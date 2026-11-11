@@ -1,0 +1,47 @@
+<CodeGroup>
+
+```ts TypeScript
+import { Client } from '@aliyun/wuying-sdk';
+
+const client = Client.create({ authCode }, { clientId });
+```
+
+```go Go
+client, err := wuying.NewClient(
+	wuying.ClientOptions{AuthCode: authCode},
+	&config.UserConfig{ClientID: clientID, DataPath: dataFile},
+)
+if err != nil {
+	return err
+}
+```
+
+```java Java
+WuyingClient client = new WuyingClient(
+    ClientOptions.builder().authCode(authCode).build(),
+    SdkConfig.builder().clientId(clientId).dataPath(dataFile).build()
+);
+```
+
+```java Android
+JSONObject config = new JSONObject()
+        .put("authCode", authCode)
+        .put("clientId", clientId)
+        .put("dataPath", dataFile);
+Client client = AndroidClient.connect(config);
+```
+
+```swift iOS
+import WuyingSDK
+
+let engine = try GoEngine(configuration: [
+    "authCode": authCode, "clientId": clientId, "dataPath": dataFile
+])
+let client = Client(engine: engine)
+```
+
+```sh CLI
+wuying runtimes list
+```
+
+</CodeGroup>

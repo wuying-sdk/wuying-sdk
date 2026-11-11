@@ -1,0 +1,47 @@
+---
+title: "MessageStream"
+sidebarTitle: "MessageStream"
+description: "Go 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## Accepted
+
+```go
+Accepted(context.Context) (MessageAccepted, error)
+```
+
+[查看操作或完整契约](/api-reference/streams/accepted)
+
+## Cancel
+
+```go
+Cancel(context.Context) (StateResult, error)
+```
+
+[查看操作或完整契约](/api-reference/streams/cancel)
+
+## Close
+
+```go
+Close()
+```
+
+[查看操作或完整契约](/api-reference/streams/close)
+
+## Next
+
+```go
+Next(context.Context) (StreamChunk, error)
+```
+
+[查看操作或完整契约](/api-reference/streams/next)
+
+## Result
+
+```go
+Result(context.Context) (Turn, error)
+```
+
+[查看操作或完整契约](/api-reference/streams/result)

@@ -1,0 +1,122 @@
+---
+title: "createConversation"
+sidebarTitle: "createConversation"
+description: "完整公开接口 · Conversation"
+---
+
+`createConversation` · Conversation
+
+req 明确 runtimeId 和 mode：single 使用 agentId，group 使用真实成员信息；mutationId 由宿主在发起前生成并保存。结果未知时查询原请求，不能换 ID 重建。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `ConversationManager.createConversation` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.ConversationManager.CreateConversation` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.ConversationManager.createConversation` | 已公开声明，需核对环境能力 |
+| CLI | `wuying conversations create` | 已公开声明，需核对环境能力 |
+| Android | [`Methods.conversationCreateConversation`](/reference/android/models/conversation#createconversation) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.conversationCreateConversation`](/reference/ios/models/conversation#createconversation) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · ConversationManager
+
+```ts
+createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<{ coordinatorMemberId?: string | undefined; memberMappings?: { clientMemberKey: string; memberId: string; }[] | undefined; mappingState?: "unknown" | "complete" | undefined; conversationId: string; runtimeId: string; }>;
+```
+
+### JavaScript / TypeScript · ConversationManager
+
+```ts
+createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
+
+```go
+func (receiver *ConversationManager) CreateConversation(ctx context.Context, r m.CreateRequest, options ...m.MutationOptions) (m.CreatedConversation, error)
+```
+
+### Java · com.aliyun.wuying.sdk.manager.ConversationManager
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedConversation> createConversation(com.aliyun.wuying.sdk.model.CreateRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedConversation> createConversation(com.aliyun.wuying.sdk.model.CreateRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+### CLI · conversations
+
+```sh
+wuying conversations create
+required --runtime <id> — Explicit authorized Runtime ID
+required --agent <id> — Agent ID
+required --name <name> — Conversation title
+optional --mutation-id <id> — Stable ID for retrying the same create request
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface Context {
+    signal?: AbortSignal;
+    timeout?: number;
+    traceId?: string;
+}
+
+type CreateRequest = (CreateBase & {
+    mode: 'single';
+    agentId: string;
+    subAgentId?: string;
+}) | (CreateBase & {
+    mode: 'group';
+    coordinatorAgentId?: string;
+    members: {
+        agentId: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+        clientMemberKey?: string;
+    }[];
+});
+
+interface CreateBase extends RuntimeRef {
+    name: string;
+    config?: Config;
+    workspaceId?: string;
+}
+
+interface RuntimeRef {
+    runtimeId: string;
+}
+
+interface MutationOptions {
+    mutationId: string;
+}
+
+interface CreatedConversation extends ConversationRef {
+    coordinatorMemberId?: string;
+    memberMappings?: {
+        clientMemberKey: string;
+        memberId: string;
+    }[];
+    mappingState?: 'complete' | 'unknown';
+}
+
+interface ConversationRef extends RuntimeRef {
+    conversationId: string;
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/03-conversation) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

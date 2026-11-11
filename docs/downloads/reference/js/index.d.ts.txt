@@ -1,0 +1,4782 @@
+/**
+ * WyDrive 文件空间模型定义
+ * 对应 POP 接口: ecd::2020-10-02 / ecd::2025-07-30 相关
+ */
+/** WyDrive 文件空间信息 */
+interface WyDrive {
+    /** WyDrive ID */
+    wyDriveId: string;
+    /** 创建时间 */
+    createdTime: string;
+    /** 地域 ID */
+    regionId: string;
+    /** 空间名称 */
+    name: string;
+    /** 所有者 ID */
+    ownerId: string;
+    /** 总容量 (bytes) */
+    totalSize: number;
+    /** 已用容量 (bytes) */
+    usedSize: number;
+    /** 空间状态 */
+    status: string;
+    /** 关联 Bot ID */
+    botId: string;
+    /** Bot 图标 URL */
+    botIcon: string;
+    /** 是否可删除 */
+    deletable: boolean;
+    /** 是否启用自动同步 */
+    enableAutoSync: boolean;
+}
+/** WyDrive 文件信息 */
+interface WyDriveFile {
+    /** 文件 ID */
+    fileId: string;
+    /** 文件名 */
+    fileName: string;
+    /** 文件路径 */
+    path: string;
+    /** 文件类型 (folder/file) */
+    fileType: string;
+    /** 文件大小 (bytes) */
+    size: number;
+    /** 文件状态 */
+    status: string;
+    /** 文件格式图标 URL */
+    fileFormatIconUrl: string;
+    /** 创建时间 */
+    gmtCreate: string;
+    /** 修改时间 */
+    gmtModified: string;
+    /** ETag */
+    eTag: string;
+    /** 父文件夹 ID */
+    parentFileId: string;
+    /** 父文件夹名 */
+    parentFileName: string;
+    /** 是否支持预览 */
+    supportPreview: boolean;
+    /** 创建者 */
+    creator: string;
+    /** 文件标签列表 */
+    tags: FileTag[];
+}
+/** 文件标签 */
+interface FileTag {
+    /** 标签值 */
+    value: string;
+    /** 标签描述 */
+    desc: string;
+    /** 标签样式 */
+    style: string;
+    /** 标签类型 */
+    type: string;
+}
+/** 下载 URL 信息 */
+interface DownloadUrlInfo {
+    /** 下载 URL（有时效性，过期后需重新获取） */
+    url: string;
+    /** 过期时间（ISO 8601 格式，如 "2026-07-09T12:00:00Z"） */
+    expireTime: string;
+    /** 文件名 */
+    fileName: string;
+    /** 文件大小 (bytes) */
+    size: number;
+}
+/** JVS 文件同步状态枚举 */
+/** 文件同步状态枚举：synced=已同步到文件空间 / syncing=同步中 / auto=自动同步 / manual=需手动存储 */
+type JvsFileSyncStateEnum = 'synced' | 'syncing' | 'auto' | 'manual';
+/** JVS 消息文件同步状态 */
+interface JvsMsgSyncState {
+    /** JVS 消息 ID（对应聊天消息的 message.id） */
+    jvsMsgId: string;
+    /** 关联文件 ID（文件空间中的文件标识） */
+    fileId: string;
+    /** 文件名 */
+    fileName: string;
+    /** 同步状态：synced=已存储 / manual=需手动存储 / syncing=同步中 / auto=自动同步 */
+    syncState: JvsFileSyncStateEnum;
+    /** 是否支持在线预览 */
+    supportPreview: boolean;
+}
+/** DescribeWyDrives 请求参数 */
+interface DescribeWyDrivesRequest {
+    /** 产品类型，固定传 "AIAgentProducts" */
+    productType?: string;
+    /** Bot ID */
+    botId?: string;
+}
+/** DescribeWyDriveFiles 请求参数 */
+interface DescribeWyDriveFilesRequest {
+    /** 地域 ID（必填） */
+    regionId: string;
+    /** WyDrive ID */
+    wyDriveId?: string;
+    /** 父文件夹 ID */
+    parentFolderId?: string;
+    /** 父文件夹路径 */
+    parentFolderPath?: string;
+    /** 文件名过滤 */
+    fileNameFilter?: string;
+    /** 每页大小 */
+    pageSize?: number;
+    /** 页码 */
+    pageNumber?: number;
+    /** 排序方式（如 CreateTimeDesc / CreateTimeAsc / NameAsc / NameDesc） */
+    orderType?: string;
+    /** 产品类型，固定传 "AIAgentProducts" */
+    productType?: string;
+    /** JVS 会话 ID，从 session.groupId 获取 */
+    jvsSessionId?: string;
+}
+/** DeleteWyDriveFile 请求参数 */
+interface DeleteWyDriveFileRequest {
+    /** 地域 ID（必填） */
+    regionId: string;
+    /** 文件 ID */
+    fileId?: string;
+    /** 文件路径 */
+    filePath?: string;
+    /** WyDrive ID */
+    wyDriveId?: string;
+    /** 文件名 */
+    fileName?: string;
+    /** ETag */
+    eTag?: string;
+    /** 是否为同步盘（与知识库关联的自动同步空间） */
+    isSyncDisk?: boolean;
+    /** 产品类型，固定传 "AIAgentProducts"（必须传，否则后端 500） */
+    productType?: string;
+    /** 父文件夹路径 */
+    parentFolderPath?: string;
+}
+/** GetDownloadUrl 请求参数 */
+interface GetDownloadUrlRequest {
+    /** 地域 ID（必填） */
+    regionId: string;
+    /** 文件 ID */
+    fileId?: string;
+    /** 文件路径 */
+    filePath?: string;
+    /** WyDrive ID */
+    wyDriveId?: string;
+    /** 端点类型（一般不用传，后端自动选择） */
+    endpointType?: string;
+    /** 产品类型，固定传 "AIAgentProducts"（必须传，否则后端 500） */
+    productType?: string;
+}
+/** AddJvsFileByOssUrl 请求参数 */
+interface AddJvsFileByOssUrlRequest {
+    /** 地域 ID（必填） */
+    regionId: string;
+    /** OSS 文件 URL（必填），格式：https://bucket.oss-cn-xxx.aliyuncs.com/path/file */
+    ossUrl: string;
+    /** 文件名（可选，不传则从 URL 路径提取） */
+    fileName?: string;
+    /** JVS Bot ID，从 Agent.id 获取 */
+    jvsBotId?: string;
+    /** JVS Session ID，从 session.groupId 获取 */
+    jvsSessionId?: string;
+    /** JVS 消息 ID（关联聊天消息，从 message.id 获取） */
+    jvsMsgId?: string;
+    /** 产品类型，固定传 "AIAgentProducts" */
+    productType?: string;
+}
+/** JVS 消息引用（用于 DescribeJvsFileSyncStates） */
+interface JvsMsg {
+    /** 消息 ID */
+    msgId: string;
+    /** 消息时间 */
+    msgTime: string;
+}
+/** DescribeJvsFileSyncStates 请求参数 */
+interface DescribeJvsFileSyncStatesRequest {
+    /** 地域 ID（必填），如 "cn-shanghai" */
+    regionId: string;
+    /** WyDrive ID（必填），从 describeWyDrives() 返回获取 */
+    wyDriveId: string;
+    /** 产品类型（必填），固定传 "AIAgentProducts" */
+    productType: string;
+    /** JVS Session ID（必填），从 session.groupId 获取 */
+    jvsSessionId: string;
+    /** JVS 消息列表（必填），包含要查询同步状态的消息 ID 和时间 */
+    jvsMsgs: JvsMsg[];
+}
+/** DescribeWyDrives 响应 */
+interface DescribeWyDrivesResponse {
+    /** WyDrive 列表 */
+    drives: WyDrive[];
+    /** 总容量 (bytes) */
+    totalSize: number;
+    /** 已用容量 (bytes) */
+    usedSize: number;
+    /** 容量是否不足 */
+    capacityNotEnough: boolean;
+}
+/** DescribeWyDriveFiles 响应 */
+interface DescribeWyDriveFilesResponse {
+    /** 文件列表 */
+    files: WyDriveFile[];
+    /** 文件总数 */
+    totalCount: number;
+}
+
+/**
+ * 知识库模型定义
+ * 对应 POP 接口: ecd::2020-10-02（skillMgmtClient）
+ */
+/** 知识库文件同步状态枚举 */
+type KnowledgeFileSyncStatus = 'INIT' | 'PENDING' | 'UPLOADED' | 'PARSED' | 'INDEXING' | 'COMPLETED' | 'PARSE_FAILED' | 'INDEX_FAILED' | 'FAILED';
+/** 知识库空间 */
+interface KnowledgeSpace {
+    /** 空间 ID */
+    spaceId: string;
+    /** 空间名称 */
+    spaceName: string;
+    /** 地域 ID */
+    regionId: string;
+    /** 关联 WyDrive ID */
+    wyDriveId: string;
+}
+/** 知识库文件 */
+interface KnowledgeFile {
+    /** 主键 ID */
+    id: number;
+    /** 文件 ID */
+    fileId: string;
+    /** 文件名 */
+    fileName: string;
+    /** 文件大小 (bytes) */
+    fileSize: number;
+    /** 文件类型 */
+    fileType: string;
+    /** 文件图标 URL */
+    fileIconUrl: string;
+    /** 文件 MD5 */
+    fileMd5: string;
+    /** 分类 ID */
+    categoryId: string;
+    /** 文件状态 */
+    status: KnowledgeFileSyncStatus;
+    /** 失败原因 */
+    failReason?: string;
+    /** 百炼文件 ID */
+    bailianFileId?: string;
+    /** 创建时间 */
+    gmtCreated: string;
+    /** 修改时间 */
+    gmtModified: string;
+    /** 完成时间（状态为 COMPLETED 时有值） */
+    gmtCompleted?: string;
+}
+/** 下载任务 */
+interface DownloadTask {
+    /** 任务 ID */
+    taskId: string;
+    /** 文件名 */
+    fileName?: string;
+    /** 文件路径 */
+    filePath?: string;
+}
+/** 下载任务结果（包含下载 URL） */
+interface DownloadTaskResult {
+    /** 任务 ID */
+    taskId: string;
+    /** 下载 URL */
+    url: string;
+}
+/** ListAgentKnowledgeSpaces 请求参数 */
+interface ListAgentKnowledgeSpacesRequest {
+    /** Agent 实例 ID（必填），使用 agent.runtimeId || agent.id（JVS 运行实例 ID） */
+    agentId: string;
+    /** 业务资源类型。新版 AgentManager 要求显式提供，不从桌面内 Agent 推导。 */
+    agentType?: string;
+}
+/** ListKnowledgeFiles 请求参数 */
+interface ListKnowledgeFilesRequest {
+    /** 知识库空间 ID（必填） */
+    knowledgeSpaceId: string;
+    /** 分类 ID */
+    categoryId?: string;
+    /** 文件名过滤 */
+    fileNameFilter?: string;
+    /** 页码 */
+    pageNumber?: number;
+    /** 每页大小 */
+    pageSize?: number;
+}
+/** 下载文件引用（用于 InitKnowledgeFileDownloadTasks） */
+interface DownloadFileRef {
+    /** 文件 ID（必填） */
+    fileId: string;
+    /** 文件名 */
+    fileName?: string;
+    /** 文件路径 */
+    filePath?: string;
+}
+/** InitKnowledgeFileDownloadTasks 请求参数 */
+interface InitKnowledgeFileDownloadTasksRequest {
+    /** 知识库空间 ID（必填） */
+    knowledgeSpaceId: string;
+    /** 要下载的文件列表（必填） */
+    files: DownloadFileRef[];
+    /** 幂等 UUID */
+    uuid?: string;
+}
+/** StartKnowledgeFileDownloadTasks 请求参数 */
+interface StartKnowledgeFileDownloadTasksRequest {
+    /** 知识库空间 ID（必填） */
+    knowledgeSpaceId: string;
+    /** 任务 ID 列表（必填） */
+    taskIds: string[];
+    /** 幂等 UUID */
+    uuid?: string;
+}
+/** DownloadKnowledgeFiles 请求参数（一站式下载，内部自动串联 Init + Start） */
+interface DownloadKnowledgeFilesRequest {
+    /** 知识库空间 ID（必填） */
+    knowledgeSpaceId: string;
+    /** 要下载的文件列表（必填） */
+    files: DownloadFileRef[];
+    /** 幂等 UUID（可选，不传则自动生成） */
+    uuid?: string;
+}
+/** DownloadKnowledgeFiles 响应（单个文件下载结果） */
+interface DownloadKnowledgeFileResult {
+    /** 任务 ID */
+    taskId: string;
+    /** 文件 ID（对应入参 fileId） */
+    fileId: string;
+    /** 文件名 */
+    fileName: string;
+    /** 下载 URL */
+    url: string;
+}
+/** ListKnowledgeFiles 响应 */
+interface ListKnowledgeFilesResponse {
+    /** 文件列表 */
+    files: KnowledgeFile[];
+    /** 总数 */
+    totalCount: number;
+    /** 当前页码 */
+    pageNumber: number;
+    /** 每页大小 */
+    pageSize: number;
+}
+
+/**
+ * 凭证类型定义
+ * 对应 Go 版本: model/credential.go
+ */
+declare enum AuthType {
+    AuthCode = 1,
+    LoginToken = 2
+}
+declare enum PermissionLevel {
+    User = 2
+}
+interface Credential {
+    type(): AuthType;
+    permissionLevel(): PermissionLevel;
+    signRequest(req: Request): Promise<void>;
+    isExpired(): boolean;
+    refresh(context: ExecutionContext): Promise<void>;
+    waitForReady?(context: ExecutionContext): Promise<void>;
+    getLoginToken?(): string;
+    getSessionId?(): string;
+    getEndUserId?(): string;
+    getLoginRegionId?(): string;
+}
+interface ExecutionContext {
+    signal?: AbortSignal;
+    traceId?: string;
+    timeout?: number;
+}
+
+/**
+ * Internal type surface of the Agent IM message transport (agmsg/v1).
+ *
+ * Web only: this module must stay free of node builtins, the legacy OpenIM
+ * client and the package root entry. Field names and closed value sets follow
+ * the frozen wire contract `test/agmsg/protocol/CONTRACT.md`.
+ */
+/** Any legal JSON value. `false`, `0`, `""` and `null` are real values, never "missing". */
+type JSONValue = null | boolean | number | string | JSONValue[] | {
+    [key: string]: JSONValue;
+};
+/** Phase of one stream packet. `seq` 1 must be `start`; `end` closes the stream. */
+type StreamPhase = 'start' | 'delta' | 'end';
+/** One opaque stream packet as delivered to the app. `data` is never parsed. */
+interface StreamDeliveryPacket {
+    groupId: string;
+    senderUserId: string;
+    streamId: string;
+    seq: string;
+    phase?: StreamPhase;
+    issuedAtMs?: number;
+    messageId: string;
+    clientMessageId: string;
+    data: JSONValue;
+    /** True when the packet was served from a `stream_history` replay, not a live delivery. */
+    replayed: boolean;
+}
+/** closed 表示接收端已补齐已知结束水位；truncated 明确表示 minSeq 之前的数据已丢失。 */
+type StreamLifecycleStatus = 'closed' | 'truncated' | 'not_found';
+type StreamEvent = {
+    type: 'packet';
+    packet: StreamDeliveryPacket;
+} | {
+    type: 'lifecycle';
+    groupId: string;
+    senderUserId: string;
+    streamId: string;
+    status: StreamLifecycleStatus;
+};
+
+/**
+ * 配置管理
+ * 对应 Go 版本: config/config.go
+ */
+interface UserConfig {
+    /** 逐请求中继耗时诊断，默认开启；false 仅关闭该诊断。 */
+    relayRequestDiagnostics?: boolean;
+    /** 中继请求/响应的本地发送上限；默认 10 MiB，只可调小。persist=true 仍限 1 MiB。 */
+    relayMaxDataBytes?: number;
+    /** 默认预加载热点5群，首群完整应用后Ready；其余群按需同步。 */
+    readinessMode?: 'legacy' | 'scoped';
+    initialSync?: {
+        readyGroupLimit?: number;
+        waitForAllGroups?: boolean;
+    };
+    /** 新群目录低频元数据对账周期，缺省30分钟，不控制消息补拉周期。 */
+    directory?: {
+        reconcileIntervalMs?: number;
+    };
+    /**
+     * 流式回放（replay_v1）观察配置，纯附加：enabled=true 才协商 streamMode；
+     * onEvent 收到未解析的原始流事件（payload 永不进入 durable Inbox/业务解析）。
+     */
+    streaming?: {
+        enabled?: boolean;
+        onEvent?: (event: StreamEvent) => void;
+    };
+    timeout?: number;
+    maxRetries?: number;
+    logger?: Logger;
+    clientId?: string;
+    /** Authentication POP endpoint; HTTPS outside loopback tests. */
+    appStreamEndpoint?: string;
+    /** Skill 管理 API 端点。默认: https://ecd.cn-shanghai.aliyuncs.com */
+    skillMgmtEndpoint?: string;
+    /** 售卖/积分 API 端点。默认: https://ecd.cn-shanghai.aliyuncs.com */
+    salesEndpoint?: string;
+    /** 阿里云 AccessKey ID，用于 AK/SK 签名的 API 调用。 */
+    accessKeyID?: string;
+    /** 阿里云 AccessKey Secret，用于 AK/SK 签名的 API 调用。 */
+    accessKeySecret?: string;
+}
+interface Logger {
+    info(msg: string, ...args: unknown[]): void;
+    warn(msg: string, ...args: unknown[]): void;
+    error(msg: string, ...args: unknown[]): void;
+    debug(msg: string, ...args: unknown[]): void;
+}
+interface Config$1 {
+    relayMaxDataBytes(): number;
+    timeout(): number;
+    maxRetries(): number;
+    retryBaseDelay(): number;
+    retryMaxDelay(): number;
+    logger(): Logger;
+    clientId(): string;
+    authCodeRefreshInterval(): number;
+    loginTokenDefaultExpiry(): number;
+    appStreamEndpoint(): string;
+    skillMgmtEndpoint(): string;
+    salesEndpoint(): string;
+    accessKeyID(): string;
+    accessKeySecret(): string;
+}
+declare function mergeToInternal(userConfig: UserConfig): Config$1;
+
+/**
+ * 匿名 CloudAPI 客户端 (无 AK/SK 签名)
+ * 对应 Go 版本: internal/integrate/cloudapi/anonymous_client.go
+ */
+
+interface AnonymousClientOptions {
+    /** @internal Harden one-shot resource operations without changing legacy requests. */
+    resourceOperations?: boolean;
+    endpoint: string;
+    version: string;
+    timeout: number;
+    logger: Logger;
+}
+declare class AnonymousClient {
+    private readonly resourceOperations;
+    private closed;
+    private readonly requests;
+    close(): void;
+    private endpoint;
+    private version;
+    private timeout;
+    private logger;
+    constructor(options: AnonymousClientOptions);
+    doAnonymousRPC(context: ExecutionContext, action: string, version: string, businessParams?: Record<string, string>): Promise<Record<string, unknown>>;
+}
+
+interface TokenInfo {
+    token: string;
+    imUserId: string;
+    imApiEndpoint: string;
+    imWssEndpoint: string;
+    expireSeconds: number;
+}
+interface ConsumerUserGetExtTokenResponse extends TokenInfo {
+    requestId: string;
+}
+
+/**
+ * wuyingWebSdk 客户端封装
+ *
+ * 负责：
+ * 1. WebSDK 环境检测
+ * 2. Session 创建和生命周期管理
+ * 3. 事件桥接（将 WebSDK 事件转换为统一格式）
+ * 4. DOM 容器管理（inline 模式动态创建 iframe，newTab 模式使用 Blob URL）
+ *
+ * 该模块对用户隐藏，由 AspManager 内部使用
+ */
+
+/**
+ * 打开方式
+ */
+type WebSdkOpenType = 'inline' | 'newTab';
+interface WebSdkClientOptions {
+    /** DOM 容器元素（仅 inline 模式） */
+    containerElement?: HTMLElement;
+    /** 云资源 ID（桌面ID或应用ID） */
+    resourceId: string;
+    /** 区域 ID，默认 'cn-shanghai' */
+    regionId?: string;
+    /** iframe 元素 ID，默认 'sessionIframe'（仅 inline 模式） */
+    iframeId?: string;
+    /** 桌面名称（仅 desktop 类型） */
+    desktopName?: string;
+    /** 打开方式，默认 'inline' */
+    openType?: WebSdkOpenType;
+    /** 自定义 container.html 的 URL（可选，不提供则使用 SDK 内置模板） */
+    containerUrl?: string;
+    /** newTab 模式的空白页面 URL（可选）
+     * - 如果提供，SDK 会将内置的 container HTML 注入到这个页面中
+     * - 如果不提供，将使用阿里云在线 container（resourceType: 'online'）
+     * - 页面应该是一个简单的空白 HTML，SDK 会自动注入 WebSDK 所需的 container 内容
+     */
+    newTabBlankPageUrl?: string;
+    /** 宽度，默认 '100%'（仅 inline 模式） */
+    width?: string;
+    /** 高度，默认 '100%'（仅 inline 模式） */
+    height?: string;
+    /** 终端用户 ID */
+    endUserId?: string;
+}
+interface WebSdkSessionHandle {
+    unsubscribe: () => void;
+}
+declare class WebSdkClient {
+    private wuying;
+    private session;
+    private eventHandles;
+    private iframe;
+    private blobUrl;
+    private newTabWindow;
+    private logger;
+    constructor(logger?: Logger);
+    /**
+     * 检测 WebSDK 是否已加载，如果未加载则自动加载内置的 WuyingWebSDK.js
+     *
+     * @returns Wuying 全局对象
+     * @throws 如果不在浏览器环境或 WebSDK 加载失败
+     */
+    private detectWebSDK;
+    /**
+     * 获取 container URL
+     * 如果用户提供了自定义 URL 则使用，否则使用 Blob URL（基于内置模板）
+     */
+    private getContainerUrl;
+    /**
+     * 在 inline 模式下创建 iframe 并注入 container 内容
+     */
+    private createInlineIframe;
+    /**
+     * 在 newTab 模式下打开新窗口
+     */
+    private openNewTab;
+    /**
+     * 创建 WebSDK Session
+     *
+     * @param streamType 流化类型（'desktop' 或 'appstream'）
+     * @param options Session 配置选项
+     * @throws 如果 session 已经存在
+     */
+    createSession(streamType: 'desktop' | 'appstream', options: WebSdkClientOptions & {
+        sessionId: string;
+        loginToken: string;
+    }): Promise<void>;
+    /**
+     * 启动 Session 开始流化渲染
+     *
+     * @throws 如果 session 未创建
+     */
+    start(): void;
+    /**
+     * 停止 Session 并释放资源
+     */
+    stop(): void;
+    /**
+     * 注册事件监听
+     *
+     * @param eventType 事件类型
+     * @param callback 事件回调
+     * @returns 取消订阅句柄
+     * @throws 如果 session 未创建
+     */
+    onEvent(eventType: string, callback: (data: any) => void): WebSdkSessionHandle;
+    /**
+     * 注册所有标准事件
+     *
+     * @param handlers 事件处理器对象
+     */
+    registerStandardEvents(handlers: {
+        onConnected: (data: any) => void;
+        onDisconnected: (data: any) => void;
+        onError: (data: any) => void;
+        onTicketReady: (data: any) => void;
+    }): void;
+    /**
+     * 获取 Session 状态
+     *
+     * @returns Session 状态字符串，如果不支持则返回 null
+     */
+    getSessionStatus(): string | null;
+    /**
+     * 检查 Session 是否存在
+     *
+     * @returns 是否有活跃的 session
+     */
+    hasSession(): boolean;
+    /**
+     * 打开和关闭键鼠操作
+     *
+     * @param enabled 是否打开
+     */
+    enableInput(enabled: boolean): void;
+    /**
+     * 唤起和关闭键盘
+     *
+     * @param enabled 是否打开
+     */
+    enableKeyBoard(enabled: boolean): void;
+    /**
+     * 剪贴板控制
+     *
+     * @param enabled 是否打开
+     */
+    setClipboardEnabled(enabled: boolean): void;
+    /**
+     * 麦克风控制
+     *
+     * @param enabled 是否打开
+     */
+    setMicrophoneEnabled(enabled: boolean): void;
+    /**
+     * 输入控制
+     *
+     * @param enabled 是否打开
+     */
+    setInputEnabled(enabled: boolean): void;
+    /**
+     * 触摸控制
+     *
+     * @param enabled 是否打开
+     */
+    setTouchEnabled(enabled: boolean): void;
+    /**
+     * 设置云电脑/应用画面分辨率
+     *
+     * @param width 宽度
+     * @param height 高度
+     * @param degree 顺时针旋转角度（0 或 90）
+     */
+    setResolution(width: number, height: number, degree?: number): void;
+    /**
+     * 连接成功后修改画质设置
+     *
+     * @param mode 'fluent' | 'high' | 'auto' （流畅优先、画质优先、智能模式）
+     */
+    setGraphicConfig(mode: 'fluent' | 'high' | 'auto'): void;
+    /**
+     * 设置鼠标模式
+     *
+     * @param mode 鼠标模式
+     */
+    setMouseMode(mode: any): void;
+    /**
+     * 上传文件
+     *
+     * @param files 上传的文件列表
+     * @param showDialog 是否显示文件传输窗口
+     */
+    uploadFileAction(files: File[], showDialog?: boolean): void;
+    /**
+     * 下载文件
+     *
+     * @param showDialog 是否显示文件传输窗口
+     */
+    downloadFileAction(showDialog?: boolean): void;
+    /**
+     * 发送消息给 Guest 内的应用
+     *
+     * @param msg 消息内容
+     * @param appId 目标应用 ID
+     */
+    sendRuntimeMsg(msg: string, appId: string): void;
+    /**
+     * 检测网络状况
+     *
+     * @param params 检测参数
+     */
+    startPingDiagnosis(params: {
+        timeout?: number;
+        callback?: (resourceId: string, response: any) => void;
+    }): void;
+    /**
+     * 获取当前截图
+     *
+     * @param callback 截图回调，可获取截图的 blob
+     * @param immediate 是否立即下载到本地
+     */
+    getScreenshot(callback: (blob: Blob) => any, immediate?: boolean): void;
+    /**
+     * 设置 UI 配置
+     *
+     * @param param UI 配置参数
+     */
+    setUiParams(param: any): void;
+    /**
+     * 唤起和关闭软键盘
+     *
+     * @param open 是否打开
+     */
+    openSoftKeyboard(open: boolean): void;
+    /**
+     * 设置云电脑/云应用设备缩放比
+     *
+     * @param num 缩放比（如 200 表示 200%）
+     */
+    setMonitorsConfig(num: number): void;
+    /**
+     * 获取云电脑无操作时间
+     *
+     * @param callback 回调函数，返回无操作时间（单位 ms）
+     */
+    getDesktopIdleTime(callback: (time: number) => any): void;
+    /**
+     * 监听文件传输能力及信息
+     *
+     * @param callback 回调函数
+     */
+    getFileTransformInfo(callback: (eventName: string, data: any) => void): void;
+    /**
+     * 调用 asp api
+     *
+     * @param action 方法名
+     * @param data 参数数组
+     */
+    customASPAction(action: string, data: any[]): void;
+    /**
+     * 断开连接后使用新的连接信息重连
+     *
+     * @param userInfo 用户登录态信息
+     */
+    refreshConnect(userInfo: any): void;
+    /**
+     * 监听连接事件
+     *
+     * @param actionName 动作名称
+     * @param callback 事件回调
+     */
+    addConnectionListener(actionName: string, callback: (eventName: string, data: any) => any): void;
+    /**
+     * 监听剪贴板事件
+     *
+     * @param callback 事件回调
+     */
+    addClipboardListener(callback: (data: any) => any): void;
+    /**
+     * 获取输入事件回调
+     *
+     * @param callback 输入事件回调
+     */
+    addInputCallback(callback: (event: string, data: any) => any): void;
+    /**
+     * Lync 通道发送消息
+     *
+     * @param channel 通道名称
+     * @param message 消息内容
+     */
+    sendLyncMessage(channel: string, message: string): void;
+    /**
+     * 监听 Lync 通道
+     *
+     * @param channel 通道名称
+     * @param action 动作名称
+     * @param callback 回调函数
+     */
+    addLyncListener(channel: string, action: string, callback: (data: any) => any): void;
+    /**
+     * 数据通道发送消息
+     *
+     * @param channel 通道名称
+     * @param message 消息内容（Uint8Array）
+     */
+    sendDataChannelMessage(channel: string, message: Uint8Array): void;
+    /**
+     * 监听数据通道
+     *
+     * @param channel 通道名称
+     * @param action 动作名称
+     * @param callback 回调函数
+     */
+    addDataChannelListener(channel: string, action: string, callback: (data: any) => any): void;
+    /**
+     * 设置 localConfig
+     *
+     * @param action 动作名称
+     * @param enable 是否启用
+     * @param delay 延迟时间
+     */
+    setLocalConfig(action: string, enable: boolean, delay: number): void;
+    /**
+     * 剪贴板模块配置
+     *
+     * @param action 动作名称
+     * @param data 配置数据
+     * @param extra 额外参数
+     */
+    setClipboardModule(action: string, data: any, extra?: any): void;
+    /**
+     * 显示/隐藏数据岛
+     *
+     * @param enable 是否启用
+     */
+    enableDataIsland(enable: boolean): void;
+    /**
+     * 断开连接
+     */
+    stopConnection(): void;
+    /**
+     * 注册事件监听（直接透传 session.addHandle）
+     *
+     * @param name 事件名称
+     * @param callback 回调函数
+     */
+    addHandle(name: string, callback: Function): void;
+    /**
+     * 设置 DPI
+     *
+     * @param dpi DPI 值
+     */
+    setDpi(dpi: number): void;
+}
+
+/** Cloud control-plane online state, not an IM presence subscription. */
+declare enum AgentOnlineStatus {
+    Online = "online",
+    Offline = "offline"
+}
+declare enum AgentStatus {
+    Ready = "ready",
+    Building = "building",
+    Error = "error",
+    Unknown = "unknown"
+}
+interface RuntimeResourceInfo {
+    /** 资源 ID（桌面 ID） */
+    resourceId: string;
+    /** 资源状态 */
+    resourceStatus: string;
+    /** 资源名称 */
+    resourceName: string;
+    /** 本地设备名称 */
+    localDeviceName: string;
+}
+interface AgentFotaUpdate {
+    /**
+     * 可升级的目标 FOTA 版本（来自 POP DescribeDesktops 的 NewDcdVersion）
+     */
+    newFotaVersion: string;
+    /**
+     * 当前 FOTA 版本（来自 POP DescribeDesktops 的 CurrentAppVersion）
+     */
+    currentFotaVersion: string;
+}
+interface Agent {
+    onlineStatus?: AgentOnlineStatus;
+    id: string;
+    name: string;
+    type: string;
+    status: AgentStatus;
+    imId: string;
+    avatarUrl: string;
+    description: string;
+    runtimeId: string;
+    runtimeType: string;
+    regionId: string;
+    osType: string;
+    sessionId?: string;
+    metadata?: Record<string, string>;
+    createdAt?: Date;
+    simplePersonaType?: string;
+    simpleModelType?: string;
+    agentPlatform?: string;
+    runtimeResourceInfo?: RuntimeResourceInfo;
+    fotaUpdate?: AgentFotaUpdate;
+    [key: string]: unknown;
+}
+
+/**
+ * Skill 模型定义
+ * 对应 Go 版本: model/skill.go
+ */
+interface SkillTag {
+    tagId: string;
+    tagValue: string;
+    tagType?: string;
+}
+interface SkillInfo {
+    skillId: string;
+    defaultVersion: string;
+    slug: string;
+    description: string;
+    skillName: string;
+    displayName: string;
+    skillIconUrl: string;
+    categoryName: string;
+    tags: SkillTag[];
+    supportOSList: SkillTag[];
+    supplierType: string;
+    sourceMarket: string;
+}
+interface SkillItem {
+    skillId: string;
+    skillName: string;
+    slug: string;
+    skillIconUrl: string;
+    displayName: string;
+    categoryName: string;
+    tags: SkillTag[];
+    supportOSList: SkillTag[];
+    defaultVersion: string;
+    description: string;
+    supplierType: string;
+    sourceMarket: string;
+    enable: string;
+}
+interface InstalledSkill {
+    skillId: string;
+    skillName: string;
+    slug: string;
+    version: string;
+    displayName: string;
+    description: string;
+    skillSummary: string;
+    skillIcon: string;
+    skillIconUrl: string;
+    categoryId: string;
+    categoryName: string;
+    userEnabled: boolean;
+    adminEnabled: boolean;
+    gmtInstalled: string;
+    operationStatus: string;
+    operationType: string;
+    supplierType: string;
+    author: string;
+    sourceMarket: string;
+    sourceLink: string;
+    gmtCreated: string;
+    tags: SkillTag[];
+    supportOSList: SkillTag[];
+    taskId: string;
+    autoInstall: boolean;
+}
+interface SkillCategory {
+    categoryId: string;
+    categoryName: string;
+}
+interface OperationTask {
+    taskId: string;
+    skillId: string;
+    operationType: string;
+    operationStatus: string;
+    errorMsg: string;
+    gmtComplete: string;
+    skillName: string;
+}
+/** Agent 授权的技能信息 */
+interface AgentAuthedSkill {
+    skillId: string;
+    autoInstall: boolean;
+    channel: string;
+    skillName: string;
+    slug: string;
+    displayName: string;
+    description: string;
+    skillIcon: string;
+    skillIconUrl: string;
+    skillSummary: string;
+    categoryId: string;
+    categoryName: string;
+    categoryIcon: string;
+    supplierType: string;
+    author: string;
+    sourceMarket: string;
+    sourceLink: string;
+    gmtCreated: string;
+    version: string;
+    adminEnabled: boolean;
+    supportOSList: string[];
+    identityResourceId: string;
+    installed: boolean;
+    userEnabled: boolean;
+    gmtInstalled: string;
+    taskId: string;
+    operationStatus: string;
+    operationType: string;
+    triggerWords: string[];
+    tags: SkillTag[];
+}
+/** ListAgentAuthedSkills 返回结果 */
+interface ListAgentAuthedSkillsResult {
+    skills: AgentAuthedSkill[];
+    totalCount: number;
+}
+/** EntInstall/EntUninstall 操作任务 */
+interface EntOperationTask {
+    skillId: string;
+    taskId: string;
+}
+/** EntInstallSkills 返回结果 */
+interface EntInstallSkillsResult {
+    operationTasks: EntOperationTask[];
+    skippedSkillIds: string[];
+}
+/** EntUninstallSkills 返回结果 */
+interface EntUninstallSkillsResult {
+    operationTasks: EntOperationTask[];
+    skippedSkillIds: string[];
+}
+/** 卸载技能信息 */
+interface UninstallSkillInfo {
+    skillId: string;
+    skillName: string;
+}
+
+/**
+ * Credit（积分）模型定义
+ * 对应 Go 版本: model/credit.go
+ */
+/** 积分套餐绑定的 Agent 信息。 */
+interface CreditPackageAgent {
+    agentId: string;
+    usedCredit: string;
+    totalCredit: string;
+    expiredTime: string;
+}
+/** 积分使用信息。 */
+interface CreditUsageInfo {
+    usageInfoList: CreditUsageInfoItem[];
+}
+/** 单条积分使用明细。 */
+interface CreditUsageInfoItem {
+    usageInfoKey: string;
+    usageInfo: CreditUsageData;
+}
+/** 积分使用趋势单点数据。 */
+interface CreditTrendItem {
+    usedCredit: number;
+    timePoint: string;
+}
+/**
+ * 积分使用详情数据（Agent 模式和 User 模式字段合集）。
+ * periodTotalCredit / periodUsedCredit 已在 API 解析层除以 100000 换算成积分单位。
+ */
+interface CreditUsageData {
+    totalUsedCredit: number;
+    dayUsedCredit: number;
+    weekUsedCredit: number;
+    periodTotalCredit: number;
+    periodUsedCredit: number;
+    totalCredit?: number;
+    warnPercent?: number;
+    currentRemainCredit?: number;
+    currentInstanceId?: string;
+    remainCredit?: number;
+    currentTotalCredit?: number;
+    currentUsedCredit?: number;
+    creditTrendList?: CreditTrendItem[];
+}
+/** 查询积分使用信息的请求参数。 */
+interface DescribeCreditUsageInfoRequest$1 {
+    usageType?: string;
+    agentIds?: string[];
+    fillAgent?: boolean;
+}
+
+/**
+ * Model 配置模型定义
+ * 对应 Go 版本: model/model_config.go
+ */
+/** Agent 实例的模型配置。 */
+interface ModelConfig {
+    modelTemplateId: string;
+    modelTemplateName: string;
+    defaultModel: string;
+    channelSessionModel: string;
+    modelProviderList: ModelProvider[];
+}
+/** 模型提供商信息。 */
+interface ModelProvider {
+    modelProviderTemplateId: string;
+    providerName: string;
+    name: string;
+    providerAvatarUrl: string;
+    llmInfoList: LlmInfo[];
+}
+/** 单个 LLM 模型信息。 */
+interface LlmInfo {
+    llmCode: string;
+    name: string;
+    description: string;
+    publishedTime: string;
+    features: string[];
+    riskType: string;
+    inferenceMetadata?: InferenceMetadata;
+    modelInfo?: Record<string, unknown>;
+    prices: PriceRange[];
+}
+/** 模型推理模态信息。 */
+interface InferenceMetadata {
+    requestModality: string[];
+    responseModality: string[];
+}
+/** 价格区间组。 */
+interface PriceRange {
+    rangeName: string;
+    prices: PriceItem[];
+}
+/** 单条价格条目。 */
+interface PriceItem {
+    priceName: string;
+    price: string;
+    priceUnit: string;
+}
+/** 设置会话组模型的结果。 */
+interface SetChannelGroupModelResult {
+    success: boolean;
+}
+
+/**
+ * Desktop（桌面/FOTA 升级）模型定义
+ * 对应 Go 版本: model/desktop.go
+ */
+/**
+ * ProtocolType 流化协议类型
+ * 用于 DescribeDesktops 接口的 ProtocolType 参数。
+ *
+ * - HDX: HDX 协议
+ * - ASP: ASP 协议（默认）
+ */
+declare enum ProtocolType {
+    /** HDX 协议 */
+    HDX = "0",
+    /** ASP 协议（默认） */
+    ASP = "1"
+}
+/**
+ * FotaUpdate 包含 FOTA（Firmware Over The Air）升级信息。
+ * 对应 Go 版本: model.FotaUpdate
+ */
+interface FotaUpdate {
+    /**
+     * NewDcdVersion 表示可升级到的目标 DCD 版本。
+     * 当字段为空字符串时表示当前桌面无可用升级。
+     */
+    newDcdVersion: string;
+    /**
+     * CurrentAppVersion 表示当前桌面已安装的应用版本（即"当前版本"）。
+     * 来源：DescribeDesktops 接口响应中的 FotaUpdate.CurrentAppVersion。
+     * 可能为 undefined 或空串（部分桌面/区域不返回）。
+     */
+    currentAppVersion?: string;
+    /**
+     * NewAppVersion 表示可升级到的目标应用版本。
+     * 来源：DescribeDesktops 接口响应中的 FotaUpdate.NewAppVersion。
+     */
+    newAppVersion?: string;
+    /**
+     * ReleaseNote 升级说明（发布备注）。
+     * 来源：DescribeDesktops 接口响应中的 FotaUpdate.ReleaseNote。
+     */
+    releaseNote?: string;
+    /**
+     * Size 升级包大小（字节）。
+     * 来源：DescribeDesktops 接口响应中的 FotaUpdate.Size。
+     */
+    size?: number;
+}
+/**
+ * Desktop 表示桌面实例信息。
+ * 对应 Go 版本: model.Desktop
+ */
+interface Desktop {
+    /** 桌面 ID（DesktopId） */
+    desktopId: string;
+    /** 桌面名称（DesktopName） */
+    desktopName: string;
+    /** 桌面状态（DesktopStatus） */
+    status: string;
+    /**
+     * FOTA 升级信息。仅当请求 DescribeDesktops 时设置 QueryFotaUpdate=true，
+     * 并且当前桌面存在可用升级时才会返回非空值。
+     */
+    fotaUpdate?: FotaUpdate;
+}
+/**
+ * DescribeDesktops 接口的返回结果。
+ * 对应 Go 版本: model.DesktopList
+ */
+interface DesktopList {
+    /** 桌面列表 */
+    desktops: Desktop[];
+    /**
+     * NextToken 表示下一页分页 token。
+     * 当为空字符串或 undefined 时表示没有更多数据。
+     */
+    nextToken?: string;
+}
+
+/**
+ * Desktop 相关 CloudAPI
+ * 对应 Go 版本: internal/integrate/cloudapi/desktop_api.go
+ *
+ * Desktop API 使用 ecd::2020-10-02 版本（salesEndpoint 端点，与 Go 版本一致）。
+ * 通过 AnonymousClient 调用 POP API。
+ */
+
+interface DescribeUserResourceFeaturesResponse {
+    requestId: string;
+    success: boolean;
+    count: number;
+    data: ResourceFeatureData[];
+}
+interface ResourceFeatureData {
+    resourceId: string;
+    resourceType: string;
+    resourceFeatures: ResourceFeature[];
+}
+interface ResourceFeature {
+    featureType: string;
+    featureList: FeatureItem[];
+}
+interface FeatureItem {
+    featureId: string;
+    featureName: string;
+    featureScene: string;
+    featureGroup: string;
+    featureStatus: string;
+    icon: string;
+}
+
+/**
+ * Agent 路由方法
+ * 对应 Go 版本: internal/router/agent_routes.go
+ *
+ * 实现了与 Agent（智能体）相关的路由方法，包括获取 Agent 列表和查询 Agent 状态。
+ * 这些方法通过 CapabilityRouter 的方法集提供，根据认证类型将请求分发到对应的后端 API。
+ * 当前仅支持 AuthTypeAuthCode 认证类型。
+ */
+
+/**
+ * AgentRoutes 类
+ * 封装了所有 Agent 相关的路由方法，供 CapabilityRouter 组合使用。
+ * 对应 Go 版本: CapabilityRouter 的 GetAgentList / GetAgentStatus 方法。
+ */
+declare class AgentRoutes {
+    private readonly container;
+    private readonly logger;
+    constructor(container: Container, logger: Logger);
+    /**
+     * 获取可用 Agent 实例列表
+     * 对应 Go 版本: agent_routes.go:GetAgentList()
+     *
+     * @param ctx - 请求上下文
+     * @param pageNum - 页码（当前未使用，API 默认获取全部）
+     * @param pageSize - 每页大小（当前未使用，API 默认获取全部）
+     * @returns Agent 列表和总数
+     */
+    getAgentList(ctx: ExecutionContext, _pageNum: number, _pageSize: number, agentPlatform?: string): Promise<{
+        agents: Agent[];
+        totalCount: number;
+    }>;
+    /**
+     * 查询指定 Agent 的状态
+     * 对应 Go 版本: agent_routes.go:GetAgentStatus()
+     *
+     * 当前版本未实现，仅进行权限检查后返回 errNotImplemented。
+     *
+     * @param ctx - 请求上下文
+     * @param agentId - Agent 唯一标识
+     * @returns Agent 信息（当前抛出 errNotImplemented）
+     */
+    getAgentStatus(ctx: ExecutionContext, agentId: string): Promise<Agent>;
+    /**
+     * 更新 Agent 实例的元数据
+     * 对应 Go 版本: agent_routes.go:UpdateAgentInstance()
+     *
+     * @param ctx - 请求上下文
+     * @param agentInstanceId - Agent 实例 ID（必填）
+     * @param name - 新名称（可选）
+     * @param avatarUrl - 新头像 URL（可选）
+     * @param description - 新描述（可选）
+     * @param simplePersonaType - 人格类型（可选）
+     * @param simpleModelType - 模型类型（可选）
+     */
+    updateAgentInstance(ctx: ExecutionContext, agentInstanceId: string, name: string, avatarUrl: string, description: string, simplePersonaType: string, simpleModelType: string): Promise<void>;
+    /**
+     * 权限检查辅助方法
+     * 调用 AuthChecker.check(capability, authType)，将异常转换为 SDKError。
+     */
+    private checkAuth;
+}
+
+/**
+ * 流化会话模型
+ * 用于无影 WebSDK 流化能力
+ */
+/**
+ * ASP 流化会话状态
+ */
+declare enum AspStreamStatus {
+    Creating = "creating",// 创建中
+    Connecting = "connecting",// 连接中
+    Connected = "connected",// 已连接
+    Disconnected = "disconnected",// 已断开
+    Error = "error"
+}
+/**
+ * ASP 流化类型
+ */
+declare enum AspStreamType {
+    Desktop = "desktop",// 云电脑桌面
+    Application = "application"
+}
+/**
+ * ASP 流化会话信息
+ */
+interface AspStreamSession {
+    id: string;
+    streamType: AspStreamType;
+    status: AspStreamStatus;
+    resourceId: string;
+    endUserId: string;
+    regionId?: string;
+    startTime?: Date;
+    endTime?: Date;
+    errorMessage?: string;
+}
+/**
+ * ASP 流化事件类型
+ */
+declare enum AspStreamEventType {
+    OnTicketReady = "onTicketReady",// 票据准备就绪
+    OnConnected = "onConnected",// 连接成功
+    OnDisconnected = "onDisconnected",// 连接断开
+    OnError = "onError",// 发生错误
+    OnStatusChanged = "onStatusChanged"
+}
+/**
+ * ASP 流化事件数据
+ */
+interface AspStreamEventData {
+    type: AspStreamEventType;
+    data: Record<string, unknown>;
+    timestamp: Date;
+}
+/**
+ * ASP 流化事件回调
+ */
+type AspStreamEventCallback = (event: AspStreamEventData) => void;
+/**
+ * 画质模式
+ */
+type GraphicMode = 'fluent' | 'high' | 'auto';
+/**
+ * 网络诊断参数
+ */
+interface PingDiagnosisParams {
+    timeout?: number;
+    callback?: (resourceId: string, response: any) => void;
+}
+/**
+ * UI 配置参数
+ */
+interface AspUiConfig {
+    toolbar?: {
+        visible?: boolean;
+    };
+    rotateDegree?: number;
+    [key: string]: any;
+}
+/**
+ * WuyingWebSDK Session 事件类型
+ * 对应 Session.addHandle 的 name 参数
+ */
+declare enum AspSessionEventType {
+    /** 连接票据信息 */
+    GetConnectionTicketInfo = "getConnectionTicketInfo",
+    /** 连接成功 */
+    OnConnected = "onConnected",
+    /** 连接断开 */
+    OnDisConnected = "onDisConnected",
+    /** 运行时消息 */
+    OnRuntimeMsg = "onRuntimeMsg",
+    /** 文件传输进度 */
+    ProgressEvent = "progressEvent"
+}
+/**
+ * 文件传输信息回调事件名
+ */
+type FileTransformEventName = 'fileErrorEvent' | 'fileTransferAvailable' | 'transformFileList';
+/**
+ * 鼠标模式类型
+ */
+type MouseModeType = string;
+
+/**
+ * Stream Routes
+ * 流化路由层
+ *
+ * 处理流化相关的 API 路由，包括：
+ * - 权限检查
+ * - 启动流化（浏览器环境）
+ * - 停止流化
+ */
+
+/**
+ * 打开方式
+ */
+type StreamOpenType = 'inline' | 'newTab';
+/**
+ * 启动流化请求参数
+ */
+interface StartStreamRouteRequest {
+    containerElementId?: string;
+    resourceId: string;
+    streamType?: AspStreamType;
+    regionId?: string;
+    openType?: StreamOpenType;
+    containerUrl?: string;
+    width?: string;
+    height?: string;
+}
+/**
+ * StreamRoutes 处理流化相关的 API 路由
+ */
+declare class StreamRoutes {
+    private container;
+    private logger;
+    private currentSession;
+    private eventCallbacks;
+    constructor(container: Container, logger: Logger);
+    /**
+     * 启动流化会话（仅浏览器环境）
+     *
+     * 流程：
+     * 1. 权限检查
+     * 2. 等待认证完成
+     * 3. 获取 LoginToken 和 SessionID
+     * 4. 使用 WebSdkClient 创建并启动流化
+     */
+    startAspStream(context: ExecutionContext, req: StartStreamRouteRequest): Promise<void>;
+    /**
+     * 停止流化会话
+     */
+    stopAspStream(): Promise<void>;
+    /**
+     * 获取当前会话信息
+     */
+    getSession(): AspStreamSession | null;
+    /**
+     * 订阅事件
+     */
+    onEvent(callback: AspStreamEventCallback): () => void;
+    /**
+     * 处理 WebSDK 连接成功事件
+     */
+    private handleWebSdkConnected;
+    /**
+     * 处理 WebSDK 票据就绪事件
+     */
+    private handleWebSdkTicketReady;
+    /**
+     * 处理 WebSDK 连接断开事件
+     */
+    private handleWebSdkDisconnected;
+    /**
+     * 处理 WebSDK 错误事件
+     */
+    private handleWebSdkError;
+    /**
+     * 发射事件到所有订阅者
+     */
+    private emitEvent;
+    /**
+     * 获取 WebSdkClient 实例
+     */
+    private getWebSdkClient;
+    enableInput(enabled: boolean): void;
+    enableKeyBoard(enabled: boolean): void;
+    setInputEnabled(enabled: boolean): void;
+    setTouchEnabled(enabled: boolean): void;
+    openSoftKeyboard(open: boolean): void;
+    setMicrophoneEnabled(enabled: boolean): void;
+    setClipboardEnabled(enabled: boolean): void;
+    setResolution(width: number, height: number, degree?: number): void;
+    setMonitorsConfig(scale: number): void;
+    setGraphicConfig(mode: GraphicMode): void;
+    setMouseMode(mode: MouseModeType): void;
+    uploadFileAction(files: File[], showDialog?: boolean): void;
+    downloadFileAction(showDialog?: boolean): void;
+    getFileTransformInfo(callback: (eventName: string, data: any) => void): void;
+    getScreenshot(callback: (blob: Blob) => any, immediate?: boolean): void;
+    startPingDiagnosis(params: PingDiagnosisParams): void;
+    getDesktopIdleTime(callback: (time: number) => any): void;
+    sendRuntimeMsg(msg: string, appId: string): void;
+    setUiParams(param: AspUiConfig): void;
+    customASPAction(action: string, data: any[]): void;
+    refreshConnect(userInfo: any): void;
+    enableDataIsland(enable: boolean): void;
+    setLocalConfig(action: string, enable: boolean, delay: number): void;
+    setClipboardModule(action: string, data: any, extra?: any): void;
+    setDpi(dpi: number): void;
+    stopConnection(): void;
+    addHandle(name: string, callback: Function): void;
+    addConnectionListener(actionName: string, callback: (eventName: string, data: any) => any): void;
+    addClipboardListener(callback: (data: any) => any): void;
+    addInputCallback(callback: (event: string, data: any) => any): void;
+    sendLyncMessage(channel: string, message: string): void;
+    addLyncListener(channel: string, action: string, callback: (data: any) => any): void;
+    sendDataChannelMessage(channel: string, message: Uint8Array): void;
+    addDataChannelListener(channel: string, action: string, callback: (data: any) => any): void;
+}
+
+/**
+ * Asp (Application Streaming Platform) Service
+ * 流化业务服务层
+ *
+ * 提供流化会话的业务逻辑处理，包括：
+ * - 启动流化（浏览器环境）
+ * - 停止流化
+ * - 错误处理和重试机制
+ */
+
+/**
+ * IAspService 定义 AspService 的接口
+ */
+interface IAspService {
+    /**
+     * 启动流化会话
+     */
+    startAspStream(context: ExecutionContext, req: StartStreamRouteRequest): Promise<void>;
+    /**
+     * 停止流化会话
+     */
+    stopAspStream(): Promise<void>;
+    /**
+     * 获取当前会话信息
+     */
+    getSession(): AspStreamSession | null;
+    /**
+     * 订阅事件
+     */
+    onEvent(callback: AspStreamEventCallback): () => void;
+    /**
+     * 获取底层 WebSDK Session 实例（用于高级功能调用）
+     * 注意：此方法返回内部对象，谨慎使用
+     */
+    getWebSdkSession(): any;
+    enableInput(enabled: boolean): void;
+    enableKeyBoard(enabled: boolean): void;
+    setInputEnabled(enabled: boolean): void;
+    setTouchEnabled(enabled: boolean): void;
+    openSoftKeyboard(open: boolean): void;
+    setMicrophoneEnabled(enabled: boolean): void;
+    setClipboardEnabled(enabled: boolean): void;
+    setResolution(width: number, height: number, degree?: number): void;
+    setMonitorsConfig(scale: number): void;
+    setGraphicConfig(mode: GraphicMode): void;
+    setMouseMode(mode: MouseModeType): void;
+    uploadFileAction(files: File[], showDialog?: boolean): void;
+    downloadFileAction(showDialog?: boolean): void;
+    getFileTransformInfo(callback: (eventName: string, data: any) => void): void;
+    getScreenshot(callback: (blob: Blob) => any, immediate?: boolean): void;
+    startPingDiagnosis(params: PingDiagnosisParams): void;
+    getDesktopIdleTime(callback: (time: number) => any): void;
+    sendRuntimeMsg(msg: string, appId: string): void;
+    setUiParams(param: AspUiConfig): void;
+    customASPAction(action: string, data: any[]): void;
+    refreshConnect(userInfo: any): void;
+    enableDataIsland(enable: boolean): void;
+    setLocalConfig(action: string, enable: boolean, delay: number): void;
+    setClipboardModule(action: string, data: any, extra?: any): void;
+    setDpi(dpi: number): void;
+    stopConnection(): void;
+    addHandle(name: string, callback: Function): void;
+    addConnectionListener(actionName: string, callback: (eventName: string, data: any) => any): void;
+    addClipboardListener(callback: (data: any) => any): void;
+    addInputCallback(callback: (event: string, data: any) => any): void;
+    sendLyncMessage(channel: string, message: string): void;
+    addLyncListener(channel: string, action: string, callback: (data: any) => any): void;
+    sendDataChannelMessage(channel: string, message: Uint8Array): void;
+    addDataChannelListener(channel: string, action: string, callback: (data: any) => any): void;
+}
+/**
+ * AspService 实现流化业务逻辑
+ *
+ * 职责：
+ * - 调用 Router 层执行具体操作
+ * - 应用重试机制
+ * - 错误分类和处理
+ */
+declare class AspService implements IAspService {
+    private container;
+    private retryer;
+    private config;
+    constructor(container: Container);
+    /**
+     * 启动流化会话
+     *
+     * 带重试和错误处理的启动流程
+     */
+    startAspStream(context: ExecutionContext, req: StartStreamRouteRequest): Promise<void>;
+    /**
+     * 停止流化会话
+     */
+    stopAspStream(): Promise<void>;
+    /**
+     * 获取当前会话信息
+     */
+    getSession(): AspStreamSession | null;
+    /**
+     * 订阅事件
+     */
+    onEvent(callback: AspStreamEventCallback): () => void;
+    /**
+     * 获取底层 WebSDK Client 实例（用于高级功能调用）
+     * 注意：此方法返回内部对象，谨慎使用
+     */
+    getWebSdkSession(): any;
+    enableInput(enabled: boolean): void;
+    enableKeyBoard(enabled: boolean): void;
+    setInputEnabled(enabled: boolean): void;
+    setTouchEnabled(enabled: boolean): void;
+    openSoftKeyboard(open: boolean): void;
+    setMicrophoneEnabled(enabled: boolean): void;
+    setClipboardEnabled(enabled: boolean): void;
+    setResolution(width: number, height: number, degree?: number): void;
+    setMonitorsConfig(scale: number): void;
+    setGraphicConfig(mode: GraphicMode): void;
+    setMouseMode(mode: MouseModeType): void;
+    uploadFileAction(files: File[], showDialog?: boolean): void;
+    downloadFileAction(showDialog?: boolean): void;
+    getFileTransformInfo(callback: (eventName: string, data: any) => void): void;
+    getScreenshot(callback: (blob: Blob) => any, immediate?: boolean): void;
+    startPingDiagnosis(params: PingDiagnosisParams): void;
+    getDesktopIdleTime(callback: (time: number) => any): void;
+    sendRuntimeMsg(msg: string, appId: string): void;
+    setUiParams(param: AspUiConfig): void;
+    customASPAction(action: string, data: any[]): void;
+    refreshConnect(userInfo: any): void;
+    enableDataIsland(enable: boolean): void;
+    setLocalConfig(action: string, enable: boolean, delay: number): void;
+    setClipboardModule(action: string, data: any, extra?: any): void;
+    setDpi(dpi: number): void;
+    stopConnection(): void;
+    addHandle(name: string, callback: Function): void;
+    addConnectionListener(actionName: string, callback: (eventName: string, data: any) => any): void;
+    addClipboardListener(callback: (data: any) => any): void;
+    addInputCallback(callback: (event: string, data: any) => any): void;
+    sendLyncMessage(channel: string, message: string): void;
+    addLyncListener(channel: string, action: string, callback: (data: any) => any): void;
+    sendDataChannelMessage(channel: string, message: Uint8Array): void;
+    addDataChannelListener(channel: string, action: string, callback: (data: any) => any): void;
+}
+
+interface Container {
+    config(): Config$1;
+    credential(): Credential;
+    appstreamClient(): AnonymousClient;
+    skillMgmtClient(): AnonymousClient;
+    salesClient(): AnonymousClient;
+    salesClientForRegion(regionId: string): AnonymousClient;
+    agentRoutes(): AgentRoutes;
+    agentService(): AgentService;
+    skillRouter(): SkillRouter;
+    skillService(): SkillService;
+    creditRouter(): CreditRouter;
+    creditService(): CreditService;
+    modelRouter(): ModelRouter;
+    modelService(): ModelService;
+    desktopRouter(): DesktopRouter;
+    desktopService(): DesktopService;
+    streamRoutes(): StreamRoutes;
+    aspService(): AspService;
+    webSdkClient(): WebSdkClient;
+    close(): Promise<void>;
+}
+interface AgentService {
+    getAgentList(context: ExecutionContext, pageNum: number, pageSize: number, agentPlatform?: string): Promise<{
+        agents: Agent[];
+        totalCount: number;
+    }>;
+    getAgentStatus(context: ExecutionContext, agentId: string): Promise<Agent>;
+    updateAgentInstance(context: ExecutionContext, agentInstanceId: string, name: string, avatarUrl: string, description: string, simplePersonaType: string, simpleModelType: string): Promise<void>;
+}
+interface SkillRouter {
+    getSkill(ctx: ExecutionContext, skillID: string, skillChannel: string): Promise<SkillInfo>;
+    listSkills(ctx: ExecutionContext, skillIDs: string[], supplierType: string, skillChannel: string, categoryId: string, filter: string, pageSize: number, pageNumber: number): Promise<SkillItem[]>;
+    listInstalledSkills(ctx: ExecutionContext, desktopID: string, categoryID: string, skillName: string): Promise<InstalledSkill[]>;
+    listCategories(ctx: ExecutionContext): Promise<SkillCategory[]>;
+    setSkillEnabled(ctx: ExecutionContext, desktopID: string, skillNames: string[], enabled: boolean): Promise<string[]>;
+    getOperationTask(ctx: ExecutionContext, taskID: string): Promise<OperationTask>;
+    batchGetOperationTask(ctx: ExecutionContext, taskIDs: string[]): Promise<OperationTask[]>;
+    listAgentAuthedSkills(ctx: ExecutionContext, identityId: string, agentPlatform: string, agentProvider: string): Promise<ListAgentAuthedSkillsResult>;
+    entInstallSkills(ctx: ExecutionContext, identityId: string, skillIds: string[], agentProvider?: string, agentPlatform?: string): Promise<EntInstallSkillsResult>;
+    entUninstallSkills(ctx: ExecutionContext, identityId: string, skillInfos: UninstallSkillInfo[], agentProvider?: string, agentPlatform?: string): Promise<EntUninstallSkillsResult>;
+}
+interface SkillService {
+    getSkill(ctx: ExecutionContext, skillID: string, skillChannel: string): Promise<SkillInfo>;
+    listSkills(ctx: ExecutionContext, skillIDs: string[], supplierType: string, skillChannel: string, categoryId: string, filter: string, pageSize: number, pageNumber: number): Promise<SkillItem[]>;
+    listInstalledSkills(ctx: ExecutionContext, desktopID: string, categoryID: string, skillName: string): Promise<InstalledSkill[]>;
+    listCategories(ctx: ExecutionContext): Promise<SkillCategory[]>;
+    setSkillEnabled(ctx: ExecutionContext, desktopID: string, skillNames: string[], enabled: boolean): Promise<string[]>;
+    setSkillEnabledAndWait(ctx: ExecutionContext, desktopID: string, skillNames: string[], enabled: boolean): Promise<OperationTask[]>;
+    getOperationTask(ctx: ExecutionContext, taskID: string): Promise<OperationTask>;
+    batchGetOperationTask(ctx: ExecutionContext, taskIDs: string[]): Promise<OperationTask[]>;
+    listAgentAuthedSkills(ctx: ExecutionContext, identityId: string, agentPlatform: string, agentProvider: string): Promise<ListAgentAuthedSkillsResult>;
+    entInstallSkills(ctx: ExecutionContext, identityId: string, skillIds: string[], agentProvider?: string, agentPlatform?: string): Promise<EntInstallSkillsResult>;
+    entInstallSkillsAndWait(ctx: ExecutionContext, identityId: string, skillIds: string[], agentProvider?: string, agentPlatform?: string): Promise<OperationTask[]>;
+    entUninstallSkills(ctx: ExecutionContext, identityId: string, skillInfos: UninstallSkillInfo[], agentProvider?: string, agentPlatform?: string): Promise<EntUninstallSkillsResult>;
+    entUninstallSkillsAndWait(ctx: ExecutionContext, identityId: string, skillInfos: UninstallSkillInfo[], agentProvider?: string, agentPlatform?: string): Promise<OperationTask[]>;
+    close(): void;
+}
+interface CreditRouter {
+    describeCreditPackageAgents(ctx: ExecutionContext, agentType: string, agentIds: string[], fillAgent: boolean): Promise<CreditPackageAgent[]>;
+    describeCreditUsageInfo(ctx: ExecutionContext, req: DescribeCreditUsageInfoRequest$1): Promise<CreditUsageInfo>;
+}
+interface CreditService {
+    describeCreditPackageAgents(ctx: ExecutionContext, agentType: string, agentIds: string[], fillAgent: boolean): Promise<CreditPackageAgent[]>;
+    describeCreditUsageInfo(ctx: ExecutionContext, req: DescribeCreditUsageInfoRequest$1): Promise<CreditUsageInfo>;
+}
+interface ModelRouter {
+    getAgentInstanceModelConfig(ctx: ExecutionContext, agentInstanceId: string, agentProvider: string, agentPlatform: string, channelSessionId: string): Promise<ModelConfig | null>;
+    setChannelGroupModel(ctx: ExecutionContext, agentInstanceId: string, groupId: string, providerName: string, llmCode: string): Promise<SetChannelGroupModelResult>;
+}
+interface ModelService {
+    getAgentInstanceModelConfig(ctx: ExecutionContext, agentInstanceId: string, agentProvider: string, agentPlatform: string, channelSessionId: string): Promise<ModelConfig | null>;
+    setChannelGroupModel(ctx: ExecutionContext, agentInstanceId: string, groupId: string, providerName: string, llmCode: string): Promise<SetChannelGroupModelResult>;
+}
+interface DesktopRouter {
+    describeDesktops(ctx: ExecutionContext, desktopIds: string[], queryFotaUpdate: boolean, protocolType: string, maxResults: number, nextToken: string, regionId?: string): Promise<DesktopList>;
+    approveFotaUpdate(ctx: ExecutionContext, desktopId: string, appVersion: string, uuid: string, targetStatus: string, regionId?: string): Promise<void>;
+    generateSceneUrl(ctx: ExecutionContext, desktopId: string, regionId?: string, scene?: string, clientOS?: string, clientType?: string, uuid?: string): Promise<{
+        requestId: string;
+        url: string;
+        expireTime: string;
+    }>;
+    describeUserResourceFeatures(ctx: ExecutionContext, desktopId: string, regionId?: string): Promise<DescribeUserResourceFeaturesResponse>;
+}
+interface DesktopService {
+    describeDesktops(ctx: ExecutionContext, desktopIds: string[], queryFotaUpdate: boolean, protocolType: string, maxResults: number, nextToken: string, regionId?: string): Promise<DesktopList>;
+    approveFotaUpdate(ctx: ExecutionContext, desktopId: string, appVersion: string, uuid: string, targetStatus: string, regionId?: string): Promise<void>;
+    generateSceneUrl(ctx: ExecutionContext, desktopId: string, regionId?: string, scene?: string, clientOS?: string, clientType?: string, uuid?: string): Promise<{
+        requestId: string;
+        url: string;
+        expireTime: string;
+    }>;
+    describeUserResourceFeatures(ctx: ExecutionContext, desktopId: string, regionId?: string): Promise<DescribeUserResourceFeaturesResponse>;
+}
+
+/** Cloud API and ASP composition only; Agent IM is owned by the business Client. */
+declare class ServiceContainer implements Container {
+    private closed;
+    private checkOpen;
+    private cfg;
+    private cred;
+    private _appstreamClient;
+    private _skillMgmtClient;
+    private logger;
+    private agentRoutesInstance;
+    private skillRoutesInstance;
+    private agentSvc;
+    private skillSvc;
+    private aspSvc;
+    private streamRoutesInstance;
+    private webSdkClientInstance;
+    private _salesClient;
+    private _salesClientsByRegion;
+    private creditRouterInstance;
+    private creditSvcInstance;
+    private modelRouterInstance;
+    private modelSvcInstance;
+    private desktopRouterInstance;
+    private desktopSvcInstance;
+    private setupAuthCodeCredential;
+    config(): Config$1;
+    credential(): Credential;
+    appstreamClient(): AnonymousClient;
+    skillMgmtClient(): AnonymousClient;
+    agentRoutes(): AgentRoutes;
+    agentService(): AgentService;
+    skillRouter(): SkillRouter;
+    skillService(): SkillService;
+    salesClient(): AnonymousClient;
+    salesClientForRegion(regionId: string): AnonymousClient;
+    creditRouter(): CreditRouter;
+    creditService(): CreditService;
+    modelRouter(): ModelRouter;
+    modelService(): ModelService;
+    desktopRouter(): DesktopRouter;
+    desktopService(): DesktopService;
+    streamRoutes(): StreamRoutes;
+    aspService(): AspService;
+    webSdkClient(): WebSdkClient;
+    constructor(cfg: Config$1, credential: Credential);
+    close(): Promise<void>;
+    reset(): Promise<void>;
+}
+
+/**
+ * WyDrive 文件空间相关 CloudAPI
+ * 对应 POP 接口: ecd::2020-10-02 / ecd::2025-07-30
+ *
+ * WyDrive API 提供文件空间管理能力，包括空间查询、文件列表、文件删除、下载链接获取、
+ * JVS 文件同步等功能。通过 AnonymousClient 调用 POP API。
+ */
+
+interface DescribeWyDrivesResult {
+    requestId: string;
+    drives: WyDrive[];
+    totalSize: number;
+    usedSize: number;
+    capacityNotEnough: boolean;
+}
+interface DescribeWyDriveFilesResult {
+    requestId: string;
+    files: WyDriveFile[];
+    totalCount: number;
+}
+interface GetDownloadUrlResult {
+    requestId: string;
+    url: string;
+    expireTime: string;
+    fileName: string;
+    size: number;
+}
+
+/**
+ * 知识库相关 CloudAPI
+ * 对应 POP 接口: ecd::2020-10-02（skillMgmtClient 端点）
+ *
+ * 知识库 API 提供知识空间查询、文件列表、下载任务初始化与启动等能力。
+ * 通过 AnonymousClient 调用 POP API。
+ */
+
+interface ListKnowledgeFilesResult {
+    requestId: string;
+    files: KnowledgeFile[];
+    totalCount: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+/** Independent authenticated HTTP resources. Never initializes the IM transport. */
+declare class CloudResources {
+    private container;
+    private checkOpen;
+    constructor(container: ServiceContainer, checkOpen: () => void);
+    private auth;
+    private pagination;
+    private file;
+    describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest): Promise<DescribeWyDrivesResult>;
+    describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+    getDownloadUrl(ctx: ExecutionContext, req: GetDownloadUrlRequest): Promise<GetDownloadUrlResult>;
+    deleteWyDriveFile(ctx: ExecutionContext, req: DeleteWyDriveFileRequest): Promise<void>;
+    listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
+    listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+    downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest): Promise<DownloadKnowledgeFileResult[]>;
+}
+
+/** Public display identities never replace execution references. */
+interface AgentPresentation {
+    productId?: string;
+    instanceLabel?: string;
+    description?: string;
+    iconUrl?: string;
+    subAgentId?: string;
+    source: 'instance' | 'profile';
+}
+interface Expert extends AgentRef {
+    expertId: string;
+    name: string;
+    description?: string;
+    primaryAgentId: string;
+    status: 'available' | 'missing' | 'ambiguous' | 'disabled' | 'unavailable';
+    capabilities: {
+        privateChat: Capability;
+        groupMember: Capability;
+    };
+}
+/** Completeness of one authoritative profile query, independent of Snapshot.projection.coverage.
+ * A complete result can contain unavailable profiles. Re-read before execution. */
+interface ExpertDirectory extends RuntimeRef {
+    primaryAgentId: string;
+    experts: Expert[];
+    complete: boolean;
+}
+interface ProductCatalog {
+    products: {
+        productId: string;
+        instanceIds: string[];
+        state: 'available' | 'unavailable' | 'unknown';
+    }[];
+    complete: boolean;
+}
+interface SidebarFilter {
+    runtimeId?: string;
+    titleQuery?: string;
+    archive?: 'active' | 'archived' | 'all';
+    pin?: 'all' | 'pinned' | 'unpinned';
+    category?: 'standard';
+}
+interface ConversationGroupQuery extends SidebarFilter {
+    dimension: 'computer' | 'agent';
+    groupSearch?: string;
+    specialLabelMatches?: ('group' | 'unknown')[];
+    limit?: number;
+    cursor?: string;
+}
+interface SidebarRowsQuery extends SidebarFilter {
+    /** Omitted preserves activity ordering. Pinned order uses persisted owner metadata. */
+    order?: 'activity' | 'pinned';
+    group?: {
+        dimension: 'computer' | 'agent';
+        groupKey: string;
+    };
+    limit?: number;
+    cursor?: string;
+}
+interface SidebarGroup {
+    groupKey: string;
+    kind: 'computer' | 'agent' | 'group' | 'unknown';
+    displayName?: string;
+    count: number | null;
+    countAccuracy: 'exact' | 'partial' | 'unknown';
+    lastActivityAt: Int64;
+    productId?: string;
+    /** Directory serving Runtime; it is not the identity of the grouped computer. */
+    runtimeId?: string;
+    /** Display metadata only. Presence requires a unique mapping in the current authorized Runtime directory. */
+    environmentId?: string;
+    environmentType?: string;
+}
+interface ConversationPresentation {
+    productId?: string;
+    environmentId?: string;
+    environmentName?: string;
+    kind: 'standard' | 'cron' | 'voice_call' | 'unknown';
+    visibleInSidebar: boolean;
+    pinOrder?: Int64;
+    pinnedAt?: Int64;
+}
+interface Coverage {
+    state: 'complete' | 'partial' | 'unknown';
+    reasonCode?: string;
+}
+interface ExecutionTiming {
+    startedAt?: Int64;
+    finishedAt?: Int64;
+    durationMs?: Int64;
+}
+type ProcessPayload = {
+    kind: 'reasoning';
+    text?: string;
+} | {
+    kind: 'tool';
+    name?: string;
+    input?: unknown;
+    output?: unknown;
+    error?: unknown;
+    truncated?: boolean;
+} | {
+    kind: 'progress_text';
+    blocks: Block[];
+} | {
+    kind: 'interaction';
+    interactionId?: string;
+} | {
+    kind: 'artifact' | 'file_change' | 'error';
+    text?: string;
+};
+interface PresentationItem {
+    itemId: string;
+    messageId: string;
+    turnId: string;
+    memberId?: string;
+    toolCallId?: string;
+    order: Int64;
+    revision: Int64;
+    state: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' | 'interrupted' | 'unknown';
+    kind: ProcessPayload['kind'];
+    payload: ProcessPayload;
+    timing?: ExecutionTiming;
+}
+interface MessagePresentation {
+    schemaVersion: '1';
+    message: Message;
+    snapshotRevision: string;
+    answer: {
+        state: 'final' | 'partial' | 'none' | 'unknown';
+        itemIds: string[];
+        blocks: Block[];
+        coverage: Coverage;
+    };
+    process: {
+        items: PresentationItem[];
+        nextCursor: string | null;
+        coverage: Coverage;
+    };
+    timing?: ExecutionTiming;
+}
+interface PresentationQuery extends ConversationRef {
+    messageId: string;
+    cursor?: string;
+    limit?: number;
+    consistency?: 'cache' | 'refresh';
+}
+interface ActiveExecution extends ConversationRef {
+    executionId: string;
+    ownerConversationId: string;
+    turnId: string;
+    memberId?: string;
+    role: 'coordinator' | 'participant' | 'single' | 'unknown';
+    state: 'active' | 'awaiting_interaction' | 'unknown';
+    cancel: Capability;
+    revision: Int64;
+}
+interface ActiveExecutionSnapshot {
+    executions: ActiveExecution[];
+    complete: boolean;
+}
+interface ComposerCapabilities extends ConversationRef {
+    agentId?: string;
+    memberId?: string;
+    capabilities: {
+        send: Capability;
+        thinking: Capability;
+        steer: Capability;
+        skills: Capability;
+        tools: Capability;
+        knowledge: Capability;
+        draftAttachments: Capability;
+        voice: Capability;
+        hostPlugins: Capability;
+    };
+    configOptions: {
+        optionId: string;
+        name: string;
+        type: string;
+        value?: string;
+        options?: {
+            value: string;
+            label: string;
+        }[];
+    }[];
+    attachments: {
+        maxFileBytes: Int64;
+        maxCount?: number;
+        mimeTypes?: string[];
+        coverage: Coverage;
+    };
+    revision: string;
+}
+interface ModelCapabilities {
+    groupName?: string;
+    sortOrder?: number;
+    description?: string;
+    features?: Record<string, boolean>;
+    thinking?: {
+        supported: boolean;
+        required?: boolean;
+        defaultValue?: string;
+        options: {
+            value: string;
+            label: string;
+        }[];
+    };
+    inputModalities?: string[];
+}
+interface CommandReceiptRef extends RuntimeRef {
+    clientCommandId: string;
+    conversationId?: string;
+}
+interface CommandReceipt extends CommandReceiptRef {
+    state: 'pending' | 'succeeded' | 'failed' | 'unknown';
+    result?: unknown;
+    errorCode?: ErrorCode$1;
+    retryable?: boolean;
+    failureEffect?: 'none' | 'partial' | 'unknown';
+    traceId?: string;
+}
+type InputPart = {
+    kind: 'text';
+    text: string;
+} | {
+    kind: 'memberMention';
+    memberId: string;
+} | {
+    kind: 'attachment';
+    attachmentId: string;
+};
+interface CreatedConversation extends ConversationRef {
+    coordinatorMemberId?: string;
+    memberMappings?: {
+        clientMemberKey: string;
+        memberId: string;
+    }[];
+    mappingState?: 'complete' | 'unknown';
+}
+interface Workspace {
+    workspaceId: string;
+    name: string;
+    displayPath: string;
+    environmentId?: string;
+}
+interface HostCapabilities extends RuntimeRef {
+    workspaceQuery: Capability;
+    workspaceCreate: Capability;
+    workspaceSearch: Capability;
+    voice: Capability;
+    plugins: Capability;
+    clipboard: Capability;
+}
+interface WorkspacePage {
+    current: Workspace;
+    parentWorkspaceId?: string;
+    entries: Workspace[];
+    truncated: boolean;
+}
+/** The Gateway owns durable bytes. Applications persist this opaque draft handle. */
+interface DraftRef extends RuntimeRef {
+    draftId: string;
+}
+interface DraftAttachment extends DraftRef {
+    attachmentId: string;
+    name: string;
+    mime: string;
+    size: Int64;
+    kind: string;
+    createdAt: Int64;
+}
+interface DraftSnapshot extends DraftRef {
+    items: DraftAttachment[];
+    remoteUpload: Capability;
+}
+interface CommittedAttachment {
+    attachmentId: string;
+    name?: string;
+    mime?: string;
+    size?: Int64;
+    kind: string;
+}
+interface AttachmentPreview {
+    attachmentId: string;
+    kind: string;
+    mime?: string;
+    title?: string;
+    text?: string;
+    dataUrl?: string;
+    unavailableReason?: string;
+}
+
+/** Public AG business API. Transport, storage and recovery remain internal. */
+type Int64 = string;
+/** timeout is milliseconds: ordinary call 1_000..120_000; stream lifetime 1_000..3_600_000. */
+interface Context {
+    signal?: AbortSignal;
+    timeout?: number;
+    traceId?: string;
+}
+interface RuntimeRef {
+    runtimeId: string;
+}
+interface ConversationRef extends RuntimeRef {
+    conversationId: string;
+}
+interface AgentRef extends RuntimeRef {
+    agentId: string;
+}
+/** IM-only read locator. runtimeId is an authorized disambiguation hint, never an execution switch. */
+interface ConversationReadQuery {
+    conversationId: string;
+    runtimeId?: string;
+}
+interface ConversationReadBinding extends ConversationReadQuery {
+    groupId: string;
+    controllerUserId: string;
+    membershipGeneration: number;
+    joinedAfterSeq?: string;
+    name?: string;
+}
+interface ConversationHistoryQuery extends ConversationReadQuery {
+    groupId?: string;
+    cursor?: string;
+    limit?: number;
+}
+/** Full group facts are materialized before paging visible messages; all fields are read-only. */
+interface ConversationHistory extends Page<Message> {
+    conversation?: Conversation;
+    members: Member[];
+    turnItems: Item[];
+    turns: Turn[];
+    activities: ExecutionActivity[];
+    presentations: MessagePresentation[];
+}
+interface Subscription {
+    unsubscribe(): void;
+}
+interface Capability {
+    supported: boolean;
+    reasonCode?: string;
+}
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
+}
+interface Snapshot<T> {
+    data: T;
+    projection: Projection;
+}
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+}
+interface Observer<T> {
+    onSnapshot(value: Snapshot<T>): void;
+    onError(error: BusinessError$2): void;
+}
+type ErrorCode$1 = 'INVALID_ARGUMENT' | 'UNAUTHENTICATED' | 'FORBIDDEN' | 'UNSUPPORTED' | 'SYNC_NOT_READY' | 'STORAGE_UNAVAILABLE' | 'CURSOR_EXPIRED' | 'CONFLICT' | 'NOT_FOUND' | 'RUNTIME_OFFLINE' | 'BUSINESS_REJECTED' | 'OUTCOME_UNKNOWN' | 'CANCELLED' | 'TIMEOUT' | 'PROTOCOL_ERROR' | 'CLIENT_CLOSED';
+interface BusinessError$2 extends Error {
+    code: ErrorCode$1;
+    outcome: 'not_started' | 'confirmed' | 'unknown';
+    retryable: boolean;
+    traceId?: string;
+}
+interface RuntimeSummary extends RuntimeRef {
+    name: string;
+    state: 'online' | 'offline' | 'unknown';
+    capabilities: {
+        agentQuery: Capability;
+        conversationCreate: Capability;
+        resourceQuery: Capability;
+    };
+}
+interface AgentSummary extends AgentRef {
+    name: string;
+    enabled: boolean;
+    availability: 'available' | 'unavailable' | 'unknown';
+    /** Product role from the selected Gateway route, not inferred from its name. */
+    category?: 'primary' | 'agent';
+    /** Original probe reason; preserves not_installed separately from unavailable. */
+    probeStatus?: string;
+    capabilities: {
+        group: Capability;
+        modelConfig: Capability;
+        cancel: Capability;
+        resources: Capability;
+    };
+    presentation?: AgentPresentation;
+    revision: Int64;
+}
+interface ModelSummary extends ModelCapabilities {
+    modelId: string;
+    name: string;
+    available: boolean;
+    revision: Int64;
+    providerName?: string;
+    isDefault?: boolean;
+}
+type Actor = {
+    kind: 'user';
+    userId: string;
+} | ({
+    kind: 'agent';
+} & AgentRef) | {
+    kind: 'system';
+} | {
+    kind: 'unresolved';
+};
+interface Sender {
+    actor: Actor;
+    memberId?: string;
+    displayName?: string;
+}
+interface Config {
+    permissionPreset?: 'ask' | 'approve-for-me' | 'full-access';
+    modelId?: string;
+    thinkingLevel?: string;
+}
+interface EffectiveConfig {
+    desired: Config;
+    applied?: Config;
+    revision: Int64;
+    writeVersion?: string;
+    application: 'applied' | 'pending' | 'partial' | 'failed' | 'unknown';
+    errors?: {
+        field: keyof Config;
+        code: ErrorCode$1;
+    }[];
+}
+interface CreateBase extends RuntimeRef {
+    name: string;
+    config?: Config;
+    workspaceId?: string;
+}
+type CreateRequest = (CreateBase & {
+    mode: 'single';
+    agentId: string;
+    subAgentId?: string;
+}) | (CreateBase & {
+    mode: 'group';
+    coordinatorAgentId?: string;
+    members: {
+        agentId: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+        clientMemberKey?: string;
+    }[];
+});
+interface Conversation extends ConversationRef {
+    name: string;
+    mode: 'single' | 'group';
+    agentId?: string;
+    revision: Int64;
+    executionState: 'idle' | 'running' | 'error' | 'unknown';
+    availability: 'available' | 'unavailable' | 'unknown';
+    archived: boolean;
+    pinned: boolean;
+    lastActivityAt: Int64;
+    header?: ConversationHeaderMetadata;
+    presentation?: ConversationPresentation;
+    capabilities: {
+        send: Capability;
+        configure: Capability;
+        members: Capability;
+        resources: Capability;
+    };
+}
+interface ConversationQuery {
+    /** Omit to query all cached Runtime sources of the authenticated account. */
+    runtimeId?: string;
+    search?: string;
+    archive?: 'active' | 'archived' | 'all';
+    pin?: 'all' | 'pinned' | 'unpinned';
+    order?: 'activity' | 'pinned';
+    agentId?: string;
+    limit?: number;
+    cursor?: string;
+}
+interface Member {
+    memberId: string;
+    actor: Actor;
+    displayName: string;
+    role: 'coordinator' | 'participant';
+    status: 'active' | 'muted' | 'suspended' | 'removed';
+    modelId?: string;
+    revision: Int64;
+    writeVersion?: string;
+    configuration?: MemberConfigurationView;
+    capabilities?: {
+        editName: Capability;
+        editModel: Capability;
+        editResponsibility: Capability;
+        remove: Capability;
+    };
+}
+type Block = {
+    kind: 'text';
+    text: string;
+} | {
+    kind: 'attachment';
+    attachmentId: string;
+    name: string;
+    mime?: string;
+    size?: Int64;
+    attachmentKind?: 'image' | 'text' | 'file' | 'folder';
+} | {
+    kind: 'tool';
+    toolCallId: string;
+    name: string;
+    status: 'running' | 'completed' | 'failed';
+    summary?: string;
+} | {
+    kind: 'interaction';
+    interactionId: string;
+} | {
+    kind: 'unsupported';
+    typeName: string;
+};
+interface Message extends ConversationRef {
+    messageId: string;
+    clientMessageId?: string;
+    turnId?: string;
+    sender: Sender;
+    blocks: Block[];
+    state: 'pending' | 'streaming' | 'folded' | 'completed' | 'cancelled' | 'failed' | 'interrupted' | 'unknown';
+    position: Int64;
+    createdAt: Int64;
+    revision: Int64;
+    timing?: ExecutionTiming;
+}
+/** Public Hub execution content, grouped and deduplicated; separate from Store messages. */
+interface ExecutionActivity extends ConversationRef {
+    activityId: string;
+    turnId: string;
+    kind: 'reasoning' | 'text' | 'tool' | 'status' | 'error';
+    name: string;
+    text: string;
+    result?: string;
+    state: 'running' | 'completed' | 'failed';
+    scope?: 'message' | 'turn' | 'unknown';
+    messageId?: string;
+    memberId?: string;
+    canonicalItemId?: string;
+    toolCallId?: string;
+    sequence: Int64;
+    revision: Int64;
+    frameCount: number;
+}
+/** Read-only live process, independent of durable Message/Turn lifecycle. */
+interface LiveProcessItem {
+    processId: string;
+    /** Accepted live tool/text stream progress only; durable/recovered content cannot advance it. */
+    liveProgress?: {
+        generation: string;
+        revision: Int64;
+    };
+    sourceConversationId: string;
+    /** Public execution identity. A canonical Turn is supplied only after an exact binding. */
+    runId?: string;
+    turnId?: string;
+    scope: 'message' | 'turn' | 'unknown';
+    messageId?: string;
+    memberId?: string;
+    canonicalItemId?: string;
+    canonicalRevision?: Int64;
+    /** Exact legacy public Activity identity replaced by this item, when one exists. */
+    legacyActivityId?: string;
+    toolCallId?: string;
+    order: Int64;
+    orderDomain: 'hub' | 'canonical' | 'observed';
+    revision: Int64;
+    state: PresentationItem['state'];
+    kind: 'reasoning' | 'tool' | 'progress_text' | 'error';
+    payload: Extract<ProcessPayload, {
+        kind: 'reasoning' | 'tool' | 'progress_text';
+    }> | {
+        kind: 'error';
+        text?: string;
+    };
+    timing?: ExecutionTiming;
+    coverage: Coverage;
+}
+interface LiveProcessSnapshot extends ConversationRef {
+    /** In-memory root observation epoch/watermark; not execution state or a durable cursor. */
+    liveProgress?: {
+        generation: string;
+        revision: Int64;
+    };
+    schemaVersion: '1';
+    revision: Int64;
+    items: readonly LiveProcessItem[];
+    /** Live observation is partial; complete message ranges remain owned by MessagePresentation. */
+    coverage: Coverage;
+    /** Bounded counters only, never raw frames, parameters, output or credentials. */
+    diagnostics: {
+        received: number;
+        accepted: number;
+        duplicates: number;
+        rejected: number;
+        gaps: number;
+        reasoning: number;
+        tools: number;
+        recoveries: number;
+        limited: boolean;
+    };
+}
+interface MessageQuery extends ConversationRef {
+    cursor?: string;
+    limit?: number;
+}
+interface Item {
+    itemId: string;
+    turnId: string;
+    messageId: string;
+    blocks: Block[];
+    state: 'pending' | 'streaming' | 'completed' | 'failed' | 'cancelled' | 'resolving' | 'resolved' | 'expired' | 'orphaned' | 'unknown';
+    outcome?: InteractionOutcome;
+    position: Int64;
+    revision: Int64;
+}
+interface MessageDetail {
+    message: Message;
+    items: Item[];
+    complete: boolean;
+    nextItemCursor: string | null;
+}
+interface SendRequest extends ConversationRef {
+    text: string;
+    clientCommandId?: string;
+    inputParts?: InputPart[];
+    targetMemberId?: string;
+    attachmentIds?: string[];
+    /** Structured references, routed by the existing Gateway group mention contract. */
+    mentions?: {
+        memberId: string;
+    }[];
+}
+/** A single accepted request followed by its authoritative Turn terminal. Failed execution rejects. */
+interface MessageCompletion {
+    accepted: MessageAccepted;
+    turn: Turn & {
+        state: 'completed' | 'cancelled' | 'interrupted';
+    };
+}
+interface MessageAccepted extends ConversationRef {
+    clientMessageId: string;
+    messageId: string;
+    turnId: string;
+}
+interface Turn extends ConversationRef {
+    turnId: string;
+    messageIds: string[];
+    state: 'active' | 'completed' | 'cancelled' | 'failed' | 'interrupted' | 'unknown';
+    errorCode?: string;
+    revision: Int64;
+}
+type StreamChunk = {
+    kind: 'message';
+    message: Message;
+} | {
+    kind: 'text.delta';
+    messageId: string;
+    turnId: string;
+    itemId: string;
+    sequence: Int64;
+    delta: string;
+} | {
+    kind: 'text.replace';
+    messageId: string;
+    turnId: string;
+    itemId: string;
+    content: string;
+    sequence: Int64;
+} | {
+    kind: 'turn';
+    turn: Turn;
+};
+interface MessageStream extends AsyncIterable<StreamChunk> {
+    readonly accepted: Promise<MessageAccepted>;
+    readonly result: Promise<Turn & {
+        state: 'completed' | 'cancelled' | 'interrupted';
+    }>;
+    cancel(ctx?: Context): Promise<{
+        state: 'requested' | 'cancelled' | 'already_finished';
+    }>;
+}
+type InteractionOutcome = 'approved' | 'denied' | 'replied' | 'dismissed' | 'expired' | 'cancelled' | 'auto_approved' | 'auto_denied';
+interface Question {
+    isSecret?: boolean;
+    placeholder?: string;
+    maxSelections?: number;
+    allowTextWithSelection?: boolean;
+    questionId: string;
+    title: string;
+    options: {
+        optionId: string;
+        label: string;
+        description?: string;
+    }[];
+    allowText: boolean;
+    allowMultiple: boolean;
+    required: boolean;
+}
+type Interaction = ConversationRef & {
+    /** Store identity for stable presentation binding; interactionId remains the response ID. */
+    canonicalInteractionId?: string;
+    /** Equivalent response IDs, authoritative only within this exact owner/Turn/kind. */
+    identityAliases?: string[];
+    interactionId: string;
+    turnId: string;
+    state: 'pending' | 'resolving' | 'resolved' | 'expired' | 'orphaned' | 'unknown';
+    outcome?: InteractionOutcome;
+    deliveryState: 'dispatching' | 'provider_accepted' | 'delivered' | 'outcome_unknown' | 'unknown';
+    title: string;
+    revision: Int64;
+    writeVersion?: string;
+    agentId?: string;
+    ownerConversationId?: string;
+    expiresAt?: Int64;
+    /** An explicit malformed deadline is never treated as unlimited validity. */
+    validity?: 'unknown';
+    unavailableReason?: 'IDENTITY_CONFLICT' | 'MISSING_AGENT' | 'EXECUTION_UNAVAILABLE' | 'DETAIL_NOT_SYNCHRONIZED' | 'AMBIGUOUS_REQUEST';
+} & ({
+    kind: 'permission';
+    options: {
+        optionId: string;
+        label: string;
+        kind?: string;
+    }[];
+} | {
+    kind: 'question';
+    questions: Question[];
+    allowSkip: boolean;
+});
+interface Resource {
+    resourceId: string;
+    runtimeId: string;
+    kind: 'skill' | 'mcp' | 'attachment';
+    name: string;
+    availability: 'available' | 'unavailable' | 'unknown';
+    revision: Int64;
+    capabilities: {
+        attach: Capability;
+        preview: Capability;
+    };
+}
+interface ResourceSelection extends ConversationRef {
+    resourceIds: string[];
+    revision: Int64;
+    writeVersion?: string;
+}
+interface StagedAttachment {
+    attachmentId: string;
+    name: string;
+    mime: string;
+    size: Int64;
+    expiresAt?: Int64;
+}
+/** Acknowledged interaction status; pending means the final outcome still needs synchronization. */
+/** Stable response identity, without question text or answers. */
+interface QuestionResponseRef extends ConversationRef {
+    interactionId: string;
+    ownerConversationId: string;
+    turnId: string;
+    expectedVersion: string;
+    clientCommandId: string;
+}
+interface InteractionResponse {
+    interactionId: string;
+    state: 'applied' | 'pending';
+    status?: string;
+    outcome?: InteractionOutcome;
+    selectedOptionId?: string;
+    resolvedAt?: Int64;
+    isAuto?: boolean;
+}
+interface AgentManager$1 extends Pick<CloudResources, 'describeWyDrives' | 'describeWyDriveFiles' | 'getDownloadUrl' | 'deleteWyDriveFile' | 'listAgentKnowledgeSpaces' | 'listKnowledgeFiles' | 'downloadKnowledgeFiles'> {
+    listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+    observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+    listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<ModelSummary[]>>;
+    listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+    getExpertDirectory(ctx: Context, req: RuntimeRef & {
+        primaryAgentId: string;
+    }): Promise<Snapshot<ExpertDirectory>>;
+    listExperts(ctx: Context, req: RuntimeRef & {
+        primaryAgentId: string;
+    }): Promise<Snapshot<Expert[]>>;
+    getAgentModelCatalog(ctx: Context, req: AgentRef & {
+        consistency?: 'cache' | 'refresh';
+    }): Promise<Snapshot<AgentModelCatalog>>;
+}
+type ResponsibilityPatch = {
+    mode: 'override';
+    text: string;
+} | {
+    mode: 'inherit';
+};
+interface MemberConfigurationView {
+    responsibility: {
+        source: 'group' | 'profile' | 'none';
+        text?: string;
+    };
+    desired: {
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    };
+    applied?: {
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    };
+    application: 'applied' | 'pending' | 'partial' | 'failed' | 'unknown';
+}
+interface ConversationHeaderMetadata {
+    workspace?: {
+        displayPath: string;
+        copyPath?: string;
+        platform: 'windows' | 'macos' | 'linux' | 'unknown';
+    };
+    actions: {
+        pin: Capability;
+        rename: Capability;
+        archive: Capability;
+        copyWorkspace: Capability;
+    };
+}
+interface MemberCandidate extends AgentRef {
+    add: Capability;
+    multipleIdentities: Capability;
+    configurable: {
+        displayName: Capability;
+        model: Capability;
+        responsibility: Capability;
+    };
+}
+interface MutationOptions {
+    mutationId: string;
+}
+interface MutationRef extends ConversationRef {
+    mutationId: string;
+}
+interface MutationStatus<T = unknown> extends MutationRef {
+    state: 'pending' | 'succeeded' | 'failed' | 'unknown';
+    result?: T;
+    errorCode?: ErrorCode$1;
+    failureEffect?: 'none' | 'partial' | 'unknown';
+    retryable?: boolean;
+    traceId?: string;
+}
+interface AgentModelCatalog {
+    models: ModelSummary[];
+    defaultModelId?: string;
+}
+interface MemberSnapshot {
+    members: Member[];
+    complete: boolean;
+    knownTotal?: number;
+}
+interface ConversationManager$1 {
+    /** Shared per authorization/root; 50ms notifications, no durable writes or execution control. */
+    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
+    getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
+    getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+    /** 仅列目录同步状态，不下载非热点群历史。 */
+    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+    /** 只读AG目录分页；不连接Runtime、不等待业务Ready、不下载历史。 */
+    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+    /** Bounded account activity index. This returns metadata only and opens no Runtime. */
+    listRecentGroups(ctx: Context, req: {
+        limit: number;
+    }): Promise<RecentGroupDirectoryEntry[]>;
+    /** 按业务会话定位当前机器的群；完整接收并应用本轮历史后返回。 */
+    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+    /** 显式选择分页返回的群，仍验证其属于指定Runtime。 */
+    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
+    listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+    observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+    listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+    observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    /** Metadata only; never activates or grants write authority to a cold conversation. */
+    getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
+    listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+    observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+    cancelExecution(ctx: Context, req: ConversationRef & {
+        executionId: string;
+        expectedVersion: string;
+    }): Promise<{
+        state: 'requested' | 'cancelled' | 'already_finished';
+    }>;
+    getComposerCapabilities(ctx: Context, req: ConversationRef & {
+        memberId?: string;
+    }): Promise<Snapshot<ComposerCapabilities>>;
+    getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    steerTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+        text: string;
+        clientCommandId: string;
+    }): Promise<{
+        state: 'accepted';
+        turnId: string;
+        messageId: string;
+    }>;
+    setConversationPinned(ctx: Context, req: ConversationRef & {
+        pinned: boolean;
+    }, options?: MutationOptions): Promise<ConversationRef>;
+    getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
+    listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<MemberCandidate[]>>;
+    getMemberSnapshot(ctx: Context, req: ConversationRef & {
+        consistency?: 'cache' | 'refresh';
+    }): Promise<Snapshot<MemberSnapshot>>;
+    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
+    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+    getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+    observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    renameConversation(ctx: Context, req: ConversationRef & {
+        name: string;
+    }, options?: MutationOptions): Promise<ConversationRef>;
+    updateConversationConfig(ctx: Context, req: ConversationRef & {
+        config: Config;
+        expectedVersion: string;
+    }): Promise<ConversationRef>;
+    /** Shell-aligned single-option command. No CAS or multi-option transaction. Read back state separately. */
+    setConversationConfigOption(ctx: Context, req: ConversationRef & {
+        optionId: 'model' | 'runtime.permissionPreset' | 'runtime.thinkingLevel';
+        value: string;
+    }): Promise<ConversationRef>;
+    observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+    getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig>>;
+    archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+    unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+    listMembers(ctx: Context, req: ConversationRef & {
+        includeRemoved?: boolean;
+    }): Promise<Snapshot<Member[]>>;
+    observeMembers(ctx: Context, req: ConversationRef & {
+        includeRemoved?: boolean;
+    }, observer: Observer<Member[]>): Promise<Subscription>;
+    addMember(ctx: Context, req: ConversationRef & {
+        agentId: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    updateMember(ctx: Context, req: ConversationRef & {
+        memberId: string;
+        expectedVersion: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    removeMember(ctx: Context, req: ConversationRef & {
+        memberId: string;
+        expectedVersion: string;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
+    sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+    sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
+    resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+    getMessageDetail(ctx: Context, req: ConversationRef & {
+        messageId: string;
+        itemCursor?: string;
+        limit?: number;
+    }): Promise<Snapshot<MessageDetail | undefined>>;
+    observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+    listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+    observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+    observeTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+    getTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }): Promise<Snapshot<Turn | undefined>>;
+    cancelTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }): Promise<{
+        state: 'requested' | 'cancelled' | 'already_finished';
+    }>;
+    observeInteractions(ctx: Context, req: ConversationRef & {
+        state?: 'pending' | 'all';
+    }, observer: Observer<Interaction[]>): Promise<Subscription>;
+    refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<ConversationRef & {
+        recovered: number;
+    }>;
+    listInteractions(ctx: Context, req: ConversationRef & {
+        state?: 'pending' | 'all';
+    }): Promise<Snapshot<Interaction[]>>;
+    /** expectedVersion fences the SDK snapshot; Gateway checks ownership and lifecycle, without a CAS field. */
+    respondPermission(ctx: Context, req: ConversationRef & {
+        interactionId: string;
+        optionId: string;
+        expectedVersion: string;
+    }): Promise<InteractionResponse>;
+    respondQuestion(ctx: Context, req: ConversationRef & {
+        interactionId: string;
+        expectedVersion: string;
+        answer: {
+            answers: {
+                questionId: string;
+                optionIds: string[];
+                text?: string;
+            }[];
+        } | {
+            skip: true;
+        };
+    }, options?: MutationOptions): Promise<InteractionResponse>;
+    /** Read only; never dispatches an answer. Available only for stable mutation attempts. */
+    getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+}
+/** 群目录查询：conversationId为AG原始业务ID，过滤需要controllerUserId作用域。 */
+interface GroupDirectoryQuery {
+    runtimeId?: string;
+    cursor?: string;
+    /** 1..200；默认由服务端/接入层决定。 */
+    limit?: number;
+    conversationId?: string;
+}
+interface GroupDirectoryEntry {
+    /** 仅在已授权Runtime目录中能唯一关联时提供；缺失时不能猜测AG。 */
+    runtimeId?: string;
+    groupId: string;
+    conversationId: string;
+    conversationIdIm: string;
+    controllerUserId: string;
+    status: string;
+    groupName: string;
+    faceURL?: string;
+    memberRevision: number;
+    membershipGeneration: number;
+    joinedAtMs?: number;
+}
+interface RecentGroupDirectoryEntry extends GroupDirectoryEntry {
+    activityAtMs: number;
+}
+interface GroupDirectoryPage {
+    groups: GroupDirectoryEntry[];
+    nextCursor: string | null;
+    hasMore: boolean;
+}
+interface GroupRef extends RuntimeRef {
+    groupId: string;
+}
+/** 群同步状态与Conversation生命周期分离；Ready不表示其他群已经同步。 */
+interface GroupSyncState {
+    groupId: string;
+    conversationId: string;
+    controllerUserId: string;
+    groupName: string;
+    membershipGeneration: number;
+    state: 'deferred' | 'syncing' | 'ready' | 'failed' | 'revoked';
+    targetSeq: string;
+    receivedSeq: string;
+    appliedSeq: string;
+    hasUpdates: boolean;
+    errorCode?: string;
+}
+interface ResourceManager$1 {
+    attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+    getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+    stageDraftAttachment(ctx: Context, req: DraftRef & {
+        file: Blob;
+        name: string;
+        uploadId: string;
+    }): Promise<StagedAttachment>;
+    listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+    commitDraftAttachments(ctx: Context, req: DraftRef & {
+        conversationId: string;
+        attachmentIds: string[];
+    }): Promise<CommittedAttachment[]>;
+    discardDraftAttachments(ctx: Context, req: DraftRef & {
+        attachmentIds: string[];
+    }): Promise<{
+        state: 'discarded';
+    }>;
+    getDraftAttachmentPreview(ctx: Context, req: DraftRef & {
+        attachmentId: string;
+    }): Promise<Snapshot<AttachmentPreview>>;
+    listWorkspaces(ctx: Context, req: RuntimeRef & {
+        parentWorkspaceId?: string;
+    }): Promise<Snapshot<WorkspacePage>>;
+    createWorkspace(ctx: Context, req: RuntimeRef & {
+        name: string;
+    }): Promise<Workspace>;
+    listResources(ctx: Context, req: RuntimeRef & {
+        kind?: Resource['kind'];
+    }): Promise<Snapshot<Resource[]>>;
+    observeResources(ctx: Context, req: RuntimeRef & {
+        kind?: Resource['kind'];
+    }, observer: Observer<Resource[]>): Promise<Subscription>;
+    observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+    getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
+    setConversationResources(ctx: Context, req: ConversationRef & {
+        resourceIds: string[];
+        expectedVersion: string;
+    }): Promise<ResourceSelection>;
+    stageAttachment(ctx: Context, req: ConversationRef & {
+        file: Blob;
+        name: string;
+    }): Promise<StagedAttachment>;
+    /** Discard a not-yet-committed upload. Does not delete conversation history or cloud files. */
+    discardAttachment(ctx: Context, req: ConversationRef & {
+        attachmentId: string;
+    }): Promise<{
+        state: 'discarded';
+    }>;
+    getAttachmentAccess(ctx: Context, req: ConversationRef & {
+        attachmentId: string;
+        purpose: 'preview' | 'download';
+    }): Promise<{
+        url: string;
+        expiresAt: Int64;
+    }>;
+}
+interface ClientConfig {
+    relayRequestDiagnostics?: boolean;
+    /** 中继发送上限，默认 10 MiB，不影响群消息分页。 */
+    relayMaxDataBytes?: number;
+    clientId: string;
+    /** 新消息链路的Ready策略：默认最近5群，显式全量等待不依赖活动索引。 */
+    readinessMode?: 'legacy' | 'scoped';
+    initialSync?: {
+        readyGroupLimit?: number;
+        waitForAllGroups?: boolean;
+    };
+    /** 低频元数据对账周期，默认30分钟；不影响热点消息Ready。 */
+    directory?: {
+        reconcileIntervalMs?: number;
+    };
+    /**
+     * 流式回放（replay_v1）观察配置，纯附加：
+     * enabled=true 才在 hello 协商 streamMode；onEvent 收到未解析的原始流事件
+     * （packet 为 transient，永不进入 durable Inbox/业务解析）。
+     */
+    streaming?: {
+        enabled?: boolean;
+        onEvent?: (event: StreamEvent) => void;
+    };
+}
+/** Ordinary IM group storage coordinates; never an AGMessage virtual group. */
+type ConversationStorageContext = ConversationRef & {
+    schemaVersion: 1;
+} & ({
+    state: 'ready';
+    productType: 'AIStorage';
+    driveType: 'imGroup';
+    imGroupId: string;
+    storageEnvironment?: 'online' | 'pre';
+} | {
+    state: 'unbound';
+} | {
+    state: 'unavailable';
+    reason: 'IM_CONTEXT_UNAVAILABLE' | 'ENVIRONMENT_UNVERIFIED';
+});
+/** Explicit group preparation may create the existing ordinary IM group. */
+type ConversationAttachmentTarget = Extract<ConversationStorageContext, {
+    state: 'ready';
+}> & {
+    storageConversationId: string;
+    groupPlatform: string;
+};
+interface IMGroupFileRequest extends ConversationRef {
+    operationId: string;
+    regionId: string;
+    driveId: string;
+    fileId: string;
+    storageEnvironment?: 'online' | 'pre';
+}
+type IMGroupAttachmentResult = ConversationRef & {
+    schemaVersion: 1;
+    operationId: string;
+} & ({
+    state: 'not_found';
+} | {
+    state: 'ready';
+    attachmentId: string;
+    name: string;
+    mime: string;
+    size: Int64;
+    kind?: 'image' | 'text' | 'file' | 'folder';
+});
+/** Web message files are loaded explicitly; old message readers perform no additional RPC. */
+interface MessageFilesQuery extends ConversationRef {
+    messages: {
+        messageId: string;
+        cursor?: string;
+    }[];
+}
+interface MessageCloudFile {
+    refId: string;
+    sourceKind: 'attachment' | 'artifact';
+    attachmentId?: string;
+    name: string;
+    size?: Int64;
+    state: 'ready' | 'pending' | 'unknown' | 'unavailable';
+    reason?: string;
+    groupId?: string;
+    regionId?: string;
+    driveId?: string;
+    fileId?: string;
+}
+interface MessageFilesPage {
+    messageId: string;
+    files: MessageCloudFile[];
+    resourceRevision: string;
+    coverage: 'complete';
+    nextCursor?: string;
+}
+interface MessageFilesResult extends ConversationRef {
+    schemaVersion: 1;
+    messages: MessageFilesPage[];
+}
+
+declare class BusinessError$1 extends Error implements BusinessError$2 {
+    readonly code: ErrorCode$1;
+    readonly outcome: 'not_started' | 'confirmed' | 'unknown';
+    readonly retryable: boolean;
+    readonly traceId?: string | undefined;
+    constructor(code: ErrorCode$1, message: string, outcome?: 'not_started' | 'confirmed' | 'unknown', retryable?: boolean, traceId?: string | undefined);
+}
+declare class Lifetime {
+    readonly controller: AbortController;
+    get closed(): boolean;
+    check(): void;
+    close(): void;
+}
+declare class Bus<T = undefined> {
+    private listeners;
+    subscribe(fn: (event?: T) => void): () => void;
+    emit(event?: T): void;
+    clear(): void;
+}
+
+interface ProcessInput {
+    conversationId: string;
+    source: 'stream' | 'durable';
+    rows: readonly ReplicaRow[];
+    /** Already checked against the current SDK-visible group/controller by Integration. */
+    membershipGeneration?: number;
+    access?: 'revoked';
+    stream?: {
+        id: string;
+        sequence: string;
+        closed?: boolean;
+        gap?: boolean;
+    };
+}
+
+/** Authorized export recipe. This boundary is selected by schema, never by field-name guessing. */
+interface View {
+    modelCatalogReady: boolean;
+    resourceCatalogReady: boolean;
+    interactionProjectionReady: boolean;
+    runtimes: RuntimeSummary[];
+    agents: AgentSummary[];
+    models: (ModelSummary & AgentRef)[];
+    conversations: Conversation[];
+    activities: ExecutionActivity[];
+    presentations: MessagePresentation[];
+    executions: ActiveExecution[];
+    memberCandidates: MemberCandidate[];
+    messages: Message[];
+    items: (Item & ConversationRef)[];
+    turns: Turn[];
+    members: (Member & ConversationRef)[];
+    interactions: Interaction[];
+    configs: (EffectiveConfig & ConversationRef)[];
+    resources: Resource[];
+    selections: ResourceSelection[];
+}
+interface ProjectionRecipe {
+    decode(rows: readonly ReplicaRow[], scope: Scope): View;
+}
+
+interface RuntimeRoute {
+    runtimeId: string;
+    target?: string;
+    name: string;
+}
+interface DirectoryIdentity {
+    principal: {
+        tenantId: string;
+        userId: string;
+    };
+    machines: RuntimeRoute[];
+}
+/** Login-scoped normalized presence; production uses owner-authorized IM relay metadata. */
+interface PresenceFact {
+    runtimeId: string;
+    state: 'online' | 'offline' | 'unknown';
+    revision: string;
+    expiresAt: number;
+}
+interface RuntimePresencePort {
+    start(signal: AbortSignal, receive: (facts: PresenceFact[]) => void): Promise<() => void>;
+}
+/** Login-scoped discovery cache; independent from AG installation-scoped business replicas. */
+declare class RuntimeDirectory {
+    readonly bus: Bus<undefined>;
+    private identity?;
+    private facts;
+    private generation;
+    private version;
+    private timer?;
+    private closed;
+    private presenceStop?;
+    private presenceLife;
+    private presenceStarted;
+    initialize(identity: DirectoryIdentity): void;
+    private check;
+    /** 本地已授权路由的唯一反查，不访问AG、不把第一个匹配当作唯一结果。 */
+    runtimeForController(controller: string): string | undefined;
+    resolve(runtimeId: string): {
+        principal: {
+            tenantId: string;
+            userId: string;
+        };
+        runtimeId: string;
+        target?: string;
+        name: string;
+    };
+    snapshot(): Snapshot<RuntimeSummary[]>;
+    connectPresence(port: RuntimePresencePort): Promise<void>;
+    private applyPresence;
+    private expiry;
+    close(): void;
+}
+
+interface Scope {
+    tenantId: string;
+    userId: string;
+    runtimeId: string;
+    installationId: string;
+    authGeneration: string;
+}
+interface LiveCoverage {
+    conversationId: string;
+    messageId: string;
+    itemId: string;
+    epoch: string;
+    epochRevision: string;
+    through: string;
+    baseline?: {
+        table: string;
+        key: string;
+        version: string;
+        data: Record<string, unknown>;
+    };
+}
+interface ReplicaRow {
+    table: string;
+    key: string;
+    version: string;
+    data: Record<string, unknown>;
+    deleted?: boolean;
+    liveCoverage?: LiveCoverage[];
+}
+type Change = {
+    op: 'upsert';
+    row: ReplicaRow;
+    coverage?: LiveCoverage[];
+} | {
+    op: 'delete';
+    table: string;
+    key: string;
+    version: string;
+};
+interface StoreBatch {
+    scope: Scope;
+    streamId: string;
+    checkpoint: string;
+    predecessor: string | null;
+    phase: {
+        kind: 'incremental';
+    } | {
+        kind: 'snapshot';
+        id: string;
+        stage: 'begin' | 'chunk' | 'end';
+        cutoverCheckpoint?: string | null;
+    };
+    changes: Change[];
+}
+interface LiveFrame extends ConversationRef {
+    scope: Scope;
+    turnId: string;
+    messageId: string;
+    itemId: string;
+    epoch: string;
+    epochRevision: string;
+    sequence: string;
+    baseVersion: string;
+    kind: 'replace' | 'delta' | 'end';
+    text?: string;
+    messageBase?: Message;
+    itemBase?: Item;
+}
+/** A trusted integration adapter, never supplied through the public Client configuration. */
+type ReadKind = 'conversationSummary' | 'sidebarGroups' | 'sidebarRows' | 'messageFiles' | 'storageContext' | 'composer' | 'members' | 'executions' | 'experts' | 'expertDirectory' | 'modelCatalog' | 'presentation' | 'workspaces' | 'draft.list' | 'draft.preview';
+interface Integration {
+    /** Opaque current authorization identity; never expose the relay session nonce. */
+    scopeGeneration?(scope: Scope): string;
+    scopedProjection?(scope: Scope, projection: Projection, domain: 'agents' | 'models' | 'conversation', conversationId?: string): Projection;
+    readonly scopedReadiness?: boolean;
+    /** Current visible membership admission for cached live-process hints. */
+    processAccess?(scope: Scope, conversationId: string): Promise<{
+        membershipGeneration: number;
+    } | undefined>;
+    imGroupAttachment?(scope: Scope, action: 'prepare' | 'attach' | 'query', params: Record<string, unknown>): Promise<unknown>;
+    groupSync?: {
+        list(scope: Scope): Promise<GroupSyncState[]>;
+        sync(scope: Scope, conversationId: string): Promise<GroupSyncState>;
+        syncGroup?(scope: Scope, groupId: string): Promise<GroupSyncState>;
+        observe(scope: Scope, handler: (state: GroupSyncState) => void): () => void;
+    };
+    /** 只读AG目录分页；不得视为Runtime授权或触发历史下载。 */
+    groupDirectory?: {
+        list(runtimeId: string | undefined, query: GroupDirectoryQuery, signal: AbortSignal): Promise<GroupDirectoryPage>;
+        recent?(limit: number, signal: AbortSignal): Promise<RecentGroupDirectoryEntry[]>;
+    };
+    read?(scope: Scope, kind: ReadKind, params: Record<string, unknown>, signal: AbortSignal): Promise<unknown>;
+    conversationHistory?: {
+        resolve(req: ConversationReadQuery, signal: AbortSignal): Promise<ConversationReadBinding>;
+        list(req: ConversationHistoryQuery, signal: AbortSignal): Promise<Snapshot<ConversationHistory>>;
+        observe(req: ConversationHistoryQuery, changed: () => void, signal: AbortSignal): Promise<() => void>;
+    };
+    directory?: RuntimeDirectory;
+    connectRuntime?(runtimeId: string, signal: AbortSignal): Promise<Scope>;
+    initializeRuntime?(scope: Scope): Promise<void>;
+    recipe: ProjectionRecipe;
+    ready(signal: AbortSignal): Promise<{
+        principal: {
+            tenantId: string;
+            userId: string;
+        };
+        scopes: Scope[];
+    }>;
+    start(sink: PushSink, signal: AbortSignal): Promise<void>;
+    command: CommandPort;
+    close(): Promise<void>;
+}
+interface PushSink {
+    /** 已知会话只唤醒该会话；缺省仍是 Runtime 全域失效，保留权限/目录变更边界。 */
+    invalidate?(scope: Scope, conversationIds?: readonly string[]): void;
+    summaryInvalidated?(scope: Scope): void;
+    /** Authorized public execution hints only; never participate in durable receipt/checkpoint apply. */
+    process?(scope: Scope, input: ProcessInput): void;
+    reactivate(runtimeId: string): Promise<void>;
+    checkpoint(scope: Scope, streamId: string): Promise<string | null>;
+    rows(scope: Scope, table: string, conversationId?: string): Promise<ReplicaRow[]>;
+    /** 只读取当前账户/Runtime/根会话内的消息锚点，不加载整个历史归档。 */
+    presentationMessage?(scope: Scope, conversationId: string, messageId: string): Promise<Message | undefined>;
+    store(batch: StoreBatch): Promise<void>;
+    /** Bounded Hub/recovered interaction display hints; never advance durable checkpoints. */
+    preview?(scope: Scope, rows: ReplicaRow[]): void;
+    /** Read the same authorized, unexpired hints used by the display projection. */
+    previewRows?(scope: Scope, table: string): ReplicaRow[];
+    live(frame: LiveFrame): Promise<void>;
+    status(scope: Scope, status: Pick<Projection, 'phase' | 'coverage'>): void;
+    revoke(scope: Scope): void;
+}
+interface CommandRequest {
+    key: string;
+    traceId: string;
+    scope: Scope;
+    kind: CommandKind;
+    params: Record<string, unknown>;
+}
+type CommandKind = 'conversation.create' | 'conversation.pin' | 'conversation.rename' | 'conversation.configure' | 'conversation.setOption' | 'conversation.archive' | 'conversation.unarchive' | 'member.add' | 'member.update' | 'member.remove' | 'message.send' | 'workspace.create' | 'turn.cancel' | 'turn.steer' | 'execution.cancel' | 'interaction.permission' | 'interaction.question' | 'interaction.refresh' | 'resources.set' | 'attachment.stage' | 'attachment.discard' | 'attachment.access' | 'draft.stage' | 'draft.commit' | 'draft.discard';
+type CommandResult = {
+    state: 'accepted' | 'unknown';
+} | {
+    state: 'succeeded';
+    result: unknown;
+} | {
+    state: 'failed';
+    code: ErrorCode$1;
+    failureEffect?: MutationStatus['failureEffect'];
+    retryable?: boolean;
+};
+interface CommandPort {
+    /** Trusted admission metadata for durable question receipt lookup. No answer bodies. */
+    prepareQuestion?(scope: Scope, params: Record<string, unknown>): Promise<Record<string, unknown>>;
+    execute(req: CommandRequest, signal: AbortSignal): Promise<CommandResult>;
+    query(scope: Scope, key: string, signal: AbortSignal, recovery?: {
+        kind: string;
+        params: Record<string, unknown>;
+    }): Promise<CommandResult>;
+}
+
+/** Materialized read replicas of the Store export; Hub never writes these stores. */
+declare const agTables: readonly ["conversations", "agent_session", "turns", "turn_items", "permissions", "conversation_artifacts", "attachments", "conversation_member", "conversation_messages"];
+type AGTable = typeof agTables[number];
+declare const agIndexes: readonly ["conversation_id", "root_conversation_id", "turn_id", "member_id", "agent_id", "status", "name"];
+interface AGRow extends Record<string, unknown> {
+    _sync: {
+        partition: string;
+        sourcePartition: string;
+        runtimeId: string;
+        installationId: string;
+        archiveId: string;
+        key: string;
+        version: string;
+        deleted: boolean;
+        wire: Record<string, unknown>;
+        payloadKeys: string[];
+        liveCoverage?: ReplicaRow['liveCoverage'];
+    };
+}
+
+/** 归属提示仅用于本地订阅失效；复用已有读取结果，不增加数据库操作。 */
+interface CommittedScope {
+    runtimeId: string;
+    conversationId?: string;
+}
+interface CommittedRow {
+    business: boolean;
+    row: ReplicaRow;
+    replaced: {
+        table: string;
+        key: string;
+    }[];
+    affected?: CommittedScope[];
+}
+interface OperationRecord {
+    id: string;
+    scope: Scope;
+    kind: string;
+    traceId: string;
+    paramsHash: string;
+    state: 'pending' | 'succeeded' | 'failed';
+    createdAt: number;
+    target?: string;
+    errorCode?: string;
+    notified?: boolean;
+    retryable?: boolean;
+    mutationId?: string;
+    result?: unknown;
+    failureEffect?: 'none' | 'partial' | 'unknown';
+    correlation?: {
+        memberId?: string;
+        conversationId?: string;
+        clientMessageId?: string;
+        hasAttachments?: boolean;
+        turnId?: string;
+        interactionId?: string;
+        ownerConversationId?: string;
+        nativeId?: string;
+        agentId?: string;
+        expectedVersion?: string;
+        mode?: unknown;
+        members?: unknown;
+    };
+}
+/** The only persistent replica writer. No transport or provider policy belongs here. */
+declare class Database {
+    private readonly factory;
+    private readonly name;
+    private opening?;
+    private closed;
+    private transactions;
+    constructor(factory: IDBFactory | undefined, name?: string);
+    private open;
+    private tx;
+    read(scope: Scope): Promise<{
+        generation: string;
+        commit: string;
+        rows: ReplicaRow[];
+    }>;
+    /** 展示元数据不需要读取正文；用于RPC完成后的Projection一致性边界。 */
+    readMetadata(scope: Scope): Promise<{
+        generation: string;
+        commit: string;
+    }>;
+    /** 复用现有主键精确取消息、根会话和成员。没有新增Object Store或索引。 */
+    readPresentationRows(scope: Scope, conversationId: string, messageId: string): Promise<ReplicaRow[]>;
+    /** Business rows have one user-owned copy; source archives only retain transport recovery state. */
+    readAccount(principal: Pick<Scope, 'tenantId' | 'userId'>, runtimeId?: string, conversationId?: string, purpose?: 'all' | 'conversation-list' | 'summary' | 'catalog'): Promise<{
+        scope: Scope;
+        generation: string;
+        commit: string;
+        rows: ReplicaRow[];
+    }[]>;
+    /** Exact active-installation catalog validation, without opening any AG/body store. */
+    readCatalogRows(scope: Scope, table: string): Promise<ReplicaRow[]>;
+    checkpoint(scope: Scope, streamId: string): Promise<string | null>;
+    apply(batch: StoreBatch, valid: () => void, committed?: (rows: CommittedRow[]) => void): Promise<boolean>;
+    private change;
+    private rebuildBusinessTables;
+    /** Internal indexed read; user owns the physical partition, Runtime is an optional business filter. */
+    readTable(scope: Scope, table: AGTable, filter?: {
+        field: typeof agIndexes[number];
+        value: string;
+    }): Promise<AGRow[]>;
+    claimOperation(record: OperationRecord): Promise<{
+        record: OperationRecord;
+        created: boolean;
+    }>;
+    operation(id: string): Promise<OperationRecord | undefined>;
+    saveOperation(record: OperationRecord): Promise<void>;
+    operations(scope: Scope): Promise<OperationRecord[]>;
+    close(): Promise<void>;
+}
+
+interface LateError {
+    runtimeId: string;
+    conversationId?: string;
+    error: BusinessError$1;
+}
+declare class Operations {
+    private db;
+    private port;
+    private life;
+    private authorize;
+    private notices;
+    private listeners;
+    private running;
+    private scans;
+    private grants;
+    constructor(db: Database, port: CommandPort, life: Lifetime, authorize?: (scope: Scope) => void);
+    private grant;
+    revoke(scope: Scope): void;
+    private check;
+    subscribe(fn: (notice: LateError) => boolean): () => void;
+    private notify;
+    private poll;
+    run<T>(ctx: Context, scope: Scope, kind: CommandKind, params: Record<string, unknown>, decode: (r: unknown) => T, options?: MutationOptions, correlation?: Record<string, unknown> | (() => Promise<Record<string, unknown>>)): Promise<T>;
+    /** Reopening only queries recorded keys. Unknown results continue bounded backoff; bodies are never replayed. */
+    recover(scope: Scope): Promise<void>;
+    private mutationKey;
+    private mutationResult;
+    lookup(scope: Scope, req: Omit<MutationRef, 'conversationId'> & {
+        conversationId?: string;
+    }, question?: QuestionResponseRef): Promise<CommandReceipt>;
+    private pause;
+    close(): void;
+}
+
+interface ReplicaChange {
+    runtimeId: string;
+    conversationIds?: readonly string[];
+}
+declare class Replica {
+    readonly database: Database;
+    private readonly recipe;
+    readonly bus: Bus<ReplicaChange>;
+    readonly previewBus: Bus<ReplicaChange>;
+    private projections;
+    private sourceSizes;
+    private states;
+    private closed;
+    constructor(database: Database, recipe: ProjectionRecipe);
+    authorize(scopes: Scope[]): void;
+    scope(runtimeId: string): Scope;
+    invalidate(scope: Scope, conversationIds?: readonly string[]): void;
+    runtimes(): string[];
+    private state;
+    private verify;
+    status(scope: Scope, next: Pick<Projection, 'phase' | 'coverage'>): void;
+    revoke(scope: Scope): void;
+    previewRows(scope: Scope, table: string): ReplicaRow[];
+    /** A provisional display view. Durable inbox/Store cursors remain the only recovery facts. */
+    preview(scope: Scope, rows: ReplicaRow[]): void;
+    store(batch: StoreBatch): Promise<CommittedRow[] | undefined>;
+    private notifyCommitted;
+    private publishCommitted;
+    live(frame: LiveFrame): Promise<void>;
+    /** 仅返回提交/连接版本，不为展示元数据再次解码整群历史。 */
+    projection(runtimeId: string): Promise<Projection>;
+    /** shared 仅供 SDK 内部只读 selector；对外结果仍在 Service 边界克隆。 */
+    read(runtimeId: string, conversationId?: string, purpose?: 'all' | 'summary' | 'catalog', shared?: boolean): Promise<{
+        view: View;
+        projection: Projection;
+    }>;
+    /** Share only simultaneous reads of the same authorized committed view.
+     * Never retain a settled result: a later read still observes other sources/tabs.
+     * A new Store commit uses another key and cannot join an older transaction. */
+    private readSources;
+    /** Synchronous preview notification; never joins the database query queue. */
+    readPreview(runtimeId: string, conversationId: string, shared?: boolean): {
+        view: View;
+        projection: Projection;
+    } | undefined;
+    private cacheSize;
+    /** 版本、授权State或预览有效期不同都必须重新计算；不会复用撤权后的数据。 */
+    private project;
+    private buildProjection;
+    close(): void;
+}
+
+declare class Service {
+    private integration;
+    private readonly summaryBus;
+    private readonly summaries;
+    private readonly summaryReads;
+    private readonly liveProcesses;
+    private readonly processReads;
+    private readonly processViews;
+    private readonly processSeeds;
+    private readonly processRecovery;
+    resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    /** 先准备Runtime处理器，不等待全局Ready，避免首次应用与业务接入互相等待。 */
+    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+    /** 目录分页只依赖鉴权与AG链路，不连接Runtime、不等待业务Ready、不下载群历史。 */
+    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+    listRecentGroups(ctx: Context, limit: number): Promise<RecentGroupDirectoryEntry[]>;
+    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    readonly life: Lifetime;
+    readonly replica: Replica;
+    readonly operations: Operations;
+    private readyTask?;
+    private runtimeTasks;
+    private principal?;
+    private subscriptions;
+    constructor(integration: Integration, factory?: IDBFactory, databaseName?: string);
+    private ready;
+    private ensureRuntime;
+    query<T>(ctx: Context, req: RuntimeRef & {
+        conversationId?: string;
+    }, select: (view: View, projection: Projection) => T, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Snapshot<T>>;
+    get scopedReadiness(): boolean;
+    private domainProjection;
+    catalogQuery<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, models?: boolean): Promise<Snapshot<T>>;
+    catalogObserve<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    /** Explicit lightweight selectors; preserve connection and projection lifecycle. */
+    summaryQuery<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T): Promise<Snapshot<T>>;
+    summaryObserve<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    private summaryIdentity;
+    private summarySnapshot;
+    private summaryValue;
+    summaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', owner?: symbol): Promise<Snapshot<Page<T>>>;
+    conversationSummary(ctx: Context, req: ConversationRef, owner?: symbol): Promise<Snapshot<Conversation>>;
+    observeSummaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', observer: Observer<Page<T>>): Promise<Subscription>;
+    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    /** Reads all cached sources owned by the authenticated account; never connects other devices. */
+    accountQuery<T>(ctx: Context, req: {
+        runtimeId?: string;
+    }, select: (view: View, projection: Projection) => T): Promise<Snapshot<T>>;
+    observeAccount<T>(ctx: Context, req: {
+        runtimeId?: string;
+    }, select: (view: View, projection: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    runtimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+    observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+    observe<T>(ctx: Context, req: RuntimeRef & {
+        conversationId?: string;
+    }, select: (v: View, p: Projection) => T, observer: Observer<T>, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Subscription>;
+    command<T>(ctx: Context, req: RuntimeRef, kind: CommandKind, allowed: string[], required: string[], decode: (data: unknown) => T, options?: MutationOptions): Promise<T>;
+    imGroupAttachment<T>(ctx: Context, req: ConversationRef, action: 'prepare' | 'attach' | 'query', params: Record<string, unknown>, decode: (v: unknown) => T): Promise<T>;
+    get supportsRemoteRead(): boolean;
+    /** One process cache per exact authorization/root; ordinary Query remains the
+     * owner of canonical message and Turn facts. No periodic detail polling. */
+    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    /** A scoped one-shot read, with no fabricated replica completeness claim. */
+    storageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+    remoteRead<T>(ctx: Context, req: RuntimeRef & {
+        conversationId?: string;
+    }, kind: ReadKind, params: Record<string, unknown>, decode: (value: unknown) => T, priority?: number, admit?: () => boolean): Promise<Snapshot<T>>;
+    getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+    getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
+    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    close(): Promise<void>;
+}
+
+/**
+ * Call Options - 调用选项配置
+ * 对应 Go 版本: manager/call_options.go
+ *
+ * 实现 Functional Options 模式，支持异步调用等可配置行为。
+ */
+/**
+ * 异步回调函数类型
+ */
+type AsyncCallback = (result: unknown, err: Error | null) => void;
+/**
+ * 内部调用选项结构体（不对外导出）
+ */
+interface CallOptions {
+    asyncCallback: AsyncCallback | null;
+}
+/**
+ * CallOption 函数类型，Functional Options 模式的核心
+ */
+type CallOption = (options: CallOptions) => void;
+/**
+ * 启用异步模式
+ *
+ * @param callback 异步回调函数。操作完成后在异步上下文中调用
+ * @returns 配置了异步回调的选项函数
+ *
+ * @example
+ * ```typescript
+ * await manager.sendTextMessage(context, req, {
+ *   async: (result, err) => {
+ *     if (err) {
+ *       console.error('发送失败:', err);
+ *       return;
+ *     }
+ *     const msg = result as Message;
+ *     console.log('发送成功，消息ID:', msg.id);
+ *   }
+ * });
+ * ```
+ */
+declare function WithAsync(callback: AsyncCallback): CallOption;
+/**
+ * 从 CallOption 列表中提取异步回调函数
+ *
+ * @param opts 调用选项列表
+ * @returns 提取出的异步回调函数；如果没有配置异步选项，返回 null
+ *
+ * 内部使用：在 Manager 方法内部从 opts 中提取 asyncCallback
+ */
+declare function CallOptionsFrom(opts: CallOption[]): AsyncCallback | null;
+/**
+ * 执行异步或同步调用
+ *
+ * @param callback 异步回调（如果为 null 则同步执行）
+ * @param fn 实际执行的函数
+ *
+ * @example
+ * ```typescript
+ * // 在方法内部使用
+ * const callback = CallOptionsFrom(opts);
+ *
+ * return executeWithCallback(callback, async () => {
+ *   // 实际工作
+ *   return await this.agentService.someMethod();
+ * });
+ * ```
+ */
+declare function executeWithCallback<T>(callback: AsyncCallback | null, fn: () => Promise<T>): Promise<T | null>;
+
+interface DescribeCreditPackageAgentsRequest {
+    agentType?: string;
+    agentIds?: string[];
+    fillAgent?: boolean;
+}
+interface DescribeCreditUsageInfoRequest {
+    usageType?: string;
+    agentIds?: string[];
+    fillAgent?: boolean;
+}
+interface UpdateAgentInstanceRequest {
+    agentInstanceId: string;
+    agentInstanceName?: string;
+    avatarUrl?: string;
+    description?: string;
+    simplePersonaType?: string;
+    simpleModelType?: string;
+}
+interface ApproveFotaUpdateRequest {
+    /**
+     * Agent 运行资源 ID（来自 agent.runtimeResourceInfo.resourceId）
+     */
+    resourceId: string;
+    /**
+     * 目标应用版本（来自 agent.fotaUpdate.newFotaVersion）
+     */
+    appVersion: string;
+    /**
+     * 客户端 UUID（可选）
+     */
+    uuid?: string;
+    /**
+     * 目标状态（可选）
+     */
+    targetStatus?: string;
+    /**
+     * 区域 ID，默认 cn-shanghai
+     */
+    regionId?: string;
+}
+interface GenerateSceneUrlRequest {
+    /**
+     * Agent 运行资源 ID（来自 agent.runtimeResourceInfo.resourceId）
+     */
+    desktopId: string;
+    /**
+     * 地域 ID，默认 cn-shanghai
+     */
+    regionId?: string;
+}
+interface GenerateSceneUrlResponse {
+    /**
+     * 场景 URL 列表（对应 URS 返回的所有 Feature，逐个生成）
+     */
+    items: GenerateSceneUrlItem[];
+}
+interface GenerateSceneUrlItem {
+    /**
+     * 请求 ID（用于问题排查）
+     */
+    requestId: string;
+    /**
+     * 场景 URL（默认有效期 2 小时）
+     */
+    url: string;
+    /**
+     * 对应的 Feature 信息
+     */
+    feature: SceneFeatureInfo;
+}
+interface SceneFeatureInfo {
+    featureId: string;
+    featureName: string;
+    icon: string;
+}
+declare class RuntimeManager {
+    private readonly container;
+    private readonly checkOpen;
+    private readonly runtimeService?;
+    constructor(container: ServiceContainer | undefined, checkOpen: () => void, runtimeService?: (() => Service) | undefined);
+    private directory;
+    private cloud;
+    listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+    observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+    getHostCapabilities(ctx: Context, req: RuntimeRef): Promise<Snapshot<HostCapabilities>>;
+    describeCreditPackageAgents(ctx: ExecutionContext, req?: DescribeCreditPackageAgentsRequest): Promise<CreditPackageAgent[]>;
+    describeCreditUsageInfo(ctx: ExecutionContext, req?: DescribeCreditUsageInfoRequest): Promise<CreditUsageInfo>;
+    updateAgentInstance(ctx: ExecutionContext, req: UpdateAgentInstanceRequest, ...opts: CallOption[]): Promise<void>;
+    approveFotaUpdate(ctx: ExecutionContext, req: ApproveFotaUpdateRequest, ...opts: CallOption[]): Promise<void>;
+    generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: CallOption[]): Promise<GenerateSceneUrlResponse | null>;
+}
+
+/**
+ * AuthCode 凭证实现
+ * 对应 Go 版本: internal/auth/auth_code.go
+ */
+
+declare class AuthCodeCredential implements Credential {
+    private importedLogin;
+    private loginRegionId;
+    private refreshPromise;
+    private disposed;
+    private loginRevision;
+    private authCode;
+    private clientId;
+    private _sessionId;
+    private _endUserId;
+    private _loginToken;
+    private _expiresAt;
+    private refreshTimer;
+    private anonymousClient;
+    private logger;
+    private refreshInterval;
+    private isReady;
+    private readyPromise;
+    private readyResolver;
+    private readyReject;
+    private loginTokenDefaultExpiry;
+    private tokenRefresher;
+    private loginTokenRefresher;
+    constructor(authCode: string, clientId: string, anonymousClient: AnonymousClient, logger: Logger, refreshInterval?: number, loginTokenDefaultExpiry?: number, initialLogin?: {
+        sessionId: string;
+        endUserId: string;
+        loginToken: string;
+    }, loginRegionId?: string);
+    /**
+     * 设置 token refresher（第一次认证时调用）
+     * 对应 Go 版本的 SetTokenRefresher 方法
+     */
+    setTokenRefresher(fn: (context: ExecutionContext, authCode: string) => Promise<{
+        sessionId: string;
+        endUserId: string;
+        loginToken: string;
+    }>): void;
+    /**
+     * 设置 login token refresher（后续刷新时调用）
+     * 对应 Go 版本的 SetLoginTokenRefresher 方法
+     */
+    setLoginTokenRefresher(fn: (context: ExecutionContext, sessionId: string, endUserId: string, loginToken: string) => Promise<string>): void;
+    /** 仅供已核验同一IM身份的Client原位续期；不启动定时器，也不重建传输。 */
+    replaceImportedLogin(value: {
+        loginToken: string;
+        sessionId: string;
+        endUserId: string;
+    }): void;
+    type(): AuthType;
+    permissionLevel(): PermissionLevel;
+    signRequest(_req: Request): Promise<void>;
+    isExpired(): boolean;
+    refresh(context: ExecutionContext): Promise<void>;
+    tokenInfo(): {
+        sessionId: string;
+        endUserId: string;
+        loginTokenPrefix: string;
+        expiresAt: Date;
+        isExpired: boolean;
+    };
+    getLoginToken(): string;
+    getAuthCode(): string;
+    getSessionId(): string;
+    getEndUserId(): string;
+    getLoginRegionId(): string;
+    /**
+     * 等待认证完成
+     * 在调用需要 LoginToken 的 API 之前使用
+     */
+    waitForReady(context: ExecutionContext): Promise<void>;
+    startAutoRefresh(context: ExecutionContext): Promise<void>;
+    stopAutoRefresh(): void;
+    dispose(): void;
+    private initialSetup;
+    private refreshToken;
+}
+
+/**
+ * Skill Manager
+ * 对应 Go 版本: manager/skill_manager.go
+ */
+
+interface ListCategoriesRequest {
+}
+interface ListSkillsRequest {
+    skillIDs?: string[];
+    supplierType?: string;
+    skillChannel?: string;
+    categoryId?: string;
+    filter?: string;
+    pageSize?: number;
+    pageNumber?: number;
+}
+interface ListInstalledSkillsRequest {
+    runtimeId?: string;
+    /** @deprecated 请使用 runtimeId */
+    desktopID?: string;
+    categoryID?: string;
+    skillName?: string;
+}
+interface SetSkillEnabledRequest {
+    runtimeId?: string;
+    /** @deprecated 请使用 runtimeId */
+    desktopID?: string;
+    skillNames: string[];
+    enabled: boolean;
+}
+interface ListAgentAuthedSkillsRequest {
+    runtimeId: string;
+    agentPlatform?: string;
+    agentProvider?: string;
+}
+interface EntInstallSkillsRequest {
+    runtimeId: string;
+    skillIds: string[];
+    /** 服务端确认的 Provider / Platform；不使用 Gateway Agent UUID 推导。 */
+    agentProvider?: string;
+    agentPlatform?: string;
+}
+interface EntUninstallSkillsRequest {
+    runtimeId: string;
+    skillInfos: UninstallSkillInfo[];
+    agentProvider?: string;
+    agentPlatform?: string;
+}
+declare class SkillManager {
+    private container;
+    static buildSkillManager(ctx: ExecutionContext, container: ServiceContainer): Promise<SkillManager>;
+    private constructor();
+    /**
+     * 获取技能分类列表
+     */
+    listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+    /**
+     * 获取技能列表（支持分页和多维度过滤）
+     * @internal 暂不对外暴露，内部保留
+     */
+    private listSkills;
+    /**
+     * 获取已安装技能列表
+     */
+    listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+    /**
+     * 启用/禁用技能并等待操作完成
+     * 内部自动轮询 OperationTask 直到完成
+     */
+    setSkillEnabled(ctx: ExecutionContext, req: SetSkillEnabledRequest): Promise<OperationTask[]>;
+    /**
+     * 查询 Agent 授权的技能列表
+     */
+    listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
+    /**
+     * 企业安装技能并等待操作完成
+     * 内部自动轮询 OperationTask 直到完成
+     */
+    entInstallSkills(ctx: ExecutionContext, req: EntInstallSkillsRequest): Promise<OperationTask[]>;
+    /**
+     * 企业卸载技能并等待操作完成
+     * 内部自动轮询 OperationTask 直到完成
+     */
+    entUninstallSkills(ctx: ExecutionContext, req: EntUninstallSkillsRequest): Promise<OperationTask[]>;
+}
+
+/**
+ * Model Manager
+ * 对应 Go 版本: manager/model_manager.go
+ */
+
+/** GetAgentInstanceModelConfig 请求参数 */
+interface GetModelConfigRequest {
+    /** 必填：Agent 实例 ID */
+    agentInstanceId: string;
+    /** Agent 类型，默认 "OpenClaw" */
+    agentProvider?: string;
+    /** Agent 平台，默认 "ENTERPRISE" */
+    agentPlatform?: string;
+    /** 可选：会话组 ID（AgentIM session ID） */
+    channelSessionId?: string;
+}
+/** SetChannelGroupModel 请求参数 */
+interface SetChannelGroupModelRequest {
+    /** 必填：Agent 实例 ID */
+    agentInstanceId: string;
+    /** 必填：会话组 ID（AgentIM session ID） */
+    groupId: string;
+    /** 必填：模型提供商 ID，如 "bailian" */
+    providerName: string;
+    /** 必填：模型 ID，如 "qwen3.5-plus" */
+    llmCode: string;
+}
+declare class ModelManager {
+    private container;
+    static buildModelManager(ctx: ExecutionContext, container: ServiceContainer): Promise<ModelManager>;
+    private constructor();
+    /**
+     * 获取 Agent 实例的模型配置
+     * 支持同步和异步模式（通过 CallOption）
+     *
+     * 同步用法：
+     *   const config = await mgr.getAgentInstanceModelConfig(ctx, { agentInstanceId: 'inst-xxx' });
+     *
+     * 异步用法：
+     *   mgr.getAgentInstanceModelConfig(ctx, req, WithAsync((result, err) => { ... }));
+     */
+    getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
+    /**
+     * 云管理 API：设置云端 channel group 模型，不接受 Gateway Conversation ID。
+     * 新版会话请调用 ConversationManager.setConversationConfigOption(model)。
+     * 支持同步和异步模式（通过 CallOption）
+     *
+     * 同步用法：
+     *   const result = await mgr.setChannelGroupModel(ctx, {
+     *     agentInstanceId: 'inst-xxx', groupId: 'grp-xxx',
+     *     providerName: 'bailian', llmCode: 'qwen3.5-plus',
+     *   });
+     *
+     * 异步用法：
+     *   mgr.setChannelGroupModel(ctx, req, WithAsync((result, err) => { ... }));
+     */
+    setChannelGroupModel(ctx: ExecutionContext, req: SetChannelGroupModelRequest, ...opts: CallOption[]): Promise<SetChannelGroupModelResult | null>;
+}
+
+interface CreditPackageQuery {
+    agentType: string;
+    agentIds: string[];
+    fillAgent?: boolean;
+}
+/** Independent HTTP queries. Does not construct a legacy Agent/IM manager. */
+declare class CreditManager {
+    private readonly container;
+    constructor(container: ServiceContainer);
+    describeCreditPackageAgents(ctx: ExecutionContext, req: CreditPackageQuery): Promise<CreditPackageAgent[]>;
+    describeCreditUsageInfo(ctx: ExecutionContext, req: DescribeCreditUsageInfoRequest$1): Promise<CreditUsageInfo>;
+}
+
+/**
+ * 打开方式
+ */
+type AspStreamOpenType = 'inline' | 'newTab';
+/**
+ * 启动 ASP 流化会话请求（仅浏览器环境）
+ */
+interface StartAspStreamRequest {
+    /** DOM 容器元素 ID（inline 模式必需） */
+    containerElementId?: string;
+    /** 云资源 ID（桌面ID或应用ID） */
+    resourceId: string;
+    /** 流化类型（desktop 或 application） */
+    streamType?: AspStreamType;
+    /** 区域 ID，默认 'cn-shanghai' */
+    regionId?: string;
+    /** 打开方式，默认 'inline' */
+    openType?: AspStreamOpenType;
+    /** 自定义 container.html 的 URL（可选，不提供则使用 SDK 内置模板） */
+    containerUrl?: string;
+    /** 宽度，默认 '100%'（仅 inline 模式） */
+    width?: string;
+    /** 高度，默认 '100%'（仅 inline 模式） */
+    height?: string;
+}
+/**
+ * BuildAspManager 的结果类型
+ */
+interface BuildAspManagerResult {
+    manager: AspManager;
+    error: Error | null;
+}
+/**
+ * AspManager 提供流化会话的高级管理接口
+ *
+ * 主要功能：
+ * - 启动流化渲染（浏览器环境，通过 Service → Router → WebSdkClient）
+ * - 停止流化会话
+ */
+declare class AspManager {
+    private aspService;
+    private container;
+    constructor(aspService: IAspService, container: Container);
+    /**
+     * 获取当前 ASP 流化会话信息
+     *
+     * @returns 当前流化会话信息，如果未创建则返回 null
+     */
+    getAspStreamSession(): AspStreamSession | null;
+    /**
+     * 启动 ASP 流化会话（仅浏览器环境）
+     *
+     * 通过 Service 层 → Router 层 → WebSdkClient 启动流化渲染。
+     * 此方法需要在 HTML 中预先加载 Wuying 脚本。
+     *
+     * @param context 执行上下文
+     * @param req 启动请求参数
+     * @throws 如果不在浏览器环境或 WebSDK 未加载
+     *
+     * @example
+     * ```typescript
+     * await aspManager.startAspStream({}, {
+     *   containerElementId: 'desktop-container',
+     *   streamType: AspStreamType.Desktop,
+     *   width: '100%',
+     *   height: '100%',
+     * });
+     * ```
+     */
+    startAspStream(context: ExecutionContext, req: StartAspStreamRequest): Promise<void>;
+    /**
+     * 停止流化会话
+     *
+     * 停止当前的流化会话并释放资源。
+     * 如果在浏览器环境中，会停止 WebSDK 的渲染。
+     */
+    stopAspStream(): Promise<void>;
+    /**
+     * 工厂方法：构建并初始化 AspManager
+     *
+     * @param context 执行上下文
+     * @param container 服务容器
+     * @param opts 调用选项（支持 WithAsync）
+     * @returns 初始化完成的 AspManager
+     *
+     * @example
+     * ```typescript
+     * const aspManager = await AspManager.buildAspManager({}, container);
+     * ```
+     */
+    static buildAspManager(context: ExecutionContext, container: Container, ...opts: CallOption[]): Promise<AspManager | null>;
+}
+
+/** Template-based ECD CreateDesktops (2020-09-30). Omitted billing fields keep server defaults. */
+interface CreateDesktopsRequest {
+    regionId: string;
+    officeSiteId: string;
+    bundleId: string;
+    policyGroupId?: string;
+    desktopName?: string;
+    amount?: number;
+    endUserIds?: string[];
+    userAssignMode?: 'ALL' | 'PER_USER';
+    chargeType?: 'PostPaid' | 'PrePaid';
+    period?: number;
+    periodUnit?: 'Month' | 'Year';
+    autoPay?: boolean;
+    autoRenew?: boolean;
+}
+/** Acceptance/order result; does not prove that desktops are ready or paid. */
+interface CreateDesktopsResponse {
+    desktopIds: string[];
+    orderId: string;
+    requestId: string;
+    /** True only after wait has verified all requested desktops as Running or Stopped. */
+    ready?: boolean;
+}
+interface DesktopCreateOptions {
+    wait?: boolean;
+    pollIntervalMs?: number;
+}
+interface WaitDesktopsRequest {
+    regionId: string;
+    desktopIds: string[];
+    pollIntervalMs?: number;
+}
+interface WaitDesktopsResponse {
+    desktopIds: string[];
+    ready: true;
+}
+
+/**
+ * 阿里云 CloudAPI Client（AK/SK 签名）
+ * 对应 Go 版本: internal/integrate/cloudapi/client.go
+ */
+
+interface CloudClientOptions {
+    /** @internal Bound and harden new unified administrative calls without changing legacy helpers. */
+    administrative?: boolean;
+    endpoint: string;
+    accessKeyID: string;
+    accessKeySecret: string;
+    timeout: number;
+    logger: Logger;
+    /** 浏览器环境下的代理路径前缀（可选），例如 '/api' */
+    browserProxyPath?: string;
+}
+declare class CloudClient {
+    private administrative;
+    private closed;
+    private readonly requests;
+    close(): void;
+    private endpoint;
+    private accessKeyID;
+    private accessKeySecret;
+    private timeout;
+    private logger;
+    private browserProxyPath?;
+    /** 是否在浏览器环境中 */
+    private isBrowser;
+    constructor(options: CloudClientOptions);
+    /**
+     * 获取实际使用的 URL
+     * 支持两种模式：
+     * 1. 相对路径（如 '/api'）：在浏览器环境中自动补全为完整 URL
+     * 2. 完整 URL（如 'https://xxx'）+ browserProxyPath：提取路径部分并拼接代理路径
+     */
+    private getEffectiveUrl;
+    /**
+     * 执行 POP RPC API 调用（使用 AK/SK 签名）
+     */
+    doRPC(context: ExecutionContext, action: string, version: string, businessParams?: Record<string, string>): Promise<Record<string, unknown>>;
+}
+
+/**
+ * 认证相关 API
+ * 对应 Go 版本: internal/integrate/cloudapi/auth_api.go
+ */
+
+interface GetAuthCodeParams {
+    endUserId?: string;
+    externalUserId?: string;
+    policy?: string;
+    autoCreateUser?: boolean;
+    tokenType?: string;
+}
+interface GetAuthCodeResponse {
+    authCode: string;
+    requestId: string;
+}
+/**
+ * 使用 AK/SK 调用 GetAuthCode API 获取 AuthCode
+ * 对应 Go 版本: auth_api.go:16-46
+ */
+declare function getAuthCode(client: CloudClient, context: ExecutionContext, params: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
+
+/** Explicit desktop IDs only; no implicit all-resources or group operations. */
+interface DesktopOperationRequest {
+    regionId: string;
+    desktopIds: string[];
+    /** User-mode idempotency token, ASCII 1..64; defaults to one UUID per call. Unsupported for administrators. */
+    clientToken?: string;
+    /** Administrator stop only. Omitted values retain service billing defaults. */
+    stoppedMode?: 'StopCharging' | 'KeepCharging';
+    /** Stop/reboot only; explicit false is transmitted. */
+    osUpdate?: boolean;
+    /** Reset only: required for user mode; administrator omission preserves service defaults. Reinitializes the system disk. */
+    imageId?: string;
+    /** Reset only; explicitly replaces the data disk when supported by the image/service. */
+    operateType?: 'replace';
+}
+interface DesktopOperationItem {
+    desktopId: string;
+    code: string;
+    accepted: boolean;
+}
+/** Request acceptance, never proof of the resource's terminal state. */
+interface DesktopOperationResponse {
+    requestId: string;
+    results?: DesktopOperationItem[];
+}
+
+interface ClientOptions {
+    /** Server-side POP authentication, exclusive with user credentials. */
+    accessKeyID?: string;
+    accessKeySecret?: string;
+    authCode?: string;
+    /** 本次新增：优先使用已有登录态，不再通过 authCode 换票。 */
+    loginToken?: string;
+    sessionId?: string;
+    endUserId?: string;
+    loginRegionId?: string;
+}
+declare class Client {
+    private userDesktopOperations?;
+    start(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+    stop(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+    reboot(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+    reset(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+    delete(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+    private desktopOperation;
+    private administration?;
+    create(context: ExecutionContext, request: CreateDesktopsRequest, options?: DesktopCreateOptions): Promise<CreateDesktopsResponse>;
+    wait(context: ExecutionContext, request: WaitDesktopsRequest): Promise<WaitDesktopsResponse>;
+    getAuthCode(context: ExecutionContext, request: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
+    private checkUser;
+    getIMCredentials(context?: ExecutionContext): Promise<ConsumerUserGetExtTokenResponse>;
+    /** 同账号续期保留消息/中继连接。换票核验失败、切换身份或环境时不修改旧Client。 */
+    updateLoginCredentials(context: Context, credentials: {
+        loginToken: string;
+        sessionId: string;
+        endUserId: string;
+        loginRegionId?: string;
+    }): Promise<void>;
+    private closed;
+    private gatewayAuth?;
+    private gatewayService?;
+    private gatewayAgents?;
+    private gatewayConversations?;
+    private gatewayResources?;
+    private checkOpen;
+    private businessAuth;
+    private businessService;
+    buildRuntimeManager(_context: ExecutionContext): Promise<RuntimeManager>;
+    buildAgentManager(_context: Context): Promise<AgentManager$1>;
+    buildConversationManager(_context: Context): Promise<ConversationManager$1>;
+    buildResourceManager(_context: Context): Promise<ResourceManager$1>;
+    buildCreditManager(_context: ExecutionContext): Promise<CreditManager>;
+    private config;
+    private credential;
+    private container;
+    private _skillManager;
+    private _modelManager;
+    private _aspManager;
+    private loginOptions;
+    private updatingCredentials;
+    private credentialUpdateController?;
+    /** 冷启动策略独立复制，不改变登录、凭据或已经退役的旧接口。 */
+    private readonly readinessMode;
+    private readonly relayRequestDiagnostics;
+    private readonly messageInitialSync;
+    private static normalizeMessageSync;
+    /** 复制目录策略，外部修改配置对象不能改变现有Client的后台调度。 */
+    private readonly directoryPolicy;
+    private static normalizeDirectoryPolicy;
+    /** 流式回放策略独立复制；observer 集合在订阅点注册，与此策略解耦。 */
+    private readonly streamingPolicy?;
+    private readonly streamHandlers;
+    private static normalizeStreamingPolicy;
+    /** 单一出口：配置回调 + onStreamEvent 订阅者，逐个隔离异常，晚订阅也能收到事件。 */
+    private streamingIntegrationConfig;
+    /** 额外原始流事件出口（可选、只读）：不改任何既有命令语义；未启用 streaming 时直接失败。 */
+    onStreamEvent(handler: (event: StreamEvent) => void): () => void;
+    static create(options: ClientOptions, userConfig?: UserConfig): Client;
+    private registerModelOperations;
+    static resetInstance(): void;
+    constructor(options: ClientOptions, userConfig?: UserConfig);
+    buildAspManager(context: ExecutionContext): Promise<AspManager>;
+    buildSkillManager(context: ExecutionContext): Promise<SkillManager>;
+    buildModelManager(context: ExecutionContext): Promise<ModelManager>;
+    getAuthCodeCredential(): AuthCodeCredential;
+    close(): Promise<void>;
+    logout(): Promise<void>;
+    private createAnonymousClient;
+}
+
+/**
+ * SDK 错误类型定义
+ * 对应 Go 版本: model/errors.go
+ */
+declare enum ErrorCode {
+    NetworkError = "NETWORK_ERROR",
+    Timeout = "TIMEOUT",
+    AuthError = "AUTH_ERROR",
+    PermissionError = "PERMISSION_ERROR",
+    BusinessError = "BUSINESS_ERROR",
+    RateLimitError = "RATE_LIMIT_ERROR",
+    ServerError = "SERVER_ERROR",
+    APIError = "API_ERROR",
+    ErrCodeNotInitialized = "NOT_INITIALIZED",
+    ErrCodeInvalidParameter = "INVALID_PARAMETER",
+    ErrCodeIMNotReady = "IM_NOT_READY",
+    ErrCodePermissionDenied = "PERMISSION_DENIED",
+    ErrCodeSessionNotFound = "SESSION_NOT_FOUND",
+    ErrCodeIMInitFailed = "IM_INIT_FAILED"
+}
+declare class SDKError extends Error {
+    code: ErrorCode;
+    cause?: Error;
+    constructor(message: string, code: ErrorCode, cause?: Error);
+}
+declare class NetworkError extends SDKError {
+    constructor(message: string, cause?: Error);
+}
+declare class TimeoutError extends SDKError {
+    constructor(message: string, cause?: Error);
+}
+declare class AuthError extends SDKError {
+    constructor(message: string, cause?: Error);
+}
+declare class PermissionError extends SDKError {
+    constructor(message: string, cause?: Error);
+}
+declare class BusinessError extends SDKError {
+    businessCode?: string;
+    constructor(message: string, businessCode?: string, cause?: Error);
+}
+declare class RateLimitError extends SDKError {
+    constructor(message: string, cause?: Error);
+}
+declare class ServerError extends SDKError {
+    constructor(message: string, cause?: Error);
+}
+declare class APIError extends SDKError {
+    statusCode: number;
+    rawBody: string;
+    requestId?: string;
+    constructor(message: string, statusCode: number, rawBody: string, requestId?: string);
+}
+declare function isRetryable(error: unknown): boolean;
+
+declare class ResourceManager implements ResourceManager$1 {
+    private service;
+    constructor(service: Service);
+    attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+    getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+    private imGroup;
+    stageDraftAttachment(ctx: Context, req: DraftRef & {
+        file: Blob;
+        name: string;
+        uploadId: string;
+    }): Promise<StagedAttachment>;
+    listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+    commitDraftAttachments(ctx: Context, req: DraftRef & {
+        conversationId: string;
+        attachmentIds: string[];
+    }): Promise<CommittedAttachment[]>;
+    discardDraftAttachments(ctx: Context, req: DraftRef & {
+        attachmentIds: string[];
+    }): Promise<{
+        state: "discarded";
+    }>;
+    getDraftAttachmentPreview(ctx: Context, req: DraftRef & {
+        attachmentId: string;
+    }): Promise<Snapshot<{
+        unavailableReason?: string | undefined;
+        dataUrl?: string | undefined;
+        text?: string | undefined;
+        title?: string | undefined;
+        mime?: string | undefined;
+        attachmentId: string;
+        kind: string;
+    }>>;
+    listWorkspaces(ctx: Context, req: RuntimeRef & {
+        parentWorkspaceId?: string;
+    }): Promise<Snapshot<{
+        entries: Workspace[];
+        truncated: boolean;
+        parentWorkspaceId?: string | undefined;
+        current: Workspace;
+    }>>;
+    createWorkspace(ctx: Context, req: RuntimeRef & {
+        name: string;
+    }): Promise<Workspace>;
+    private resources;
+    listResources(ctx: Context, req: RuntimeRef & {
+        kind?: Resource['kind'];
+    }): Promise<Snapshot<Resource[]>>;
+    observeResources(ctx: Context, req: RuntimeRef & {
+        kind?: Resource['kind'];
+    }, observer: Observer<Resource[]>): Promise<Subscription>;
+    getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
+    observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+    setConversationResources(ctx: Context, req: ConversationRef & {
+        resourceIds: string[];
+        expectedVersion: string;
+    }): Promise<{
+        resourceIds: string[];
+        revision: string;
+        writeVersion: string | undefined;
+        conversationId: string;
+        runtimeId: string;
+    }>;
+    stageAttachment(ctx: Context, req: ConversationRef & {
+        file: Blob;
+        name: string;
+    }): Promise<{
+        attachmentId: string;
+        name: string;
+        mime: string;
+        size: string;
+        expiresAt: string | undefined;
+    }>;
+    discardAttachment(ctx: Context, req: ConversationRef & {
+        attachmentId: string;
+    }): Promise<{
+        state: "discarded";
+    }>;
+    getAttachmentAccess(ctx: Context, req: ConversationRef & {
+        attachmentId: string;
+        purpose: 'preview' | 'download';
+    }): Promise<{
+        url: string;
+        expiresAt: string;
+    }>;
+}
+
+declare class AgentManager implements AgentManager$1 {
+    private service;
+    private cloud?;
+    constructor(service: Service, cloud?: CloudResources | undefined);
+    private resources;
+    describeWyDrives(...args: Parameters<CloudResources['describeWyDrives']>): Promise<DescribeWyDrivesResult>;
+    describeWyDriveFiles(...args: Parameters<CloudResources['describeWyDriveFiles']>): Promise<DescribeWyDriveFilesResult>;
+    getDownloadUrl(...args: Parameters<CloudResources['getDownloadUrl']>): Promise<GetDownloadUrlResult>;
+    deleteWyDriveFile(...args: Parameters<CloudResources['deleteWyDriveFile']>): Promise<void>;
+    listAgentKnowledgeSpaces(...args: Parameters<CloudResources['listAgentKnowledgeSpaces']>): Promise<KnowledgeSpace[]>;
+    listKnowledgeFiles(...args: Parameters<CloudResources['listKnowledgeFiles']>): Promise<ListKnowledgeFilesResult>;
+    downloadKnowledgeFiles(...args: Parameters<CloudResources['downloadKnowledgeFiles']>): Promise<DownloadKnowledgeFileResult[]>;
+    listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+    observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+    listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<(ModelSummary & AgentRef)[]>>;
+    listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+    listExperts(ctx: Context, req: RuntimeRef & {
+        primaryAgentId: string;
+    }): Promise<Snapshot<Expert[]>>;
+    /** Additive scoped directory API; legacy listExperts/projection semantics are unchanged. */
+    getExpertDirectory(ctx: Context, req: RuntimeRef & {
+        primaryAgentId: string;
+    }): Promise<Snapshot<ExpertDirectory>>;
+    getAgentModelCatalog(ctx: Context, req: AgentRef & {
+        consistency?: 'cache' | 'refresh';
+    }): Promise<Snapshot<AgentModelCatalog>>;
+}
+
+declare class ConversationManager implements ConversationManager$1 {
+    private service;
+    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+    listRecentGroups(ctx: Context, req: {
+        limit: number;
+    }): Promise<RecentGroupDirectoryEntry[]>;
+    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    constructor(service: Service);
+    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
+    createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<{
+        coordinatorMemberId?: string | undefined;
+        memberMappings?: {
+            clientMemberKey: string;
+            memberId: string;
+        }[] | undefined;
+        mappingState?: "unknown" | "complete" | undefined;
+        conversationId: string;
+        runtimeId: string;
+    }>;
+    listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+    observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+    listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+    observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
+    getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
+    listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+    observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+    cancelExecution(ctx: Context, req: ConversationRef & {
+        executionId: string;
+        expectedVersion: string;
+    }): Promise<{
+        state: "cancelled" | "requested" | "already_finished";
+    }>;
+    getComposerCapabilities(ctx: Context, req: ConversationRef & {
+        memberId?: string;
+    }): Promise<Snapshot<ComposerCapabilities>>;
+    getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    steerTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+        text: string;
+        clientCommandId: string;
+    }): Promise<{
+        state: "accepted";
+        turnId: string;
+        messageId: string;
+    }>;
+    setConversationPinned(ctx: Context, req: ConversationRef & {
+        pinned: boolean;
+    }, options?: MutationOptions): Promise<ConversationRef>;
+    getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+    getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
+    listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<{
+        add: Capability;
+        multipleIdentities: Capability;
+        configurable: {
+            displayName: Capability;
+            model: Capability;
+            responsibility: Capability;
+        };
+        agentId: string;
+        runtimeId: string;
+    }[]>>;
+    getMemberSnapshot(ctx: Context, req: ConversationRef & {
+        consistency?: 'cache' | 'refresh';
+    }): Promise<Snapshot<MemberSnapshot>>;
+    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
+    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    private conversations;
+    listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+    observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+    renameConversation(ctx: Context, req: ConversationRef & {
+        name: string;
+    }, options?: MutationOptions): Promise<ConversationRef>;
+    updateConversationConfig(ctx: Context, req: ConversationRef & {
+        config: Config;
+        expectedVersion: string;
+    }): Promise<ConversationRef>;
+    setConversationConfigOption(ctx: Context, req: ConversationRef & {
+        optionId: 'model' | 'runtime.permissionPreset' | 'runtime.thinkingLevel';
+        value: string;
+    }): Promise<ConversationRef>;
+    getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig & ConversationRef>>;
+    observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+    archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+    unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+    listMembers(ctx: Context, req: ConversationRef & {
+        includeRemoved?: boolean;
+    }): Promise<Snapshot<(Member & ConversationRef)[]>>;
+    observeMembers(ctx: Context, req: ConversationRef & {
+        includeRemoved?: boolean;
+    }, observer: Observer<Member[]>): Promise<Subscription>;
+    addMember(ctx: Context, req: ConversationRef & {
+        agentId: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    updateMember(ctx: Context, req: ConversationRef & {
+        memberId: string;
+        expectedVersion: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    removeMember(ctx: Context, req: ConversationRef & {
+        memberId: string;
+        expectedVersion: string;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
+    sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+    /** Wait for the Turn, not an IM receipt. Reuses the same subscription, send and recovery owner. */
+    sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
+    private messages;
+    resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+    observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+    listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+    observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+    getMessageDetail(ctx: Context, req: ConversationRef & {
+        messageId: string;
+        itemCursor?: string;
+        limit?: number;
+    }): Promise<Snapshot<MessageDetail | undefined>>;
+    getTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }): Promise<Snapshot<Turn | undefined>>;
+    observeTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+    cancelTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }): Promise<{
+        state: "cancelled" | "requested" | "already_finished";
+    }>;
+    private interactions;
+    refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<{
+        recovered: number;
+        conversationId: string;
+        runtimeId: string;
+    }>;
+    listInteractions(ctx: Context, req: ConversationRef & {
+        state?: 'pending' | 'all';
+    }): Promise<Snapshot<Interaction[]>>;
+    observeInteractions(ctx: Context, req: ConversationRef & {
+        state?: 'pending' | 'all';
+    }, observer: Observer<Interaction[]>): Promise<Subscription>;
+    respondPermission(ctx: Context, req: ConversationRef & {
+        interactionId: string;
+        optionId: string;
+        expectedVersion: string;
+    }): Promise<InteractionResponse>;
+    getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+    respondQuestion(ctx: Context, req: ConversationRef & {
+        interactionId: string;
+        expectedVersion: string;
+        answer: {
+            answers: {
+                questionId: string;
+                optionIds: string[];
+                text?: string;
+            }[];
+        } | {
+            skip: true;
+        };
+    }, options?: MutationOptions): Promise<InteractionResponse>;
+}
+
+export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type AgentSummary, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientConfig, type ClientOptions, BusinessError as CloudBusinessError, CloudClient, type CloudClientOptions, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type GroupDirectoryEntry, type GroupDirectoryPage, type GroupDirectoryQuery, type GroupRef, type GroupSyncState, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type ModelSummary, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type Observer, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type Resource, ResourceManager, type ResourceSelection, type ResponsibilityPatch, RuntimeManager, type RuntimeRef, type RuntimeSummary, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type StreamDeliveryPacket, type StreamEvent, type StreamLifecycleStatus, type Subscription, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, getAuthCode, isRetryable, mergeToInternal };

@@ -1,0 +1,30 @@
+---
+title: "Agent"
+description: "Agent 描述一个执行环境中可调用的产品入口，用于选择谁来执行业务。"
+---
+
+Agent 描述一个执行环境中可调用的产品入口，用于选择谁来执行业务。
+
+## 模型与关联
+
+`AgentSummary` / `AgentRef` 使用 `runtimeId + agentId`；名称和图标只用于展示。`ProductCatalog` 解释产品与运行入口，`AgentModelCatalog` / `ModelSummary` 提供可选模型目录。
+
+[Runtime](/domain-model/02-runtime-agent) 确定目录范围；[Member](/domain-model/04-member-config) 表示 Agent 在会话内的参与身份，不与 agentId 共用身份。
+
+## 生命周期
+
+选择 Runtime → 查询 Agent → 检查 enabled、availability 与 capabilities → 明确选择后创建会话。
+
+## 操作入口
+
+- [`listAgents`](/api-reference/agents/list)
+- [`observeAgents`](/api-reference/agents/observe-agents)
+- [`listAgentModels`](/api-reference/agents/models)
+- [`listAgentProducts`](/api-reference/agents/list-agent-products)
+- [`getAgentModelCatalog`](/api-reference/agents/get-agent-model-catalog)
+
+## 使用边界
+
+目录由 AgentManager 提供，但 Manager 不是新的领域对象。不能根据显示名、产品 ID 或实例前缀拼接 agentId；历史消息中的 Agent 也不代表当前可用。云实例管理另见 [Runtime](/domain-model/02-runtime-agent)。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

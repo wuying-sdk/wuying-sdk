@@ -1,0 +1,287 @@
+---
+title: "ResourceManager"
+sidebarTitle: "ResourceManager"
+description: "JavaScript / TypeScript 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## attachImGroupFile
+
+```ts
+attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/attach-im-group-file)
+
+## getImGroupAttachmentOperation
+
+```ts
+getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/get-im-group-attachment-operation)
+
+## stageDraftAttachment
+
+```ts
+stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; uploadId: string; }): Promise<StagedAttachment>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/stage-draft-attachment)
+
+## listDraftAttachments
+
+```ts
+listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
+
+## commitDraftAttachments
+
+```ts
+commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; attachmentIds: string[]; }): Promise<CommittedAttachment[]>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/commit-draft-attachments)
+
+## discardDraftAttachments
+
+```ts
+discardDraftAttachments(ctx: Context, req: DraftRef & { attachmentIds: string[]; }): Promise<{ state: "discarded"; }>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/discard-draft-attachments)
+
+## getDraftAttachmentPreview
+
+```ts
+getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; }): Promise<Snapshot<{ unavailableReason?: string | undefined; dataUrl?: string | undefined; text?: string | undefined; title?: string | undefined; mime?: string | undefined; attachmentId: string; kind: string; }>>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/get-draft-attachment-preview)
+
+## listWorkspaces
+
+```ts
+listWorkspaces(ctx: Context, req: RuntimeRef & { parentWorkspaceId?: string; }): Promise<Snapshot<{ entries: Workspace[]; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>>;
+```
+
+[查看操作或完整契约](/api-reference/workspaces/list)
+
+## createWorkspace
+
+```ts
+createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
+```
+
+[查看操作或完整契约](/api-reference/workspaces/create)
+
+## listResources
+
+```ts
+listResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }): Promise<Snapshot<Resource[]>>;
+```
+
+[查看操作或完整契约](/api-reference/resources/list-resources)
+
+## observeResources
+
+```ts
+observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: Observer<Resource[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/resources/observe-resources)
+
+## getConversationResources
+
+```ts
+getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
+```
+
+[查看操作或完整契约](/api-reference/resources/get-conversation-resources)
+
+## observeConversationResources
+
+```ts
+observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/resources/observe-conversation-resources)
+
+## setConversationResources
+
+```ts
+setConversationResources(ctx: Context, req: ConversationRef & { resourceIds: string[]; expectedVersion: string; }): Promise<{ resourceIds: string[]; revision: string; writeVersion: string | undefined; conversationId: string; runtimeId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/resources/set-conversation-resources)
+
+## stageAttachment
+
+```ts
+stageAttachment(ctx: Context, req: ConversationRef & { file: Blob; name: string; }): Promise<{ attachmentId: string; name: string; mime: string; size: string; expiresAt: string | undefined; }>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/stage)
+
+## discardAttachment
+
+```ts
+discardAttachment(ctx: Context, req: ConversationRef & { attachmentId: string; }): Promise<{ state: "discarded"; }>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/discard)
+
+## getAttachmentAccess
+
+```ts
+getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/access)
+
+## constructor
+
+```ts
+new new (service: Service): ResourceManager;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-b9ca8ae4ef7c0fcf)
+
+## attachImGroupFile
+
+```ts
+attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/attach-im-group-file)
+
+## getImGroupAttachmentOperation
+
+```ts
+getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/get-im-group-attachment-operation)
+
+## stageDraftAttachment
+
+```ts
+stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; uploadId: string; }): Promise<StagedAttachment>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/stage-draft-attachment)
+
+## listDraftAttachments
+
+```ts
+listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
+
+## commitDraftAttachments
+
+```ts
+commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; attachmentIds: string[]; }): Promise<CommittedAttachment[]>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/commit-draft-attachments)
+
+## discardDraftAttachments
+
+```ts
+discardDraftAttachments(ctx: Context, req: DraftRef & { attachmentIds: string[]; }): Promise<{ state: "discarded"; }>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/discard-draft-attachments)
+
+## getDraftAttachmentPreview
+
+```ts
+getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; }): Promise<Snapshot<AttachmentPreview>>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/get-draft-attachment-preview)
+
+## listWorkspaces
+
+```ts
+listWorkspaces(ctx: Context, req: RuntimeRef & { parentWorkspaceId?: string; }): Promise<Snapshot<WorkspacePage>>;
+```
+
+[查看操作或完整契约](/api-reference/workspaces/list)
+
+## createWorkspace
+
+```ts
+createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
+```
+
+[查看操作或完整契约](/api-reference/workspaces/create)
+
+## listResources
+
+```ts
+listResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }): Promise<Snapshot<Resource[]>>;
+```
+
+[查看操作或完整契约](/api-reference/resources/list-resources)
+
+## observeResources
+
+```ts
+observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: Observer<Resource[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/resources/observe-resources)
+
+## observeConversationResources
+
+```ts
+observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/resources/observe-conversation-resources)
+
+## getConversationResources
+
+```ts
+getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
+```
+
+[查看操作或完整契约](/api-reference/resources/get-conversation-resources)
+
+## setConversationResources
+
+```ts
+setConversationResources(ctx: Context, req: ConversationRef & { resourceIds: string[]; expectedVersion: string; }): Promise<ResourceSelection>;
+```
+
+[查看操作或完整契约](/api-reference/resources/set-conversation-resources)
+
+## stageAttachment
+
+```ts
+stageAttachment(ctx: Context, req: ConversationRef & { file: Blob; name: string; }): Promise<StagedAttachment>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/stage)
+
+## discardAttachment
+
+```ts
+discardAttachment(ctx: Context, req: ConversationRef & { attachmentId: string; }): Promise<{ state: "discarded"; }>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/discard)
+
+## getAttachmentAccess
+
+```ts
+getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: Int64; }>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/access)

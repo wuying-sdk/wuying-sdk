@@ -1,0 +1,98 @@
+---
+title: "start"
+sidebarTitle: "start"
+description: "完整公开接口 · Client"
+---
+
+`start` · Client
+
+开机。用户态与 AK/SK 管理员态均支持；使用真实 regionId、desktopIds。 当前公开在根 Client，不是 RuntimeManager 方法；JS/TypeScript、Go、服务端 Java 和 CLI 有入口；Android/iOS 移动清单没有对应入口。返回值是受理信息，不是完成状态；写请求不自动重试。共享 DTO 不表示所有字段都适用于本操作。clientToken 仅用于支持的用户态操作，管理员态不接受。
+
+## 业务请求字段
+
+| 字段 | 要求 |
+|---|---|
+| regionId | 必填的目标资源地域；不从登录地域推导 |
+| desktopIds | 必填、非空且不重复的真实云桌面 ID 数组；用户态 1–20 台，管理员 1–100 台；超过数量拒绝，不自动拆分写请求 |
+| clientToken | 仅用户态；1–64 个可打印 ASCII 字符且不能全为空白，省略时本次调用生成一个 UUID；不据此自动重试 |
+
+Go 字段使用 RegionID / DesktopIDs 等本语言名称，见下方真实签名和 DTO。请求不能自带凭据或协议版本；本操作不接受的字段会在发送前拒绝。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `Client.start` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go.Client.Start` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.WuyingClient.start` | 已公开声明，需核对环境能力 |
+| CLI | `wuying desktops start` | 已公开声明，需核对环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · Client
+
+```ts
+start(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go.Client
+
+```go
+func (receiver *Client) Start(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+### Java · com.aliyun.wuying.sdk.WuyingClient
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> start(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+### CLI · desktops
+
+```sh
+wuying desktops start
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface ExecutionContext {
+    signal?: AbortSignal;
+    traceId?: string;
+    timeout?: number;
+}
+
+interface DesktopOperationRequest {
+    regionId: string;
+    desktopIds: string[];
+    /** User-mode idempotency token, ASCII 1..64; defaults to one UUID per call. Unsupported for administrators. */
+    clientToken?: string;
+    /** Administrator stop only. Omitted values retain service billing defaults. */
+    stoppedMode?: 'StopCharging' | 'KeepCharging';
+    /** Stop/reboot only; explicit false is transmitted. */
+    osUpdate?: boolean;
+    /** Reset only: required for user mode; administrator omission preserves service defaults. Reinitializes the system disk. */
+    imageId?: string;
+    /** Reset only; explicitly replaces the data disk when supported by the image/service. */
+    operateType?: 'replace';
+}
+
+interface DesktopOperationResponse {
+    requestId: string;
+    results?: DesktopOperationItem[];
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/02-runtime-agent) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

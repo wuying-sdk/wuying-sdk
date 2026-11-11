@@ -1,0 +1,194 @@
+---
+title: "WuyingClient"
+sidebarTitle: "WuyingClient"
+description: "Java 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## constructor
+
+```java
+public com.aliyun.wuying.sdk.WuyingClient(com.aliyun.wuying.sdk.config.ClientOptions);
+public com.aliyun.wuying.sdk.WuyingClient(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.config.SdkConfig);
+```
+
+[查看操作或完整契约](/api-reference/client/create)
+
+## start
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> start(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/start)
+
+## stop
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> stop(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/stop)
+
+## reboot
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> reboot(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/reboot)
+
+## reset
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> reset(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/reset)
+
+## delete
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> delete(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/delete)
+
+## create
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreateDesktopsResponse> create(com.aliyun.wuying.sdk.model.CreateDesktopsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreateDesktopsResponse> create(com.aliyun.wuying.sdk.model.CreateDesktopsRequest, com.aliyun.wuying.sdk.model.DesktopCreateOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/create-desktops)
+
+## wait
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WaitDesktopsResponse> wait(com.aliyun.wuying.sdk.model.WaitDesktopsRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/wait)
+
+## getAuthCode
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GetAuthCodeResponse> getAuthCode(com.aliyun.wuying.sdk.model.GetAuthCodeParams, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/get-auth-code)
+
+## getAuthCodeCredential
+
+```java
+public com.aliyun.wuying.sdk.AuthCodeCredential getAuthCodeCredential();
+public com.aliyun.wuying.sdk.AuthCodeCredential getAuthCodeCredential(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/reference/java/public#entry-2231da018d85bec5)
+
+## logout
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> logout(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/logout)
+
+## buildAgentManager
+
+```java
+public com.aliyun.wuying.sdk.manager.AgentManager buildAgentManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/build-agent-manager)
+
+## buildConversationManager
+
+```java
+public com.aliyun.wuying.sdk.manager.ConversationManager buildConversationManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/build-conversation-manager)
+
+## buildResourceManager
+
+```java
+public com.aliyun.wuying.sdk.manager.ResourceManager buildResourceManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/build-resource-manager)
+
+## buildSkillManager
+
+```java
+public com.aliyun.wuying.sdk.manager.SkillManager buildSkillManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/build-skill-manager)
+
+## buildModelManager
+
+```java
+public com.aliyun.wuying.sdk.manager.ModelManager buildModelManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/build-model-manager)
+
+## buildCreditManager
+
+```java
+public com.aliyun.wuying.sdk.manager.CreditManager buildCreditManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/build-credit-manager)
+
+## buildRuntimeManager
+
+```java
+public com.aliyun.wuying.sdk.manager.RuntimeManager buildRuntimeManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/build-runtime-manager)
+
+## getIMCredentials
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMCredentials> getIMCredentials(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/get-imcredentials)
+
+## refreshLogin
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> refreshLogin(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/refresh-login)
+
+## updateLoginCredentials
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> updateLoginCredentials(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/client/update-login-credentials)
+
+## onStreamEvent
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onStreamEvent(com.aliyun.wuying.sdk.CallContext, java.util.function.Consumer<com.aliyun.wuying.sdk.model.StreamEvent>);
+```
+
+[查看操作或完整契约](/api-reference/client/on-stream-event)
+
+## close
+
+```java
+public void close();
+```
+
+[查看操作或完整契约](/api-reference/client/close)

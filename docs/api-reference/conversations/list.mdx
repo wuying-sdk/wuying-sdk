@@ -1,0 +1,121 @@
+---
+title: "listConversations"
+sidebarTitle: "listConversations"
+description: "完整公开接口 · Conversation"
+---
+
+`listConversations` · Conversation
+
+返回 Snapshot&lt;Page&lt;Conversation&gt;&gt;，读取 data.items；保留投影与公开分页信息。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `ConversationManager.listConversations` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListConversations` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.ConversationManager.listConversations` | 已公开声明，需核对环境能力 |
+| CLI | `wuying conversations list` | 已公开声明，需核对环境能力 |
+| Android | [`Methods.conversationListConversations`](/reference/android/models/conversation#listconversations) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.conversationListConversations`](/reference/ios/models/conversation#listconversations) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · ConversationManager
+
+```ts
+listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
+
+```go
+func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+```
+
+### Java · com.aliyun.wuying.sdk.manager.ConversationManager
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+### CLI · conversations
+
+```sh
+wuying conversations list
+required --runtime <id> — Explicit authorized Runtime ID
+optional --limit <count> — Page size (default: 20)
+optional --cursor <cursor> — Opaque nextCursor
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface Context {
+    signal?: AbortSignal;
+    timeout?: number;
+    traceId?: string;
+}
+
+interface ConversationQuery {
+    /** Omit to query all cached Runtime sources of the authenticated account. */
+    runtimeId?: string;
+    search?: string;
+    archive?: 'active' | 'archived' | 'all';
+    pin?: 'all' | 'pinned' | 'unpinned';
+    order?: 'activity' | 'pinned';
+    agentId?: string;
+    limit?: number;
+    cursor?: string;
+}
+
+interface Snapshot<T> {
+    data: T;
+    projection: Projection;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+}
+
+interface Conversation extends ConversationRef {
+    name: string;
+    mode: 'single' | 'group';
+    agentId?: string;
+    revision: Int64;
+    executionState: 'idle' | 'running' | 'error' | 'unknown';
+    availability: 'available' | 'unavailable' | 'unknown';
+    archived: boolean;
+    pinned: boolean;
+    lastActivityAt: Int64;
+    header?: ConversationHeaderMetadata;
+    presentation?: ConversationPresentation;
+    capabilities: {
+        send: Capability;
+        configure: Capability;
+        members: Capability;
+        resources: Capability;
+    };
+}
+
+interface ConversationRef extends RuntimeRef {
+    conversationId: string;
+}
+
+interface RuntimeRef {
+    runtimeId: string;
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/03-conversation) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

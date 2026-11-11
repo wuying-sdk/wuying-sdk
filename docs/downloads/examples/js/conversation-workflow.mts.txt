@@ -1,0 +1,34 @@
+import type { Client, Context, ConversationRef, MessageCompletion, Observer, Page, Message } from '@aliyun/wuying-sdk';
+
+/** Root Client only. The caller selects a Runtime and Agent and owns Client.close(). */
+export async function openConversation(
+  client: Client,
+  ctx: Context,
+  selection: { runtimeId: string; agentId: string; name: string },
+) {
+  const agents = await client.buildAgentManager(ctx);
+  const conversations = await client.buildConversationManager(ctx);
+  // Keep projection metadata: partial/stale lists are not authoritative absence.
+  const runtimeManager = await client.buildRuntimeManager(ctx);
+  const runtimes = await runtimeManager.listRuntimes(ctx);
+  const availableAgents = await agents.listAgents(ctx, { runtimeId: selection.runtimeId });
+  const conversation = await conversations.createConversation(ctx, { ...selection, mode: 'single' });
+  return { conversation, runtimes, agents: availableAgents };
+}
+
+/** Observe before sending; release this subscription on every outcome. Does not own the Client. */
+export async function sendAndObserve(
+  client: Client,
+  ctx: Context,
+  request: ConversationRef & { text: string; attachmentIds?: string[] },
+  observer: Observer<Page<Message>>,
+): Promise<MessageCompletion> {
+  const conversations = await client.buildConversationManager(ctx);
+  const subscription = await conversations.observeMessages(ctx, { runtimeId: request.runtimeId, conversationId: request.conversationId }, observer);
+  try {
+    // The observer receives projection snapshots, not append-only text fragments.
+    return await conversations.sendMessageAndWait(ctx, request);
+  } finally {
+    subscription.unsubscribe();
+  }
+}

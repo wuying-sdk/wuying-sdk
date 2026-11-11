@@ -1,0 +1,64 @@
+---
+title: "会话、消息、流式与断线恢复"
+description: "会话、消息、流式与断线恢复：职责、模型关联、生命周期、公开操作与使用边界。"
+---
+
+## 一条完整业务链
+
+查询授权 Runtime → 查询其 Agent → 用户明确选择 → 创建/选择 Conversation → 订阅消息 → 发送 → 保存 accepted → 消费流/快照 → 核对权威 Turn 终态 → 读取最终展示 → 释放订阅。
+
+本包 Go、Java、JS 的 workflow 示例实现创建会话及一次发送。默认仅显示帮助；显式 --send 才写入远端。它们不替用户选择环境、不自动重试、不打印任务正文。CLI 的同等流程见命令参考。示例用于核对公开 SDK 的接线，编译通过不代表远端业务已验收。
+
+## 不同 ID 不可混用
+
+| ID | 作用 | 不能替换为 |
+|---|---|---|
+| runtimeId | 当前账号授权的执行环境 | 云桌面显示名或任意云实例 ID |
+| agentId | 该环境中的产品 Agent | 名称、图标或历史消息中的不明身份 |
+| conversationId | 产品会话身份 | IM 群 ID、旧 Session ID |
+| mutationId | 一次有幂等契约的业务 mutation | 不同内容共用的固定常量 |
+| clientCommandId | 一次消息提交的稳定身份 | 每次重试新生成的随机 ID |
+| turnId / messageId | 受理后的执行轮次 / 消息 | 前端临时气泡索引 |
+
+宿主在发出写入前生成并保存 mutationId / clientCommandId；原样重查同一个操作时保持身份和输入一致。新业务操作使用新 ID。某方法是否接受 mutation options，以本包真实类型和签名为准；不能给所有方法任意添加该字段。
+
+## 创建、列表和配置
+
+新建单 Agent 会话使用 mode=single 与选定 agentId；群会话需要合法成员与协调配置，不能把一个单聊 UI 参数直接视为群聊配置。查询保留分页 cursor、projection 和会话归属。cursor 是不透明值，过期后从新第一页重查；不要将不同过滤条件的游标混用。
+
+模型/审批配置的提交回执与生效状态分开。公开配置查询/观察中的 desired/applied/application 需要如实展示 pending/failed；不能点击后立即把本地选择当成已经生效。当前未暴露的 demo 扩展会话操作，不可绕过 SDK 直接调用私有 Gateway 方法。
+
+## 三种发送方式
+
+| 方式 | 适合场景 | 返回含义 |
+|---|---|---|
+| sendMessage | 后台任务先提交后查询 | accepted 表示受理，不表示成功 |
+| sendMessageStream | 实时展示及尽早保留回执 | accepted、更新流、result 各自需处理错误和关闭 |
+| sendMessageAndWait | 简单请求并等待终态 | 返回 MessageCompletion；仍需区分 completed/cancelled/interrupted |
+
+流结束不等于 completed。本地超时、关闭流、退出 CLI 都不自动取消远端。若需停止任务，显式取消对应 Turn，并等待真实终态；取消 requested 不是取消完成。
+
+## 消息渲染不能把快照当增量
+
+observeMessages 提供快照，列表在 snapshot.data.items，分页在 snapshot.data.nextCursor；保留 snapshot.projection。按稳定 Message ID 更新/替换已有记录，不能把每次快照整个 append。文本流须区分 text.delta 与 text.replace，replace 必须替换对应文本。否则会出现重复气泡、两张卡片、断线重连后重复正文。
+
+历史消息的 Agent 名称/图标需匹配当前目录身份与来源范围；目录尚未完整时保持加载/未知，不把陌生 ID 硬编码成默认主 Agent。身份展示不应改变执行事实。
+
+## 恢复策略
+
+| 发生了什么 | 正确处理 |
+|---|---|
+| 已拿到 accepted，等待超时 | 保存原 Turn/Message ID，查询/观察该 Turn；不再次发送任务 |
+| 写入 outcome=unknown，没拿到 accepted | 保留原请求身份，读回 operation / 会话事实；不换 ID 重发 |
+| 观察断线或 projection stale | 恢复同一 Client / 账号的数据位置并重新观察，对账稳定 ID |
+| 写前预检失败，或 owner 明确证明未提交且无副作用 | 修正条件后由业务明确发起新尝试；普通 SDK 错误的 not_started 枚举值不足以证明这一点 |
+| 新机器/新空库没有完整历史 | 按 partial/SYNC_NOT_READY 处理，不把缓存缺失解释成远端实体不存在 |
+| Turn 已 completed，正文尚未完整 | 精确获取消息展示并核对覆盖范围；不要从 completed 标志编造回复 |
+
+宿主保留的是必要的业务关联 ID 和待确认 UI 状态，不复制 SDK 的内部数据库、路由表或请求执行状态机。成功判断必须来自原执行 owner。日志只记录必要元数据；完整任务/回复仅在客户业务界面按其权限展示。
+
+普通 BusinessError 的 not_started 可能是默认值：例如 owner 已成功写入而 SDK 随后解析结果失败，错误对象仍可能携带该值。不能仅按 outcome 枚举自动换 ID 重发。只有确定调用尚未进入写入，或存在 owner 的明确未受理/无副作用证明，才按“未执行”处理；证据不足时先保留原 mutation/command/Turn 身份核对，不凭本地默认值推翻远端事实。
+
+## 当前 JS 业务流的交付范围
+
+当前 JS `sendMessageStream()` 实现交付 `message` 与 `turn` 快照。`StreamChunk` 声明中的 `text.delta` / `text.replace` 不代表此版本会实际交付这两类事件；界面以真实消息快照更新，不能等待尚未交付的文本增量。各语言按其实际实现与同版本类型使用。

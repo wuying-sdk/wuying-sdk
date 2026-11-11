@@ -1,0 +1,23 @@
+---
+title: "run"
+sidebarTitle: "run"
+description: "CLI 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## run
+
+```sh
+wuying run
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+optional --text <text> — Task text
+optional --input-file <path> — Read UTF-8 task text from a local file
+optional --stdin — Read task text from stdin
+optional --attach <path> — Stage a local attachment (repeatable) (default: [])
+optional --client-command-id <id> — Stable ID for request recovery
+optional --no-wait — Return after durable acceptance; remote execution continues
+```
+
+[查看操作或完整契约](/api-reference/cli/run)

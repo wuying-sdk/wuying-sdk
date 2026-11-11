@@ -1,0 +1,81 @@
+---
+title: "Client"
+description: "Swift 包装的公开 Client、Request、事件、错误和引擎契约。"
+---
+
+模块名为 `WuyingSDK`。下面保留当前公开声明的类型与默认值，省略实现；所有业务入口通过 [Methods 常量](/reference/ios/public)调用。真实引擎依赖配套 XCFramework，见[安装](/sdk-reference/ios)。
+
+## Client / Request
+
+```swift
+// public final class Client
+public init(engine: MobileEngine, callbackQueue: DispatchQueue = .main)
+@discardableResult
+public func request(
+    method: String, request: [String: Any] = [:],
+    mutationId: String? = nil, data: Data? = nil,
+    timeoutMillis: Int64 = 0,
+    onEvent: @escaping (SDKEvent) -> Void
+) throws -> Request
+public func close() throws
+
+// public final class Request: LocalOperation
+public func cancel()
+```
+
+默认向主队列交付事件。初始化和关闭可能涉及磁盘及连接释放，在工作线程执行。`Request` 由 `Client.request` 返回，应用不自行构造；取消只释放本地等待，不取消远端任务。
+
+## SDKEvent
+
+```swift
+// public struct SDKEvent
+public let kind: String
+public let data: Any?
+public let error: SDKFailure?
+public let terminal: Bool
+public static func decode(_ json: String) throws -> SDKEvent
+```
+
+按具体方法解码 `data`，保留快照投影、版本和 Int64 字符串。SDK 返回事件，未提供公开的自定义成员初始化器；应用通过回调读取，按需使用公开 `decode` 校验信封。
+
+## SDKFailure
+
+```swift
+// public struct SDKFailure: Error, Equatable
+public let code: String
+public let outcome: String
+public let retryable: Bool
+public let traceId: String?
+public init(
+    code: String, outcome: String = "unknown",
+    retryable: Bool = false, traceId: String? = nil
+)
+```
+
+同步初始化/启动可能抛错，异步错误通过 `SDKEvent.error` 交付。`outcome=unknown` 时按原请求身份查回执，不自动重发写操作。
+
+## GoEngine / MobileEngine
+
+```swift
+// GoEngine 仅在能导入 WuyingMobile 时提供。
+// public final class GoEngine: MobileEngine
+public init(configuration: [String: Any]) throws
+public func start(
+    method: String, envelope: String, data: Data?,
+    timeoutMillis: Int64, onEvent: @escaping (String) -> Void
+) throws -> LocalOperation
+public func close() throws
+
+public protocol LocalOperation: AnyObject {
+    func cancel()
+}
+public protocol MobileEngine: AnyObject {
+    func start(
+        method: String, envelope: String, data: Data?,
+        timeoutMillis: Int64, onEvent: @escaping (String) -> Void
+    ) throws -> LocalOperation
+    func close() throws
+}
+```
+
+通常由 `GoEngine` 承接底层调用，`Client` 负责编码和本地事件派发。注入测试引擎不能替代真实原生运行验证。配置、数据和生命周期见[移动合同](/reference/mobile/contract)，`Methods` 全部静态常量见[方法目录](/reference/ios/public)。

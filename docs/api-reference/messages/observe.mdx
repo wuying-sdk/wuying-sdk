@@ -1,0 +1,102 @@
+---
+title: "observeMessages"
+sidebarTitle: "observeMessages"
+description: "完整公开接口 · Message"
+---
+
+`observeMessages` · Message
+
+按 Message ID 更新 data.items，保留 projection；停止观察时退订，不能把快照当文本增量追加。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `ConversationManager.observeMessages` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveMessages` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.ConversationManager.observeMessages` | 已公开声明，需核对环境能力 |
+| CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Android | [`Methods.conversationObserveMessages`](/reference/android/models/conversation#observemessages) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.conversationObserveMessages`](/reference/ios/models/conversation#observemessages) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · ConversationManager
+
+```ts
+observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
+
+```go
+func (receiver *ConversationManager) ObserveMessages(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
+```
+
+### Java · com.aliyun.wuying.sdk.manager.ConversationManager
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface Context {
+    signal?: AbortSignal;
+    timeout?: number;
+    traceId?: string;
+}
+
+interface MessageQuery extends ConversationRef {
+    cursor?: string;
+    limit?: number;
+}
+
+interface ConversationRef extends RuntimeRef {
+    conversationId: string;
+}
+
+interface RuntimeRef {
+    runtimeId: string;
+}
+
+interface Observer<T> {
+    onSnapshot(value: Snapshot<T>): void;
+    onError(error: BusinessError$2): void;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+}
+
+interface Message extends ConversationRef {
+    messageId: string;
+    clientMessageId?: string;
+    turnId?: string;
+    sender: Sender;
+    blocks: Block[];
+    state: 'pending' | 'streaming' | 'folded' | 'completed' | 'cancelled' | 'failed' | 'interrupted' | 'unknown';
+    position: Int64;
+    createdAt: Int64;
+    revision: Int64;
+    timing?: ExecutionTiming;
+}
+
+interface Subscription {
+    unsubscribe(): void;
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/05-message) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

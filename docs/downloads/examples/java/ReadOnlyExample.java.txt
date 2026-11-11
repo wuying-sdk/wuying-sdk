@@ -1,0 +1,24 @@
+import com.aliyun.wuying.sdk.*;
+import com.aliyun.wuying.sdk.config.*;
+import com.aliyun.wuying.sdk.manager.*;
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+public final class ReadOnlyExample {
+    private static String required(String key) { String value=System.getenv(key);if(value==null||value.trim().isEmpty())throw new IllegalArgumentException("Missing "+key);return value; }
+    public static void main(String[] args) {
+        if(args.length!=1||!"--live-read".equals(args[0])) { System.out.println("Use --live-read with WUYING_CLIENT_ID, WUYING_DATA_PATH and host-supplied credentials. Reads runtime count only."); return; }
+        try {
+            ClientOptions.Builder login=ClientOptions.builder(); String code=System.getenv("WUYING_AUTH_CODE");
+            if(code!=null&&!code.trim().isEmpty())login.authCode(code);
+            else login.loginToken(required("WUYING_LOGIN_TOKEN")).sessionId(required("WUYING_SESSION_ID")).endUserId(required("WUYING_END_USER_ID"));
+            String region=System.getenv("WUYING_LOGIN_REGION_ID");if(region!=null)login.loginRegionId(region);
+            SdkConfig config=SdkConfig.builder().clientId(required("WUYING_CLIENT_ID")).dataPath(Paths.get(required("WUYING_DATA_PATH"))).build();
+            try(WuyingClient client=new WuyingClient(login.build(),config);CallContext context=CallContext.withTimeout(Duration.ofSeconds(60))) {
+                RuntimeManager runtimesAPI=client.buildRuntimeManager(context);
+                System.out.println("runtimes="+runtimesAPI.listRuntimes(context).toCompletableFuture().get(65,TimeUnit.SECONDS).data.size());
+            }
+        } catch(Exception error) { System.err.println("SDK read failed; verify credentials, authorization and network. Error details are intentionally not logged.");System.exit(1); }
+    }
+}

@@ -1,0 +1,97 @@
+---
+title: "Go SDK 客户集成指南"
+description: "Go SDK 客户集成指南：职责、模型关联、生命周期、公开操作与使用边界。"
+---
+
+当前为 **RuntimeManager 首版未提交草稿**；下文 SHA 为基础提交，非当前完整源码身份。源码归档及逐文件哈希见文档站覆盖清单；不代表已发布制品。
+
+以下文中的交付路径必须替换为本次源码重新构建的制品；旧交付包不具备这些接口。
+
+业务模型、关系与生命周期先读 [领域文档](/index)；本页保留该语言的安装、配置和代码接线。
+
+当前草稿基线：2026-11-11，源码 `ea48f8775d28753cefef13b937982dd44587aa51`。本草稿须使用本次重新构建的 Go 源码。共用的认证、身份、快照、幂等和审批约束见 [集成说明](/domain-model/00-overview)，开始前应阅读。
+
+## 环境与安装
+
+Go 1.22+；SDK 使用纯 Go 持久化，通常不要求 CGO。支持 Windows、Linux、macOS，实际运行验收结果以目标报告为准。提供的是 module 源码，不假设存在公开可拉取的 tag。
+
+在客户项目中，将 `sdks/go` 放在固定依赖目录，在 go.mod 中指定：
+
+```go
+require github.com/aliyun/wuying-sdk-go v0.0.0
+replace github.com/aliyun/wuying-sdk-go => ./vendor-sdk/wuying-sdk-go
+```
+
+replace 指向实际源码目录，不是 demo Host。首次构建需要可下载 go.mod 中依赖的网络或 module 缓存。随包示例 `examples/go` 已按 `../../sdks/go` 配好路径。
+
+## 最小只读程序
+
+可运行源码：[examples/go/main.go](/downloads/examples/go/main.go.txt)。以下是核心调用：
+
+```go
+ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+defer cancel()
+client, err := wuying.NewClient(
+    wuying.ClientOptions{AuthCode: os.Getenv("WUYING_AUTH_CODE")},
+    &config.UserConfig{
+        ClientID: os.Getenv("WUYING_CLIENT_ID"),
+        DataPath: os.Getenv("WUYING_DATA_PATH"),
+        Logger: config.DiscardLogger,
+    },
+)
+if err != nil { return err }
+defer client.Close()
+runtimesAPI, err := client.BuildRuntimeManager(ctx)
+if err != nil { return err }
+runtimes, err := runtimesAPI.ListRuntimes(ctx)
+if err != nil { return err }
+// runtimes.Data 需结合 runtimes.Projection.Phase / Coverage 使用。
+```
+
+导入：`wuying "github.com/aliyun/wuying-sdk-go"` 和 `"github.com/aliyun/wuying-sdk-go/config"`，以及标准库 context/os/time。完整程序处理错误并限制输出，不调用业务服务的编译检查（依赖未缓存时仍需下载）：在包根目录执行 `node scripts/qa.mjs sdk-smoke --language=go`。也可进入 `examples/go` 执行 `go run . --help`。
+
+真实只读测试前，由宿主安全地注入环境变量：`WUYING_CLIENT_ID`、`WUYING_DATA_PATH`（独占数据库文件路径），以及 `WUYING_AUTH_CODE`；另一种凭据组合为 `WUYING_LOGIN_TOKEN`、`WUYING_SESSION_ID`、`WUYING_END_USER_ID`，可选 `WUYING_LOGIN_REGION_ID`。不要在命令行写真实密钥。进入示例目录后 `go run . --live-read`，仅输出运行环境数量和投影阶段，不创建会话。
+
+## 从查询接入会话业务
+
+Client 是对外根入口；通过 `BuildAgentManager` 和 `BuildConversationManager` 获取业务 Manager。按查询返回的真实 ID 选择环境与 Agent，再使用 Manager 的公开会话 / 消息 / Turn / Interaction 方法。请求和结果类型在源码 module 的公开包中；推荐先阅读 `sdks/go/examples/web-workflow/main.go` 与 `sdks/go/examples/unified/main.go`，再按自己的业务流程裁剪。不要复制 demo bridge 的私有方法作为 API。
+
+传入 `context.Context` 管理本地调用期限；不要把本地 deadline 当成远端已取消的证据。消息观察返回的是快照，保留服务端 ID 和投影 metadata。写入需要保留请求 / mutation 身份；网络不确定时先对账，切勿重新创建一份请求。错误对象可能携带敏感信息，产品只展示脱敏错误类别，必要时记录真实关联 ID。
+
+## 生命周期和持久化
+
+每个账号、环境使用独立 `DataPath`；这里是文件路径，不是目录路径。父目录仅当前用户可读写；不要两进程共享打开同一库。应用停止时取消观察、释放订阅并关闭 Client。SDK 拥有副本与连接，宿主不要直接读写其内部库、复制会话映射或自行补造 complete。
+
+## 验证与交付核对
+
+`verify` 校验 SDK 文件哈希，`sdk-smoke --language=go` 编译并以 `--help` 启动示例，不消费凭据。`--live-read` 只证明当时授权范围内的查询。完整收发 / 附件 / 审批 / 重连应在客户测试环境按 [测试清单](/support/validation) 验收。交付给支持人员时记录提交 SHA 与包哈希，不仅记录 `v0.0.0`。
+
+## 完整业务示例与 API 参考
+
+[Go workflow 源码](/downloads/examples/go-workflow/main.go.txt) 提供新建会话 → 获取受理 → 消费流 → 核对 Turn 的完整流程。它默认只显示帮助；显式 `go run . --send` 才执行真实写入。除前述认证与数据库配置，还需宿主提供 `WUYING_RUNTIME_ID`、`WUYING_AGENT_ID`、`WUYING_CREATE_ID`、`WUYING_COMMAND_ID`、`WUYING_INPUT_FILE`。先通过只读查询人工选择环境/Agent；任务文件使用 UTF-8，示例不输出正文。前两个操作 ID 必须为本次业务稳定保存，结果未知时先按原 ID 对账，不能更换 ID 重发。
+
+在 `examples/go-workflow` 运行 `go build .` / `go run . --help` 可只验证编译和入口，无业务请求。示例创建单 Agent 会话，示范流式消费；现有会话可复用公开 ConversationRef，不需要每轮重建会话。
+
+| 业务 | Go 公共入口 | 参数/结果说明 |
+|---|---|---|
+| 构造与关闭 | NewClient / Close | ClientOptions + UserConfig，context 由调用传递 |
+| 选环境/Agent | RuntimeManager.ListRuntimes / AgentManager.ListAgents | RuntimeRef，结果保留 Snapshot.Projection |
+| 建会 | CreateConversation | CreateRequest + 可选 MutationOptions，返回 CreatedConversation |
+| 分页历史 | ListMessages | MessageQuery，Snapshot.Data.Items / NextCursor |
+| 观察历史 | ObserveMessages | model.Observer，结束 Unsubscribe |
+| 提交/流式/等待 | SendMessage / SendMessageStream / SendMessageAndWait | SendRequest，受理与终态分开 |
+| 附件 | ResourceManager.StageAttachment / GetAttachmentAccess | 对应请求 DTO，不套用 JS File |
+| 审批/问答 | RespondPermission / RespondQuestion | 当前 Interaction ID、ExpectedVersion 及真实选项/答案 |
+
+完整签名、DTO 字段、注释由同版本公共 Go package 生成到 [Go API 参考](/reference/go/api)。没有该方法或返回 UNSUPPORTED 时，以 SDK 和远端能力为准，不调用内部 package。
+
+## 配套场景指南
+
+- [认证与生命周期](/integration/01-auth-and-lifecycle)：配置来源、账号/存储隔离、关闭和重登。
+- [会话与流式](/integration/02-conversations-and-streams)：受理/终态、快照渲染、分页、未知结果恢复。
+- [附件和交互](/integration/03-attachments-and-interactions)：暂存、审批、问答、工作空间与产物边界。
+- [错误与运维](/integration/04-errors-and-operations)：错误决策、诊断、升级回滚与客户验收。
+
+## 当前草稿的制品
+
+以下 `sdks/`、测试包及本地 tgz/jar 路径描述交付布局。本次源码尚未重新封装为完整交付包；审核当前接口须先用 RuntimeManager 草稿源码重新构建并替换对应制品。旧交付包与公网上同名版本不具备本页的新接口。源码和构建命令见各 SDK README；来源身份见 文档站的全量覆盖清单。

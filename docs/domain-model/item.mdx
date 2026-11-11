@@ -1,0 +1,27 @@
+---
+title: "Item"
+description: "Item 是执行轮次中的内容项，用于定位一段消息内容及其状态和版本。"
+---
+
+Item 是执行轮次中的内容项，用于定位一段消息内容及其状态和版本。
+
+## 模型与关联
+
+`Item` 使用 itemId，并关联 turnId、messageId、blocks、position 与 revision。`MessageDetail` 将消息与内容项分页返回；`PresentationItem` 是展示过程中的对应表达。
+
+所属轮次见 [Turn](/domain-model/06-turn-items)，消息展示见 [MessagePresentation](/domain-model/message-presentation)。
+
+## 生命周期
+
+从消息详情或展示读取内容项 → 按稳定身份和版本更新 → 按 nextItemCursor 继续读取 → 核对 complete 或 coverage。
+
+## 操作入口
+
+- [`getMessageDetail`](/api-reference/messages/detail)
+- [`getMessagePresentation`](/api-reference/messages/presentation)
+
+## 使用边界
+
+内容项不是每个 token / delta 创建的新业务对象。某个 Item 完成不代表整个 Turn 已完成；不能用一页内容项推断全文完整。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

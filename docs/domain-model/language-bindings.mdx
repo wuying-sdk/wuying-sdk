@@ -1,0 +1,53 @@
+---
+title: "语言绑定与示例"
+description: "语言绑定与示例：职责、模型关联、生命周期、公开操作与使用边界。"
+---
+
+领域概念一致，公开入口、命名、参数顺序和已提供能力按本语言处理。Manager 是操作入口，不是新增领域对象；以下链接连接同版本实际类型和代码。
+
+## Go
+
+- [安装、配置与快速上手](/sdk-reference/go)
+- [准确签名 / DTO / 命令参考](/reference/go/api)
+- [领域组合示例或命令流程](/downloads/examples/go-workflow/main.go.txt)
+
+根入口为 NewClient。context.Context 在前；公开 DTO 通常位于 model，用户配置位于 config。返回值与 error 分开检查，观察后 Unsubscribe，结束 Close。DataPath 为独占库文件。
+
+## Java
+
+- [安装、配置与快速上手](/sdk-reference/java)
+- [准确签名 / DTO / 命令参考](/reference/java/api)
+- [领域组合示例或命令流程](/downloads/examples/java/WorkflowExample.java.txt)
+
+根入口为 WuyingClient。普通业务请求 DTO 在前、CallContext 在后；以具体重载为准。异步结果为 CompletionStage，观察使用 Observer/Subscription；利用 try-with-resources 关闭。DataPath 为库文件。
+
+## JS / TypeScript
+
+- [安装、配置与快速上手](/sdk-reference/js)
+- [准确签名 / DTO / 命令参考](/downloads/reference/js/index.d.ts.txt)
+- [领域组合示例或命令流程](/downloads/examples/js/workflow.mjs.txt)
+
+从 @aliyun/wuying-sdk 根导入 Client；Client.create 同步返回。业务 Context 通常在前；按方法返回类型区分 Snapshot&lt;T[]&gt;（读 data）、Snapshot&lt;Page&lt;T&gt;&gt;（读 data.items/nextCursor）和直接 DTO。JS Int64 为字符串。Node 需先准备持久 IndexedDB，安装后保留 shim 补丁。
+
+## CLI
+
+- [安装、配置与快速上手](/sdk-reference/cli)
+- [准确签名 / DTO / 命令参考](/reference/cli/commands)
+- [领域组合示例或命令流程](/reference/cli/commands)
+
+CLI 使用显式 Runtime/Conversation/Turn ID 和结构化输出，只有已提供的子命令能使用；没有命令不代表其他 SDK 没有 API。auth status 仅检查本地配置；环境凭据与 POSIX 文件/Windows 限制见本语言指南。
+
+## 调用与模型使用
+
+SDK DTO 是领域的当前公开投影，不是数据库 schema。不同语言不按字段大小写机械互译；真实 ID、版本、游标和可用性按返回值处理。CLI 的输出还有命令 envelope，不能把 JS 的 data 路径直接套到每条 CLI 命令。
+
+示例的默认帮助不调用业务。显式 --send 才根据宿主授权配置建会/发送；旧 TypeScript 组合函数用于演示订阅释放，不示范完整幂等恢复，稳定 mutation/command 身份见新的 runnable workflow 和本语言指南。
+
+
+## Android 与 iOS
+
+- [Android 安装、初始化与完整方法](/sdk-reference/android)
+- [iOS 安装、初始化与完整方法](/sdk-reference/ios)
+- [移动端认证、数据与生命周期](/reference/mobile/contract)
+
+两端使用原生包装与 Go 移动引擎，通过 Client.request 和 Methods 常量调用。当前同源清单各 113 个入口；与服务端 Java SDK 分别核对，不从语言名称推断能力等价。

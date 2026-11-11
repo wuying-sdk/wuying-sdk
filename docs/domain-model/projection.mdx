@@ -1,0 +1,17 @@
+---
+title: "判断数据是否可用"
+description: "解释返回结果中的就绪状态、完整性与版本。"
+---
+
+页面正在加载环境或消息时，拿到空数组还不够；需要确认这份数据是否已经可读、是否覆盖完整范围。这些信息由 `projection` 提供。
+
+| 字段 | 怎么理解 | 应用怎么处理 |
+|---|---|---|
+| `phase` | 当前是否已就绪；可能是 initializing、ready、stale、resyncing、unavailable | 展示加载、过期或不可用状态，不把它们改成 ready |
+| `coverage` | 这次结果只覆盖部分数据，还是当前作用域的完整数据 | partial 时不把缺失项判定为不存在 |
+| `generation` | 当前观察所属的一代数据 | 代际变化时按接口合同重新对账，不混用旧状态 |
+| `viewVersion` / `statusVersion` | 用于识别视图或状态变化 | 原样保留，不当作业务写版本 |
+
+ready 与 complete 描述数据可读性和覆盖范围，不表示 Agent 任务已完成。部分接口还有 `controlReady`，它也不保证所有目录或历史都已同步。任务是否完成应检查 [Turn](/domain-model/06-turn-items)。
+
+[完整类型与语言差异](/sdk-reference/index)

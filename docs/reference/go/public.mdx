@@ -1,0 +1,3279 @@
+---
+title: "Go 完整公开清单"
+sidebarTitle: "Go 完整公开清单"
+description: "按原始声明核对所有公开调用入口，包括配置、DTO、回调与辅助方法。"
+---
+
+本页完整列出当前快照中的公开函数、方法与命令，包含重载。业务操作按模型拆页；构造、配置、DTO/错误辅助、回调契约等保留完整签名，不当作新的资源操作。
+
+统计非 internal 的库包，含 mobile 与公开 transport/agmessage 门面及其重导出/提升的方法；排除示例、生成工具与测试程序。
+
+<a id="entry-3d23c0b50ffc0ae3" />
+
+### github.com/aliyun/wuying-sdk-go.NewClient
+
+类别：类型、配置、构造、回调或辅助入口。[按模型查看操作](/api-reference/client/create)。
+
+```go
+func NewClient(opts ClientOptions, cfg *config.UserConfig) (*Client, error)
+```
+
+<a id="entry-6e9d604bbe4e5ba2" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildAgentManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-agent-manager)。
+
+```go
+func (receiver *Client) BuildAgentManager(ctx context.Context) (*manager.AgentManager, error)
+```
+
+<a id="entry-a39526c9212d1862" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildConversationManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-conversation-manager)。
+
+```go
+func (receiver *Client) BuildConversationManager(ctx context.Context) (*manager.ConversationManager, error)
+```
+
+<a id="entry-6c1c459feb632093" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildCreditManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-credit-manager)。
+
+```go
+func (receiver *Client) BuildCreditManager(ctx context.Context) (*manager.CreditManager, error)
+```
+
+<a id="entry-c44fd9bfe7ca41c0" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildModelManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-model-manager)。
+
+```go
+func (receiver *Client) BuildModelManager(ctx context.Context) (*manager.ModelManager, error)
+```
+
+<a id="entry-e1447b7c626ad912" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildResourceManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-resource-manager)。
+
+```go
+func (receiver *Client) BuildResourceManager(ctx context.Context) (*manager.ResourceManager, error)
+```
+
+<a id="entry-9270aac7fc299201" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildRuntimeManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-runtime-manager)。
+
+```go
+func (receiver *Client) BuildRuntimeManager(ctx context.Context) (*manager.RuntimeManager, error)
+```
+
+<a id="entry-9105912deabf09e2" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildSkillManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-skill-manager)。
+
+```go
+func (receiver *Client) BuildSkillManager(ctx context.Context) (*manager.SkillManager, error)
+```
+
+<a id="entry-aee088f327e24612" />
+
+### github.com/aliyun/wuying-sdk-go.Client.Close
+
+类别：模型操作。[按模型查看操作](/api-reference/client/close)。
+
+```go
+func (receiver *Client) Close() error
+```
+
+<a id="entry-c5efb872c6634b80" />
+
+### github.com/aliyun/wuying-sdk-go.Client.Create
+
+类别：模型操作。[按模型查看操作](/api-reference/client/create-desktops)。
+
+```go
+func (receiver *Client) Create(ctx context.Context, r *model.CreateDesktopsRequest, options ...model.DesktopCreateOptions) (*model.CreateDesktopsResponse, error)
+```
+
+<a id="entry-4824a953a38f23b5" />
+
+### github.com/aliyun/wuying-sdk-go.Client.Delete
+
+类别：模型操作。[按模型查看操作](/api-reference/client/delete)。
+
+```go
+func (receiver *Client) Delete(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+<a id="entry-9d78108b15c24976" />
+
+### github.com/aliyun/wuying-sdk-go.Client.GetAuthCode
+
+类别：模型操作。[按模型查看操作](/api-reference/client/get-auth-code)。
+
+```go
+func (receiver *Client) GetAuthCode(ctx context.Context, r *model.GetAuthCodeRequest) (*model.GetAuthCodeResponse, error)
+```
+
+<a id="entry-65d48a3e57e71a6f" />
+
+### github.com/aliyun/wuying-sdk-go.Client.OnStreamEvent
+
+类别：模型操作。[按模型查看操作](/api-reference/client/on-stream-event)。
+
+```go
+func (receiver *Client) OnStreamEvent(ctx context.Context, handler agmessage.StreamHandler) (func(), error)
+```
+
+<a id="entry-7a7e4293e4357399" />
+
+### github.com/aliyun/wuying-sdk-go.Client.Reboot
+
+类别：模型操作。[按模型查看操作](/api-reference/client/reboot)。
+
+```go
+func (receiver *Client) Reboot(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+<a id="entry-2ebe46cb16cb63c3" />
+
+### github.com/aliyun/wuying-sdk-go.Client.Reset
+
+类别：模型操作。[按模型查看操作](/api-reference/client/reset)。
+
+```go
+func (receiver *Client) Reset(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+<a id="entry-10202c0f902770c5" />
+
+### github.com/aliyun/wuying-sdk-go.Client.Start
+
+类别：模型操作。[按模型查看操作](/api-reference/client/start)。
+
+```go
+func (receiver *Client) Start(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+<a id="entry-218096ff8af78a1a" />
+
+### github.com/aliyun/wuying-sdk-go.Client.Stop
+
+类别：模型操作。[按模型查看操作](/api-reference/client/stop)。
+
+```go
+func (receiver *Client) Stop(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+<a id="entry-6d0aef69bf13187a" />
+
+### github.com/aliyun/wuying-sdk-go.Client.Wait
+
+类别：模型操作。[按模型查看操作](/api-reference/client/wait)。
+
+```go
+func (receiver *Client) Wait(ctx context.Context, r *model.WaitDesktopsRequest) (*model.WaitDesktopsResponse, error)
+```
+
+<a id="entry-ad3524bafede02fd" />
+
+### github.com/aliyun/wuying-sdk-go.ClientOptions.GoString
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver ClientOptions) GoString() string
+```
+
+<a id="entry-419ff394f89e1611" />
+
+### github.com/aliyun/wuying-sdk-go.ClientOptions.String
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver ClientOptions) String() string
+```
+
+<a id="entry-35e7d7ab98761347" />
+
+### github.com/aliyun/wuying-sdk-go/config.DirectoryPolicy
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func DirectoryPolicy(c Config) DirectoryConfig
+```
+
+<a id="entry-90ea34980d401289" />
+
+### github.com/aliyun/wuying-sdk-go/config.MergeToInternal
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func MergeToInternal(user *UserConfig) (Config, error)
+```
+
+<a id="entry-7d8adf54c6a36ca5" />
+
+### github.com/aliyun/wuying-sdk-go/config.StreamingPolicy
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func StreamingPolicy(c Config) StreamingConfig
+```
+
+<a id="entry-48ba727eea383a98" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.AccessKeyID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+AccessKeyID() string
+```
+
+<a id="entry-e9e0a14c35fedd22" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.AccessKeySecret
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+AccessKeySecret() string
+```
+
+<a id="entry-ec9860e4dcae99a0" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.AppStreamEndpoint
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+AppStreamEndpoint() string
+```
+
+<a id="entry-267b7b00ca1a9987" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.AuthCodeRefreshInterval
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+AuthCodeRefreshInterval() time.Duration
+```
+
+<a id="entry-423703e6c17e5e06" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.ClientID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+ClientID() string
+```
+
+<a id="entry-6acf61fe4429d1f3" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.IMDataDir
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+IMDataDir() string
+```
+
+<a id="entry-45a502d54796e113" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.IMLogFilePath
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+IMLogFilePath() string
+```
+
+<a id="entry-2c7bdfcb07157a85" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.IMLogLevel
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+IMLogLevel() uint32
+```
+
+<a id="entry-6d931dc9d08109e4" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.IMPlatformID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+IMPlatformID() int32
+```
+
+<a id="entry-d9206bceeb682b6b" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.InitialSync
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+InitialSync() InitialSyncConfig
+```
+
+<a id="entry-700c36986d4c8049" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.Logger
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Logger() *slog.Logger
+```
+
+<a id="entry-de3ae9bf408b0226" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.LoginTokenDefaultExpiry
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoginTokenDefaultExpiry() time.Duration
+```
+
+<a id="entry-65ebbd3c0296ba43" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.MaxRetries
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+MaxRetries() int
+```
+
+<a id="entry-7f955b5d32705e93" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.RelayMaxDataBytes
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+RelayMaxDataBytes() int
+```
+
+<a id="entry-e519573a32398ba2" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.RetryBaseDelay
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+RetryBaseDelay() time.Duration
+```
+
+<a id="entry-1e0590186c0b0bf9" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.RetryMaxDelay
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+RetryMaxDelay() time.Duration
+```
+
+<a id="entry-f3cace988e6e5705" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.SalesEndpoint
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SalesEndpoint() string
+```
+
+<a id="entry-9c5df22203c967a1" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.SkillMgmtEndpoint
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SkillMgmtEndpoint() string
+```
+
+<a id="entry-5ed7f952a1c0012d" />
+
+### github.com/aliyun/wuying-sdk-go/config.Config.Timeout
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Timeout() time.Duration
+```
+
+<a id="entry-770bf22175a3f1f1" />
+
+### github.com/aliyun/wuying-sdk-go/manager.CallOptionsFrom
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func CallOptionsFrom(opts []CallOption) func(result interface{}, err error)
+```
+
+<a id="entry-d6d27fa5598b452a" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewAgentManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewAgentManager(s *business.Service) *AgentManager
+```
+
+<a id="entry-e745ffba5c7095c9" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewConversationManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewConversationManager(s *business.Service) *ConversationManager
+```
+
+<a id="entry-db0c04eace8512ec" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewCreditManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewCreditManager(sc *container.ServiceContainer) *CreditManager
+```
+
+<a id="entry-390bc027d1fae88b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewModelManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewModelManager(sc *container.ServiceContainer) *ModelManager
+```
+
+<a id="entry-427f76554846eba8" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewResourceManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewResourceManager(s *business.Service) *ResourceManager
+```
+
+<a id="entry-7e15c8fecf00c225" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewRuntimeManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewRuntimeManager(sc *container.ServiceContainer, service *business.Service) *RuntimeManager
+```
+
+<a id="entry-b6374ae0fbe172be" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewSkillManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewSkillManager(sc *container.ServiceContainer) *SkillManager
+```
+
+<a id="entry-b321f43007fa12f1" />
+
+### github.com/aliyun/wuying-sdk-go/manager.WithAsync
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func WithAsync(callback func(result interface{}, err error)) CallOption
+```
+
+<a id="entry-d2bc9baf29b8bedc" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.DeleteWyDriveFile
+
+类别：模型操作。[按模型查看操作](/api-reference/files/delete-wy-drive-file)。
+
+```go
+func (receiver *AgentManager) DeleteWyDriveFile(ctx context.Context, r m.DeleteWyDriveFileRequest) error
+```
+
+<a id="entry-b60d2f2a6877447c" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.DescribeWyDriveFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drive-files)。
+
+```go
+func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+```
+
+<a id="entry-c434137068932b3d" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.DescribeWyDrives
+
+类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drives)。
+
+```go
+func (receiver *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+```
+
+<a id="entry-80bed22f1ac8071b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.DownloadKnowledgeFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/download-knowledge-files)。
+
+```go
+func (receiver *AgentManager) DownloadKnowledgeFiles(ctx context.Context, r m.DownloadKnowledgeFilesRequest) ([]m.DownloadKnowledgeFileResult, error)
+```
+
+<a id="entry-8bc3d6bf4ab1fd88" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.GetAgentModelCatalog
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/get-agent-model-catalog)。
+
+```go
+func (receiver *AgentManager) GetAgentModelCatalog(ctx context.Context, r m.ModelCatalogQuery) (m.Snapshot[m.AgentModelCatalog], error)
+```
+
+<a id="entry-dfa19b4e69a0a1e1" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.GetDownloadURL
+
+类别：模型操作。[按模型查看操作](/api-reference/files/get-download-url)。
+
+```go
+func (receiver *AgentManager) GetDownloadURL(ctx context.Context, r m.GetDownloadUrlRequest) (m.DownloadUrlInfo, error)
+```
+
+<a id="entry-e5fdc792a28dbbd5" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.GetExpertDirectory
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/get-expert-directory)。
+
+```go
+func (receiver *AgentManager) GetExpertDirectory(ctx context.Context, r m.ExpertQuery) (m.Snapshot[m.ExpertDirectory], error)
+```
+
+<a id="entry-b82c9898e0adf247" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.ListAgentKnowledgeSpaces
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-agent-knowledge-spaces)。
+
+```go
+func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+```
+
+<a id="entry-7f459d1d932e4088" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.ListAgentModels
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
+
+```go
+func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+```
+
+<a id="entry-9940cc00c970267e" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.ListAgentProducts
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list-agent-products)。
+
+```go
+func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
+```
+
+<a id="entry-93c3aba406c167f2" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.ListAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
+
+```go
+func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+```
+
+<a id="entry-89fffa72700baaf4" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.ListExperts
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list-experts)。
+
+```go
+func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+```
+
+<a id="entry-b780d367d1233fea" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.ListKnowledgeFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-knowledge-files)。
+
+```go
+func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+```
+
+<a id="entry-f564f83d2b1b3e1b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.ObserveAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/observe-agents)。
+
+```go
+func (receiver *AgentManager) ObserveAgents(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
+```
+
+<a id="entry-bcd0d7c5e8fd2193" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.AddMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/add)。
+
+```go
+func (receiver *ConversationManager) AddMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+<a id="entry-5374706705d7cff6" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ArchiveConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/archive)。
+
+```go
+func (receiver *ConversationManager) ArchiveConversation(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
+```
+
+<a id="entry-bf4921b55028765f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.CancelExecution
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/cancel-execution)。
+
+```go
+func (receiver *ConversationManager) CancelExecution(ctx context.Context, r m.CancelExecutionRequest) (m.StateResult, error)
+```
+
+<a id="entry-d284c9759ff424b1" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.CancelTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/cancel)。
+
+```go
+func (receiver *ConversationManager) CancelTurn(ctx context.Context, r m.TurnRef) (m.StateResult, error)
+```
+
+<a id="entry-a7efecc41b47c1db" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.CreateConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/create)。
+
+```go
+func (receiver *ConversationManager) CreateConversation(ctx context.Context, r m.CreateRequest, options ...m.MutationOptions) (m.CreatedConversation, error)
+```
+
+<a id="entry-782392fc2e5b1b3d" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetCommandReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-command-receipt)。
+
+```go
+func (receiver *ConversationManager) GetCommandReceipt(ctx context.Context, r m.CommandReceiptRef) (m.Snapshot[m.CommandReceipt], error)
+```
+
+<a id="entry-5463fd74fcd183f6" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetComposerCapabilities
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/get-composer-capabilities)。
+
+```go
+func (receiver *ConversationManager) GetComposerCapabilities(ctx context.Context, r m.ComposerQuery) (m.Snapshot[m.ComposerCapabilities], error)
+```
+
+<a id="entry-4ed3f74cf90bcb99" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/get)。
+
+```go
+func (receiver *ConversationManager) GetConversationConfig(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.EffectiveConfig], error)
+```
+
+<a id="entry-f1841ff7986afa97" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetConversationHeaderMetadata
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-header-metadata)。
+
+```go
+func (receiver *ConversationManager) GetConversationHeaderMetadata(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ConversationHeaderMetadata], error)
+```
+
+<a id="entry-245eb8001f78cee9" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetConversationStorageContext
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/get-conversation-storage-context)。
+
+```go
+func (receiver *ConversationManager) GetConversationStorageContext(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, error)
+```
+
+<a id="entry-6c061220b5973363" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetConversationSummary
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-summary)。
+
+```go
+func (receiver *ConversationManager) GetConversationSummary(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.Conversation], error)
+```
+
+<a id="entry-f20b1a1ec416a067" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get)。
+
+```go
+func (receiver *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+```
+
+<a id="entry-353db5509b6d9add" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetMemberSnapshot
+
+类别：模型操作。[按模型查看操作](/api-reference/members/get-member-snapshot)。
+
+```go
+func (receiver *ConversationManager) GetMemberSnapshot(ctx context.Context, r m.MemberSnapshotQuery) (m.Snapshot[m.MemberSnapshot], error)
+```
+
+<a id="entry-6dbd2119f913a8a4" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetMessageDetail
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/detail)。
+
+```go
+func (receiver *ConversationManager) GetMessageDetail(ctx context.Context, r m.MessageDetailQuery) (m.Snapshot[*m.MessageDetail], error)
+```
+
+<a id="entry-52af4e969632b82b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetMessageFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/get-message-files)。
+
+```go
+func (receiver *ConversationManager) GetMessageFiles(ctx context.Context, r m.MessageFilesQuery) (m.Snapshot[m.MessageFilesResult], error)
+```
+
+<a id="entry-d4432ecd41987d32" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetMessagePresentation
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/presentation)。
+
+```go
+func (receiver *ConversationManager) GetMessagePresentation(ctx context.Context, r m.PresentationQuery) (m.Snapshot[*m.MessagePresentation], error)
+```
+
+<a id="entry-793675b1c537a0f5" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetMutation
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-mutation)。
+
+```go
+func (receiver *ConversationManager) GetMutation(ctx context.Context, r m.MutationRef) (m.Snapshot[m.MutationStatus], error)
+```
+
+<a id="entry-c1809aff2dec73c4" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetQuestionResponseReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-question-response-receipt)。
+
+```go
+func (receiver *ConversationManager) GetQuestionResponseReceipt(ctx context.Context, r m.QuestionResponseRef) (m.Snapshot[m.CommandReceipt], error)
+```
+
+<a id="entry-a0e7c453aa24100c" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/get)。
+
+```go
+func (receiver *ConversationManager) GetTurn(ctx context.Context, r m.TurnRef) (m.Snapshot[*m.Turn], error)
+```
+
+<a id="entry-48a5d32c4de56763" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListActiveExecutions
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/list-active-executions)。
+
+```go
+func (receiver *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnapshot], error)
+```
+
+<a id="entry-cdf49529094e4193" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListConversationGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list-conversation-groups)。
+
+```go
+func (receiver *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.SidebarGroup]], error)
+```
+
+<a id="entry-fd5225cc1a2d45a6" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListConversationHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/list-conversation-history)。
+
+```go
+func (receiver *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+```
+
+<a id="entry-99b0f3c6711089e8" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list)。
+
+```go
+func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+```
+
+<a id="entry-09cc000cf4773fd5" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListExecutionActivity
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/list-execution-activity)。
+
+```go
+func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity], error)
+```
+
+<a id="entry-4261a5c4c4615d52" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListGroupSyncStates
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/list-group-sync-states)。
+
+```go
+func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
+```
+
+<a id="entry-022bc7999a5ac952" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
+
+```go
+func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
+```
+
+<a id="entry-c487e15cdedb21f4" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/list)。
+
+```go
+func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+```
+
+<a id="entry-6c9931611a53edc0" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListMemberCandidates
+
+类别：模型操作。[按模型查看操作](/api-reference/members/list-member-candidates)。
+
+```go
+func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+```
+
+<a id="entry-f8e270c1dcb1160f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/members/list)。
+
+```go
+func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+```
+
+<a id="entry-f8adeda5092da91d" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListMessages
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/list)。
+
+```go
+func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+```
+
+<a id="entry-45860257d7bd052b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ListSidebarConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list-sidebar-conversations)。
+
+```go
+func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+```
+
+<a id="entry-112a929a9ee993ed" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveActiveExecutions
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-active-executions)。
+
+```go
+func (receiver *ConversationManager) ObserveActiveExecutions(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
+```
+
+<a id="entry-e9b3cd46f6747d78" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveCommandReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-command-receipt)。
+
+```go
+func (receiver *ConversationManager) ObserveCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.Observer[m.CommandReceipt]) (m.Subscription, error)
+```
+
+<a id="entry-cf168e4890dedbb2" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/observe-conversation-config)。
+
+```go
+func (receiver *ConversationManager) ObserveConversationConfig(ctx context.Context, r m.ConversationRef, o m.Observer[m.EffectiveConfig]) (m.Subscription, error)
+```
+
+<a id="entry-6adf3be311b4e6bd" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveConversationGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-groups)。
+
+```go
+func (receiver *ConversationManager) ObserveConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.Observer[m.Page[m.SidebarGroup]]) (m.Subscription, error)
+```
+
+<a id="entry-52ddb0763fd475ea" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveConversationHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/observe-conversation-history)。
+
+```go
+func (receiver *ConversationManager) ObserveConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.Observer[m.ConversationHistory]) (m.Subscription, error)
+```
+
+<a id="entry-ba2c112d86cc857a" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversations)。
+
+```go
+func (receiver *ConversationManager) ObserveConversations(ctx context.Context, r m.ConversationQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+<a id="entry-73a6bafb69df1ab0" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveExecutionActivity
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-execution-activity)。
+
+```go
+func (receiver *ConversationManager) ObserveExecutionActivity(ctx context.Context, r m.ConversationRef, o m.Observer[[]m.ExecutionActivity]) (m.Subscription, error)
+```
+
+<a id="entry-e7814a7897deef73" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/observe-interactions)。
+
+```go
+func (receiver *ConversationManager) ObserveInteractions(ctx context.Context, r m.InteractionQuery, o m.Observer[[]m.Interaction]) (m.Subscription, error)
+```
+
+<a id="entry-6e40f5d4a4169b89" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveLiveProcess
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-live-process)。
+
+```go
+func (receiver *ConversationManager) ObserveLiveProcess(ctx context.Context, r m.ConversationRef, o m.Observer[m.LiveProcessSnapshot]) (m.Subscription, error)
+```
+
+<a id="entry-2f20c23e2abf7d3c" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/members/observe-members)。
+
+```go
+func (receiver *ConversationManager) ObserveMembers(ctx context.Context, r m.MemberQuery, o m.Observer[[]m.Member]) (m.Subscription, error)
+```
+
+<a id="entry-b577102069094180" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveMessages
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/observe)。
+
+```go
+func (receiver *ConversationManager) ObserveMessages(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
+```
+
+<a id="entry-08c36b5d4f6b5a0c" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveMutation
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-mutation)。
+
+```go
+func (receiver *ConversationManager) ObserveMutation(ctx context.Context, r m.MutationRef, o m.Observer[m.MutationStatus]) (m.Subscription, error)
+```
+
+<a id="entry-adba7662ccb49963" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveSidebarConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-sidebar-conversations)。
+
+```go
+func (receiver *ConversationManager) ObserveSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+<a id="entry-e9b6e1e0d7318b01" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/observe-turn)。
+
+```go
+func (receiver *ConversationManager) ObserveTurn(ctx context.Context, r m.TurnRef, o m.Observer[*m.Turn]) (m.Subscription, error)
+```
+
+<a id="entry-6e2b80be50e7f95a" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.OnGroupSyncState
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/on-group-sync-state)。
+
+```go
+func (receiver *ConversationManager) OnGroupSyncState(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
+```
+
+<a id="entry-07efe74c84cda2a8" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.PrepareConversationAttachmentTarget
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/prepare-conversation-attachment-target)。
+
+```go
+func (receiver *ConversationManager) PrepareConversationAttachmentTarget(ctx context.Context, r m.ConversationRef) (m.ConversationAttachmentTarget, error)
+```
+
+<a id="entry-e4f4cc8c8e839db3" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.RefreshPendingInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/refresh-pending-interactions)。
+
+```go
+func (receiver *ConversationManager) RefreshPendingInteractions(ctx context.Context, r m.ConversationRef) (m.RecoveredInteractions, error)
+```
+
+<a id="entry-c8d414598b98c901" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.RemoveMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/remove)。
+
+```go
+func (receiver *ConversationManager) RemoveMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+<a id="entry-f64b6e91dc835371" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.RenameConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/rename)。
+
+```go
+func (receiver *ConversationManager) RenameConversation(ctx context.Context, r m.RenameRequest, options ...m.MutationOptions) (m.ConversationRef, error)
+```
+
+<a id="entry-6ae8c1aa497fd22e" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ResolveConversationRead
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/resolve-conversation-read)。
+
+```go
+func (receiver *ConversationManager) ResolveConversationRead(ctx context.Context, r m.ConversationReadQuery) (m.ConversationReadBinding, error)
+```
+
+<a id="entry-7e0a1b54d27f5b04" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.RespondPermission
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/permission)。
+
+```go
+func (receiver *ConversationManager) RespondPermission(ctx context.Context, r m.PermissionRequest) (m.InteractionResponse, error)
+```
+
+<a id="entry-23a2fde215d8639e" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.RespondQuestion
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/question)。
+
+```go
+func (receiver *ConversationManager) RespondQuestion(ctx context.Context, r m.QuestionRequest, options ...m.MutationOptions) (m.InteractionResponse, error)
+```
+
+<a id="entry-89ad35112b6cd933" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SendMessageAndWait
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/wait)。
+
+```go
+func (receiver *ConversationManager) SendMessageAndWait(ctx context.Context, r m.SendRequest) (m.MessageCompletion, error)
+```
+
+<a id="entry-9cc10892c69f4a37" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SendMessageStream
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/stream)。
+
+```go
+func (receiver *ConversationManager) SendMessageStream(ctx context.Context, r m.SendRequest) m.MessageStream
+```
+
+<a id="entry-ecc9ef40c3ae93d1" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SendMessage
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/send)。
+
+```go
+func (receiver *ConversationManager) SendMessage(ctx context.Context, r m.SendRequest) (m.MessageAccepted, error)
+```
+
+<a id="entry-6047acb6fd260a0b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SetConversationConfigOption
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/set-conversation-config-option)。
+
+```go
+func (receiver *ConversationManager) SetConversationConfigOption(ctx context.Context, r m.ConfigOptionRequest) (m.ConversationRef, error)
+```
+
+<a id="entry-1d548873fabd2a1b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SetConversationPinned
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/set-conversation-pinned)。
+
+```go
+func (receiver *ConversationManager) SetConversationPinned(ctx context.Context, r m.PinnedRequest, options ...m.MutationOptions) (m.ConversationRef, error)
+```
+
+<a id="entry-f477a741cb508f83" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SteerTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/steer-turn)。
+
+```go
+func (receiver *ConversationManager) SteerTurn(ctx context.Context, r m.SteerRequest) (m.SteerResult, error)
+```
+
+<a id="entry-6c4428ff734b9e14" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SyncConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/sync-conversation)。
+
+```go
+func (receiver *ConversationManager) SyncConversation(ctx context.Context, r m.ConversationRef) (m.GroupSyncState, error)
+```
+
+<a id="entry-124d5fc0b17d8d13" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SyncGroup
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/sync-group)。
+
+```go
+func (receiver *ConversationManager) SyncGroup(ctx context.Context, r m.GroupRef) (m.GroupSyncState, error)
+```
+
+<a id="entry-a74f1f913ed1e221" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.UnarchiveConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/unarchive-conversation)。
+
+```go
+func (receiver *ConversationManager) UnarchiveConversation(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
+```
+
+<a id="entry-8344da70e9468a05" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.UpdateConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/update)。
+
+```go
+func (receiver *ConversationManager) UpdateConversationConfig(ctx context.Context, r m.ConfigRequest) (m.ConversationRef, error)
+```
+
+<a id="entry-1ede515ab5716256" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.UpdateMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/update)。
+
+```go
+func (receiver *ConversationManager) UpdateMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+<a id="entry-d76b64c35643c254" />
+
+### github.com/aliyun/wuying-sdk-go/manager.CreditManager.DescribeCreditPackageAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/credits/describe-credit-package-agents)。
+
+```go
+func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+```
+
+<a id="entry-2b425c386eb56c9f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.CreditManager.DescribeCreditUsageInfo
+
+类别：模型操作。[按模型查看操作](/api-reference/credits/usage)。
+
+```go
+func (receiver *CreditManager) DescribeCreditUsageInfo(ctx context.Context, r *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
+```
+
+<a id="entry-aee3ea40c5362b2a" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ModelManager.GetAgentInstanceModelConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/models/get)。
+
+```go
+func (receiver *ModelManager) GetAgentInstanceModelConfig(ctx context.Context, req *GetModelConfigRequest, opts ...CallOption) (*model.ModelConfig, error)
+```
+
+<a id="entry-e9869d158b5259a3" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ModelManager.SetChannelGroupModel
+
+类别：模型操作。[按模型查看操作](/api-reference/models/set-channel-group-model)。
+
+```go
+func (receiver *ModelManager) SetChannelGroupModel(ctx context.Context, req *SetChannelGroupModelRequest, opts ...CallOption) (*model.SetChannelGroupModelResult, error)
+```
+
+<a id="entry-3b92c2975794b98f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.AttachImGroupFile
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-im-group-file)。
+
+```go
+func (receiver *ResourceManager) AttachImGroupFile(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+```
+
+<a id="entry-d649cc3745d0ea4f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.CommitDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
+
+```go
+func (receiver *ResourceManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
+```
+
+<a id="entry-03e4218ded1c0de7" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.CreateWorkspace
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
+
+```go
+func (receiver *ResourceManager) CreateWorkspace(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
+```
+
+<a id="entry-3da1160927425f26" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.DiscardAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
+
+```go
+func (receiver *ResourceManager) DiscardAttachment(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
+```
+
+<a id="entry-e28e09a35b1b423e" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.DiscardDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
+
+```go
+func (receiver *ResourceManager) DiscardDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
+```
+
+<a id="entry-92217952ce73bb66" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetAttachmentAccess
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
+
+```go
+func (receiver *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
+```
+
+<a id="entry-5ba83416975a605b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/get-conversation-resources)。
+
+```go
+func (receiver *ResourceManager) GetConversationResources(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ResourceSelection], error)
+```
+
+<a id="entry-9b24f7172c4a0e97" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetDraftAttachmentPreview
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
+
+```go
+func (receiver *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
+```
+
+<a id="entry-275682567fb4a617" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetImGroupAttachmentOperation
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/get-im-group-attachment-operation)。
+
+```go
+func (receiver *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+```
+
+<a id="entry-e1df4346778360ae" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ListDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
+
+```go
+func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef) (m.Snapshot[m.DraftSnapshot], error)
+```
+
+<a id="entry-990096554fdbc61d" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ListResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/list-resources)。
+
+```go
+func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
+```
+
+<a id="entry-175cf5691e706458" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ListWorkspaces
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
+
+```go
+func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery) (m.Snapshot[m.WorkspacePage], error)
+```
+
+<a id="entry-d5b11dfb66eebf2c" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ObserveConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/observe-conversation-resources)。
+
+```go
+func (receiver *ResourceManager) ObserveConversationResources(ctx context.Context, r m.ConversationRef, o m.Observer[m.ResourceSelection]) (m.Subscription, error)
+```
+
+<a id="entry-05bdff9e6eb74778" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ObserveResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/observe-resources)。
+
+```go
+func (receiver *ResourceManager) ObserveResources(ctx context.Context, r m.ResourceQuery, o m.Observer[[]m.Resource]) (m.Subscription, error)
+```
+
+<a id="entry-11c32d186f4713b3" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.SetConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/set-conversation-resources)。
+
+```go
+func (receiver *ResourceManager) SetConversationResources(ctx context.Context, r m.ResourceRequest) (m.ResourceSelection, error)
+```
+
+<a id="entry-a3569ba176484abf" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.StageAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
+
+```go
+func (receiver *ResourceManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
+```
+
+<a id="entry-3409a81d4ecc67f7" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.StageDraftAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
+
+```go
+func (receiver *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
+```
+
+<a id="entry-8e4c6be8be093363" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.ApproveFotaUpdate
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/approve-fota-update)。
+
+```go
+func (receiver *RuntimeManager) ApproveFotaUpdate(ctx context.Context, req *ApproveFotaUpdateRequest, opts ...CallOption) error
+```
+
+<a id="entry-5e21fe5c18cee05b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.DescribeCreditPackageAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/describe-credit-package-agents)。
+
+```go
+func (receiver *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+```
+
+<a id="entry-feec90a8507445d2" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.DescribeCreditUsageInfo
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/describe-credit-usage-info)。
+
+```go
+func (receiver *RuntimeManager) DescribeCreditUsageInfo(ctx context.Context, req *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
+```
+
+<a id="entry-a0d8a45dc215e381" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.GenerateSceneUrl
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/generate-scene-url)。
+
+```go
+func (receiver *RuntimeManager) GenerateSceneUrl(ctx context.Context, req *GenerateSceneUrlRequest, opts ...CallOption) (*GenerateSceneUrlResponse, error)
+```
+
+<a id="entry-031434b90bffc437" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.GetHostCapabilities
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/capabilities)。
+
+```go
+func (receiver *RuntimeManager) GetHostCapabilities(ctx context.Context, r model.RuntimeRef) (model.Snapshot[model.HostCapabilities], error)
+```
+
+<a id="entry-d7334a3a228c2dd7" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.ListRuntimes
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
+
+```go
+func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
+```
+
+<a id="entry-89fb844b0cbc6e62" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.ObserveRuntimes
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
+
+```go
+func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.RuntimeSummary]) (model.Subscription, error)
+```
+
+<a id="entry-175da63d708e0fd7" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.UpdateAgentInstance
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/update-agent-instance)。
+
+```go
+func (receiver *RuntimeManager) UpdateAgentInstance(ctx context.Context, req *UpdateAgentInstanceRequest, opts ...CallOption) error
+```
+
+<a id="entry-c0f1af72b7caf894" />
+
+### github.com/aliyun/wuying-sdk-go/manager.SkillManager.EntInstallSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/ent-install-skills)。
+
+```go
+func (receiver *SkillManager) EntInstallSkills(ctx context.Context, req *EntInstallSkillsRequest, opts ...CallOption) ([]*model.OperationTask, error)
+```
+
+<a id="entry-9e7e18f3b24a74c5" />
+
+### github.com/aliyun/wuying-sdk-go/manager.SkillManager.EntUninstallSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/ent-uninstall-skills)。
+
+```go
+func (receiver *SkillManager) EntUninstallSkills(ctx context.Context, req *EntUninstallSkillsRequest, opts ...CallOption) ([]*model.OperationTask, error)
+```
+
+<a id="entry-00389ba8b689f1f0" />
+
+### github.com/aliyun/wuying-sdk-go/manager.SkillManager.ListAgentAuthedSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/list-agent-authed-skills)。
+
+```go
+func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...CallOption) (*model.ListAgentAuthedSkillsResult, error)
+```
+
+<a id="entry-ac66a727fe8f5b08" />
+
+### github.com/aliyun/wuying-sdk-go/manager.SkillManager.ListCategories
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/list-categories)。
+
+```go
+func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...CallOption) ([]*model.SkillCategory, error)
+```
+
+<a id="entry-5b640b55727b5cca" />
+
+### github.com/aliyun/wuying-sdk-go/manager.SkillManager.ListInstalledSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/installed)。
+
+```go
+func (receiver *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...CallOption) ([]*model.InstalledSkill, error)
+```
+
+<a id="entry-4e7f2309f1327263" />
+
+### github.com/aliyun/wuying-sdk-go/manager.SkillManager.SetSkillEnabled
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/set-skill-enabled)。
+
+```go
+func (receiver *SkillManager) SetSkillEnabled(ctx context.Context, req *SetSkillEnabledRequest, opts ...CallOption) ([]*model.OperationTask, error)
+```
+
+<a id="entry-9c7990ebdacd216b" />
+
+### github.com/aliyun/wuying-sdk-go/mobile.NewClient
+
+类别：模型操作。[按模型查看操作](/api-reference/mobile/new-client)。
+
+```go
+func NewClient(configJSON string) *InitResult
+```
+
+<a id="entry-028d69f5874444fa" />
+
+### github.com/aliyun/wuying-sdk-go/mobile.Callback.OnEvent
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+OnEvent(eventJSON string)
+```
+
+<a id="entry-0da2fdce31143adf" />
+
+### github.com/aliyun/wuying-sdk-go/mobile.Client.Close
+
+类别：模型操作。[按模型查看操作](/api-reference/mobile/close)。
+
+```go
+func (receiver *Client) Close() *Failure
+```
+
+<a id="entry-025e141c01980dfd" />
+
+### github.com/aliyun/wuying-sdk-go/mobile.Client.StartWithData
+
+类别：模型操作。[按模型查看操作](/api-reference/mobile/start-with-data)。
+
+```go
+func (receiver *Client) StartWithData(method, requestJSON string, data []byte, timeoutMillis int64, callback Callback) *Operation
+```
+
+<a id="entry-d708e3269671ace0" />
+
+### github.com/aliyun/wuying-sdk-go/mobile.Client.Start
+
+类别：模型操作。[按模型查看操作](/api-reference/mobile/start)。
+
+```go
+func (receiver *Client) Start(method, requestJSON string, timeoutMillis int64, callback Callback) *Operation
+```
+
+<a id="entry-674c22a8097efc8d" />
+
+### github.com/aliyun/wuying-sdk-go/mobile.Operation.Cancel
+
+类别：模型操作。[按模型查看操作](/api-reference/mobile/cancel)。
+
+```go
+func (receiver *Operation) Cancel()
+```
+
+<a id="entry-32392cec38bfcfe8" />
+
+### github.com/aliyun/wuying-sdk-go/mobile.Operation.IsDone
+
+类别：模型操作。[按模型查看操作](/api-reference/mobile/is-done)。
+
+```go
+func (receiver *Operation) IsDone() bool
+```
+
+<a id="entry-329fc4f178c85edc" />
+
+### github.com/aliyun/wuying-sdk-go/mobile.Operation.StartError
+
+类别：模型操作。[按模型查看操作](/api-reference/mobile/start-error)。
+
+```go
+func (receiver *Operation) StartError() *Failure
+```
+
+<a id="entry-2b9e45e33639d012" />
+
+### github.com/aliyun/wuying-sdk-go/model.NewBusinessError
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewBusinessError(code, outcome string) *BusinessError
+```
+
+<a id="entry-6bc9c3641a51164b" />
+
+### github.com/aliyun/wuying-sdk-go/model.NewSDKErrorWithRequestID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewSDKErrorWithRequestID(code sdkerr.ErrorCode, message, requestID string) *SDKError
+```
+
+<a id="entry-e9d81648169e33ec" />
+
+### github.com/aliyun/wuying-sdk-go/model.NewSDKError
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewSDKError(code sdkerr.ErrorCode, message string) *SDKError
+```
+
+<a id="entry-353c13308d8e5966" />
+
+### github.com/aliyun/wuying-sdk-go/model.WrapError
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func WrapError(code sdkerr.ErrorCode, message string, err error) *SDKError
+```
+
+<a id="entry-1660ce47b38491e4" />
+
+### github.com/aliyun/wuying-sdk-go/model.APIError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *APIError) Error() string
+```
+
+<a id="entry-6516f25574f697b7" />
+
+### github.com/aliyun/wuying-sdk-go/model.AuthError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *AuthError) Error() string
+```
+
+<a id="entry-d30e1f99ef376097" />
+
+### github.com/aliyun/wuying-sdk-go/model.AuthError.GetCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *AuthError) GetCode() int
+```
+
+<a id="entry-b845a456b0d1316b" />
+
+### github.com/aliyun/wuying-sdk-go/model.AuthType.String
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver AuthType) String() string
+```
+
+<a id="entry-f89bac3c522d5cfe" />
+
+### github.com/aliyun/wuying-sdk-go/model.BusinessError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *BusinessError) Error() string
+```
+
+<a id="entry-822bbf0a95587b13" />
+
+### github.com/aliyun/wuying-sdk-go/model.CloudBusinessError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *CloudBusinessError) Error() string
+```
+
+<a id="entry-45879e8cc7ecfe44" />
+
+### github.com/aliyun/wuying-sdk-go/model.CloudBusinessError.GetCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *CloudBusinessError) GetCode() int
+```
+
+<a id="entry-1af1be51bc0abbc7" />
+
+### github.com/aliyun/wuying-sdk-go/model.Credential.IsExpired
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+IsExpired() bool
+```
+
+<a id="entry-875b607d45f6d34b" />
+
+### github.com/aliyun/wuying-sdk-go/model.Credential.PermissionLevel
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+PermissionLevel() PermissionLevel
+```
+
+<a id="entry-ceaeb1e68c2367c1" />
+
+### github.com/aliyun/wuying-sdk-go/model.Credential.Refresh
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Refresh(ctx context.Context) error
+```
+
+<a id="entry-523296d9f73321df" />
+
+### github.com/aliyun/wuying-sdk-go/model.Credential.SignRequest
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SignRequest(req *http.Request) error
+```
+
+<a id="entry-718ce6bee496b624" />
+
+### github.com/aliyun/wuying-sdk-go/model.Credential.Type
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Type() AuthType
+```
+
+<a id="entry-92027fb1d5d09726" />
+
+### github.com/aliyun/wuying-sdk-go/model.GetAuthCodeResponse.GoString
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver GetAuthCodeResponse) GoString() string
+```
+
+<a id="entry-3a2cef8bf5a90c23" />
+
+### github.com/aliyun/wuying-sdk-go/model.GetAuthCodeResponse.String
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver GetAuthCodeResponse) String() string
+```
+
+<a id="entry-95eee05b72cfd97f" />
+
+### github.com/aliyun/wuying-sdk-go/model.MessageStream.Accepted
+
+类别：模型操作。[按模型查看操作](/api-reference/streams/accepted)。
+
+```go
+Accepted(context.Context) (MessageAccepted, error)
+```
+
+<a id="entry-1fd9252b02f25d3e" />
+
+### github.com/aliyun/wuying-sdk-go/model.MessageStream.Cancel
+
+类别：模型操作。[按模型查看操作](/api-reference/streams/cancel)。
+
+```go
+Cancel(context.Context) (StateResult, error)
+```
+
+<a id="entry-e6487b985861a4e7" />
+
+### github.com/aliyun/wuying-sdk-go/model.MessageStream.Close
+
+类别：模型操作。[按模型查看操作](/api-reference/streams/close)。
+
+```go
+Close()
+```
+
+<a id="entry-bc3ea45be23cbb3c" />
+
+### github.com/aliyun/wuying-sdk-go/model.MessageStream.Next
+
+类别：模型操作。[按模型查看操作](/api-reference/streams/next)。
+
+```go
+Next(context.Context) (StreamChunk, error)
+```
+
+<a id="entry-d7df9fb522dde37c" />
+
+### github.com/aliyun/wuying-sdk-go/model.MessageStream.Result
+
+类别：模型操作。[按模型查看操作](/api-reference/streams/result)。
+
+```go
+Result(context.Context) (Turn, error)
+```
+
+<a id="entry-a3f393b0a652bc38" />
+
+### github.com/aliyun/wuying-sdk-go/model.NetworkError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *NetworkError) Error() string
+```
+
+<a id="entry-7e3a52125b1e1e48" />
+
+### github.com/aliyun/wuying-sdk-go/model.NetworkError.GetCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *NetworkError) GetCode() int
+```
+
+<a id="entry-f6ee1a59f9e2280f" />
+
+### github.com/aliyun/wuying-sdk-go/model.NetworkError.Unwrap
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *NetworkError) Unwrap() error
+```
+
+<a id="entry-298209a92007b0ba" />
+
+### github.com/aliyun/wuying-sdk-go/model.PermissionError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *PermissionError) Error() string
+```
+
+<a id="entry-03e232169ac782dc" />
+
+### github.com/aliyun/wuying-sdk-go/model.PermissionError.GetCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *PermissionError) GetCode() int
+```
+
+<a id="entry-2e387ad9aa725152" />
+
+### github.com/aliyun/wuying-sdk-go/model.ProcessPayload.MarshalJSON
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver ProcessPayload) MarshalJSON() ([]byte, error)
+```
+
+<a id="entry-cc42876690c0a674" />
+
+### github.com/aliyun/wuying-sdk-go/model.ProcessPayload.SetText
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *ProcessPayload) SetText(v string)
+```
+
+<a id="entry-c5e07973d3b6ecd1" />
+
+### github.com/aliyun/wuying-sdk-go/model.ProcessPayload.UnmarshalJSON
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *ProcessPayload) UnmarshalJSON(raw []byte) error
+```
+
+<a id="entry-aad57f8f850d46af" />
+
+### github.com/aliyun/wuying-sdk-go/model.RateLimitError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *RateLimitError) Error() string
+```
+
+<a id="entry-d64e49603455dfaf" />
+
+### github.com/aliyun/wuying-sdk-go/model.RateLimitError.GetCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *RateLimitError) GetCode() int
+```
+
+<a id="entry-63b8ff888896499b" />
+
+### github.com/aliyun/wuying-sdk-go/model.SDKError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *SDKError) Error() string
+```
+
+<a id="entry-9a6e78c33cd1f728" />
+
+### github.com/aliyun/wuying-sdk-go/model.SDKError.GetCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *SDKError) GetCode() int
+```
+
+<a id="entry-d38882eb8e8ec5c0" />
+
+### github.com/aliyun/wuying-sdk-go/model.ServerError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *ServerError) Error() string
+```
+
+<a id="entry-dff9888fea669dff" />
+
+### github.com/aliyun/wuying-sdk-go/model.ServerError.GetCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *ServerError) GetCode() int
+```
+
+<a id="entry-37d973501e42c3a5" />
+
+### github.com/aliyun/wuying-sdk-go/model.Subscription.Unsubscribe
+
+类别：模型操作。[按模型查看操作](/api-reference/subscriptions/unsubscribe)。
+
+```go
+Unsubscribe()
+```
+
+<a id="entry-a6d6924c8bd59556" />
+
+### github.com/aliyun/wuying-sdk-go/model.TimeoutError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *TimeoutError) Error() string
+```
+
+<a id="entry-8de26f6ea84742f3" />
+
+### github.com/aliyun/wuying-sdk-go/model.TimeoutError.GetCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *TimeoutError) GetCode() int
+```
+
+<a id="entry-cf12e9768c70b6d8" />
+
+### github.com/aliyun/wuying-sdk-go/model.TimeoutError.Unwrap
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *TimeoutError) Unwrap() error
+```
+
+<a id="entry-7185d6be7ef5004a" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DefaultConfig
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func DefaultConfig() Config
+```
+
+<a id="entry-ff966050bb002fa7" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.IsVirtualConversationID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func IsVirtualConversationID(id string) bool
+```
+
+<a id="entry-997215d91e156c64" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.IsVirtualGroupID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func IsVirtualGroupID(id string) bool
+```
+
+<a id="entry-e3ff165dfe5da638" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.New
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func New(cfg Config, credentials CredentialProvider) (*Client, error)
+```
+
+<a id="entry-ceff10f306959c6c" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AGMessageError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *AGMessageError) Error() string
+```
+
+<a id="entry-498c5974619cca9a" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AGMessageError.Is
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *AGMessageError) Is(target error) bool
+```
+
+<a id="entry-105f50f03ddf5cef" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AGMessageError.Unwrap
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *AGMessageError) Unwrap() error
+```
+
+<a id="entry-441c991e54f956b9" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AGMessageError.WithCause
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *AGMessageError) WithCause(err error) *AGMessageError
+```
+
+<a id="entry-84d3b9e779a6dacb" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AtomicDurableBatchStore.UpdateDurableBatch
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+UpdateDurableBatch(context.Context, func(DurableBatchTx) error) error
+```
+
+<a id="entry-be9d1181b0d035be" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AtomicInstanceIDStore.GetOrCreateClientInstanceID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+GetOrCreateClientInstanceID(ctx context.Context) (string, error)
+```
+
+<a id="entry-cf7adde29228c16e" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AtomicStreamOutboxStore.BeginStreamPacket
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+BeginStreamPacket(ctx context.Context, groupID string, env OutboundEnvelope, send StreamSend, issuedAtMs int64) (OutboundEnvelope, error)
+```
+
+<a id="entry-e5ef9f6b1118764b" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AtomicStreamOutboxStore.LoadStreamSendState
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadStreamSendState(ctx context.Context, groupID, streamID string) (StreamSendState, bool, error)
+```
+
+<a id="entry-d10ff5199954a13d" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.AtomicStreamOutboxStore.SettleStreamPacket
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SettleStreamPacket(ctx context.Context, groupID, streamID string, seq uint64, outcome StreamPacketOutcome, env OutboundEnvelope) error
+```
+
+<a id="entry-363a6d3e70be4742" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.AddVirtualGroupMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/add-virtual-group-members)。
+
+```go
+func (receiver *Client) AddVirtualGroupMembers(ctx context.Context, groupID string, memberRevision uint64, userIDs []string) (*MemberChangeResult, error)
+```
+
+<a id="entry-0f14e41a7ce0b177" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.AuditClosedHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/audit-closed-history)。
+
+```go
+func (receiver *Client) AuditClosedHistory(ctx context.Context, groupID string, afterSeq uint64, limit int) (*AuditPage, error)
+```
+
+<a id="entry-3c580c6d4fd9c36b" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.ClientInstanceID
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/client-instance-id)。
+
+```go
+func (receiver *Client) ClientInstanceID() string
+```
+
+<a id="entry-96b32ca9b41031a6" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.CloseVirtualGroup
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/close-virtual-group)。
+
+```go
+func (receiver *Client) CloseVirtualGroup(ctx context.Context, groupID string, groupRevision uint64) (*VirtualGroup, error)
+```
+
+<a id="entry-0b7d278854e37695" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.Close
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/close)。
+
+```go
+func (receiver *Client) Close() error
+```
+
+<a id="entry-f1fbcbe1795ef500" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.Connect
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/connect)。
+
+```go
+func (receiver *Client) Connect(ctx context.Context) error
+```
+
+<a id="entry-149589d132ef40bf" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.CreateVirtualGroup
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/create-virtual-group)。
+
+```go
+func (receiver *Client) CreateVirtualGroup(ctx context.Context, req CreateVirtualGroupRequest) (*VirtualGroup, error)
+```
+
+<a id="entry-da40fcb39fa18764" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.GetDevicePresence
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/get-device-presence)。
+
+```go
+func (receiver *Client) GetDevicePresence(ctx context.Context, userID string) (*DevicePresence, error)
+```
+
+<a id="entry-b314f15460321067" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.GetGroupSyncState
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/get-group-sync-state)。
+
+```go
+func (receiver *Client) GetGroupSyncState(id string) (GroupSyncState, bool)
+```
+
+<a id="entry-bb6bf7022c4c7237" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.GetHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/get-history)。
+
+```go
+func (receiver *Client) GetHistory(ctx context.Context, groupID string, afterSeq uint64, limit int) ([]DurableMessage, error)
+```
+
+<a id="entry-ccc1f46cbe4d0d7b" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.GetPublishState
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/get-publish-state)。
+
+```go
+func (receiver *Client) GetPublishState(ctx context.Context, clientMessageID string) (PublishState, error)
+```
+
+<a id="entry-c0600456577c0756" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.GetVirtualGroup
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/get-virtual-group)。
+
+```go
+func (receiver *Client) GetVirtualGroup(ctx context.Context, groupID, conversationID string) (*VirtualGroup, error)
+```
+
+<a id="entry-dbbca997d23dcd0f" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.GetVirtualGroupsV1
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/get-virtual-groups-v1)。
+
+```go
+func (receiver *Client) GetVirtualGroupsV1(ctx context.Context, groupIDs []string) (*VirtualGroupBatch, error)
+```
+
+<a id="entry-94a5551d63abded5" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.InitialSyncProgress
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/initial-sync-progress)。
+
+```go
+func (receiver *Client) InitialSyncProgress() InitialSyncProgress
+```
+
+<a id="entry-237dc7e8dfdcfc01" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.LinkState
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/link-state)。
+
+```go
+func (receiver *Client) LinkState(link Link) LinkState
+```
+
+<a id="entry-2612b541c1599e72" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.ListGroupChangesV1
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/list-group-changes-v1)。
+
+```go
+func (receiver *Client) ListGroupChangesV1(ctx context.Context, cursor string, limit int) (*GroupChangePage, error)
+```
+
+<a id="entry-854ca99941e22048" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.ListGroupSyncStates
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/list-group-sync-states)。
+
+```go
+func (receiver *Client) ListGroupSyncStates() []GroupSyncState
+```
+
+<a id="entry-20efbde0980434d4" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.ListVirtualGroupMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/list-virtual-group-members)。
+
+```go
+func (receiver *Client) ListVirtualGroupMembers(ctx context.Context, groupID, cursor string, limit int) (*MemberPage, error)
+```
+
+<a id="entry-84fdbd98ddca7cdb" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.ListVirtualGroupsV1
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/list-virtual-groups-v1)。
+
+```go
+func (receiver *Client) ListVirtualGroupsV1(ctx context.Context, controllerUserID, controllerInstanceID, conversationID, cursor string, limit int) (*VirtualGroupPageV1, error)
+```
+
+<a id="entry-866ae748814ba901" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.ListVirtualGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/list-virtual-groups)。
+
+```go
+func (receiver *Client) ListVirtualGroups(ctx context.Context, cursor string, limit int) (*VirtualGroupPage, error)
+```
+
+<a id="entry-390897fbb20969f6" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.LoadDurableMessage
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/load-durable-message)。
+
+```go
+func (receiver *Client) LoadDurableMessage(ctx context.Context, groupID string, seq uint64) (*DurableMessage, error)
+```
+
+<a id="entry-602192e49e2a8631" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnDevicePresence
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-device-presence)。
+
+```go
+func (receiver *Client) OnDevicePresence(handler func(DevicePresence)) (func(), error)
+```
+
+<a id="entry-5f8a7119e97f2e54" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnDurableMessage
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-durable-message)。
+
+```go
+func (receiver *Client) OnDurableMessage(handler DurableHandler) (func(), error)
+```
+
+<a id="entry-bd2f527644ecf9aa" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnError
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-error)。
+
+```go
+func (receiver *Client) OnError(fn func(error)) func()
+```
+
+<a id="entry-bdd0359bbb1b9926" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnGroupSyncState
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-group-sync-state)。
+
+```go
+func (receiver *Client) OnGroupSyncState(fn func(GroupSyncState)) func()
+```
+
+<a id="entry-b8fb7c0bd7f3ab60" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnInitialSyncProgress
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-initial-sync-progress)。
+
+```go
+func (receiver *Client) OnInitialSyncProgress(handler func(InitialSyncProgress)) func()
+```
+
+<a id="entry-14b8dadc8bcfabd4" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnLinkState
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-link-state)。
+
+```go
+func (receiver *Client) OnLinkState(link Link, fn func(LinkState)) func()
+```
+
+<a id="entry-1605d852cc739999" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnRelayBroadcastResponse
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-relay-broadcast-response)。
+
+```go
+func (receiver *Client) OnRelayBroadcastResponse(handler func(*RelayResponse)) (func(), error)
+```
+
+<a id="entry-d0f4cb0db885c548" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnRelayError
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-relay-error)。
+
+```go
+func (receiver *Client) OnRelayError(handler func(error)) (func(), error)
+```
+
+<a id="entry-5a0772570870a7e5" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnRelayLateResponse
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-relay-late-response)。
+
+```go
+func (receiver *Client) OnRelayLateResponse(handler func(*RelayResponse)) (func(), error)
+```
+
+<a id="entry-12cc64d91f49976f" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnRelayMessage
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-relay-message)。
+
+```go
+func (receiver *Client) OnRelayMessage(handler RelayMessageHandler) (func(), error)
+```
+
+<a id="entry-0cadbaff57fc9f9c" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnRelayRequest
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-relay-request)。
+
+```go
+func (receiver *Client) OnRelayRequest(handler RelayRequestHandler) (func(), error)
+```
+
+<a id="entry-f241735b218647a8" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnStreamEvent
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-stream-event)。
+
+```go
+func (receiver *Client) OnStreamEvent(handler StreamHandler) (func(), error)
+```
+
+<a id="entry-d8a1273e3e4f7fcc" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnTransientMessage
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/on-transient-message)。
+
+```go
+func (receiver *Client) OnTransientMessage(handler TransientHandler) (func(), error)
+```
+
+<a id="entry-f0ac69109f5e821c" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.PublishDurable
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/publish-durable)。
+
+```go
+func (receiver *Client) PublishDurable(ctx context.Context, groupID, conversationID, clientMessageID string, data json.RawMessage) (PublishReceipt, error)
+```
+
+<a id="entry-a72e7e12aacc9ce2" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.PublishStreamTransient
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/publish-stream-transient)。
+
+```go
+func (receiver *Client) PublishStreamTransient(ctx context.Context, groupID, conversationID, clientMessageID string, send StreamSend, data json.RawMessage) (PublishReceipt, error)
+```
+
+<a id="entry-0bd110e40e2457e7" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.PublishTransient
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/publish-transient)。
+
+```go
+func (receiver *Client) PublishTransient(ctx context.Context, groupID, conversationID, clientMessageID string, data json.RawMessage, stream ...StreamSend) (PublishReceipt, error)
+```
+
+<a id="entry-32a6ebb27a23144d" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.QueryDevicePresence
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/query-device-presence)。
+
+```go
+func (receiver *Client) QueryDevicePresence(ctx context.Context, ids []string) ([]DevicePresence, error)
+```
+
+<a id="entry-5f2acca5f041b572" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.ReadHistoryPage
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/read-history-page)。
+
+```go
+func (receiver *Client) ReadHistoryPage(ctx context.Context, group string, after uint64, limit int) (ReadHistoryPage, error)
+```
+
+<a id="entry-9182dd162fb8cc0c" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RefreshGroupDirectory
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/refresh-group-directory)。
+
+```go
+func (receiver *Client) RefreshGroupDirectory(ctx context.Context) error
+```
+
+<a id="entry-b7c6adb4db7ef076" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RelayBroadcastRequest
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/relay-broadcast-request)。
+
+```go
+func (receiver *Client) RelayBroadcastRequest(ctx context.Context, req RelayRequestOptions) (*RelayResponse, error)
+```
+
+<a id="entry-d9c253dc3659af5e" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RelayCancel
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/relay-cancel)。
+
+```go
+func (receiver *Client) RelayCancel(ctx context.Context, requestID string) (*RelayCancelResult, error)
+```
+
+<a id="entry-5a960003259e96b8" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RelayGetHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/relay-get-history)。
+
+```go
+func (receiver *Client) RelayGetHistory(ctx context.Context, query RelayHistoryQuery) (*RelayHistoryPage, error)
+```
+
+<a id="entry-4317af47e60cbb0b" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RelayGetRequest
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/relay-get-request)。
+
+```go
+func (receiver *Client) RelayGetRequest(ctx context.Context, requestID string) (*RelayRequestState, error)
+```
+
+<a id="entry-30c5aea047bdd298" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RelayRequest
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/relay-request)。
+
+```go
+func (receiver *Client) RelayRequest(ctx context.Context, req RelayRequestOptions) (*RelayResponse, error)
+```
+
+<a id="entry-a0c9d5fd9cf41778" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RelayRetry
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/relay-retry)。
+
+```go
+func (receiver *Client) RelayRetry(ctx context.Context, envelope RelayRetryEnvelope) (*RelayRetryResult, error)
+```
+
+<a id="entry-aef0e623e60c54ad" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RelaySend
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/relay-send)。
+
+```go
+func (receiver *Client) RelaySend(ctx context.Context, req RelaySendOptions) (*RelayReceipt, error)
+```
+
+<a id="entry-5e30b54bebc4b28f" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RemoveVirtualGroupMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/remove-virtual-group-members)。
+
+```go
+func (receiver *Client) RemoveVirtualGroupMembers(ctx context.Context, groupID string, memberRevision uint64, userIDs []string) (*MemberChangeResult, error)
+```
+
+<a id="entry-b3dfaf63afed2616" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.RetryPublish
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/retry-publish)。
+
+```go
+func (receiver *Client) RetryPublish(ctx context.Context, handle *PublishRetry) (PublishReceipt, error)
+```
+
+<a id="entry-3fae621f88cf5b82" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.SessionID
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/session-id)。
+
+```go
+func (receiver *Client) SessionID() string
+```
+
+<a id="entry-397dbf33107cfc7e" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.StreamHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/stream-history)。
+
+```go
+func (receiver *Client) StreamHistory(ctx context.Context, groupID, senderUserID, streamID string, afterSeq uint64, maxRecords int) (*StreamHistoryPage, error)
+```
+
+<a id="entry-b4d2000f1c62a908" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.StreamList
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/stream-list)。
+
+```go
+func (receiver *Client) StreamList(ctx context.Context, groupID, cursor string, limit int) (*StreamListPage, error)
+```
+
+<a id="entry-efd33b3b0a9f48ce" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.StreamState
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/stream-state)。
+
+```go
+func (receiver *Client) StreamState(ctx context.Context, groupID, senderUserID, streamID string) (*StreamInfo, error)
+```
+
+<a id="entry-8de831bd6ee19bf4" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.SyncGroup
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/sync-group)。
+
+```go
+func (receiver *Client) SyncGroup(ctx context.Context, groupID string) error
+```
+
+<a id="entry-ebc2f5b771b04c1d" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.Sync
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/sync)。
+
+```go
+func (receiver *Client) Sync(ctx context.Context) error
+```
+
+<a id="entry-f86ef7d3a2ec33ff" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.UpdateDevices
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/update-devices)。
+
+```go
+func (receiver *Client) UpdateDevices(ctx context.Context, ids []string) ([]DevicePresence, error)
+```
+
+<a id="entry-6955cae6307306a0" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.UpdateVirtualGroupProfile
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/update-virtual-group-profile)。
+
+```go
+func (receiver *Client) UpdateVirtualGroupProfile(ctx context.Context, groupID string, profileRevision uint64, update ProfileUpdate) (*VirtualGroup, error)
+```
+
+<a id="entry-9e7bc02575404d37" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.UserID
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/user-id)。
+
+```go
+func (receiver *Client) UserID() string
+```
+
+<a id="entry-746ceed9f56a7184" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.WaitGroupDirectory
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/wait-group-directory)。
+
+```go
+func (receiver *Client) WaitGroupDirectory(ctx context.Context) error
+```
+
+<a id="entry-9ec1fa42de48686b" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.WaitRelayReady
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/wait-relay-ready)。
+
+```go
+func (receiver *Client) WaitRelayReady(ctx context.Context) error
+```
+
+<a id="entry-7013359e73ebbc7f" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Clock.NewTimer
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+NewTimer(d time.Duration) Timer
+```
+
+<a id="entry-2d9e40f3ba9bd948" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Clock.Now
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Now() time.Time
+```
+
+<a id="entry-c577edbe2dcfb6cd" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.ControllerProofProvider.ControllerProof
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+ControllerProof(ctx context.Context, operation string) (ControllerProof, error)
+```
+
+<a id="entry-e1c372418dbee7ac" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.CredentialProvider.GetCredential
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+GetCredential(ctx context.Context) (Credential, error)
+```
+
+<a id="entry-ef3d6690d108b523" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DirectoryBaselineStore.LoadDirectoryBaseline
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadDirectoryBaseline(context.Context) ([]VisibleGroup, bool, error)
+```
+
+<a id="entry-174014ca9feed759" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DirectoryBaselineStore.SaveDirectoryBaseline
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SaveDirectoryBaseline(context.Context, []VisibleGroup) error
+```
+
+<a id="entry-000ed4d8e3cd43dd" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DirectoryStateStore.LoadDirectoryState
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadDirectoryState(context.Context) (DirectoryState, bool, error)
+```
+
+<a id="entry-30854f86f0c5d55a" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DirectoryStateStore.SaveDirectoryState
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SaveDirectoryState(context.Context, DirectoryState) error
+```
+
+<a id="entry-9bd5ded59530ca41" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DurableBatchTx.DeleteMany
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+DeleteMany(keys []string) error
+```
+
+<a id="entry-4722af2fdac7b8bc" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DurableBatchTx.GetMany
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+GetMany(keys []string) (map[string][]byte, error)
+```
+
+<a id="entry-594e83d31fa6e283" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DurableBatchTx.PutMany
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+PutMany(entries []DurableBatchEntry) error
+```
+
+<a id="entry-8cee96481e6f200f" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DurableBatchTx.Scan
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Scan(prefix, after string, limit int) ([]DurableBatchEntry, error)
+```
+
+<a id="entry-fc87d9ff27967222" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.DurableBatchViewStore.ViewDurableBatch
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+ViewDurableBatch(context.Context, func(DurableBatchTx) error) error
+```
+
+<a id="entry-58b2406f801989a9" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.IDSource.NewID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+NewID() string
+```
+
+<a id="entry-5b71e15d4602179d" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.AppendDurable
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+AppendDurable(ctx context.Context, rec DurableRecord) (AppendResult, error)
+```
+
+<a id="entry-03de5e2c99dc9c21" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.CleanupGroup
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+CleanupGroup(ctx context.Context, groupID string) error
+```
+
+<a id="entry-67a0d4ef909eec13" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.LoadAppliedSeq
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadAppliedSeq(ctx context.Context, groupID string) (uint64, error)
+```
+
+<a id="entry-3f688aa987366f9f" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.LoadDurable
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadDurable(ctx context.Context, groupID string, afterSeq uint64, limit int) ([]DurableRecord, error)
+```
+
+<a id="entry-59538ed19a2da734" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.LoadGroupState
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadGroupState(ctx context.Context, groupID string) (GroupState, bool, error)
+```
+
+<a id="entry-5723144653099e53" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.LoadOutbound
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadOutbound(ctx context.Context, clientMessageID string) (OutboundEnvelope, bool, error)
+```
+
+<a id="entry-16365c6f137a599e" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.LoadReceivedSeq
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadReceivedSeq(ctx context.Context, groupID string) (uint64, error)
+```
+
+<a id="entry-9d947bff7ff8f055" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.LoadVisibleGroups
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+LoadVisibleGroups(ctx context.Context) ([]VisibleGroup, error)
+```
+
+<a id="entry-9c9af5737ca9ec52" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.MarkApplied
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+MarkApplied(ctx context.Context, groupID string, seq uint64) error
+```
+
+<a id="entry-685b2d67c6012a8f" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.SaveGroupState
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SaveGroupState(ctx context.Context, state GroupState) error
+```
+
+<a id="entry-34bac50051ee304e" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.SaveOutbound
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SaveOutbound(ctx context.Context, env OutboundEnvelope) error
+```
+
+<a id="entry-a94e54996f74996e" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.MessageStateStore.SaveVisibleGroups
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+SaveVisibleGroups(ctx context.Context, groups []VisibleGroup) error
+```
+
+<a id="entry-caea554f4e0c20ac" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Rand.Int63n
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Int63n(n int64) int64
+```
+
+<a id="entry-290ed03740b91027" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.RelayDedupStore.ClaimRelayDelivery
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+ClaimRelayDelivery(ctx context.Context, key string, proposed DedupRecord) (record DedupRecord, claimed bool, err error)
+```
+
+<a id="entry-c1406dca0d2fb7f1" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.RelayDedupStore.CompleteRelayDelivery
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+CompleteRelayDelivery(ctx context.Context, key string, completed DedupRecord) error
+```
+
+<a id="entry-a0297f116ebd9ff9" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.RelayDedupStore.PruneRelayDeliveries
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+PruneRelayDeliveries(ctx context.Context, nowMs int64, limit int) error
+```
+
+<a id="entry-d8086ec71f318926" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.RelayError.Error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *RelayError) Error() string
+```
+
+<a id="entry-45b544d0d7748c04" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.RelayError.Is
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *RelayError) Is(target error) bool
+```
+
+<a id="entry-9b46b620ed9a286b" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.RelayError.Unwrap
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *RelayError) Unwrap() error
+```
+
+<a id="entry-6651ac71a0d92a79" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.RelayError.WithCause
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func (receiver *RelayError) WithCause(err error) *RelayError
+```
+
+<a id="entry-9524f3a5f54836b2" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Timer.C
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+C() <-chan time.Time
+```
+
+<a id="entry-04a1a8830bb5cf2e" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Timer.Stop
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Stop()
+```
+
+<a id="entry-4c7c8fb5f6c46367" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.TransportConn.CloseWithCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+CloseWithCode(code int, reason string) error
+```
+
+<a id="entry-fbcce548b11f980d" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.TransportConn.Ping
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Ping(ctx context.Context) error
+```
+
+<a id="entry-cfff45eff35d7b5c" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.TransportConn.Read
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Read(ctx context.Context) ([]byte, error)
+```
+
+<a id="entry-d94c08c9d23769e3" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.TransportConn.Write
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Write(ctx context.Context, data []byte) error
+```
+
+<a id="entry-eef950f91af50bd3" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.TransportDialer.DialTransport
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+DialTransport(ctx context.Context, rawURL string, header http.Header) (TransportConn, error)
+```

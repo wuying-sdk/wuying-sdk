@@ -1,0 +1,151 @@
+---
+title: "ResourceManager"
+sidebarTitle: "ResourceManager"
+description: "Java 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## constructor
+
+```java
+public com.aliyun.wuying.sdk.manager.ResourceManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
+```
+
+[查看操作或完整契约](/reference/java/public#entry-0c01930bab9abe6a)
+
+## listResources
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Resource>>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/resources/list-resources)
+
+## observeResources
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Resource>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/resources/observe-resources)
+
+## getConversationResources
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ResourceSelection>> getConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/resources/get-conversation-resources)
+
+## observeConversationResources
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ResourceSelection>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/resources/observe-conversation-resources)
+
+## setConversationResources
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ResourceSelection> setConversationResources(com.aliyun.wuying.sdk.model.ResourceRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/resources/set-conversation-resources)
+
+## stageAttachment
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageAttachment(com.aliyun.wuying.sdk.model.StageAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/attachments/stage)
+
+## discardAttachment
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardAttachment(com.aliyun.wuying.sdk.model.AttachmentRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/attachments/discard)
+
+## getAttachmentAccess
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.AttachmentAccess> getAttachmentAccess(com.aliyun.wuying.sdk.model.AttachmentAccessRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/attachments/access)
+
+## stageDraftAttachment
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageDraftAttachment(com.aliyun.wuying.sdk.model.StageDraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/drafts/stage-draft-attachment)
+
+## listDraftAttachments
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.DraftSnapshot>> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
+
+## commitDraftAttachments
+
+```java
+public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CommittedAttachment>> commitDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/drafts/commit-draft-attachments)
+
+## discardDraftAttachments
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/drafts/discard-draft-attachments)
+
+## getDraftAttachmentPreview
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AttachmentPreview>> getDraftAttachmentPreview(com.aliyun.wuying.sdk.model.DraftPreviewRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/drafts/get-draft-attachment-preview)
+
+## listWorkspaces
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.WorkspacePage>> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/workspaces/list)
+
+## createWorkspace
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspace> createWorkspace(com.aliyun.wuying.sdk.model.CreateWorkspaceRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/workspaces/create)
+
+## attachImGroupFile
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupAttachmentResult> attachImGroupFile(com.aliyun.wuying.sdk.model.IMGroupFileRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/attachments/attach-im-group-file)
+
+## getImGroupAttachmentOperation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupAttachmentResult> getImGroupAttachmentOperation(com.aliyun.wuying.sdk.model.IMGroupFileRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/attachments/get-im-group-attachment-operation)

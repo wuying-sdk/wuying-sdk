@@ -1,0 +1,74 @@
+---
+title: "SDK Client"
+sidebarTitle: "SDK Client"
+icon: "plug"
+description: "完成服务端与用户端身份选择，用 TypeScript、Go、Java、Android、iOS 或 CLI 初始化用户态连接。"
+---
+
+import ClientInitialization from '/snippets/client-initialization.mdx';
+
+先阅读[授权与认证](/integration/01-auth-and-lifecycle)，确定是服务端签名云 API，还是代表某个用户调用业务。服务端签名 Client 的初始化在认证指南中；本页说明**用户态 Client**，无论它运行在用户端还是代用户执行的后端。
+
+## 1. 安装并准备配置
+
+按[语言安装指南](/domain-model/language-bindings)安装同版本交付包，准备以下输入：
+
+| 输入 | 来源和要求 |
+|---|---|
+| AuthCode | 由认证后端按已验证用户申请，在创建 Client 前获取新票，不复用旧票 |
+| clientId | 平台授权管理员提供的接入标识，不是 AccessKey ID，也不是用户 ID |
+| 数据位置 | Go / Java / Android / iOS 为当前身份独占的私有数据库文件；Node 为预先配置的私有持久化目录 |
+| 登录地域 | 身份票据有地域要求时，通过 `loginRegionId`（Go：`LoginRegionID`）传入；不能拿资源地域或资源 ID 代替 |
+
+浏览器需要真实 IndexedDB；Node 按 [Node 持久化配置](/sdk-reference/js#node-持久化)先安装 shim、保留补丁并完成初始化。下面的短例不代替这些运行环境准备。JS 示例服务于应用当前登录用户；不能用全局单例混接其他用户的凭据和数据。
+
+## 2. 使用 AuthCode 创建 Client
+
+下面只展示核心初始化语句。`authCode`、`clientId` 与数据文件来自上面的配置；Go 的 `dataFile` 是绝对文件路径字符串，Java 为 `Path`，Android / iOS 为应用私有目录中的绝对数据库文件路径字符串。CLI 由宿主注入对应环境变量。完整类型与可选项见[初始化接口](/api-reference/client/create)。
+
+<ClientInitialization />
+
+Go / Java / Android / iOS 的数据库父目录应为当前用户私有并预先准备，不能让不同账号、进程并发复用同一文件。JS 的持久化配置和账号隔离由应用按语言指南准备。需要指定登录地域时，按本语言的认证配置补充对应字段；Android / iOS 在上面的配置对象中增加 `loginRegionId`。
+
+Android / iOS 在工作线程初始化和关闭；默认回调分别交付到主 Looper / 主队列。Android 使用配套双 AAR，最低 API 23；iOS 使用带 XCFramework 的 Swift Package，最低 iOS 13。安装与原生类型分别见 [Android](/sdk-reference/android) / [iOS](/sdk-reference/ios)。
+
+## 3. 已有登录态时，使用完整组合
+
+如果宿主已有当前用户的有效登录态，可以使用 `loginToken + sessionId + endUserId`，按需附带 `loginRegionId`，替代 AuthCode。**两条路径选择一种**，不同时填入两套凭据。
+
+```ts TypeScript
+import { Client } from '@aliyun/wuying-sdk';
+
+const client = Client.create({
+  loginToken, sessionId, endUserId,
+}, { clientId });
+```
+
+| 语言 | 登录态字段 |
+|---|---|
+| TypeScript | `loginToken`、`sessionId`、`endUserId`、可选 `loginRegionId` |
+| Go ClientOptions | `LoginToken`、`SessionID`、`EndUserID`、可选 `LoginRegionID` |
+| Java ClientOptions.Builder | `loginToken(...)`、`sessionId(...)`、`endUserId(...)`、可选 `loginRegionId(...)` |
+| Android / iOS 配置对象 | `loginToken`、`sessionId`、`endUserId`，可选 `loginRegionId`；替换 `authCode`，保留 `clientId` 和 `dataPath` |
+| CLI 环境 | `WUYING_LOGIN_TOKEN`、`WUYING_SESSION_ID`、`WUYING_END_USER_ID`、可选 `WUYING_LOGIN_REGION_ID`；移除另一条路径的 AuthCode 配置 |
+
+这些字段属于同一用户、同一登录上下文；不能拼接不同账号的票据，不能拿用户名显示文案或桌面 ID 代替。原始凭据只经宿主的安全链路注入，不输出到日志或公开示例。
+
+## 4. 验证在线身份与授权
+
+构造成功说明拿到了本地 Client 对象，不能证明在线认证或资源授权已通过。使用创建出的 Client，建立目录 Manager 并执行只读查询：
+
+```ts TypeScript
+const runtimes = await client.buildRuntimeManager(ctx);
+const snapshot = await runtimes.listRuntimes(ctx);
+```
+
+预期取得当前身份下的目录快照及投影状态；查询成功不代表获得全部资源权限，投影未就绪时空数组也不足以证明没有权限。Go、Java 和 Node 的完整初始化与只读验证源码见[代码示例](/examples/index)；Android / iOS 通过 `Client.request` 与 `Methods.runtimeObserveRuntimes` 观察目录，见[移动端契约](/reference/mobile/contract)。
+
+## 5. 结束或更换身份
+
+应用持有并复用当前登录上下文的 Client，页面只释放自己的订阅；退出账号时退订后关闭 Client：JS `await client.close()`，Go `client.Close()`，Java `client.close()` 或 try-with-resources，Android `client.close()`，iOS `try client.close()`；移动端关闭放在工作线程。更换身份必须关闭旧 Client 并使用隔离数据位置；关闭本地连接不等于注销云端登录态或取消远端任务。
+
+宿主负责提供初始身份、处理账号切换；SDK 管理已建立用户态的换票、续期和连接，不另起竞争的刷新器。JS 的 `updateLoginCredentials` 只适用于通过登录态初始化、且身份和登录地域不变的 Client，详见[语言指南](/sdk-reference/js)。
+
+接下来：[选择环境并发送第一个任务](/getting-started/first-conversation) · [查看认证与生命周期边界](/integration/01-auth-and-lifecycle)

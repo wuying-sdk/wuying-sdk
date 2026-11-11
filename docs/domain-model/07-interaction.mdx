@@ -1,0 +1,42 @@
+---
+title: "Interaction"
+description: "Interaction 的职责、关联模型与使用边界。"
+---
+
+## 领域职责
+
+Interaction 表示执行过程向用户发起的一次有身份、有生命周期的交互。permission 与 question 共享会话/轮次归属和写入版本约束，但提交内容不同。
+
+## 关键模型与关联
+
+| 模型/字段 | 含义 | 规则 |
+|---|---|---|
+| Interaction | interactionId、turnId、kind、state、writeVersion | 绑定真实 Conversation/Turn；不按标题猜身份 |
+| canonicalInteractionId / identityAliases（可选） | 展示及精确范围内的等价身份 | 不能跨 owner/Turn/kind 合并交互 |
+| kind=permission 时的 interaction.options | 真实 optionId 与显示标签 | 提交 ID，不能提交翻译文案 |
+| kind=question 时的 interaction.questions | questionId、可选项、单选/多选/文本等约束 | 按本题结构组装，不用对象 toString 代替 JSON |
+| InteractionResponse | applied/pending 及可用的 outcome/回执信息 | pending 后继续观察，不伪造成功 |
+| QuestionResponseRef | 稳定回复关联与当前 expectedVersion | 仅在该公开回执契约适用时读回 |
+
+## 生命周期
+
+发现 pending → 取得完整题目/审批详情 → 用户明确选择 → 带当前写版本提交 → 核对回执及最终状态。超时、过期、跨端已处理、归属冲突均不得自动放行。没有题目或详情时不补造默认选择。
+
+## 公开操作
+
+| 操作 | JS | Go | Java | CLI |
+|---|---|---|---|---|
+| 列出待处理项 | listInteractions | ListInteractions | listInteractions | interactions list |
+| 恢复当前上下文 | refreshPendingInteractions | RefreshPendingInteractions | refreshPendingInteractions | interactions refresh |
+| 观察 | observeInteractions | ObserveInteractions | observeInteractions | 当前无独立长期订阅命令 |
+| 回复审批 | respondPermission | RespondPermission | respondPermission | interactions respond --option |
+| 回复问题 | respondQuestion | RespondQuestion | respondQuestion | interactions respond --answer-file |
+
+入口是 ConversationManager。expectedVersion 不是调用方伪造的“最新时间”，也不应被解释成所有后端都提供同一种数据库 CAS。
+
+## 边界与示例
+
+只有写前预检或 owner 明确未受理/无副作用证明，才能判断尚未执行。普通错误的 not_started 可能是默认值，不能据此自动重答；unknown 先按原身份核对。题目与审批具体字段见 [语言绑定](/domain-model/language-bindings) 和 [交互场景指南](/integration/03-attachments-and-interactions)。
+
+
+关联领域：[Turn](/domain-model/06-turn-items) · [Execution](/domain-model/execution) · [Mutation](/domain-model/mutation)。

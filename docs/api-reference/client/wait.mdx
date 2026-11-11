@@ -1,0 +1,79 @@
+---
+title: "wait"
+sidebarTitle: "wait"
+description: "完整公开接口 · Client"
+---
+
+`wait` · Client
+
+AK/SK 管理员态等待指定桌面创建完成；使用原创建结果的 regionId 与 desktopIds，创建成功不等于 Agent 或 IM 在线。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `Client.wait` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go.Client.Wait` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.WuyingClient.wait` | 已公开声明，需核对环境能力 |
+| CLI | `wuying desktops wait` | 已公开声明，需核对环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · Client
+
+```ts
+wait(context: ExecutionContext, request: WaitDesktopsRequest): Promise<WaitDesktopsResponse>;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go.Client
+
+```go
+func (receiver *Client) Wait(ctx context.Context, r *model.WaitDesktopsRequest) (*model.WaitDesktopsResponse, error)
+```
+
+### Java · com.aliyun.wuying.sdk.WuyingClient
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WaitDesktopsResponse> wait(com.aliyun.wuying.sdk.model.WaitDesktopsRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+### CLI · desktops
+
+```sh
+wuying desktops wait
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface ExecutionContext {
+    signal?: AbortSignal;
+    traceId?: string;
+    timeout?: number;
+}
+
+interface WaitDesktopsRequest {
+    regionId: string;
+    desktopIds: string[];
+    pollIntervalMs?: number;
+}
+
+interface WaitDesktopsResponse {
+    desktopIds: string[];
+    ready: true;
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/02-runtime-agent) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

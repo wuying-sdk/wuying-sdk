@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@aliyun/wuying-sdk": "file:../../wuying-sdk-nodejs",
+    "indexeddbshim": "19.0.7"
+  },
+  "scripts": {
+    "postinstall": "node scripts/patch-idb.mjs"
+  }
+}

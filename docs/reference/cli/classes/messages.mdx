@@ -1,0 +1,41 @@
+---
+title: "messages"
+sidebarTitle: "messages"
+description: "CLI 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## messages
+
+```sh
+wuying messages
+
+```
+
+[查看操作或完整契约](/reference/cli/public#entry-37a4ffba0afb77e6)
+
+## messages get
+
+```sh
+wuying messages get
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --message <id> — Message ID from the Turn
+optional --limit <count> — Process-item page size (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
+```
+
+[查看操作或完整契约](/api-reference/messages/presentation)
+
+## messages list
+
+```sh
+wuying messages list
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+optional --limit <count> — Page size (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
+```
+
+[查看操作或完整契约](/api-reference/messages/list)

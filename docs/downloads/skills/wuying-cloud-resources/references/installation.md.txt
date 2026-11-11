@@ -1,0 +1,6 @@
+Use the customer-supplied matching CLI package, then run `wuying codex install`.
+The command installs both Wuying Skills with an absolute CLI fallback for this machine.
+For project scope use `wuying codex install --scope project --project-dir /absolute/project`.
+Do not assume a public npm package or guess a machine-specific executable path.
+Other Agent hosts can load this entire Skill directory through their own Skill mechanism;
+the CLI must be installed in the environment where the Agent runs.

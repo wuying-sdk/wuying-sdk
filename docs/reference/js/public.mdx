@@ -1,0 +1,3419 @@
+---
+title: "JavaScript / TypeScript 完整公开清单"
+sidebarTitle: "JavaScript / TypeScript 完整公开清单"
+description: "按原始声明核对所有公开调用入口，包括配置、DTO、回调与辅助方法。"
+---
+
+本页完整列出当前快照中的公开函数、方法与命令，包含重载。业务操作按模型拆页；构造、配置、DTO/错误辅助、回调契约等保留完整签名，不当作新的资源操作。
+
+统计范围是根模块导出及根 Client 各 Manager 的可调用返回接口（包含继承方法）；全量类型与数据字段见[同版本声明](/reference/js/types)。
+
+<a id="entry-e1e6df231c2479a9" />
+
+### APIError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, statusCode: number, rawBody: string, requestId?: string): APIError;
+```
+
+<a id="entry-cea5d90fbe57f6ef" />
+
+### AgentManager.describeWyDrives
+
+类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drives)。
+
+```ts
+describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest | undefined): Promise<DescribeWyDrivesResult>;
+```
+
+<a id="entry-27d41b9c7b005da6" />
+
+### AgentManager.describeWyDriveFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drive-files)。
+
+```ts
+describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+```
+
+<a id="entry-e1da6b947de6592a" />
+
+### AgentManager.getDownloadUrl
+
+类别：模型操作。[按模型查看操作](/api-reference/files/get-download-url)。
+
+```ts
+getDownloadUrl(ctx: ExecutionContext, req: GetDownloadUrlRequest): Promise<GetDownloadUrlResult>;
+```
+
+<a id="entry-ea6cd2d5d59ff2e2" />
+
+### AgentManager.deleteWyDriveFile
+
+类别：模型操作。[按模型查看操作](/api-reference/files/delete-wy-drive-file)。
+
+```ts
+deleteWyDriveFile(ctx: ExecutionContext, req: DeleteWyDriveFileRequest): Promise<void>;
+```
+
+<a id="entry-609b545ebc67c288" />
+
+### AgentManager.listAgentKnowledgeSpaces
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-agent-knowledge-spaces)。
+
+```ts
+listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
+```
+
+<a id="entry-43db9bdc6a285983" />
+
+### AgentManager.listKnowledgeFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-knowledge-files)。
+
+```ts
+listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+```
+
+<a id="entry-0a2295122ef846df" />
+
+### AgentManager.downloadKnowledgeFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/download-knowledge-files)。
+
+```ts
+downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest): Promise<DownloadKnowledgeFileResult[]>;
+```
+
+<a id="entry-0cd3c15d6e26b819" />
+
+### AgentManager.listAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
+
+```ts
+listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+```
+
+<a id="entry-fe30a14a4283c6ed" />
+
+### AgentManager.observeAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/observe-agents)。
+
+```ts
+observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+```
+
+<a id="entry-65dfb93b368faa72" />
+
+### AgentManager.listAgentModels
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
+
+```ts
+listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<(ModelSummary & AgentRef)[]>>;
+```
+
+<a id="entry-9f060e6d341ce45a" />
+
+### AgentManager.listAgentProducts
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list-agent-products)。
+
+```ts
+listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+```
+
+<a id="entry-c0232f4ee75e197b" />
+
+### AgentManager.listExperts
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list-experts)。
+
+```ts
+listExperts(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<Expert[]>>;
+```
+
+<a id="entry-fae3ca5102bc72c0" />
+
+### AgentManager.getExpertDirectory
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/get-expert-directory)。
+
+```ts
+getExpertDirectory(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<ExpertDirectory>>;
+```
+
+<a id="entry-ccacddfe27b9204a" />
+
+### AgentManager.getAgentModelCatalog
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/get-agent-model-catalog)。
+
+```ts
+getAgentModelCatalog(ctx: Context, req: AgentRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<AgentModelCatalog>>;
+```
+
+<a id="entry-c0944a4674945cdf" />
+
+### AgentManager.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (service: Service, cloud?: CloudResources | undefined): AgentManager;
+```
+
+<a id="entry-d818d4482e57e047" />
+
+### AspManager.getAspStreamSession
+
+类别：模型操作。[按模型查看操作](/api-reference/asp/get-asp-stream-session)。
+
+```ts
+getAspStreamSession(): AspStreamSession | null;
+```
+
+<a id="entry-96aabc7f7d2484d4" />
+
+### AspManager.startAspStream
+
+类别：模型操作。[按模型查看操作](/api-reference/asp/start)。
+
+```ts
+startAspStream(context: ExecutionContext, req: StartAspStreamRequest): Promise<void>;
+```
+
+<a id="entry-d5772c5eaeb12f7a" />
+
+### AspManager.stopAspStream
+
+类别：模型操作。[按模型查看操作](/api-reference/asp/stop-asp-stream)。
+
+```ts
+stopAspStream(): Promise<void>;
+```
+
+<a id="entry-354709a7a674c373" />
+
+### AspManager.buildAspManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+buildAspManager(context: ExecutionContext, container: Container, ...opts: CallOption[]): Promise<AspManager | null>;
+```
+
+<a id="entry-34f680af4f9a33bc" />
+
+### AspManager.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (aspService: IAspService, container: Container): AspManager;
+```
+
+<a id="entry-9e9a7c1302696bec" />
+
+### AuthCodeCredential.setTokenRefresher
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+setTokenRefresher(fn: (context: ExecutionContext, authCode: string) => Promise<{ sessionId: string; endUserId: string; loginToken: string; }>): void;
+```
+
+<a id="entry-683c994662c1c7b0" />
+
+### AuthCodeCredential.setLoginTokenRefresher
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+setLoginTokenRefresher(fn: (context: ExecutionContext, sessionId: string, endUserId: string, loginToken: string) => Promise<string>): void;
+```
+
+<a id="entry-57c8e632247a4f2b" />
+
+### AuthCodeCredential.replaceImportedLogin
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+replaceImportedLogin(value: { loginToken: string; sessionId: string; endUserId: string; }): void;
+```
+
+<a id="entry-048f456617ad80b5" />
+
+### AuthCodeCredential.type
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+type(): AuthType;
+```
+
+<a id="entry-032fadf0b9001559" />
+
+### AuthCodeCredential.permissionLevel
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+permissionLevel(): PermissionLevel;
+```
+
+<a id="entry-b2746fa07b74f7f0" />
+
+### AuthCodeCredential.signRequest
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+signRequest(_req: Request): Promise<void>;
+```
+
+<a id="entry-5e73e809a165e313" />
+
+### AuthCodeCredential.isExpired
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+isExpired(): boolean;
+```
+
+<a id="entry-58fa1f3ad1f14d58" />
+
+### AuthCodeCredential.refresh
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+refresh(context: ExecutionContext): Promise<void>;
+```
+
+<a id="entry-f94e1cf54bf4e23f" />
+
+### AuthCodeCredential.tokenInfo
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+tokenInfo(): { sessionId: string; endUserId: string; loginTokenPrefix: string; expiresAt: Date; isExpired: boolean; };
+```
+
+<a id="entry-5b6f5b864a87df14" />
+
+### AuthCodeCredential.getLoginToken
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getLoginToken(): string;
+```
+
+<a id="entry-dc738d3f291376f6" />
+
+### AuthCodeCredential.getAuthCode
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getAuthCode(): string;
+```
+
+<a id="entry-ec5f99ede1b05eae" />
+
+### AuthCodeCredential.getSessionId
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getSessionId(): string;
+```
+
+<a id="entry-eda7911f9f4cb282" />
+
+### AuthCodeCredential.getEndUserId
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getEndUserId(): string;
+```
+
+<a id="entry-1231ce48273e67c8" />
+
+### AuthCodeCredential.getLoginRegionId
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getLoginRegionId(): string;
+```
+
+<a id="entry-9cec6f61710eee96" />
+
+### AuthCodeCredential.waitForReady
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+waitForReady(context: ExecutionContext): Promise<void>;
+```
+
+<a id="entry-6309dfaad154ea72" />
+
+### AuthCodeCredential.startAutoRefresh
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+startAutoRefresh(context: ExecutionContext): Promise<void>;
+```
+
+<a id="entry-e6a427b2a230f6cd" />
+
+### AuthCodeCredential.stopAutoRefresh
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+stopAutoRefresh(): void;
+```
+
+<a id="entry-d778266d375f4ffb" />
+
+### AuthCodeCredential.dispose
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+dispose(): void;
+```
+
+<a id="entry-f0206beefa5f809e" />
+
+### AuthCodeCredential.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (authCode: string, clientId: string, anonymousClient: AnonymousClient, logger: Logger, refreshInterval?: number, loginTokenDefaultExpiry?: number, initialLogin?: { sessionId: string; endUserId: string; loginToken: string; }, loginRegionId?: string): AuthCodeCredential;
+```
+
+<a id="entry-3b8bc22fd7c8884f" />
+
+### AuthError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, cause?: Error): AuthError;
+```
+
+<a id="entry-7cc96fff75f01a4c" />
+
+### BusinessError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (code: ErrorCode$1, message: string, outcome?: "not_started" | "confirmed" | "unknown", retryable?: boolean, traceId?: string | undefined): BusinessError$1;
+```
+
+<a id="entry-864563e9681c284a" />
+
+### Functions.CallOptionsFrom
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+function CallOptionsFrom(opts: CallOption[]): AsyncCallback | null;
+```
+
+<a id="entry-cb304712c990cf9e" />
+
+### Client.start
+
+类别：模型操作。[按模型查看操作](/api-reference/client/start)。
+
+```ts
+start(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+<a id="entry-836a4a73cd60783c" />
+
+### Client.stop
+
+类别：模型操作。[按模型查看操作](/api-reference/client/stop)。
+
+```ts
+stop(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+<a id="entry-c7cb7ea8a85b126f" />
+
+### Client.reboot
+
+类别：模型操作。[按模型查看操作](/api-reference/client/reboot)。
+
+```ts
+reboot(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+<a id="entry-407afe51b382aea3" />
+
+### Client.reset
+
+类别：模型操作。[按模型查看操作](/api-reference/client/reset)。
+
+```ts
+reset(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+<a id="entry-9f02226387f330f5" />
+
+### Client.delete
+
+类别：模型操作。[按模型查看操作](/api-reference/client/delete)。
+
+```ts
+delete(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+<a id="entry-e998e9b99506c43f" />
+
+### Client.create
+
+类别：模型操作。[按模型查看操作](/api-reference/client/create-desktops)。
+
+```ts
+create(context: ExecutionContext, request: CreateDesktopsRequest, options?: DesktopCreateOptions): Promise<CreateDesktopsResponse>;
+```
+
+<a id="entry-9d29bd26f4129ed6" />
+
+### Client.wait
+
+类别：模型操作。[按模型查看操作](/api-reference/client/wait)。
+
+```ts
+wait(context: ExecutionContext, request: WaitDesktopsRequest): Promise<WaitDesktopsResponse>;
+```
+
+<a id="entry-9a59ad1f7c9c1c22" />
+
+### Client.getAuthCode
+
+类别：模型操作。[按模型查看操作](/api-reference/client/get-auth-code)。
+
+```ts
+getAuthCode(context: ExecutionContext, request: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
+```
+
+<a id="entry-6445f1740df3169b" />
+
+### Client.getIMCredentials
+
+类别：模型操作。[按模型查看操作](/api-reference/client/get-imcredentials)。
+
+```ts
+getIMCredentials(context?: ExecutionContext): Promise<ConsumerUserGetExtTokenResponse>;
+```
+
+<a id="entry-ca59b696beaf993d" />
+
+### Client.updateLoginCredentials
+
+类别：模型操作。[按模型查看操作](/api-reference/client/update-login-credentials)。
+
+```ts
+updateLoginCredentials(context: Context, credentials: { loginToken: string; sessionId: string; endUserId: string; loginRegionId?: string; }): Promise<void>;
+```
+
+<a id="entry-1fbe9a563eaffd92" />
+
+### Client.buildRuntimeManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-runtime-manager)。
+
+```ts
+buildRuntimeManager(_context: ExecutionContext): Promise<RuntimeManager>;
+```
+
+<a id="entry-ff4ffd28babae884" />
+
+### Client.buildAgentManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-agent-manager)。
+
+```ts
+buildAgentManager(_context: Context): Promise<AgentManager$1>;
+```
+
+<a id="entry-5aae090cb77a3693" />
+
+### Client.buildConversationManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-conversation-manager)。
+
+```ts
+buildConversationManager(_context: Context): Promise<ConversationManager$1>;
+```
+
+<a id="entry-8b82711cd532b322" />
+
+### Client.buildResourceManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-resource-manager)。
+
+```ts
+buildResourceManager(_context: Context): Promise<ResourceManager$1>;
+```
+
+<a id="entry-cebad5934bfa0602" />
+
+### Client.buildCreditManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-credit-manager)。
+
+```ts
+buildCreditManager(_context: ExecutionContext): Promise<CreditManager>;
+```
+
+<a id="entry-2528ee91c86f7c96" />
+
+### Client.onStreamEvent
+
+类别：模型操作。[按模型查看操作](/api-reference/client/on-stream-event)。
+
+```ts
+onStreamEvent(handler: (event: StreamEvent) => void): () => void;
+```
+
+<a id="entry-e2e546d6d28afc25" />
+
+### Client.buildAspManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+buildAspManager(context: ExecutionContext): Promise<AspManager>;
+```
+
+<a id="entry-62e6f7d9dff04b28" />
+
+### Client.buildSkillManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-skill-manager)。
+
+```ts
+buildSkillManager(context: ExecutionContext): Promise<SkillManager>;
+```
+
+<a id="entry-872533de4696d613" />
+
+### Client.buildModelManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-model-manager)。
+
+```ts
+buildModelManager(context: ExecutionContext): Promise<ModelManager>;
+```
+
+<a id="entry-06298aa869bb69cf" />
+
+### Client.getAuthCodeCredential
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getAuthCodeCredential(): AuthCodeCredential;
+```
+
+<a id="entry-5ac83ed3dc8642b5" />
+
+### Client.close
+
+类别：模型操作。[按模型查看操作](/api-reference/client/close)。
+
+```ts
+close(): Promise<void>;
+```
+
+<a id="entry-29336d9191418db7" />
+
+### Client.logout
+
+类别：模型操作。[按模型查看操作](/api-reference/client/logout)。
+
+```ts
+logout(): Promise<void>;
+```
+
+<a id="entry-ffea0198a030218f" />
+
+### Client.create
+
+类别：类型、配置、构造、回调或辅助入口。[按模型查看操作](/api-reference/client/create)。
+
+```ts
+create(options: ClientOptions, userConfig?: UserConfig): Client;
+```
+
+<a id="entry-d6016468ca85be7a" />
+
+### Client.resetInstance
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+resetInstance(): void;
+```
+
+<a id="entry-f352ec231ad6fd29" />
+
+### Client.constructor
+
+类别：类型、配置、构造、回调或辅助入口。[按模型查看操作](/api-reference/client/create)。
+
+```ts
+new new (options: ClientOptions, userConfig?: UserConfig): Client;
+```
+
+<a id="entry-b4dc4cba4693e121" />
+
+### CloudBusinessError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, businessCode?: string, cause?: Error): BusinessError;
+```
+
+<a id="entry-5add199ec260c04c" />
+
+### CloudClient.close
+
+类别：模型操作。[按模型查看操作](/api-reference/cloud-api/close)。
+
+```ts
+close(): void;
+```
+
+<a id="entry-8e1b2e79b0c54ac4" />
+
+### CloudClient.doRPC
+
+类别：模型操作。[按模型查看操作](/api-reference/cloud-api/do-rpc)。
+
+```ts
+doRPC(context: ExecutionContext, action: string, version: string, businessParams?: Record<string, string>): Promise<Record<string, unknown>>;
+```
+
+<a id="entry-9c827a0fab73ad30" />
+
+### CloudClient.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (options: CloudClientOptions): CloudClient;
+```
+
+<a id="entry-e24304aa87e2c778" />
+
+### Config.relayMaxDataBytes
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+relayMaxDataBytes(): number;
+```
+
+<a id="entry-a6d7854bb6f68da1" />
+
+### Config.timeout
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+timeout(): number;
+```
+
+<a id="entry-ef6db1e3b67e212a" />
+
+### Config.maxRetries
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+maxRetries(): number;
+```
+
+<a id="entry-4a23aa3c94f029a8" />
+
+### Config.retryBaseDelay
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+retryBaseDelay(): number;
+```
+
+<a id="entry-763d6bda7da98842" />
+
+### Config.retryMaxDelay
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+retryMaxDelay(): number;
+```
+
+<a id="entry-af07af3ec10a26ee" />
+
+### Config.logger
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+logger(): Logger;
+```
+
+<a id="entry-7cdd05123cb013ec" />
+
+### Config.clientId
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+clientId(): string;
+```
+
+<a id="entry-ca6fa0bd26937c99" />
+
+### Config.authCodeRefreshInterval
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+authCodeRefreshInterval(): number;
+```
+
+<a id="entry-057ce738b58de39f" />
+
+### Config.loginTokenDefaultExpiry
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+loginTokenDefaultExpiry(): number;
+```
+
+<a id="entry-5e8d9c94413781cd" />
+
+### Config.appStreamEndpoint
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+appStreamEndpoint(): string;
+```
+
+<a id="entry-54588ea3583d8e8b" />
+
+### Config.skillMgmtEndpoint
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+skillMgmtEndpoint(): string;
+```
+
+<a id="entry-0f8e5483a49faf73" />
+
+### Config.salesEndpoint
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+salesEndpoint(): string;
+```
+
+<a id="entry-e6d1520691a92918" />
+
+### Config.accessKeyID
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+accessKeyID(): string;
+```
+
+<a id="entry-af2a34c718a5c61d" />
+
+### Config.accessKeySecret
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+accessKeySecret(): string;
+```
+
+<a id="entry-0f0db7444a400b02" />
+
+### ConversationManager.listGroupSyncStates
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/list-group-sync-states)。
+
+```ts
+listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+```
+
+<a id="entry-7e68a88c5fb15df5" />
+
+### ConversationManager.listGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
+
+```ts
+listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+```
+
+<a id="entry-8ab8bce35509a55d" />
+
+### ConversationManager.listRecentGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list-recent-groups)。
+
+```ts
+listRecentGroups(ctx: Context, req: { limit: number; }): Promise<RecentGroupDirectoryEntry[]>;
+```
+
+<a id="entry-07942c3adc076ee1" />
+
+### ConversationManager.syncConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/sync-conversation)。
+
+```ts
+syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+```
+
+<a id="entry-757a6a7471e36b1d" />
+
+### ConversationManager.syncGroup
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/sync-group)。
+
+```ts
+syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+```
+
+<a id="entry-995fb71126353a9f" />
+
+### ConversationManager.onGroupSyncState
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/on-group-sync-state)。
+
+```ts
+onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+```
+
+<a id="entry-1cac6512aa294055" />
+
+### ConversationManager.observeLiveProcess
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-live-process)。
+
+```ts
+observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+```
+
+<a id="entry-8362d3644b85882e" />
+
+### ConversationManager.prepareConversationAttachmentTarget
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/prepare-conversation-attachment-target)。
+
+```ts
+prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
+```
+
+<a id="entry-d0bb6b92d802acf1" />
+
+### ConversationManager.createConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/create)。
+
+```ts
+createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<{ coordinatorMemberId?: string | undefined; memberMappings?: { clientMemberKey: string; memberId: string; }[] | undefined; mappingState?: "unknown" | "complete" | undefined; conversationId: string; runtimeId: string; }>;
+```
+
+<a id="entry-bbf161f22bbb16af" />
+
+### ConversationManager.listConversationGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list-conversation-groups)。
+
+```ts
+listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+```
+
+<a id="entry-80ef6211a9af5c2f" />
+
+### ConversationManager.observeConversationGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-groups)。
+
+```ts
+observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+```
+
+<a id="entry-b81a024752053e6c" />
+
+### ConversationManager.listSidebarConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list-sidebar-conversations)。
+
+```ts
+listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+<a id="entry-56f71367cd1f6411" />
+
+### ConversationManager.observeSidebarConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-sidebar-conversations)。
+
+```ts
+observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+```
+
+<a id="entry-f2c26ed945cc610f" />
+
+### ConversationManager.getConversationSummary
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-summary)。
+
+```ts
+getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+```
+
+<a id="entry-b758bd19254b0a74" />
+
+### ConversationManager.observeConversationSummary
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-summary)。
+
+```ts
+observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+```
+
+<a id="entry-74d21ae9615cd1f2" />
+
+### ConversationManager.getMessageFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/get-message-files)。
+
+```ts
+getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
+```
+
+<a id="entry-2592def5604bc9f6" />
+
+### ConversationManager.getMessagePresentation
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/presentation)。
+
+```ts
+getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
+```
+
+<a id="entry-b378e04b6046680b" />
+
+### ConversationManager.listActiveExecutions
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/list-active-executions)。
+
+```ts
+listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+```
+
+<a id="entry-a0c114aa2fcb2491" />
+
+### ConversationManager.observeActiveExecutions
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-active-executions)。
+
+```ts
+observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+```
+
+<a id="entry-74bfe60b45a6eb99" />
+
+### ConversationManager.cancelExecution
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/cancel-execution)。
+
+```ts
+cancelExecution(ctx: Context, req: ConversationRef & { executionId: string; expectedVersion: string; }): Promise<{ state: "cancelled" | "requested" | "already_finished"; }>;
+```
+
+<a id="entry-522accd09583b8e9" />
+
+### ConversationManager.getComposerCapabilities
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/get-composer-capabilities)。
+
+```ts
+getComposerCapabilities(ctx: Context, req: ConversationRef & { memberId?: string; }): Promise<Snapshot<ComposerCapabilities>>;
+```
+
+<a id="entry-fdfcd2070063d591" />
+
+### ConversationManager.getCommandReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-command-receipt)。
+
+```ts
+getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+```
+
+<a id="entry-b376ec28003699d7" />
+
+### ConversationManager.observeCommandReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-command-receipt)。
+
+```ts
+observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+```
+
+<a id="entry-1dfed513373944bb" />
+
+### ConversationManager.steerTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/steer-turn)。
+
+```ts
+steerTurn(ctx: Context, req: ConversationRef & { turnId: string; text: string; clientCommandId: string; }): Promise<{ state: "accepted"; turnId: string; messageId: string; }>;
+```
+
+<a id="entry-878c5534512ab56a" />
+
+### ConversationManager.setConversationPinned
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/set-conversation-pinned)。
+
+```ts
+setConversationPinned(ctx: Context, req: ConversationRef & { pinned: boolean; }, options?: MutationOptions): Promise<ConversationRef>;
+```
+
+<a id="entry-5b46e15aa76b6c37" />
+
+### ConversationManager.getConversationStorageContext
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/get-conversation-storage-context)。
+
+```ts
+getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+```
+
+<a id="entry-5e82edc61a48c644" />
+
+### ConversationManager.getConversationHeaderMetadata
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-header-metadata)。
+
+```ts
+getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
+```
+
+<a id="entry-f68a446a3e53a795" />
+
+### ConversationManager.listMemberCandidates
+
+类别：模型操作。[按模型查看操作](/api-reference/members/list-member-candidates)。
+
+```ts
+listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<{ add: Capability; multipleIdentities: Capability; configurable: { displayName: Capability; model: Capability; responsibility: Capability; }; agentId: string; runtimeId: string; }[]>>;
+```
+
+<a id="entry-6e9826d9e7e177e8" />
+
+### ConversationManager.getMemberSnapshot
+
+类别：模型操作。[按模型查看操作](/api-reference/members/get-member-snapshot)。
+
+```ts
+getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<MemberSnapshot>>;
+```
+
+<a id="entry-1014e110495e3467" />
+
+### ConversationManager.getMutation
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-mutation)。
+
+```ts
+getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
+```
+
+<a id="entry-bc67e8d8dd2e2785" />
+
+### ConversationManager.observeMutation
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-mutation)。
+
+```ts
+observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+```
+
+<a id="entry-aadd24b9b88c1785" />
+
+### ConversationManager.listConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list)。
+
+```ts
+listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+<a id="entry-147a7a9a57028d23" />
+
+### ConversationManager.observeConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversations)。
+
+```ts
+observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+```
+
+<a id="entry-58bcaa00667cc834" />
+
+### ConversationManager.getConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get)。
+
+```ts
+getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+```
+
+<a id="entry-7d609eae8ed5e318" />
+
+### ConversationManager.renameConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/rename)。
+
+```ts
+renameConversation(ctx: Context, req: ConversationRef & { name: string; }, options?: MutationOptions): Promise<ConversationRef>;
+```
+
+<a id="entry-c340263658db57e4" />
+
+### ConversationManager.updateConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/update)。
+
+```ts
+updateConversationConfig(ctx: Context, req: ConversationRef & { config: Config; expectedVersion: string; }): Promise<ConversationRef>;
+```
+
+<a id="entry-ee47a5a5c8715b54" />
+
+### ConversationManager.setConversationConfigOption
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/set-conversation-config-option)。
+
+```ts
+setConversationConfigOption(ctx: Context, req: ConversationRef & { optionId: "model" | "runtime.permissionPreset" | "runtime.thinkingLevel"; value: string; }): Promise<ConversationRef>;
+```
+
+<a id="entry-01339507070612eb" />
+
+### ConversationManager.getConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/get)。
+
+```ts
+getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig & ConversationRef>>;
+```
+
+<a id="entry-97a23f63cf8eb77f" />
+
+### ConversationManager.observeConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/observe-conversation-config)。
+
+```ts
+observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+```
+
+<a id="entry-1cd640ba5c902553" />
+
+### ConversationManager.archiveConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/archive)。
+
+```ts
+archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+```
+
+<a id="entry-ad4c11ffd524665b" />
+
+### ConversationManager.unarchiveConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/unarchive-conversation)。
+
+```ts
+unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+```
+
+<a id="entry-1d112c3bab2c3ee2" />
+
+### ConversationManager.listMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/members/list)。
+
+```ts
+listMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }): Promise<Snapshot<(Member & ConversationRef)[]>>;
+```
+
+<a id="entry-22cee6e23ccd86af" />
+
+### ConversationManager.observeMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/members/observe-members)。
+
+```ts
+observeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: Observer<Member[]>): Promise<Subscription>;
+```
+
+<a id="entry-4b0765295d6b7b5b" />
+
+### ConversationManager.addMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/add)。
+
+```ts
+addMember(ctx: Context, req: ConversationRef & { agentId: string; displayName?: string; modelId?: string; responsibility?: ResponsibilityPatch; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+<a id="entry-c34a8636bd717dbc" />
+
+### ConversationManager.updateMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/update)。
+
+```ts
+updateMember(ctx: Context, req: ConversationRef & { memberId: string; expectedVersion: string; displayName?: string; modelId?: string; responsibility?: ResponsibilityPatch; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+<a id="entry-a8c757ca3ece8a3a" />
+
+### ConversationManager.removeMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/remove)。
+
+```ts
+removeMember(ctx: Context, req: ConversationRef & { memberId: string; expectedVersion: string; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+<a id="entry-cc6603a5b6b88c24" />
+
+### ConversationManager.sendMessage
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/send)。
+
+```ts
+sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
+```
+
+<a id="entry-27e493aab0169659" />
+
+### ConversationManager.sendMessageStream
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/stream)。
+
+```ts
+sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+```
+
+<a id="entry-a1613a32426ad544" />
+
+### ConversationManager.sendMessageAndWait
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/wait)。
+
+```ts
+sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
+```
+
+<a id="entry-d77044e0fd3b4072" />
+
+### ConversationManager.resolveConversationRead
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/resolve-conversation-read)。
+
+```ts
+resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+```
+
+<a id="entry-04915d3e69023d3e" />
+
+### ConversationManager.listConversationHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/list-conversation-history)。
+
+```ts
+listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+```
+
+<a id="entry-aaa7ebf792a000a6" />
+
+### ConversationManager.observeConversationHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/observe-conversation-history)。
+
+```ts
+observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+```
+
+<a id="entry-d73f87ee253b2732" />
+
+### ConversationManager.listMessages
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/list)。
+
+```ts
+listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+```
+
+<a id="entry-5d41e03a6a31088e" />
+
+### ConversationManager.observeMessages
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/observe)。
+
+```ts
+observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+```
+
+<a id="entry-80ad7d605a80a46b" />
+
+### ConversationManager.listExecutionActivity
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/list-execution-activity)。
+
+```ts
+listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+```
+
+<a id="entry-9385c62ffe36960e" />
+
+### ConversationManager.observeExecutionActivity
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-execution-activity)。
+
+```ts
+observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+```
+
+<a id="entry-5637a07d4ccfdbb3" />
+
+### ConversationManager.getMessageDetail
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/detail)。
+
+```ts
+getMessageDetail(ctx: Context, req: ConversationRef & { messageId: string; itemCursor?: string; limit?: number; }): Promise<Snapshot<MessageDetail | undefined>>;
+```
+
+<a id="entry-c964f4130a3ceebf" />
+
+### ConversationManager.getTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/get)。
+
+```ts
+getTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<Snapshot<Turn | undefined>>;
+```
+
+<a id="entry-3166d035e8ce82ef" />
+
+### ConversationManager.observeTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/observe-turn)。
+
+```ts
+observeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+```
+
+<a id="entry-617145aa0b0cc2b5" />
+
+### ConversationManager.cancelTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/cancel)。
+
+```ts
+cancelTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<{ state: "cancelled" | "requested" | "already_finished"; }>;
+```
+
+<a id="entry-82e0182a0923f8bc" />
+
+### ConversationManager.refreshPendingInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/refresh-pending-interactions)。
+
+```ts
+refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<{ recovered: number; conversationId: string; runtimeId: string; }>;
+```
+
+<a id="entry-917bf490b2f8a493" />
+
+### ConversationManager.listInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/list)。
+
+```ts
+listInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }): Promise<Snapshot<Interaction[]>>;
+```
+
+<a id="entry-9e99a38408bf848e" />
+
+### ConversationManager.observeInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/observe-interactions)。
+
+```ts
+observeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: Observer<Interaction[]>): Promise<Subscription>;
+```
+
+<a id="entry-e0d46700e9c128f9" />
+
+### ConversationManager.respondPermission
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/permission)。
+
+```ts
+respondPermission(ctx: Context, req: ConversationRef & { interactionId: string; optionId: string; expectedVersion: string; }): Promise<InteractionResponse>;
+```
+
+<a id="entry-b795b01450fbddcd" />
+
+### ConversationManager.getQuestionResponseReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-question-response-receipt)。
+
+```ts
+getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+```
+
+<a id="entry-c1cc19191c19f913" />
+
+### ConversationManager.respondQuestion
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/question)。
+
+```ts
+respondQuestion(ctx: Context, req: ConversationRef & { interactionId: string; expectedVersion: string; answer: { answers: { questionId: string; optionIds: string[]; text?: string; }[]; } | { skip: true; }; }, options?: MutationOptions): Promise<InteractionResponse>;
+```
+
+<a id="entry-5b73ae15ebe839b2" />
+
+### ConversationManager.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (service: Service): ConversationManager;
+```
+
+<a id="entry-4bb1c6cdc22e0bc5" />
+
+### Credential.type
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+type(): AuthType;
+```
+
+<a id="entry-a725854355123d76" />
+
+### Credential.permissionLevel
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+permissionLevel(): PermissionLevel;
+```
+
+<a id="entry-078fe32a49eef68c" />
+
+### Credential.signRequest
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+signRequest(req: Request): Promise<void>;
+```
+
+<a id="entry-f41bd9fbfb7ffdb0" />
+
+### Credential.isExpired
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+isExpired(): boolean;
+```
+
+<a id="entry-6fda2ac5c53df779" />
+
+### Credential.refresh
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+refresh(context: ExecutionContext): Promise<void>;
+```
+
+<a id="entry-65babe31022e1fe3" />
+
+### Credential.waitForReady
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+waitForReady?(context: ExecutionContext): Promise<void>;
+```
+
+<a id="entry-104db584de8da7af" />
+
+### Credential.getLoginToken
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getLoginToken?(): string;
+```
+
+<a id="entry-d4270ccdc439d828" />
+
+### Credential.getSessionId
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getSessionId?(): string;
+```
+
+<a id="entry-c6b8204cab3a8424" />
+
+### Credential.getEndUserId
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getEndUserId?(): string;
+```
+
+<a id="entry-1a37fd269c8bf981" />
+
+### Credential.getLoginRegionId
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+getLoginRegionId?(): string;
+```
+
+<a id="entry-51e26ead5e102da1" />
+
+### CreditManager.describeCreditPackageAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/credits/describe-credit-package-agents)。
+
+```ts
+describeCreditPackageAgents(ctx: ExecutionContext, req: CreditPackageQuery): Promise<CreditPackageAgent[]>;
+```
+
+<a id="entry-f15c36926dac36d3" />
+
+### CreditManager.describeCreditUsageInfo
+
+类别：模型操作。[按模型查看操作](/api-reference/credits/usage)。
+
+```ts
+describeCreditUsageInfo(ctx: ExecutionContext, req: DescribeCreditUsageInfoRequest$1): Promise<CreditUsageInfo>;
+```
+
+<a id="entry-0294bc25760acc24" />
+
+### CreditManager.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (container: ServiceContainer): CreditManager;
+```
+
+<a id="entry-dbbd886fa941edad" />
+
+### LegacyBusinessError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, businessCode?: string, cause?: Error): BusinessError;
+```
+
+<a id="entry-41edcacb60f547e9" />
+
+### Logger.info
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+info(msg: string, ...args: unknown[]): void;
+```
+
+<a id="entry-1dd62256bf19760c" />
+
+### Logger.warn
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+warn(msg: string, ...args: unknown[]): void;
+```
+
+<a id="entry-3502babb0838b4c1" />
+
+### Logger.error
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+error(msg: string, ...args: unknown[]): void;
+```
+
+<a id="entry-77385c593c174077" />
+
+### Logger.debug
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+debug(msg: string, ...args: unknown[]): void;
+```
+
+<a id="entry-d9421cf174b633d5" />
+
+### MessageStream.cancel
+
+类别：模型操作。[按模型查看操作](/api-reference/streams/cancel)。
+
+```ts
+cancel(ctx?: Context): Promise<{ state: "requested" | "cancelled" | "already_finished"; }>;
+```
+
+<a id="entry-f3c946d63c095b0c" />
+
+### ModelManager.getAgentInstanceModelConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/models/get)。
+
+```ts
+getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
+```
+
+<a id="entry-14401c78b5b02bd2" />
+
+### ModelManager.setChannelGroupModel
+
+类别：模型操作。[按模型查看操作](/api-reference/models/set-channel-group-model)。
+
+```ts
+setChannelGroupModel(ctx: ExecutionContext, req: SetChannelGroupModelRequest, ...opts: CallOption[]): Promise<SetChannelGroupModelResult | null>;
+```
+
+<a id="entry-396a23bb8cbb5f69" />
+
+### ModelManager.buildModelManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+buildModelManager(ctx: ExecutionContext, container: ServiceContainer): Promise<ModelManager>;
+```
+
+<a id="entry-bbc754d0b5d32bf0" />
+
+### NetworkError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, cause?: Error): NetworkError;
+```
+
+<a id="entry-e1d70b2cd413105b" />
+
+### Observer.onSnapshot
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+onSnapshot(value: Snapshot<T>): void;
+```
+
+<a id="entry-9ae014a34fad4652" />
+
+### Observer.onError
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+onError(error: BusinessError$2): void;
+```
+
+<a id="entry-a2ade9a582650591" />
+
+### PermissionError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, cause?: Error): PermissionError;
+```
+
+<a id="entry-450ad8b2d445ef81" />
+
+### RateLimitError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, cause?: Error): RateLimitError;
+```
+
+<a id="entry-f1ef13b6872a6745" />
+
+### ResourceManager.attachImGroupFile
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-im-group-file)。
+
+```ts
+attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+```
+
+<a id="entry-bf45094df07c97c1" />
+
+### ResourceManager.getImGroupAttachmentOperation
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/get-im-group-attachment-operation)。
+
+```ts
+getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+```
+
+<a id="entry-433a060457ea0286" />
+
+### ResourceManager.stageDraftAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
+
+```ts
+stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; uploadId: string; }): Promise<StagedAttachment>;
+```
+
+<a id="entry-025a68cb397b2f2f" />
+
+### ResourceManager.listDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
+
+```ts
+listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+```
+
+<a id="entry-c2dfd0e623632d5f" />
+
+### ResourceManager.commitDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
+
+```ts
+commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; attachmentIds: string[]; }): Promise<CommittedAttachment[]>;
+```
+
+<a id="entry-e4557d29b1ceda7f" />
+
+### ResourceManager.discardDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
+
+```ts
+discardDraftAttachments(ctx: Context, req: DraftRef & { attachmentIds: string[]; }): Promise<{ state: "discarded"; }>;
+```
+
+<a id="entry-3fc84c32b37ce003" />
+
+### ResourceManager.getDraftAttachmentPreview
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
+
+```ts
+getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; }): Promise<Snapshot<{ unavailableReason?: string | undefined; dataUrl?: string | undefined; text?: string | undefined; title?: string | undefined; mime?: string | undefined; attachmentId: string; kind: string; }>>;
+```
+
+<a id="entry-9a2c2b87de247afa" />
+
+### ResourceManager.listWorkspaces
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
+
+```ts
+listWorkspaces(ctx: Context, req: RuntimeRef & { parentWorkspaceId?: string; }): Promise<Snapshot<{ entries: Workspace[]; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>>;
+```
+
+<a id="entry-83e750c7b48c30ab" />
+
+### ResourceManager.createWorkspace
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
+
+```ts
+createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
+```
+
+<a id="entry-f4b5984b4a2124c2" />
+
+### ResourceManager.listResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/list-resources)。
+
+```ts
+listResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }): Promise<Snapshot<Resource[]>>;
+```
+
+<a id="entry-091732dc78a86f7f" />
+
+### ResourceManager.observeResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/observe-resources)。
+
+```ts
+observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: Observer<Resource[]>): Promise<Subscription>;
+```
+
+<a id="entry-7b608baf37b263d1" />
+
+### ResourceManager.getConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/get-conversation-resources)。
+
+```ts
+getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
+```
+
+<a id="entry-85c916cf5ea9d2d9" />
+
+### ResourceManager.observeConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/observe-conversation-resources)。
+
+```ts
+observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+```
+
+<a id="entry-7277e2ddbfbe60dc" />
+
+### ResourceManager.setConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/set-conversation-resources)。
+
+```ts
+setConversationResources(ctx: Context, req: ConversationRef & { resourceIds: string[]; expectedVersion: string; }): Promise<{ resourceIds: string[]; revision: string; writeVersion: string | undefined; conversationId: string; runtimeId: string; }>;
+```
+
+<a id="entry-18867b9701fa14c6" />
+
+### ResourceManager.stageAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
+
+```ts
+stageAttachment(ctx: Context, req: ConversationRef & { file: Blob; name: string; }): Promise<{ attachmentId: string; name: string; mime: string; size: string; expiresAt: string | undefined; }>;
+```
+
+<a id="entry-cbf41ef5671db92f" />
+
+### ResourceManager.discardAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
+
+```ts
+discardAttachment(ctx: Context, req: ConversationRef & { attachmentId: string; }): Promise<{ state: "discarded"; }>;
+```
+
+<a id="entry-6ec4671fa81797d9" />
+
+### ResourceManager.getAttachmentAccess
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
+
+```ts
+getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: string; }>;
+```
+
+<a id="entry-b9ca8ae4ef7c0fcf" />
+
+### ResourceManager.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (service: Service): ResourceManager;
+```
+
+<a id="entry-524d2522dabd84d4" />
+
+### RuntimeManager.listRuntimes
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
+
+```ts
+listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+```
+
+<a id="entry-f553cb30638c35bc" />
+
+### RuntimeManager.observeRuntimes
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
+
+```ts
+observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+```
+
+<a id="entry-21ab7a934565dc06" />
+
+### RuntimeManager.getHostCapabilities
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/capabilities)。
+
+```ts
+getHostCapabilities(ctx: Context, req: RuntimeRef): Promise<Snapshot<HostCapabilities>>;
+```
+
+<a id="entry-d7551a284fcf1e84" />
+
+### RuntimeManager.describeCreditPackageAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/describe-credit-package-agents)。
+
+```ts
+describeCreditPackageAgents(ctx: ExecutionContext, req?: DescribeCreditPackageAgentsRequest): Promise<CreditPackageAgent[]>;
+```
+
+<a id="entry-da5d0565ad18908e" />
+
+### RuntimeManager.describeCreditUsageInfo
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/describe-credit-usage-info)。
+
+```ts
+describeCreditUsageInfo(ctx: ExecutionContext, req?: DescribeCreditUsageInfoRequest): Promise<CreditUsageInfo>;
+```
+
+<a id="entry-11f0bb38d58f82b7" />
+
+### RuntimeManager.updateAgentInstance
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/update-agent-instance)。
+
+```ts
+updateAgentInstance(ctx: ExecutionContext, req: UpdateAgentInstanceRequest, ...opts: CallOption[]): Promise<void>;
+```
+
+<a id="entry-a6238151c57ee6c3" />
+
+### RuntimeManager.approveFotaUpdate
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/approve-fota-update)。
+
+```ts
+approveFotaUpdate(ctx: ExecutionContext, req: ApproveFotaUpdateRequest, ...opts: CallOption[]): Promise<void>;
+```
+
+<a id="entry-4518130219dc46aa" />
+
+### RuntimeManager.generateSceneUrl
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/generate-scene-url)。
+
+```ts
+generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: CallOption[]): Promise<GenerateSceneUrlResponse | null>;
+```
+
+<a id="entry-572e0000989d8b4e" />
+
+### RuntimeManager.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (container: ServiceContainer | undefined, checkOpen: () => void, runtimeService?: (() => Service) | undefined): RuntimeManager;
+```
+
+<a id="entry-f45de22669d36167" />
+
+### SDKError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, code: ErrorCode, cause?: Error): SDKError;
+```
+
+<a id="entry-51c44080c8469836" />
+
+### ServerError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, cause?: Error): ServerError;
+```
+
+<a id="entry-d1eb20d85ee0fdef" />
+
+### SkillManager.listCategories
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/list-categories)。
+
+```ts
+listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+```
+
+<a id="entry-7e34481d6f6a0bf6" />
+
+### SkillManager.listInstalledSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/installed)。
+
+```ts
+listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+```
+
+<a id="entry-0a9ae59fe2383557" />
+
+### SkillManager.setSkillEnabled
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/set-skill-enabled)。
+
+```ts
+setSkillEnabled(ctx: ExecutionContext, req: SetSkillEnabledRequest): Promise<OperationTask[]>;
+```
+
+<a id="entry-1fe01aa0c7ffdbcd" />
+
+### SkillManager.listAgentAuthedSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/list-agent-authed-skills)。
+
+```ts
+listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
+```
+
+<a id="entry-12330d96dbb4ac93" />
+
+### SkillManager.entInstallSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/ent-install-skills)。
+
+```ts
+entInstallSkills(ctx: ExecutionContext, req: EntInstallSkillsRequest): Promise<OperationTask[]>;
+```
+
+<a id="entry-8ed780361f211617" />
+
+### SkillManager.entUninstallSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/ent-uninstall-skills)。
+
+```ts
+entUninstallSkills(ctx: ExecutionContext, req: EntUninstallSkillsRequest): Promise<OperationTask[]>;
+```
+
+<a id="entry-ae1f2cda77638211" />
+
+### SkillManager.buildSkillManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+buildSkillManager(ctx: ExecutionContext, container: ServiceContainer): Promise<SkillManager>;
+```
+
+<a id="entry-c77dc9d83f4c188b" />
+
+### Subscription.unsubscribe
+
+类别：模型操作。[按模型查看操作](/api-reference/subscriptions/unsubscribe)。
+
+```ts
+unsubscribe(): void;
+```
+
+<a id="entry-66d040e57d178f10" />
+
+### TimeoutError.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (message: string, cause?: Error): TimeoutError;
+```
+
+<a id="entry-6559f2ca65b4386a" />
+
+### Functions.WithAsync
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+function WithAsync(callback: AsyncCallback): CallOption;
+```
+
+<a id="entry-ceec6b414388ed9b" />
+
+### Functions.executeWithCallback
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+function executeWithCallback<T>(callback: AsyncCallback | null, fn: () => Promise<T>): Promise<T | null>;
+```
+
+<a id="entry-bc471a09b7f7794b" />
+
+### Functions.getAuthCode
+
+类别：模型操作。[按模型查看操作](/api-reference/auth/get-auth-code)。
+
+```ts
+function getAuthCode(client: CloudClient, context: ExecutionContext, params: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
+```
+
+<a id="entry-7f388245b57f2cfc" />
+
+### Functions.isRetryable
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+function isRetryable(error: unknown): boolean;
+```
+
+<a id="entry-45a198dd93ea11dd" />
+
+### Functions.mergeToInternal
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+function mergeToInternal(userConfig: UserConfig): Config$1;
+```
+
+<a id="entry-7aa55d54a9c159d1" />
+
+### RuntimeManager.listRuntimes
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
+
+```ts
+listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+```
+
+<a id="entry-b1e5f99531538997" />
+
+### RuntimeManager.observeRuntimes
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
+
+```ts
+observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+```
+
+<a id="entry-8edbe51456ca1f5e" />
+
+### RuntimeManager.getHostCapabilities
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/capabilities)。
+
+```ts
+getHostCapabilities(ctx: Context, req: RuntimeRef): Promise<Snapshot<HostCapabilities>>;
+```
+
+<a id="entry-65e7cdc698759014" />
+
+### RuntimeManager.describeCreditPackageAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/describe-credit-package-agents)。
+
+```ts
+describeCreditPackageAgents(ctx: ExecutionContext, req?: DescribeCreditPackageAgentsRequest): Promise<CreditPackageAgent[]>;
+```
+
+<a id="entry-affae023c64d8c13" />
+
+### RuntimeManager.describeCreditUsageInfo
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/describe-credit-usage-info)。
+
+```ts
+describeCreditUsageInfo(ctx: ExecutionContext, req?: DescribeCreditUsageInfoRequest): Promise<CreditUsageInfo>;
+```
+
+<a id="entry-0aa880bc39d3c5c4" />
+
+### RuntimeManager.updateAgentInstance
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/update-agent-instance)。
+
+```ts
+updateAgentInstance(ctx: ExecutionContext, req: UpdateAgentInstanceRequest, ...opts: CallOption[]): Promise<void>;
+```
+
+<a id="entry-297476c2a6066e9b" />
+
+### RuntimeManager.approveFotaUpdate
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/approve-fota-update)。
+
+```ts
+approveFotaUpdate(ctx: ExecutionContext, req: ApproveFotaUpdateRequest, ...opts: CallOption[]): Promise<void>;
+```
+
+<a id="entry-c7b05f6e3e7cec7a" />
+
+### RuntimeManager.generateSceneUrl
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/generate-scene-url)。
+
+```ts
+generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: CallOption[]): Promise<GenerateSceneUrlResponse | null>;
+```
+
+<a id="entry-86f92a55d2fdb8e2" />
+
+### AgentManager.listAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
+
+```ts
+listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+```
+
+<a id="entry-99539ca6cb84c190" />
+
+### AgentManager.observeAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/observe-agents)。
+
+```ts
+observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+```
+
+<a id="entry-f70ecfcf24c0216b" />
+
+### AgentManager.listAgentModels
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
+
+```ts
+listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<ModelSummary[]>>;
+```
+
+<a id="entry-66b443f1dc7ecb4a" />
+
+### AgentManager.listAgentProducts
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list-agent-products)。
+
+```ts
+listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+```
+
+<a id="entry-5d6f42ec77dc48d3" />
+
+### AgentManager.getExpertDirectory
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/get-expert-directory)。
+
+```ts
+getExpertDirectory(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<ExpertDirectory>>;
+```
+
+<a id="entry-d8d056c30840e631" />
+
+### AgentManager.listExperts
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list-experts)。
+
+```ts
+listExperts(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<Expert[]>>;
+```
+
+<a id="entry-0fdfc4c616619358" />
+
+### AgentManager.getAgentModelCatalog
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/get-agent-model-catalog)。
+
+```ts
+getAgentModelCatalog(ctx: Context, req: AgentRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<AgentModelCatalog>>;
+```
+
+<a id="entry-ede5b19a819d9bfa" />
+
+### AgentManager.describeWyDrives
+
+类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drives)。
+
+```ts
+describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest): Promise<DescribeWyDrivesResult>;
+```
+
+<a id="entry-f9cd1b06f06e4aec" />
+
+### AgentManager.describeWyDriveFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drive-files)。
+
+```ts
+describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+```
+
+<a id="entry-e6c6de6608b5a6c0" />
+
+### AgentManager.getDownloadUrl
+
+类别：模型操作。[按模型查看操作](/api-reference/files/get-download-url)。
+
+```ts
+getDownloadUrl(ctx: ExecutionContext, req: GetDownloadUrlRequest): Promise<GetDownloadUrlResult>;
+```
+
+<a id="entry-fbdfe2627350cb88" />
+
+### AgentManager.deleteWyDriveFile
+
+类别：模型操作。[按模型查看操作](/api-reference/files/delete-wy-drive-file)。
+
+```ts
+deleteWyDriveFile(ctx: ExecutionContext, req: DeleteWyDriveFileRequest): Promise<void>;
+```
+
+<a id="entry-0a8c2f51da54071a" />
+
+### AgentManager.listAgentKnowledgeSpaces
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-agent-knowledge-spaces)。
+
+```ts
+listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
+```
+
+<a id="entry-205ab352572e712b" />
+
+### AgentManager.listKnowledgeFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-knowledge-files)。
+
+```ts
+listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+```
+
+<a id="entry-f0f43cc96a97c35e" />
+
+### AgentManager.downloadKnowledgeFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/knowledge/download-knowledge-files)。
+
+```ts
+downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest): Promise<DownloadKnowledgeFileResult[]>;
+```
+
+<a id="entry-e1190dadf683284b" />
+
+### ConversationManager.observeLiveProcess
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-live-process)。
+
+```ts
+observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+```
+
+<a id="entry-431b76d2e8ea4483" />
+
+### ConversationManager.prepareConversationAttachmentTarget
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/prepare-conversation-attachment-target)。
+
+```ts
+prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
+```
+
+<a id="entry-a3eec1ac9a635f09" />
+
+### ConversationManager.getMessageFiles
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/get-message-files)。
+
+```ts
+getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
+```
+
+<a id="entry-bd4ab4ff7178d31e" />
+
+### ConversationManager.getConversationStorageContext
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/get-conversation-storage-context)。
+
+```ts
+getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+```
+
+<a id="entry-1703b655de9ecb2b" />
+
+### ConversationManager.listGroupSyncStates
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/list-group-sync-states)。
+
+```ts
+listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+```
+
+<a id="entry-24dcfec126a44c61" />
+
+### ConversationManager.listGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
+
+```ts
+listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+```
+
+<a id="entry-d2729e61e542e632" />
+
+### ConversationManager.listRecentGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list-recent-groups)。
+
+```ts
+listRecentGroups(ctx: Context, req: { limit: number; }): Promise<RecentGroupDirectoryEntry[]>;
+```
+
+<a id="entry-3ddcb13ebf30b43c" />
+
+### ConversationManager.syncConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/sync-conversation)。
+
+```ts
+syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+```
+
+<a id="entry-69ba2de8f4e79057" />
+
+### ConversationManager.syncGroup
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/sync-group)。
+
+```ts
+syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+```
+
+<a id="entry-219457e0963ba92b" />
+
+### ConversationManager.onGroupSyncState
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/on-group-sync-state)。
+
+```ts
+onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+```
+
+<a id="entry-6cbb39fcb14ad4c3" />
+
+### ConversationManager.createConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/create)。
+
+```ts
+createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
+```
+
+<a id="entry-b329043fb11d2c42" />
+
+### ConversationManager.listConversationGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list-conversation-groups)。
+
+```ts
+listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+```
+
+<a id="entry-4c644992e80d064d" />
+
+### ConversationManager.observeConversationGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-groups)。
+
+```ts
+observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+```
+
+<a id="entry-24aa282992da26db" />
+
+### ConversationManager.listSidebarConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list-sidebar-conversations)。
+
+```ts
+listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+<a id="entry-a9ca9be0bddf2dad" />
+
+### ConversationManager.observeSidebarConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-sidebar-conversations)。
+
+```ts
+observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+```
+
+<a id="entry-ef31984d883ac14d" />
+
+### ConversationManager.getConversationSummary
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-summary)。
+
+```ts
+getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+```
+
+<a id="entry-49e0c518fa0f7a34" />
+
+### ConversationManager.observeConversationSummary
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-summary)。
+
+```ts
+observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+```
+
+<a id="entry-888293249f0f185c" />
+
+### ConversationManager.getMessagePresentation
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/presentation)。
+
+```ts
+getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
+```
+
+<a id="entry-0bc8c0bca559bee7" />
+
+### ConversationManager.listActiveExecutions
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/list-active-executions)。
+
+```ts
+listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+```
+
+<a id="entry-4d32a42f70bfc413" />
+
+### ConversationManager.observeActiveExecutions
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-active-executions)。
+
+```ts
+observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+```
+
+<a id="entry-9778c30601c0fad6" />
+
+### ConversationManager.cancelExecution
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/cancel-execution)。
+
+```ts
+cancelExecution(ctx: Context, req: ConversationRef & { executionId: string; expectedVersion: string; }): Promise<{ state: "requested" | "cancelled" | "already_finished"; }>;
+```
+
+<a id="entry-15b136c143aeaa9c" />
+
+### ConversationManager.getComposerCapabilities
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/get-composer-capabilities)。
+
+```ts
+getComposerCapabilities(ctx: Context, req: ConversationRef & { memberId?: string; }): Promise<Snapshot<ComposerCapabilities>>;
+```
+
+<a id="entry-8d09ef0e038d8846" />
+
+### ConversationManager.getCommandReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-command-receipt)。
+
+```ts
+getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+```
+
+<a id="entry-4d73fb88fbba97d1" />
+
+### ConversationManager.observeCommandReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-command-receipt)。
+
+```ts
+observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+```
+
+<a id="entry-6f52e28335de5266" />
+
+### ConversationManager.steerTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/steer-turn)。
+
+```ts
+steerTurn(ctx: Context, req: ConversationRef & { turnId: string; text: string; clientCommandId: string; }): Promise<{ state: "accepted"; turnId: string; messageId: string; }>;
+```
+
+<a id="entry-8be135751bdfcb4f" />
+
+### ConversationManager.setConversationPinned
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/set-conversation-pinned)。
+
+```ts
+setConversationPinned(ctx: Context, req: ConversationRef & { pinned: boolean; }, options?: MutationOptions): Promise<ConversationRef>;
+```
+
+<a id="entry-f858953b2750f3f6" />
+
+### ConversationManager.getConversationHeaderMetadata
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-header-metadata)。
+
+```ts
+getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
+```
+
+<a id="entry-d821ae529c36998a" />
+
+### ConversationManager.listMemberCandidates
+
+类别：模型操作。[按模型查看操作](/api-reference/members/list-member-candidates)。
+
+```ts
+listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<MemberCandidate[]>>;
+```
+
+<a id="entry-8c0310fc835588ad" />
+
+### ConversationManager.getMemberSnapshot
+
+类别：模型操作。[按模型查看操作](/api-reference/members/get-member-snapshot)。
+
+```ts
+getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<MemberSnapshot>>;
+```
+
+<a id="entry-2970883b6d5c0fd0" />
+
+### ConversationManager.getMutation
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-mutation)。
+
+```ts
+getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
+```
+
+<a id="entry-580a5285137f09a2" />
+
+### ConversationManager.observeMutation
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-mutation)。
+
+```ts
+observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+```
+
+<a id="entry-000bfcde0967e74c" />
+
+### ConversationManager.listConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list)。
+
+```ts
+listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+<a id="entry-f9d01e000c7b282e" />
+
+### ConversationManager.getConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get)。
+
+```ts
+getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+```
+
+<a id="entry-796667e556516f93" />
+
+### ConversationManager.observeConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversations)。
+
+```ts
+observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+```
+
+<a id="entry-d2a00b3fc51a9106" />
+
+### ConversationManager.renameConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/rename)。
+
+```ts
+renameConversation(ctx: Context, req: ConversationRef & { name: string; }, options?: MutationOptions): Promise<ConversationRef>;
+```
+
+<a id="entry-186dd6bca5ecf50b" />
+
+### ConversationManager.updateConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/update)。
+
+```ts
+updateConversationConfig(ctx: Context, req: ConversationRef & { config: Config; expectedVersion: string; }): Promise<ConversationRef>;
+```
+
+<a id="entry-6855b84dc86a3a42" />
+
+### ConversationManager.setConversationConfigOption
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/set-conversation-config-option)。
+
+```ts
+setConversationConfigOption(ctx: Context, req: ConversationRef & { optionId: "model" | "runtime.permissionPreset" | "runtime.thinkingLevel"; value: string; }): Promise<ConversationRef>;
+```
+
+<a id="entry-005fb84ecab87cf7" />
+
+### ConversationManager.observeConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/observe-conversation-config)。
+
+```ts
+observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+```
+
+<a id="entry-c108d4099374565e" />
+
+### ConversationManager.getConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/get)。
+
+```ts
+getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig>>;
+```
+
+<a id="entry-ce973c7b98ee9eb3" />
+
+### ConversationManager.archiveConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/archive)。
+
+```ts
+archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+```
+
+<a id="entry-79e367dd187dee69" />
+
+### ConversationManager.unarchiveConversation
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/unarchive-conversation)。
+
+```ts
+unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+```
+
+<a id="entry-6f1c45c02f22f113" />
+
+### ConversationManager.listMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/members/list)。
+
+```ts
+listMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }): Promise<Snapshot<Member[]>>;
+```
+
+<a id="entry-5ca5e21f1173c74b" />
+
+### ConversationManager.observeMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/members/observe-members)。
+
+```ts
+observeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: Observer<Member[]>): Promise<Subscription>;
+```
+
+<a id="entry-dec6582d3a7c095c" />
+
+### ConversationManager.addMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/add)。
+
+```ts
+addMember(ctx: Context, req: ConversationRef & { agentId: string; displayName?: string; modelId?: string; responsibility?: ResponsibilityPatch; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+<a id="entry-71defcfd9b7d691c" />
+
+### ConversationManager.updateMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/update)。
+
+```ts
+updateMember(ctx: Context, req: ConversationRef & { memberId: string; expectedVersion: string; displayName?: string; modelId?: string; responsibility?: ResponsibilityPatch; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+<a id="entry-ac984f5891c61c1d" />
+
+### ConversationManager.removeMember
+
+类别：模型操作。[按模型查看操作](/api-reference/members/remove)。
+
+```ts
+removeMember(ctx: Context, req: ConversationRef & { memberId: string; expectedVersion: string; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+<a id="entry-21b05daff51380e8" />
+
+### ConversationManager.sendMessage
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/send)。
+
+```ts
+sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
+```
+
+<a id="entry-0f4a8f3c9658de93" />
+
+### ConversationManager.sendMessageStream
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/stream)。
+
+```ts
+sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+```
+
+<a id="entry-cc6d96aea88a18e0" />
+
+### ConversationManager.sendMessageAndWait
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/wait)。
+
+```ts
+sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
+```
+
+<a id="entry-a70e87ba017a0bff" />
+
+### ConversationManager.resolveConversationRead
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/resolve-conversation-read)。
+
+```ts
+resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+```
+
+<a id="entry-96180b2cc0b7f481" />
+
+### ConversationManager.listConversationHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/list-conversation-history)。
+
+```ts
+listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+```
+
+<a id="entry-fd6fec46cfa69676" />
+
+### ConversationManager.observeConversationHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/observe-conversation-history)。
+
+```ts
+observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+```
+
+<a id="entry-d97ea973ef50df7f" />
+
+### ConversationManager.listMessages
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/list)。
+
+```ts
+listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+```
+
+<a id="entry-ed7570bd2cbfbb2e" />
+
+### ConversationManager.getMessageDetail
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/detail)。
+
+```ts
+getMessageDetail(ctx: Context, req: ConversationRef & { messageId: string; itemCursor?: string; limit?: number; }): Promise<Snapshot<MessageDetail | undefined>>;
+```
+
+<a id="entry-77c4916baa925010" />
+
+### ConversationManager.observeMessages
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/observe)。
+
+```ts
+observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+```
+
+<a id="entry-72ad2a9ed19baf80" />
+
+### ConversationManager.listExecutionActivity
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/list-execution-activity)。
+
+```ts
+listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+```
+
+<a id="entry-a609f79559bc0c31" />
+
+### ConversationManager.observeExecutionActivity
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/observe-execution-activity)。
+
+```ts
+observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+```
+
+<a id="entry-7688e1a189f14357" />
+
+### ConversationManager.observeTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/observe-turn)。
+
+```ts
+observeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+```
+
+<a id="entry-cb641f0c2dfe192c" />
+
+### ConversationManager.getTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/get)。
+
+```ts
+getTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<Snapshot<Turn | undefined>>;
+```
+
+<a id="entry-11d5e361ef07134f" />
+
+### ConversationManager.cancelTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/cancel)。
+
+```ts
+cancelTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<{ state: "requested" | "cancelled" | "already_finished"; }>;
+```
+
+<a id="entry-fbae63fd6c64a80f" />
+
+### ConversationManager.observeInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/observe-interactions)。
+
+```ts
+observeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: Observer<Interaction[]>): Promise<Subscription>;
+```
+
+<a id="entry-4940ca1dee0d49de" />
+
+### ConversationManager.refreshPendingInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/refresh-pending-interactions)。
+
+```ts
+refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<ConversationRef & { recovered: number; }>;
+```
+
+<a id="entry-f89bbc933516419f" />
+
+### ConversationManager.listInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/list)。
+
+```ts
+listInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }): Promise<Snapshot<Interaction[]>>;
+```
+
+<a id="entry-d57e2ba1a0eae2fa" />
+
+### ConversationManager.respondPermission
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/permission)。
+
+```ts
+respondPermission(ctx: Context, req: ConversationRef & { interactionId: string; optionId: string; expectedVersion: string; }): Promise<InteractionResponse>;
+```
+
+<a id="entry-5b7ece24c1359417" />
+
+### ConversationManager.respondQuestion
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/question)。
+
+```ts
+respondQuestion(ctx: Context, req: ConversationRef & { interactionId: string; expectedVersion: string; answer: { answers: { questionId: string; optionIds: string[]; text?: string; }[]; } | { skip: true; }; }, options?: MutationOptions): Promise<InteractionResponse>;
+```
+
+<a id="entry-56e75f349d14b9bc" />
+
+### ConversationManager.getQuestionResponseReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/get-question-response-receipt)。
+
+```ts
+getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+```
+
+<a id="entry-e5b81e5573dd689d" />
+
+### ResourceManager.attachImGroupFile
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-im-group-file)。
+
+```ts
+attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+```
+
+<a id="entry-9b6bc45a67e7522c" />
+
+### ResourceManager.getImGroupAttachmentOperation
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/get-im-group-attachment-operation)。
+
+```ts
+getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+```
+
+<a id="entry-f25fb930ed66dc64" />
+
+### ResourceManager.stageDraftAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
+
+```ts
+stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; uploadId: string; }): Promise<StagedAttachment>;
+```
+
+<a id="entry-330bd2b2d2e53a71" />
+
+### ResourceManager.listDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
+
+```ts
+listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+```
+
+<a id="entry-cf18ff833f7f18e7" />
+
+### ResourceManager.commitDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
+
+```ts
+commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; attachmentIds: string[]; }): Promise<CommittedAttachment[]>;
+```
+
+<a id="entry-a5b6f45fd6ff2567" />
+
+### ResourceManager.discardDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
+
+```ts
+discardDraftAttachments(ctx: Context, req: DraftRef & { attachmentIds: string[]; }): Promise<{ state: "discarded"; }>;
+```
+
+<a id="entry-9a3f2388353bf230" />
+
+### ResourceManager.getDraftAttachmentPreview
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
+
+```ts
+getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; }): Promise<Snapshot<AttachmentPreview>>;
+```
+
+<a id="entry-608bc1f9ceb2095e" />
+
+### ResourceManager.listWorkspaces
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
+
+```ts
+listWorkspaces(ctx: Context, req: RuntimeRef & { parentWorkspaceId?: string; }): Promise<Snapshot<WorkspacePage>>;
+```
+
+<a id="entry-d8ab4371b4671779" />
+
+### ResourceManager.createWorkspace
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
+
+```ts
+createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
+```
+
+<a id="entry-a5011f516e1673bd" />
+
+### ResourceManager.listResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/list-resources)。
+
+```ts
+listResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }): Promise<Snapshot<Resource[]>>;
+```
+
+<a id="entry-57d309be43f36483" />
+
+### ResourceManager.observeResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/observe-resources)。
+
+```ts
+observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: Observer<Resource[]>): Promise<Subscription>;
+```
+
+<a id="entry-68802dcb5df2c5e7" />
+
+### ResourceManager.observeConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/observe-conversation-resources)。
+
+```ts
+observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+```
+
+<a id="entry-1542c224bd6ba529" />
+
+### ResourceManager.getConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/get-conversation-resources)。
+
+```ts
+getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
+```
+
+<a id="entry-cc28f3cfa1d92bcb" />
+
+### ResourceManager.setConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/set-conversation-resources)。
+
+```ts
+setConversationResources(ctx: Context, req: ConversationRef & { resourceIds: string[]; expectedVersion: string; }): Promise<ResourceSelection>;
+```
+
+<a id="entry-3939a28ab8582358" />
+
+### ResourceManager.stageAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
+
+```ts
+stageAttachment(ctx: Context, req: ConversationRef & { file: Blob; name: string; }): Promise<StagedAttachment>;
+```
+
+<a id="entry-798b6e74c9daf7f8" />
+
+### ResourceManager.discardAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
+
+```ts
+discardAttachment(ctx: Context, req: ConversationRef & { attachmentId: string; }): Promise<{ state: "discarded"; }>;
+```
+
+<a id="entry-163ca4eaf5e10126" />
+
+### ResourceManager.getAttachmentAccess
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
+
+```ts
+getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: Int64; }>;
+```
+
+<a id="entry-d24c33b75c3baa1e" />
+
+### CreditManager.describeCreditPackageAgents
+
+类别：模型操作。[按模型查看操作](/api-reference/credits/describe-credit-package-agents)。
+
+```ts
+describeCreditPackageAgents(ctx: ExecutionContext, req: CreditPackageQuery): Promise<CreditPackageAgent[]>;
+```
+
+<a id="entry-bb6e344db72a0f4e" />
+
+### CreditManager.describeCreditUsageInfo
+
+类别：模型操作。[按模型查看操作](/api-reference/credits/usage)。
+
+```ts
+describeCreditUsageInfo(ctx: ExecutionContext, req: DescribeCreditUsageInfoRequest$1): Promise<CreditUsageInfo>;
+```
+
+<a id="entry-9684ee4c10553676" />
+
+### AspManager.getAspStreamSession
+
+类别：模型操作。[按模型查看操作](/api-reference/asp/get-asp-stream-session)。
+
+```ts
+getAspStreamSession(): AspStreamSession | null;
+```
+
+<a id="entry-08027e2b3ac19325" />
+
+### AspManager.startAspStream
+
+类别：模型操作。[按模型查看操作](/api-reference/asp/start)。
+
+```ts
+startAspStream(context: ExecutionContext, req: StartAspStreamRequest): Promise<void>;
+```
+
+<a id="entry-7103ddc1d8a5f6eb" />
+
+### AspManager.stopAspStream
+
+类别：模型操作。[按模型查看操作](/api-reference/asp/stop-asp-stream)。
+
+```ts
+stopAspStream(): Promise<void>;
+```
+
+<a id="entry-0d0a923904c36a09" />
+
+### SkillManager.listCategories
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/list-categories)。
+
+```ts
+listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+```
+
+<a id="entry-8008ba452b1f31fb" />
+
+### SkillManager.listInstalledSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/installed)。
+
+```ts
+listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+```
+
+<a id="entry-013d2389c6eae9e6" />
+
+### SkillManager.setSkillEnabled
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/set-skill-enabled)。
+
+```ts
+setSkillEnabled(ctx: ExecutionContext, req: SetSkillEnabledRequest): Promise<OperationTask[]>;
+```
+
+<a id="entry-fa4731b245a91355" />
+
+### SkillManager.listAgentAuthedSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/list-agent-authed-skills)。
+
+```ts
+listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
+```
+
+<a id="entry-c3dd4a78a1ab4a1b" />
+
+### SkillManager.entInstallSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/ent-install-skills)。
+
+```ts
+entInstallSkills(ctx: ExecutionContext, req: EntInstallSkillsRequest): Promise<OperationTask[]>;
+```
+
+<a id="entry-132d1affdcb40838" />
+
+### SkillManager.entUninstallSkills
+
+类别：模型操作。[按模型查看操作](/api-reference/skills/ent-uninstall-skills)。
+
+```ts
+entUninstallSkills(ctx: ExecutionContext, req: EntUninstallSkillsRequest): Promise<OperationTask[]>;
+```
+
+<a id="entry-24220ab1d4dfe5db" />
+
+### ModelManager.getAgentInstanceModelConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/models/get)。
+
+```ts
+getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
+```
+
+<a id="entry-2c0163612b521b93" />
+
+### ModelManager.setChannelGroupModel
+
+类别：模型操作。[按模型查看操作](/api-reference/models/set-channel-group-model)。
+
+```ts
+setChannelGroupModel(ctx: ExecutionContext, req: SetChannelGroupModelRequest, ...opts: CallOption[]): Promise<SetChannelGroupModelResult | null>;
+```

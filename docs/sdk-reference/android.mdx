@@ -1,0 +1,57 @@
+---
+title: "Android SDK"
+sidebarTitle: "安装与初始化"
+description: "在 Android 应用中接入无影，初始化 Client、观察资源并管理本地请求。"
+icon: "android"
+---
+
+Android SDK 使用 Java 包装与 Go 移动引擎，向 Android 应用提供无影的用户端集成入口。当前参考包含七个 Manager 的 **113 个 JSON 方法入口**；[完整方法目录](/reference/android/public)按实际移动清单展示，服务端 Java SDK 另见 [Java](/sdk-reference/java)。
+
+## 安装
+
+当前使用配套交付的两个本地 AAR，同时引入；文档尚未指定公共 Maven 坐标。Android 最低 API 23，包装库使用 compileSdk 34。将同一版本的文件放入应用模块的 `libs`：
+
+```kotlin
+// app/build.gradle.kts
+dependencies {
+    implementation(files("libs/wuying-mobile.aar"))
+    implementation(files("libs/wuying-sdk-android.aar"))
+}
+```
+
+`wuying-sdk-android.aar` 不内嵌 Go AAR。保留两份制品的混淆保留规则，并确认合并后的 Manifest 包含 `android.permission.INTERNET`。实际设备 ABI 必须与 Go AAR 匹配；当前构建目标为 arm64-v8a / x86_64，制品是否包含新增入口需按对应交付记录与哈希确认。
+
+## 认证与授权
+
+这是**用户端集成**。通过受信任后端取得 `authCode`，或者使用完整的 `loginToken`、`sessionId`、`endUserId` 登录态；两种模式择一。后端保管 AK/SK 并执行真实用户映射和授权校验，移动应用不嵌入服务端密钥。参见[授权与认证](/integration/01-auth-and-lifecycle)。初始化成功不会扩大用户的资源访问范围。
+
+## 初始化 Client
+
+下面是核心语句。`authCode`、`clientId`、私有数据库绝对路径 `dataFile` 与 `Client.Listener onEvent` 由宿主提供。使用 `com.aliyun.wuying.sdk` 的 Client、Methods、AndroidClient 和 `org.json.JSONObject`；在**工作线程**初始化。`AndroidClient.connect` 默认将回调派发到主 Looper。
+
+```java
+JSONObject config = new JSONObject()
+        .put("authCode", authCode)
+        .put("clientId", clientId)
+        .put("dataPath", dataFile);
+Client client = AndroidClient.connect(config);
+Client.Request watch = client.request(
+        Methods.runtimeObserveRuntimes, new JSONObject(), onEvent);
+```
+
+如需指定登录地域，补充 `loginRegionId`；完整配置见[移动合同](/reference/mobile/contract)。使用已有登录态时，将 `authCode` 一项替换为完整的三项 `loginToken`、`sessionId`、`endUserId`。`dataFile` 应位于 `Context.getFilesDir()` 等应用私有位置；账号目录名由应用安全映射，不直接拼接用户输入。`dataPath` 是绝对数据库**文件**路径，每个文件只交给一个活跃 Client。
+
+## 读取事件与释放
+
+回调接收 `SDKEvent`，`kind` 区分结果、快照、流片段与错误，`data` 可能是 `JSONObject` 或 `JSONArray`。保留快照投影、版本及字符串形式的 Int64，不把数据强制转成固定数组。终态看 `terminal`，业务失败读取 `error.code/outcome/retryable/traceId`；同步初始化或请求启动失败会抛出 `SDKFailure`。
+
+```java
+// 页面退出时释放自己持有的订阅；不会取消远端任务。
+watch.cancel();
+// 账号退出时在工作线程关闭 Client。
+client.close();
+```
+
+这里 `watch` 是上面 `client.request` 返回的 `Client.Request`。换账号先关闭旧实例，再使用新的私有数据库文件初始化。远端停止执行需显式调用对应的 `conversation.cancelTurn` 或 `conversation.cancelExecution` 并核对终态。
+
+[Client 与事件接口](/reference/android/client) · [全部 113 个方法](/reference/android/public) · [移动端数据与生命周期](/reference/mobile/contract)

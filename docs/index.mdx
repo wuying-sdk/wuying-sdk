@@ -1,0 +1,79 @@
+---
+title: "Wuying SDK 简介"
+sidebarTitle: "概览"
+description: "无影对外集成能力的统一入口，面向资源管理、资源内操作系统操作与 Agent 集成。"
+---
+
+import ClientInitialization from '/snippets/client-initialization.mdx';
+
+## 什么是 Wuying SDK？
+
+Wuying SDK（无影 SDK）是无影对外集成能力的统一入口，帮助开发者将无影的资源与服务接入自己的应用、业务系统和自动化流程。
+
+AI 云电脑是当前的重点场景。随着能力持续开放，SDK 将逐步覆盖无影各类资源的操作、资源内操作系统的操作，以及 Agent 的调用与交互。你可以通过这份文档了解无影有哪些可集成能力，再按业务场景选择接口与示例。
+
+## 集成能力有哪些？
+
+SDK 按四类能力提供集成入口：
+
+| 能力分类 | 模型与集成内容 |
+|---|---|
+| 云资源 | [Runtime](/domain-model/02-runtime-agent)、[ASP 流化](/domain-model/asp)、[端口服务](/domain-model/port-service)：查询与操作执行环境、连接画面或访问资源内服务 |
+| AI 能力 | [会话](/domain-model/03-conversation)、[Agent](/domain-model/agent)、[技能](/domain-model/11-cloud-capabilities)、[模型](/domain-model/model)、[附件与工作空间](/domain-model/attachment)：调用智能体并组织任务 |
+| 存储能力 | [云盘](/domain-model/wy-drive)、[知识库](/domain-model/knowledge-space)：访问文件与知识内容 |
+| 计量 | [Credit](/domain-model/credit)：查询套餐与用量 |
+
+具体可调用方法、语言支持和权限要求以当前 [API Reference](/api-reference/index) 为准；规划能力不视为已交付。查询结果读取、实时更新和错误恢复是共用接入方法，放在 Guides 中说明。
+
+## 先选择集成方式与认证路径
+
+| 场景 | 使用什么身份 | 从哪里开始 |
+|---|---|---|
+| 服务端调用云 API | AK/SK 签名，按相应云 API 的 RAM 授权调用 | [服务端认证与签名 Client](/integration/01-auth-and-lifecycle#服务端初始化签名-client-并申请用户票据) |
+| 用户端接入，或后端代表用户调用 | AuthCode 或完整用户登录态，按当前用户的授权范围操作 | [用户态 Client 初始化](/getting-started/initialize-client) |
+
+认证确认调用身份，授权决定能操作哪些资源。AK/SK 留在受信任后端；用户端从自己的认证后端取得用户票据。接入方 `clientId` 不能替代身份凭据或资源权限。完整流程见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 示例：初始化用户态 Client
+
+先按[接入准备](/getting-started/overview)安装同版本 SDK，并由宿主取得当前用户的 AuthCode、接入方 Client ID 和私有数据配置。以下只展示核心初始化语句，`authCode`、`clientId` 与数据文件由宿主提供；Go、Android、iOS 的 `dataFile` 为绝对数据库文件路径字符串，Java 为 `Path`。Node 需先配置真实持久化；完整导入和参数见[初始化指南](/getting-started/initialize-client)。
+
+<ClientInitialization />
+
+Android / iOS 需先安装配套原生制品，在工作线程初始化，并使用应用私有、按账号隔离的数据库文件；安装入口：[Android](/sdk-reference/android) / [iOS](/sdk-reference/ios)。
+
+构造成功不等于在线认证通过；接下来执行[只读验证](/getting-started/initialize-client#4-验证在线身份与授权)，再[创建会话并发送第一个任务](/getting-started/first-conversation)。调用方处理错误，退出登录时关闭 Client。
+
+<Note>
+上面的示例使用用户票据；服务端签名 Client 的初始化见[认证指南](/integration/01-auth-and-lifecycle)。已有登录态的初始化示例与各语言字段对应关系见[初始化 Client](/getting-started/initialize-client)。
+</Note>
+
+## 当前接入指南
+
+<CardGroup cols={2}>
+  <Card title="运行完整 Demo" icon="code" href="/examples/index">
+    选择环境、实时观察消息，再进入 Go / Java / Node 完整源码。
+  </Card>
+  <Card title="接入聊天界面" icon="message" href="/guides/streaming">
+    按消息身份更新快照，区分受理、执行终态与最终答案。
+  </Card>
+  <Card title="上传文件与处理审批" icon="paperclip" href="/integration/03-attachments-and-interactions">
+    添加任务附件，显示审批与问题并提交用户选择。
+  </Card>
+  <Card title="查询精确 API" icon="brackets-curly" href="/sdk-reference/index">
+    Go、Java、JavaScript / TypeScript、Android、iOS 与 CLI 的安装和接口参考。
+  </Card>
+</CardGroup>
+
+## 继续接入 Agent 业务
+
+| 对象 | 你用它做什么 |
+|---|---|
+| [Client](/domain-model/01-client) | 持有身份、连接与数据配置，取得各领域 Manager |
+| [Runtime](/domain-model/02-runtime-agent) | 明确选择在哪里执行 |
+| [Agent](/domain-model/agent) | 选择由哪个 Agent 执行 |
+| [Conversation](/domain-model/03-conversation) | 组织一次业务会话，复用后续轮次 |
+| [Message](/domain-model/05-message) | 展示与更新真实消息 |
+| [Turn](/domain-model/06-turn-items) | 确认每轮执行状态 |
+
+首次使用按[快速开始](/getting-started/overview)操作；已有集成问题可按[任务指南](/guides/index)查找。完整关系见[领域模型](/domain-model/00-overview)。

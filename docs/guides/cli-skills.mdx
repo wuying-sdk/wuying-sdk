@@ -1,0 +1,57 @@
+---
+title: "通过 Skill 使用 CLI"
+description: "安装随 CLI 交付的云资源管理与远程 Agent Skill，让 Agent 按真实身份、资源和操作回执调用无影。"
+---
+
+配套 Skill 告诉 Agent 如何使用无影 CLI：选择当前身份和资源、构造必要请求、理解返回结果，并在失败后恢复。Skill 与 CLI 一起交付，认证和业务操作仍通过 CLI 使用同一套 SDK。
+
+## 选择 Skill
+
+| Skill | 适用任务 | 源码阅读 |
+|---|---|---|
+| `wuying-cloud-resources` | 创建、启动、停止、重启、重置及释放云桌面，等待创建就绪，获取用户 AuthCode | [SKILL.md](/downloads/skills/wuying-cloud-resources/SKILL.md.txt) |
+| `wuying-remote-desktop` | 选择已授权 Runtime 与 Agent、发起任务、读取结果、处理审批与问答 | [SKILL.md](/downloads/skills/wuying-remote-desktop/SKILL.md.txt) |
+
+仓库位置为 `wuying-sdk-cli/skills/`，CLI 安装包包含这两个完整目录及其 references。可[下载同版本 Skill 包](/downloads/skills/wuying-cli-skills.zip)检查或按宿主要求安装；Skill 包不包含 CLI 可执行文件和凭据。
+
+## 安装到 Codex
+
+先按 [CLI 指南](/sdk-reference/cli)安装客户交付的 CLI 包，确认 `wuying --help` 可用，再执行：
+
+```sh
+wuying codex install
+```
+
+该命令将两个 Skill 安装到用户的 `~/.agents/skills/`。只为指定项目安装时：
+
+```sh
+wuying codex install --scope project --project-dir /absolute/project
+```
+
+项目安装位置是 `.agents/skills/`。命令返回两个 Skill 的路径，并为这台机器写入绝对 CLI 路径作为 PATH 不可用时的后备入口。必要时开启新会话以发现 Skill；目录发现规则见 [OpenAI 官方 Skill 文档](https://learn.chatgpt.com/docs/build-skills)。
+
+安装不配置 AK/SK 或用户凭据，也不授予资源权限。当前文档和 Skill 对应本次源码草稿，安装前应核对 [CLI 版本与来源](/api-reference/coverage/index)，使用由该源码构建的配套 CLI；旧交付包不具备新增命令。
+
+## 开始使用
+
+通过客户自己的环境或认证流程配置管理员/用户态凭据，见[授权与认证](/integration/01-auth-and-lifecycle)。不要把 AK/SK、AuthCode 或 LoginToken 粘贴到对话中。
+
+明确要操作的身份、地域和资源后，可这样提问：
+
+```text
+使用 $wuying-cloud-resources，以 admin profile 启动 cn-hangzhou 的云桌面 desktop-id，并保留操作回执。
+```
+
+将示例地域和 ID 换成实际已授权资源。远程 Agent 任务则使用另一项 Skill：
+
+```text
+使用 $wuying-remote-desktop，在我指定的 Runtime 和 Agent 中执行任务，并返回最终结果。
+```
+
+`--profile` 不会覆盖环境凭据；切换到用户 profile 前，应由宿主移除管理员环境凭据。资源受理不等于操作完成，远程任务受理也不等于 Turn 已完成；两个 Skill 分别说明各自的结果判断和恢复方式。
+
+## 更新与其他 Agent 宿主
+
+更新配套 CLI 后，重新执行安装命令即可更新 CLI 管理的 Skill 文件；客户额外添加的文件会保留。若目标目录由客户自行维护，或受管理路径存在符号链接，命令返回冲突，不覆盖它。客户可保留原目录，并将新 Skill 安装到另一个明确选择的项目。
+
+其他支持 Skill 的 Agent 宿主，可按其自身机制加载下载包中的完整 Skill 目录。需要在 Agent 实际运行的环境中安装 CLI；手工复制时保留 references，确认 `wuying` 在 PATH 中或配置宿主认可的可执行路径。当前自动安装命令只针对 Codex，其他宿主不宣称已经完成适配验收。

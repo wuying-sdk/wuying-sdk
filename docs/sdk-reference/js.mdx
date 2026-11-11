@@ -1,0 +1,117 @@
+---
+title: "JS / TypeScript SDK 客户集成指南"
+description: "JS / TypeScript SDK 客户集成指南：职责、模型关联、生命周期、公开操作与使用边界。"
+---
+
+当前为 **RuntimeManager 首版未提交草稿**；下文 SHA 为基础提交，非当前完整源码身份。源码归档及逐文件哈希见文档站覆盖清单；不代表已发布制品。
+
+以下文中的交付路径必须替换为本次源码重新构建的制品；旧交付包不具备这些接口。
+
+业务模型、关系与生命周期先读 [领域文档](/index)；本页保留该语言的安装、配置和代码接线。
+
+当前草稿基线：2026-11-11，源码 `ea48f8775d28753cefef13b937982dd44587aa51`，npm 包名 `@aliyun/wuying-sdk`，包版本 `1.0.0`。本页对应以上基线加 RuntimeManager 未提交源码草稿，重新构建后，请以交付 SHA-256 为准，不假设 npm 公网上的同名版本与之相同。
+
+## 安装与运行环境
+
+在客户项目目录执行（路径按解压位置调整）：
+
+```sh
+npm install /absolute/path/to/kit/sdks/js/aliyun-wuying-sdk-1.0.0.tgz
+```
+
+Windows 使用带引号的本地路径。包同时包含 CommonJS、ESM 和 TypeScript 声明；通过 `import {Client} from '@aliyun/wuying-sdk'` 或 `require('@aliyun/wuying-sdk')` 进入公开根 Client。`sdks/js/runtime` 是相同构建的可检查输出，不含 Node 的持久化 shim。浏览器 ESM 在 `sdks/js/browser/index.mjs`；用 HTTP 静态服务托管，不用 file://。已提供 [browser.html](/downloads/examples/js/browser.html.txt) 只读集成模板，须由客户宿主在运行时注入授权材料。
+
+SDK package 标注 Node &gt;=18；本交付 Node 示例 / CLI / QA 统一验收 Node 22 LTS（22.18+）或 24.11+，不要把较低引擎下限当成本示例已验证。现代浏览器需要 IndexedDB、WebSocket、fetch，受企业网络 / CSP / 代理策略影响。
+
+## 浏览器最小调用
+
+```js
+const client = Client.create(
+  {authCode: hostSuppliedAuthCode},
+  {clientId: authorizedClientId},
+);
+try {
+  const ctx = {timeout: 60000};
+  const runtimesAPI = await client.buildRuntimeManager(ctx);
+  const runtimes = await runtimesAPI.listRuntimes(ctx);
+  // 使用 runtimes.data，同时保留 runtimes.projection。
+} finally {
+  await client.close();
+}
+```
+
+`Client.create` 同步返回根 Client；登录与 Manager 准备的异步错误仍需捕获。也可使用 `loginToken/sessionId/endUserId` 完整组合，可选 `loginRegionId`。由宿主负责认证、账号切换与材料更新。Web 禁止放置 AK/SK，禁止把令牌写进 URL、localStorage 或诊断。集成不依赖原桌面端登录文件。
+
+## Node 持久化
+
+Node 没有原生 IndexedDB。使用随包 `examples/js`，其依赖为本地 SDK tgz + `indexeddbshim@19.0.7`，安装后自动执行与当前 CLI 一致的 SQLite 调度补丁。保留 package.json 的 postinstall，不用 `--ignore-scripts` 跳过。首次安装可能下载目标平台的 SQLite 预编译件；没有匹配件时需 npm/node-gyp 要求的 Python、C/C++ 构建工具和网络。
+
+```sh
+cd examples/js
+npm install
+node read-only.mjs --help
+```
+
+该示例先在私有 `WUYING_DATA_PATH` **目录**建立 shim，再创建 Client，明确不定义 window/location，以免 SDK 误判为浏览器模式。不要只注入一个空 indexedDB 对象或共享多账号目录。Go/Java 的 DataPath 是文件，本示例则是目录。
+
+真实测试由宿主安全注入 `WUYING_CLIENT_ID`、`WUYING_DATA_PATH`，以及 `WUYING_AUTH_CODE` 或完整 `WUYING_LOGIN_TOKEN/WUYING_SESSION_ID/WUYING_END_USER_ID`；可选 `WUYING_LOGIN_REGION_ID`，然后 `node read-only.mjs --live-read`。只输出运行环境数量 / 投影阶段。`sdk-smoke --language=js` 仅加载 tgz 同构 ESM 并测试非法空凭据被拒绝，不安装 shim，也不登录。
+
+## 会话、消息与交互
+
+```js
+const ctx = {timeout: 60000};
+const conversations = await client.buildConversationManager(ctx);
+// selection 的 runtimeId / agentId 来自用户选定的 SDK 查询结果。
+const created = await conversations.createConversation(ctx, {
+  ...selection, mode: 'single', name: '客户测试会话',
+});
+// 从 created 的公开结果取得 conversationId，勿自行猜测或使用桌面 ID。
+const ref = {runtimeId, conversationId};
+const sub = await conversations.observeMessages(ctx, ref, {
+  onSnapshot(page) { renderByStableId(page); },
+  onError(error) { showSanitizedError(error); },
+});
+try {
+  const completion = await conversations.sendMessageAndWait(ctx, {...ref, text: '你好'});
+  // 核对 completion 的执行终态；收到消息不等于整轮成功。
+} finally { sub.unsubscribe(); }
+```
+
+此段是业务接线模板；`selection/runtimeId/conversationId/renderByStableId/showSanitizedError` 由宿主实现。精确类型和结果字段见 tgz 内 `dist/index.d.ts` 与 `docs/NodeJS-SDK-API-V3.md`。消息观察是快照，请按 Message ID 对账，不能每次整体追加。订阅上下文的 timeout 要匹配实际订阅生命周期，不应直接复用过期调用上下文。
+
+附件通过 SDK staging 后把 attachmentIds 传入消息请求；文件路径文本本身不上传。审批/问答从公开 Interaction 观察中取得真实 ID、option ID、writeVersion，再调用对应 `respondPermission/respondQuestion`。未知回执先精确刷新和对账，不自动重答。执行中 steer、分叉或技能等以交付 SDK 的公开能力和远端能力协商为准，不依据 demo 页面可见就宣布支持。
+
+## 错误与验收
+
+遵守 [共用规则](/domain-model/00-overview)，关闭订阅与 Client。保存业务 ID 与脱敏错误类别，不记录原始带令牌对象。正式 API / 迁移指南 / 交互指南随 npm tgz 一起提供。优先跑包完整性和只读示例，再按 [业务验收](/support/validation) 测收发、附件和审批。Node 原生模块需在目标平台安装，不能把 macOS 的 node_modules 复制给 Windows/Linux。
+
+## 完整业务示例与发布输出
+
+本版按既有 Node 发布流程保留 CJS、Node ESM、浏览器 ESM、Source Map、完整类型声明、公开 API 与迁移文档，而不仅是一页快速上手。正式参考入口为 [API V3](/reference/js/api)、[当前声明文件](/downloads/reference/js/index.d.ts.txt)、[新版交互](/domain-model/07-interaction) 和 [退役迁移](/support/migration)。历史说明与当前声明冲突时，以本包声明和实际能力为准。
+
+[conversation-workflow.mts](/downloads/examples/js/conversation-workflow.mts.txt) 是既有 Node 发布脚本使用的根 API 组合示例，接收调用者选择，订阅先于发送，并在所有结果下退订。该历史组合函数不示范完整幂等恢复；需要稳定 mutationId/clientCommandId 时使用下面的新可运行 workflow。本次另外提供 [workflow.mjs](/downloads/examples/js/workflow.mjs.txt) 可运行 Node 版本：在 examples/js 安装依赖后，默认 `node workflow.mjs --help` 不访问业务；显式 `--send` 才创建并发送。
+
+除认证/数据目录外，宿主需注入 `WUYING_RUNTIME_ID`、`WUYING_AGENT_ID`、`WUYING_CREATE_ID`、`WUYING_COMMAND_ID`、`WUYING_INPUT_FILE`。人工选择查询返回的环境/Agent；输入文件为 UTF-8，示例只记录 ID/计数/阶段，业务可以将消息快照交给自己的渲染函数。每次 snapshot 按稳定 ID 替换，不当作 token delta。
+
+独立 JS SDK 包提供宿主安全注入的浏览器只读演示（见 demos/host-injected-readonly.html），不收集 AK/SK、不把凭据写入 localStorage 或日志。旧 Node 发布脚本里的 ASP / streaming-only 页面带有过时的凭据处理方式，不随本包交付；相关能力按当前公开 API 由客户宿主安全接线。SDK 本体不包含生产账号。
+
+| 分发方式 | 使用方式 |
+|---|---|
+| npm tgz | 在客户工程 npm install 本地 tgz，再从 @aliyun/wuying-sdk 根导入 |
+| Node CJS | sdks/js/runtime/index.js，默认导出声明由本包类型给出 |
+| Node ESM | sdks/js/runtime/index.mjs；原生 Node 仍须先提供持久 IndexedDB |
+| Browser ESM | sdks/js/browser/index.mjs；通过 HTTP 模块导入，不直接在 Node 使用 |
+| TypeScript | npm 的 dist/index.d.ts 与 reference/js/index.d.ts 对应同构建 |
+
+资源、附件、问答、错误及迁移说明都有配套详细指南；旧 IM 子路径不因为存在说明文档就重新成为公共导入入口。
+
+## 配套场景指南
+
+- [认证与生命周期](/integration/01-auth-and-lifecycle)：配置来源、账号/存储隔离、关闭和重登。
+- [会话与流式](/integration/02-conversations-and-streams)：受理/终态、快照渲染、分页、未知结果恢复。
+- [附件和交互](/integration/03-attachments-and-interactions)：暂存、审批、问答、工作空间与产物边界。
+- [错误与运维](/integration/04-errors-and-operations)：错误决策、诊断、升级回滚与客户验收。
+
+## 当前草稿的制品
+
+以下 `sdks/`、测试包及本地 tgz/jar 路径描述交付布局。本次源码尚未重新封装为完整交付包；审核当前接口须先用 RuntimeManager 草稿源码重新构建并替换对应制品。旧交付包与公网上同名版本不具备本页的新接口。源码和构建命令见各 SDK README；来源身份见 文档站的全量覆盖清单。

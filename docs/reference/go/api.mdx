@@ -1,0 +1,2833 @@
+---
+title: "Go 公共 API 参考"
+description: "同版本 Go 根入口、config、manager 与 model 公共包的完整签名。"
+---
+
+由本次 RuntimeManager 源码草稿执行 go doc -all 生成，基础提交 ea48f8775d28753cefef13b937982dd44587aa51，不是该提交原始制品。
+
+## .
+
+```go
+package wuying // import "github.com/aliyun/wuying-sdk-go"
+
+Package wuying provides a unified SDK for Alibaba Cloud Wuying services.
+
+Usage:
+
+    client, err := wuying.NewClient(
+        wuying.ClientOptions{AuthCode: "your-auth-code"},
+        nil, // use default config, or pass *config.Config for customization
+    )
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer client.Close()
+
+TYPES
+
+type Client struct {
+	// Has unexported fields.
+}
+    Client owns exactly one login lifetime. It is independent of other Client
+    instances.
+
+func NewClient(opts ClientOptions, cfg *config.UserConfig) (*Client, error)
+
+func (c *Client) BuildAgentManager(ctx context.Context) (*manager.AgentManager, error)
+
+func (c *Client) BuildConversationManager(ctx context.Context) (*manager.ConversationManager, error)
+
+func (c *Client) BuildCreditManager(ctx context.Context) (*manager.CreditManager, error)
+
+func (c *Client) BuildModelManager(ctx context.Context) (*manager.ModelManager, error)
+
+func (c *Client) BuildResourceManager(ctx context.Context) (*manager.ResourceManager, error)
+
+func (c *Client) BuildRuntimeManager(ctx context.Context) (*manager.RuntimeManager, error)
+    BuildRuntimeManager exposes runtime discovery and cloud-instance management
+    for this Client.
+
+func (c *Client) BuildSkillManager(ctx context.Context) (*manager.SkillManager, error)
+
+func (c *Client) Close() error
+
+func (c *Client) Create(ctx context.Context, r *model.CreateDesktopsRequest, options ...model.DesktopCreateOptions) (*model.CreateDesktopsResponse, error)
+    Create uses the unified AK/SK Client. Wait=true waits for resource events
+    without resubmitting creation.
+
+func (c *Client) Delete(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+
+func (c *Client) GetAuthCode(ctx context.Context, r *model.GetAuthCodeRequest) (*model.GetAuthCodeResponse, error)
+    GetAuthCode issues a user authorization code through this same AK/SK Client.
+
+func (c *Client) OnStreamEvent(ctx context.Context, handler agmessage.StreamHandler) (func(), error)
+    OnStreamEvent在既有Client上增加不透明事件订阅，不改变SendMessageStream的业务命令语义。
+    需先在UserConfig.Streaming中启用；可在建立Runtime前注册，回调不得长时间阻塞。
+
+func (c *Client) Reboot(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+
+func (c *Client) Reset(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+
+func (c *Client) Start(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+
+func (c *Client) Stop(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+
+func (c *Client) Wait(ctx context.Context, r *model.WaitDesktopsRequest) (*model.WaitDesktopsResponse, error)
+    Wait observes only requested resources. Events are produced by signed,
+    bounded DescribeDesktops reads.
+
+type ClientOptions struct {
+	AccessKeyID     string
+	AccessKeySecret string
+	AuthCode        string
+	LoginToken      string
+	SessionID       string
+	EndUserID       string
+	LoginRegionID   string
+}
+
+func (o ClientOptions) GoString() string
+
+func (o ClientOptions) String() string
+
+```
+
+## ./config
+
+```go
+package config // import "github.com/aliyun/wuying-sdk-go/config"
+
+
+VARIABLES
+
+var DiscardLogger = slog.New(slog.NewTextHandler(io.Discard, nil))
+    DiscardLogger is a shared no-op logger that discards all output.
+
+
+TYPES
+
+type Config interface {
+	// Core
+	Timeout() time.Duration
+	MaxRetries() int
+	RetryBaseDelay() time.Duration
+	RetryMaxDelay() time.Duration
+	Logger() *slog.Logger
+	ClientID() string
+	RelayMaxDataBytes() int
+	InitialSync() InitialSyncConfig
+
+	// IM
+	IMDataDir() string
+	IMPlatformID() int32
+	IMLogLevel() uint32
+	IMLogFilePath() string
+
+	// Auth
+	AuthCodeRefreshInterval() time.Duration
+	LoginTokenDefaultExpiry() time.Duration
+
+	// Cloud API
+	AppStreamEndpoint() string
+	SkillMgmtEndpoint() string
+	SalesEndpoint() string
+
+	// AK/SK for signed API calls
+	AccessKeyID() string
+	AccessKeySecret() string
+}
+    Config is the internal configuration interface consumed by SDK internals.
+
+func MergeToInternal(user *UserConfig) (Config, error)
+    MergeToInternal merges UserConfig with internal defaults and returns a
+    Config. Pass nil to use all defaults.
+
+type DirectoryConfig struct {
+	// ReconcileIntervalMs 是完整目录对账间隔，单位毫秒；0 默认1800000（30分钟），
+	// 必须为正数。它不是消息补拉周期，也不影响首个群 Ready。
+	ReconcileIntervalMs int64
+}
+    DirectoryConfig 控制群目录低频全量元数据对账；增量变化不受该周期影响。
+
+func DirectoryPolicy(c Config) DirectoryConfig
+    DirectoryPolicy为可选配置能力，不扩展旧Config的必选方法，兼容外部自定义实现。
+
+type InitialSyncConfig struct {
+	ReadyGroupLimit  int  // 未传/0 默认5；允许1–100。
+	WaitForAllGroups bool // true 等待全部群完整补齐后 Ready。
+}
+    InitialSyncConfig 只改变新虚拟群消息的 Ready 边界，不减少单群历史同步。
+
+type StreamingConfig struct {
+	Enabled bool
+	OnEvent agmessage.StreamHandler
+}
+    StreamingConfig由宿主显式启用；OnEvent接收原样数据，不经过AG正文解析器。
+
+func StreamingPolicy(c Config) StreamingConfig
+    StreamingPolicy是可选配置能力，不扩展既有Config必选接口，兼容自定义配置实现。
+
+type UserConfig struct {
+	// Streaming仅启用不透明流式事件；不会改变原消息投影或中继配置。
+	Streaming *StreamingConfig
+	// RelayMaxDataBytes 为中继请求/响应的本地发送上限；0 默认 10 MiB，只可调小。落库仍限 1 MiB。
+	RelayMaxDataBytes int
+	// InitialSync 为 nil 时最近5群优先，其余群按需同步。
+	InitialSync *InitialSyncConfig
+	// Directory 为 nil 时使用默认低频目录全量对账周期。
+	Directory *DirectoryConfig
+	// DataPath is an SDK-owned bbolt file; it is never the legacy OpenIM directory.
+	DataPath string
+	// AppStreamEndpoint selects the management environment. HTTPS is required outside loopback tests.
+	AppStreamEndpoint string
+
+	// Timeout is the HTTP request timeout.
+	// Default: 30s.
+	Timeout time.Duration
+
+	// MaxRetries is the maximum number of retry attempts.
+	// Default: 3. Leave as 0 (zero value) to use the default.
+	MaxRetries int
+
+	// Logger is the structured logger for SDK output.
+	// Default: stdout text logger.
+	Logger *slog.Logger
+
+	// ClientID is the client identifier used in API requests.
+	// Default: "sdk-client".
+	ClientID string
+
+	// IMDataDir is the local data directory for the IM SDK.
+	// Default: /tmp/wuying-im-data.
+	IMDataDir string
+
+	// IMPlatformID is the platform identifier for the IM SDK.
+	// 1=Linux, 2=Windows, 3=MacOS, 4=iOS, 5=Android, 6=Web.
+	// Default: 1.
+	IMPlatformID int32
+
+	// SkillMgmtEndpoint is the endpoint for Skill Management APIs.
+	// Default: "https://ecd.cn-shanghai.aliyuncs.com".
+	SkillMgmtEndpoint string
+
+	// SalesEndpoint is the endpoint for Sales/Credit APIs.
+	// Default: "https://ecd.cn-shanghai.aliyuncs.com".
+	SalesEndpoint string
+
+	// AccessKeyID is the Alibaba Cloud access key ID for AK/SK signed API calls.
+	// Required for Model Config APIs (GetAgentInstanceModelConfig, SetChannelGroupModel).
+	AccessKeyID string
+
+	// AccessKeySecret is the Alibaba Cloud access key secret for AK/SK signed API calls.
+	// Required for Model Config APIs.
+	AccessKeySecret string
+}
+    UserConfig holds user-facing SDK configuration. Pass nil to NewClient to use
+    all defaults.
+
+```
+
+## ./manager
+
+```go
+package manager // import "github.com/aliyun/wuying-sdk-go/manager"
+
+
+FUNCTIONS
+
+func CallOptionsFrom(opts []CallOption) func(result interface{}, err error)
+    CallOptionsFrom extracts the async callback from call options. Returns nil
+    if no async callback is configured.
+
+
+TYPES
+
+type AgentManager struct {
+	// Has unexported fields.
+}
+
+func NewAgentManager(s *business.Service) *AgentManager
+
+func (a *AgentManager) DeleteWyDriveFile(ctx context.Context, r m.DeleteWyDriveFileRequest) error
+
+func (a *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+
+func (a *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+
+func (a *AgentManager) DownloadKnowledgeFiles(ctx context.Context, r m.DownloadKnowledgeFilesRequest) ([]m.DownloadKnowledgeFileResult, error)
+
+func (a *AgentManager) GetAgentModelCatalog(ctx context.Context, r m.ModelCatalogQuery) (m.Snapshot[m.AgentModelCatalog], error)
+
+func (a *AgentManager) GetDownloadURL(ctx context.Context, r m.GetDownloadUrlRequest) (m.DownloadUrlInfo, error)
+
+func (a *AgentManager) GetExpertDirectory(ctx context.Context, r m.ExpertQuery) (m.Snapshot[m.ExpertDirectory], error)
+
+func (a *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+
+func (a *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+
+func (a *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
+
+func (a *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+
+func (a *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+
+func (a *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+
+func (a *AgentManager) ObserveAgents(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
+
+type ApproveFotaUpdateRequest struct {
+	// Agent 运行资源 ID（来自 agent.RuntimeResourceInfo.ResourceId）
+	ResourceId string `json:"resource_id"`
+	// 目标应用版本（来自 agent.FotaUpdate.NewFotaVersion 或 NewAppVersion）
+	AppVersion string `json:"app_version"`
+	// 客户端 UUID（可选）
+	Uuid string `json:"uuid,omitempty"`
+	// 目标状态（可选）
+	TargetStatus string `json:"target_status,omitempty"`
+	// 区域 ID，默认 cn-shanghai
+	RegionId string `json:"region_id,omitempty"`
+}
+    ApproveFotaUpdateRequest is the request for ApproveFotaUpdate.
+
+type CallOption func(*callOptions)
+    CallOption configures a single API call.
+
+func WithAsync(callback func(result interface{}, err error)) CallOption
+    WithAsync enables async mode. The callback is invoked in a goroutine when
+    the operation completes with either the result or an error.
+
+    Usage:
+
+        // Synchronous (default)
+        msg, err := mgr.SendTextMessage(ctx, req)
+
+        // Asynchronous
+        mgr.SendTextMessage(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            msg := result.(*model.Message)
+            // handle result or error
+        }))
+
+type ConversationManager struct {
+	// Has unexported fields.
+}
+
+func NewConversationManager(s *business.Service) *ConversationManager
+
+func (a *ConversationManager) AddMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+
+func (a *ConversationManager) ArchiveConversation(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
+
+func (a *ConversationManager) CancelExecution(ctx context.Context, r m.CancelExecutionRequest) (m.StateResult, error)
+
+func (a *ConversationManager) CancelTurn(ctx context.Context, r m.TurnRef) (m.StateResult, error)
+
+func (a *ConversationManager) CreateConversation(ctx context.Context, r m.CreateRequest, options ...m.MutationOptions) (m.CreatedConversation, error)
+
+func (a *ConversationManager) GetCommandReceipt(ctx context.Context, r m.CommandReceiptRef) (m.Snapshot[m.CommandReceipt], error)
+
+func (a *ConversationManager) GetComposerCapabilities(ctx context.Context, r m.ComposerQuery) (m.Snapshot[m.ComposerCapabilities], error)
+
+func (a *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+
+func (a *ConversationManager) GetConversationConfig(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.EffectiveConfig], error)
+
+func (a *ConversationManager) GetConversationHeaderMetadata(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ConversationHeaderMetadata], error)
+
+func (a *ConversationManager) GetConversationStorageContext(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, error)
+
+func (a *ConversationManager) GetConversationSummary(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.Conversation], error)
+
+func (a *ConversationManager) GetMemberSnapshot(ctx context.Context, r m.MemberSnapshotQuery) (m.Snapshot[m.MemberSnapshot], error)
+
+func (a *ConversationManager) GetMessageDetail(ctx context.Context, r m.MessageDetailQuery) (m.Snapshot[*m.MessageDetail], error)
+
+func (a *ConversationManager) GetMessageFiles(ctx context.Context, r m.MessageFilesQuery) (m.Snapshot[m.MessageFilesResult], error)
+
+func (a *ConversationManager) GetMessagePresentation(ctx context.Context, r m.PresentationQuery) (m.Snapshot[*m.MessagePresentation], error)
+
+func (a *ConversationManager) GetMutation(ctx context.Context, r m.MutationRef) (m.Snapshot[m.MutationStatus], error)
+
+func (a *ConversationManager) GetQuestionResponseReceipt(ctx context.Context, r m.QuestionResponseRef) (m.Snapshot[m.CommandReceipt], error)
+
+func (a *ConversationManager) GetTurn(ctx context.Context, r m.TurnRef) (m.Snapshot[*m.Turn], error)
+
+func (a *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnapshot], error)
+
+func (a *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.SidebarGroup]], error)
+
+func (a *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+
+func (a *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+
+func (a *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity], error)
+
+func (a *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
+    ListGroupSyncStates只读取该Runtime的群目录状态，不下载非热点群历史。
+
+func (a *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
+    ListGroups读取服务器群目录的一页，按 runtimeId（必要时加 AG 原始会话 ID） 服务端过滤；不连接全部 AG、不等待消息
+    Ready、不自动翻页。
+
+func (a *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+
+func (a *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+
+func (a *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+
+func (a *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+
+func (a *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+
+func (a *ConversationManager) ObserveActiveExecutions(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.Observer[m.CommandReceipt]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveConversationConfig(ctx context.Context, r m.ConversationRef, o m.Observer[m.EffectiveConfig]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.Observer[m.Page[m.SidebarGroup]]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.Observer[m.ConversationHistory]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveConversations(ctx context.Context, r m.ConversationQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveExecutionActivity(ctx context.Context, r m.ConversationRef, o m.Observer[[]m.ExecutionActivity]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveInteractions(ctx context.Context, r m.InteractionQuery, o m.Observer[[]m.Interaction]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveLiveProcess(ctx context.Context, r m.ConversationRef, o m.Observer[m.LiveProcessSnapshot]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveMembers(ctx context.Context, r m.MemberQuery, o m.Observer[[]m.Member]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveMessages(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveMutation(ctx context.Context, r m.MutationRef, o m.Observer[m.MutationStatus]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
+
+func (a *ConversationManager) ObserveTurn(ctx context.Context, r m.TurnRef, o m.Observer[*m.Turn]) (m.Subscription, error)
+
+func (a *ConversationManager) OnGroupSyncState(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
+    OnGroupSyncState订阅后立即获得已有状态，不要求业务方理解或维护内部seq。
+
+func (a *ConversationManager) PrepareConversationAttachmentTarget(ctx context.Context, r m.ConversationRef) (m.ConversationAttachmentTarget, error)
+
+func (a *ConversationManager) RefreshPendingInteractions(ctx context.Context, r m.ConversationRef) (m.RecoveredInteractions, error)
+
+func (a *ConversationManager) RemoveMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+
+func (a *ConversationManager) RenameConversation(ctx context.Context, r m.RenameRequest, options ...m.MutationOptions) (m.ConversationRef, error)
+
+func (a *ConversationManager) ResolveConversationRead(ctx context.Context, r m.ConversationReadQuery) (m.ConversationReadBinding, error)
+
+func (a *ConversationManager) RespondPermission(ctx context.Context, r m.PermissionRequest) (m.InteractionResponse, error)
+
+func (a *ConversationManager) RespondQuestion(ctx context.Context, r m.QuestionRequest, options ...m.MutationOptions) (m.InteractionResponse, error)
+
+func (a *ConversationManager) SendMessage(ctx context.Context, r m.SendRequest) (m.MessageAccepted, error)
+
+func (a *ConversationManager) SendMessageAndWait(ctx context.Context, r m.SendRequest) (m.MessageCompletion, error)
+
+func (a *ConversationManager) SendMessageStream(ctx context.Context, r m.SendRequest) m.MessageStream
+
+func (a *ConversationManager) SetConversationConfigOption(ctx context.Context, r m.ConfigOptionRequest) (m.ConversationRef, error)
+
+func (a *ConversationManager) SetConversationPinned(ctx context.Context, r m.PinnedRequest, options ...m.MutationOptions) (m.ConversationRef, error)
+
+func (a *ConversationManager) SteerTurn(ctx context.Context, r m.SteerRequest) (m.SteerResult, error)
+
+func (a *ConversationManager) SyncConversation(ctx context.Context, r m.ConversationRef) (m.GroupSyncState, error)
+    SyncConversation按业务会话定位唯一群，等待本轮历史完整接收和应用；取消只结束当前调用等待。
+
+func (a *ConversationManager) SyncGroup(ctx context.Context, r m.GroupRef) (m.GroupSyncState, error)
+    SyncGroup按 groupId 显式同步单个群，适合从目录分页拿到 groupId 后调用。
+
+func (a *ConversationManager) UnarchiveConversation(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
+
+func (a *ConversationManager) UpdateConversationConfig(ctx context.Context, r m.ConfigRequest) (m.ConversationRef, error)
+
+func (a *ConversationManager) UpdateMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+
+type CreditManager struct {
+	// Has unexported fields.
+}
+
+func NewCreditManager(sc *container.ServiceContainer) *CreditManager
+
+func (m *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+
+func (m *CreditManager) DescribeCreditUsageInfo(ctx context.Context, r *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
+
+type DescribeCreditPackageAgentsRequest struct {
+	// FillAgentSet distinguishes explicit false from the Node default true in CreditManager.
+	FillAgentSet bool     `json:"-"`
+	AgentType    string   `json:"agent_type,omitempty"` // Optional: agent type filter
+	AgentIds     []string `json:"agent_ids,omitempty"`  // Optional: specific agent IDs
+	FillAgent    bool     `json:"fill_agent,omitempty"` // Optional: whether to fill agent info
+}
+
+type DescribeCreditUsageInfoRequest struct {
+	UsageType string   `json:"usage_type,omitempty"` // Optional: usage type filter
+	AgentIds  []string `json:"agent_ids,omitempty"`  // Optional: Agent ID 列表，从 Agent 详情获取
+	FillAgent bool     `json:"fill_agent,omitempty"` // Optional: whether to fill agent info
+}
+
+type EntInstallSkillsRequest struct {
+	AgentProvider string   `json:"agent_provider,omitempty"`
+	AgentPlatform string   `json:"agent_platform,omitempty"`
+	RuntimeId     string   `json:"runtime_id"` // Required: Agent 的 RuntimeId
+	SkillIDs      []string `json:"skill_ids"`  // Required: skill IDs to install
+}
+    EntInstallSkillsRequest is the request for EntInstallSkills.
+
+type EntUninstallSkillsRequest struct {
+	AgentProvider string                     `json:"agent_provider,omitempty"`
+	AgentPlatform string                     `json:"agent_platform,omitempty"`
+	RuntimeId     string                     `json:"runtime_id"`  // Required: Agent 的 RuntimeId
+	SkillInfos    []model.UninstallSkillInfo `json:"skill_infos"` // Required: skill infos to uninstall
+}
+    EntUninstallSkillsRequest is the request for EntUninstallSkills.
+
+type GenerateSceneUrlRequest struct {
+	// 桌面ID（即 Agent 的 ResourceId），必填
+	DesktopId string `json:"desktop_id"`
+	// 区域 ID，默认 cn-shanghai
+	RegionId string `json:"region_id,omitempty"`
+	// 场景标识（如 app-0a9mg1hbum7mueze1）
+	Scene string `json:"scene,omitempty"`
+	// 客户端OS
+	ClientOS string `json:"client_os,omitempty"`
+	// 客户端类型
+	ClientType string `json:"client_type,omitempty"`
+	// 客户端UUID
+	Uuid string `json:"uuid,omitempty"`
+}
+    GenerateSceneUrlRequest is the request for GenerateSceneUrl.
+
+type GenerateSceneUrlResponse struct {
+	Items      []model.SceneURLItem `json:"items"`
+	RequestId  string               `json:"request_id,omitempty"`
+	Url        string               `json:"url,omitempty"`
+	ExpireTime string               `json:"expire_time,omitempty"`
+}
+    GenerateSceneUrlResponse is the response for GenerateSceneUrl.
+
+type GetAgentStatusRequest struct {
+	AgentID string `json:"agent_id"`
+}
+
+type GetModelConfigRequest struct {
+	AgentInstanceId  string `json:"agent_instance_id"`            // Required: agent instance ID
+	AgentProvider    string `json:"agent_provider,omitempty"`     // Required: agent type, default "OpenClaw"
+	AgentPlatform    string `json:"agent_platform,omitempty"`     // Optional: ENTERPRISE / JVS / ENTERPRISE_JVS, default "ENTERPRISE"
+	ChannelSessionId string `json:"channel_session_id,omitempty"` // Optional: group ID (AgentIM session ID)
+}
+    GetModelConfigRequest is the request for GetAgentInstanceModelConfig.
+
+type ListAgentAuthedSkillsRequest struct {
+	RuntimeId     string `json:"runtime_id"`               // Required: Agent 的 RuntimeId
+	AgentPlatform string `json:"agent_platform,omitempty"` // Optional: e.g. "ENTERPRISE", "ENTERPRISE_JVS"
+	AgentProvider string `json:"agent_provider,omitempty"` // Optional: e.g. "OpenClaw", "JVSClaw"
+}
+    ListAgentAuthedSkillsRequest is the request for ListAgentAuthedSkills.
+
+type ListCategoriesRequest struct {
+}
+
+type ListInstalledSkillsRequest struct {
+	RuntimeId  string `json:"runtime_id,omitempty"`  // Agent 的 RuntimeId（优先使用）
+	DesktopID  string `json:"desktop_id,omitempty"`  // Deprecated: 请使用 RuntimeId
+	CategoryID string `json:"category_id,omitempty"` // Optional: filter by category ID
+	SkillName  string `json:"skill_name,omitempty"`  // Optional: filter by skill name
+}
+
+type ListSkillsRequest struct {
+	SkillIDs     []string `json:"skill_ids,omitempty"`     // Optional: filter by skill IDs
+	SupplierType string   `json:"supplier_type,omitempty"` // Optional: filter by supplier type
+	SkillChannel string   `json:"skill_channel,omitempty"` // Optional: filter by skill channel
+	CategoryId   string   `json:"category_id,omitempty"`   // Optional: filter by category ID
+	Filter       string   `json:"filter,omitempty"`        // Optional: fuzzy search filter
+	PageSize     int32    `json:"page_size,omitempty"`     // Optional: page size
+	PageNumber   int32    `json:"page_number,omitempty"`   // Optional: page number
+}
+
+type ModelManager struct {
+	// Has unexported fields.
+}
+    ModelManager provides model-config-related APIs.
+
+func NewModelManager(sc *container.ServiceContainer) *ModelManager
+
+func (m *ModelManager) GetAgentInstanceModelConfig(ctx context.Context, req *GetModelConfigRequest, opts ...CallOption) (*model.ModelConfig, error)
+    GetAgentInstanceModelConfig retrieves the model configuration for an agent
+    instance. Supports both sync and async modes via CallOption.
+
+    Sync usage:
+
+        config, err := mgr.GetAgentInstanceModelConfig(ctx, &manager.GetModelConfigRequest{AgentInstanceId: "inst-xxx"})
+
+    Async usage:
+
+        mgr.GetAgentInstanceModelConfig(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            config := result.(*model.ModelConfig)
+            // handle result or error
+        }))
+
+func (m *ModelManager) SetChannelGroupModel(ctx context.Context, req *SetChannelGroupModelRequest, opts ...CallOption) (*model.SetChannelGroupModelResult, error)
+    SetChannelGroupModel sets the model for a channel group. Supports both sync
+    and async modes via CallOption.
+
+    Sync usage:
+
+        result, err := mgr.SetChannelGroupModel(ctx, &manager.SetChannelGroupModelRequest{
+            AgentInstanceId: "inst-xxx", GroupId: "grp-xxx", ProviderName: "bailian", LlmCode: "qwen3.5-plus",
+        })
+
+    Async usage:
+
+        mgr.SetChannelGroupModel(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            res := result.(*model.SetChannelGroupModelResult)
+            // handle result or error
+        }))
+
+type ResourceManager struct {
+	// Has unexported fields.
+}
+
+func NewResourceManager(s *business.Service) *ResourceManager
+
+func (a *ResourceManager) AttachImGroupFile(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+
+func (a *ResourceManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
+
+func (a *ResourceManager) CreateWorkspace(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
+
+func (a *ResourceManager) DiscardAttachment(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
+
+func (a *ResourceManager) DiscardDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
+
+func (a *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
+
+func (a *ResourceManager) GetConversationResources(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ResourceSelection], error)
+
+func (a *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
+
+func (a *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+
+func (a *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef) (m.Snapshot[m.DraftSnapshot], error)
+
+func (a *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
+
+func (a *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery) (m.Snapshot[m.WorkspacePage], error)
+
+func (a *ResourceManager) ObserveConversationResources(ctx context.Context, r m.ConversationRef, o m.Observer[m.ResourceSelection]) (m.Subscription, error)
+
+func (a *ResourceManager) ObserveResources(ctx context.Context, r m.ResourceQuery, o m.Observer[[]m.Resource]) (m.Subscription, error)
+
+func (a *ResourceManager) SetConversationResources(ctx context.Context, r m.ResourceRequest) (m.ResourceSelection, error)
+
+func (a *ResourceManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
+
+func (a *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
+
+type RuntimeManager struct {
+	// Has unexported fields.
+}
+
+func NewRuntimeManager(sc *container.ServiceContainer, service *business.Service) *RuntimeManager
+
+func (m *RuntimeManager) ApproveFotaUpdate(ctx context.Context, req *ApproveFotaUpdateRequest, opts ...CallOption) error
+    describeDesktopsInternal queries the list of desktops with optional FOTA
+    upgrade detection. This is an internal method not exported to external
+    callers.
+
+func (m *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+
+func (m *RuntimeManager) DescribeCreditUsageInfo(ctx context.Context, req *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
+    DescribeCreditUsageInfo retrieves credit usage information. Supports both
+    sync and async modes via CallOption.
+
+    Sync usage:
+
+        info, err := mgr.DescribeCreditUsageInfo(ctx, &manager.DescribeCreditUsageInfoRequest{UsageType: "agent"})
+
+    Async usage:
+
+        mgr.DescribeCreditUsageInfo(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            info := result.(*model.CreditUsageInfo)
+            // handle result or error
+        }))
+
+func (m *RuntimeManager) GenerateSceneUrl(ctx context.Context, req *GenerateSceneUrlRequest, opts ...CallOption) (*GenerateSceneUrlResponse, error)
+    GenerateSceneUrl generates a scene URL for the specified desktop. Supports
+    both sync and async modes via CallOption.
+
+    Sync usage:
+
+        resp, err := mgr.GenerateSceneUrl(ctx, &manager.GenerateSceneUrlRequest{
+            DesktopId: agent.RuntimeResourceInfo.ResourceId,
+            Scene:     "app-0a9mg1hbum7mueze1",
+        })
+
+    Async usage:
+
+        mgr.GenerateSceneUrl(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            resp := result.(*GenerateSceneUrlResponse)
+            // handle result or error
+        }))
+
+func (a *RuntimeManager) GetHostCapabilities(ctx context.Context, r model.RuntimeRef) (model.Snapshot[model.HostCapabilities], error)
+
+func (a *RuntimeManager) ListRuntimes(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
+
+func (a *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.RuntimeSummary]) (model.Subscription, error)
+
+func (m *RuntimeManager) UpdateAgentInstance(ctx context.Context, req *UpdateAgentInstanceRequest, opts ...CallOption) error
+    UpdateAgentInstance updates the metadata of an existing agent instance.
+    Supports both sync and async modes via CallOption.
+
+    Sync usage:
+
+        err := mgr.UpdateAgentInstance(ctx, &manager.UpdateAgentInstanceRequest{
+            AgentInstanceId:   "agent-123",
+            AgentInstanceName: "New Name",
+        })
+
+    Async usage:
+
+        mgr.UpdateAgentInstance(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            // handle result or error
+        }))
+
+type SetChannelGroupModelRequest struct {
+	AgentInstanceId string `json:"agent_instance_id"` // Required: agent instance ID
+	GroupId         string `json:"group_id"`          // Required: group ID (AgentIM session ID)
+	ProviderName    string `json:"provider_name"`     // Required: model provider ID, e.g. "bailian"
+	LlmCode         string `json:"llm_code"`          // Required: model ID, e.g. "qwen3.5-plus"
+}
+    SetChannelGroupModelRequest is the request for SetChannelGroupModel.
+
+type SetSkillEnabledRequest struct {
+	RuntimeId  string   `json:"runtime_id,omitempty"` // Agent 的 RuntimeId（优先使用）
+	DesktopID  string   `json:"desktop_id,omitempty"` // Deprecated: 请使用 RuntimeId
+	SkillNames []string `json:"skill_names"`          // Required: skill names to enable/disable
+	Enabled    bool     `json:"enabled"`              // Required: true to enable, false to disable
+}
+
+type SkillManager struct {
+	// Has unexported fields.
+}
+    SkillManager provides skill-related APIs.
+
+func NewSkillManager(sc *container.ServiceContainer) *SkillManager
+
+func (m *SkillManager) EntInstallSkills(ctx context.Context, req *EntInstallSkillsRequest, opts ...CallOption) ([]*model.OperationTask, error)
+    EntInstallSkills installs skills for the enterprise and waits for all
+    operations to complete. It returns the final operation task results after
+    polling.
+
+    Sync usage:
+
+        tasks, err := mgr.EntInstallSkills(ctx, &manager.EntInstallSkillsRequest{SkillIDs: []string{"skill-1", "skill-2"}})
+
+    Async usage:
+
+        mgr.EntInstallSkills(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            tasks := result.([]*model.OperationTask)
+        }))
+
+func (m *SkillManager) EntUninstallSkills(ctx context.Context, req *EntUninstallSkillsRequest, opts ...CallOption) ([]*model.OperationTask, error)
+    EntUninstallSkills uninstalls skills for the enterprise and waits for all
+    operations to complete. It returns the final operation task results after
+    polling.
+
+    Sync usage:
+
+        tasks, err := mgr.EntUninstallSkills(ctx, &manager.EntUninstallSkillsRequest{
+            SkillInfos: []model.UninstallSkillInfo{{SkillID: "skill-1", SkillName: "name-1"}},
+        })
+
+    Async usage:
+
+        mgr.EntUninstallSkills(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            tasks := result.([]*model.OperationTask)
+        }))
+
+func (m *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...CallOption) (*model.ListAgentAuthedSkillsResult, error)
+    ListAgentAuthedSkills retrieves the list of skills authorized for an agent.
+    Supports both sync and async modes via CallOption.
+
+    Sync usage:
+
+        result, err := mgr.ListAgentAuthedSkills(ctx, &manager.ListAgentAuthedSkillsRequest{RuntimeId: "runtime-xxx"})
+
+    Async usage:
+
+        mgr.ListAgentAuthedSkills(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            res := result.(*model.ListAgentAuthedSkillsResult)
+            // handle result or error
+        }))
+
+func (m *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...CallOption) ([]*model.SkillCategory, error)
+    ListCategories retrieves the list of skill categories. Supports both sync
+    and async modes via CallOption.
+
+    Sync usage:
+
+        categories, err := mgr.ListCategories(ctx, nil)
+
+    Async usage:
+
+        mgr.ListCategories(ctx, nil, manager.WithAsync(func(result interface{}, err error) {
+            categories := result.([]*model.SkillCategory)
+            // handle result or error
+        }))
+
+func (m *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...CallOption) ([]*model.InstalledSkill, error)
+    ListInstalledSkills retrieves the list of installed skills for a specific
+    agent. Supports both sync and async modes via CallOption.
+
+    Sync usage:
+
+        skills, err := mgr.ListInstalledSkills(ctx, &manager.ListInstalledSkillsRequest{RuntimeId: "runtime-xxx"})
+
+    Async usage:
+
+        mgr.ListInstalledSkills(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            skills := result.([]*model.InstalledSkill)
+            // handle result or error
+        }))
+
+func (m *SkillManager) SetSkillEnabled(ctx context.Context, req *SetSkillEnabledRequest, opts ...CallOption) ([]*model.OperationTask, error)
+    SetSkillEnabled enables or disables the specified skills and waits for all
+    operations to complete. It returns the final operation task results after
+    polling.
+
+    Sync usage:
+
+        tasks, err := mgr.SetSkillEnabled(ctx, req)
+
+    Async usage:
+
+        mgr.SetSkillEnabled(ctx, req, manager.WithAsync(func(result interface{}, err error) {
+            tasks := result.([]*model.OperationTask)
+        }))
+
+type UpdateAgentInstanceRequest struct {
+	AgentInstanceId   string `json:"agent_instance_id"`             // Required: agent instance ID
+	AgentInstanceName string `json:"agent_instance_name,omitempty"` // Optional: new name
+	AvatarUrl         string `json:"avatar_url,omitempty"`          // Optional: new avatar URL
+	Description       string `json:"description,omitempty"`         // Optional: new description
+	SimplePersonaType string `json:"simple_persona_type,omitempty"` // Optional: persona type
+	SimpleModelType   string `json:"simple_model_type,omitempty"`   // Optional: model type
+}
+    UpdateAgentInstanceRequest is the request for UpdateAgentInstance.
+
+```
+
+## ./model
+
+```go
+package model // import "github.com/aliyun/wuying-sdk-go/model"
+
+Package model defines the unified public business contracts.
+
+TYPES
+
+type APIError struct {
+	StatusCode int
+	Action     string // API action name (e.g., "GetAuthCode", "ListAgentInstance")
+	Version    string // API version (e.g., "2021-02-18")
+	Endpoint   string // Target endpoint URL
+	Code       string `json:"Code"`
+	Message    string `json:"Message"`
+	RequestID  string `json:"RequestId"`
+	RawBody    []byte // Original response body for detailed error information
+}
+    APIError represents an error response from a remote API with full context.
+
+func (e *APIError) Error() string
+
+type ActiveExecution struct {
+	ConversationRef
+	ExecutionID         string     `json:"executionId"`
+	OwnerConversationID string     `json:"ownerConversationId"`
+	TurnID              string     `json:"turnId"`
+	MemberID            string     `json:"memberId,omitempty"`
+	Role                string     `json:"role"`
+	State               string     `json:"state"`
+	Cancel              Capability `json:"cancel"`
+	Revision            string     `json:"revision"`
+}
+
+type ActiveExecutionSnapshot struct {
+	Executions []ActiveExecution `json:"executions"`
+	Complete   bool              `json:"complete"`
+}
+
+type Actor struct {
+	Kind      string `json:"kind"`
+	UserID    string `json:"userId,omitempty"`
+	RuntimeID string `json:"runtimeId,omitempty"`
+	AgentID   string `json:"agentId,omitempty"`
+}
+
+type Agent struct {
+	// OnlineStatus is a cloud API projection, never an IM presence subscription.
+	OnlineStatus AgentStatus       `json:"online_status,omitempty"`
+	ID           string            `json:"id"`
+	Name         string            `json:"name"`
+	Type         string            `json:"type"`
+	SessionID    string            `json:"session_id,omitempty"`
+	Metadata     map[string]string `json:"metadata,omitempty"`
+	CreatedAt    time.Time         `json:"created_at"`
+
+	// Fields populated from ListAgentInstance API
+	AvatarUrl         string `json:"avatar_url,omitempty"`
+	Description       string `json:"description,omitempty"`
+	RuntimeID         string `json:"runtime_id,omitempty"`
+	RuntimeType       string `json:"runtime_type,omitempty"`
+	RegionID          string `json:"region_id,omitempty"`
+	OsType            string `json:"os_type,omitempty"`
+	IMID              string `json:"im_id,omitempty"`
+	SimplePersonaType string `json:"simple_persona_type,omitempty"`
+	SimpleModelType   string `json:"simple_model_type,omitempty"`
+	AgentPlatform     string `json:"agent_platform,omitempty"` // ENTERPRISE / JVS / ENTERPRISE_JVS
+
+	// RuntimeResourceInfo describes the runtime/desktop resource backing this agent.
+	RuntimeResourceInfo *RuntimeResourceInfo `json:"runtime_resource_info,omitempty"`
+
+	// FOTA 升级信息（仅 QueryFotaUpdate=true 时填充）
+	FotaUpdate *AgentFotaUpdate `json:"fota_update,omitempty"`
+
+	// OpenIM online status (populated by subscribing to user status)
+	Status AgentStatus `json:"status,omitempty"`
+}
+    Agent represents a Wuying agent instance.
+
+type AgentAuthedSkill struct {
+	SkillId            string     `json:"skill_id"`
+	AutoInstall        bool       `json:"auto_install"`
+	Channel            string     `json:"channel"`
+	SkillName          string     `json:"skill_name"`
+	Slug               string     `json:"slug"`
+	DisplayName        string     `json:"display_name"`
+	Description        string     `json:"description"`
+	SkillIcon          string     `json:"skill_icon"`
+	SkillIconUrl       string     `json:"skill_icon_url"`
+	SkillSummary       string     `json:"skill_summary"`
+	CategoryId         string     `json:"category_id"`
+	CategoryName       string     `json:"category_name"`
+	CategoryIcon       string     `json:"category_icon"`
+	SupplierType       string     `json:"supplier_type"`
+	Author             string     `json:"author"`
+	SourceMarket       string     `json:"source_market"`
+	SourceLink         string     `json:"source_link"`
+	GmtCreated         string     `json:"gmt_created"`
+	Version            string     `json:"version"`
+	AdminEnabled       bool       `json:"admin_enabled"`
+	SupportOSList      []string   `json:"support_os_list"`
+	IdentityResourceId string     `json:"identity_resource_id"`
+	Installed          bool       `json:"installed"`
+	UserEnabled        bool       `json:"user_enabled"`
+	GmtInstalled       string     `json:"gmt_installed"`
+	TaskId             string     `json:"task_id"`
+	OperationStatus    string     `json:"operation_status"`
+	OperationType      string     `json:"operation_type"`
+	TriggerWords       []string   `json:"trigger_words"`
+	Tags               []SkillTag `json:"tags"`
+}
+    AgentAuthedSkill represents a skill authorized for an agent.
+
+type AgentCapabilities struct {
+	Group       Capability `json:"group"`
+	ModelConfig Capability `json:"modelConfig"`
+	Cancel      Capability `json:"cancel"`
+	Resources   Capability `json:"resources"`
+}
+
+type AgentFotaUpdate struct {
+	// 可升级的目标 FOTA 版本（来自 POP DescribeDesktops 的 NewDcdVersion）
+	NewFotaVersion string
+	// 当前 FOTA 版本（来自 POP DescribeDesktops 的 CurrentAppVersion）
+	CurrentFotaVersion string
+}
+    AgentFotaUpdate 表示 Agent 可用的 FOTA 升级信息 仅在
+    GetAgentListRequest.QueryFotaUpdate=true 时填充
+
+type AgentModelCatalog struct {
+	Models         []ModelSummary `json:"models"`
+	DefaultModelID string         `json:"defaultModelId,omitempty"`
+}
+
+type AgentPlatform string
+    AgentPlatform represents the platform type of an agent.
+
+const (
+	// AgentPlatformEnterprise represents the enterprise platform.
+	AgentPlatformEnterprise AgentPlatform = "ENTERPRISE"
+	// AgentPlatformEnterpriseJVS represents the enterprise JVS platform.
+	AgentPlatformEnterpriseJVS AgentPlatform = "ENTERPRISE_JVS"
+)
+type AgentPresentation struct {
+	ProductID     string `json:"productId,omitempty"`
+	InstanceLabel string `json:"instanceLabel,omitempty"`
+	Description   string `json:"description,omitempty"`
+	IconURL       string `json:"iconUrl,omitempty"`
+	SubAgentID    string `json:"subAgentId,omitempty"`
+	Source        string `json:"source"`
+}
+    These DTOs share the JS business wire schema; IDs remain opaque strings.
+
+type AgentRef struct {
+	RuntimeRef
+	AgentID string `json:"agentId"`
+}
+
+type AgentStatus string
+    AgentStatus represents the online status of an agent (from OpenIM)
+
+const (
+	AgentStatusOnline   AgentStatus = "online"  // 在线
+	AgentStatusOffline  AgentStatus = "offline" // 离线
+	AgentStatusReady    AgentStatus = "ready"
+	AgentStatusBuilding AgentStatus = "building"
+	AgentStatusError    AgentStatus = "error"
+	AgentStatusUnknown  AgentStatus = "unknown"
+)
+type AgentSummary struct {
+	Presentation *AgentPresentation `json:"presentation,omitempty"`
+	AgentRef
+	Name         string            `json:"name"`
+	Enabled      bool              `json:"enabled"`
+	Availability string            `json:"availability"`
+	Category     string            `json:"category,omitempty"`
+	ProbeStatus  string            `json:"probeStatus,omitempty"`
+	Capabilities AgentCapabilities `json:"capabilities"`
+	Revision     Int64             `json:"revision"`
+}
+
+type AttachmentAccess struct {
+	URL       string `json:"url"`
+	ExpiresAt string `json:"expiresAt"`
+}
+
+type AttachmentAccessRequest struct {
+	AttachmentRef
+	Purpose string `json:"purpose"`
+}
+
+type AttachmentPreview struct {
+	AttachmentID      string `json:"attachmentId"`
+	Kind              string `json:"kind"`
+	Mime              string `json:"mime,omitempty"`
+	Title             string `json:"title,omitempty"`
+	Text              string `json:"text,omitempty"`
+	DataURL           string `json:"dataUrl,omitempty"`
+	UnavailableReason string `json:"unavailableReason,omitempty"`
+}
+
+type AttachmentRef struct {
+	ConversationRef
+	AttachmentID string `json:"attachmentId"`
+}
+
+type AuthError struct {
+	SDKError
+}
+    AuthError represents an authentication or authorization failure.
+
+func (e *AuthError) Error() string
+
+type AuthType int
+    AuthType represents the type of authentication.
+
+const (
+	AuthTypeAuthCode AuthType = 1 // AuthCode 鉴权
+)
+func (t AuthType) String() string
+    String returns the string representation of the AuthType.
+
+type Block struct {
+	Kind          string `json:"kind"`
+	Text          string `json:"text,omitempty"`
+	AttachmentID  string `json:"attachmentId,omitempty"`
+	Name          string `json:"name,omitempty"`
+	Mime          string `json:"mime,omitempty"`
+	ToolCallID    string `json:"toolCallId,omitempty"`
+	Status        string `json:"status,omitempty"`
+	Summary       string `json:"summary,omitempty"`
+	InteractionID string `json:"interactionId,omitempty"`
+	TypeName      string `json:"typeName,omitempty"`
+}
+
+type BusinessError struct {
+	Code      string `json:"code"`
+	Outcome   string `json:"outcome"`
+	Retryable bool   `json:"retryable"`
+	TraceID   string `json:"traceId,omitempty"`
+}
+
+func NewBusinessError(code, outcome string) *BusinessError
+
+func (e *BusinessError) Error() string
+
+type CancelExecutionRequest struct {
+	ConversationRef
+	ExecutionID     string `json:"executionId"`
+	ExpectedVersion string `json:"expectedVersion"`
+}
+
+type Capability struct {
+	Supported  bool   `json:"supported"`
+	ReasonCode string `json:"reasonCode,omitempty"`
+}
+
+type Choice struct {
+	Value string `json:"value"`
+	Label string `json:"label"`
+}
+
+type CloudBusinessError struct {
+	SDKError
+	ErrorCode string `json:"error_code"`
+}
+    BusinessError represents a business logic error from the API.
+
+func (e *CloudBusinessError) Error() string
+
+type CommandReceipt struct {
+	CommandReceiptRef
+	State         string `json:"state"`
+	Result        any    `json:"result,omitempty"`
+	ErrorCode     string `json:"errorCode,omitempty"`
+	FailureEffect string `json:"failureEffect,omitempty"`
+	TraceID       string `json:"traceId,omitempty"`
+}
+
+type CommandReceiptRef struct {
+	RuntimeRef
+	ClientCommandID string `json:"clientCommandId"`
+	ConversationID  string `json:"conversationId,omitempty"`
+}
+
+type CommittedAttachment struct {
+	AttachmentID string `json:"attachmentId"`
+	Name         string `json:"name,omitempty"`
+	Mime         string `json:"mime,omitempty"`
+	Size         string `json:"size,omitempty"`
+	Kind         string `json:"kind"`
+}
+
+type ComposerCapabilities struct {
+	ConversationRef
+	AgentID       string                `json:"agentId,omitempty"`
+	MemberID      string                `json:"memberId,omitempty"`
+	Capabilities  map[string]Capability `json:"capabilities"`
+	ConfigOptions []ComposerOption      `json:"configOptions"`
+	Attachments   struct {
+		MaxFileBytes string   `json:"maxFileBytes"`
+		MaxCount     *int     `json:"maxCount,omitempty"`
+		MimeTypes    []string `json:"mimeTypes,omitempty"`
+		Coverage     Coverage `json:"coverage"`
+	} `json:"attachments"`
+	Revision string `json:"revision"`
+}
+
+type ComposerOption struct {
+	OptionID string   `json:"optionId"`
+	Name     string   `json:"name"`
+	Type     string   `json:"type"`
+	Value    string   `json:"value,omitempty"`
+	Options  []Choice `json:"options,omitempty"`
+}
+
+type ComposerQuery struct {
+	ConversationRef
+	MemberID string `json:"memberId,omitempty"`
+}
+
+type ConfigOptionRequest struct {
+	ConversationRef
+	OptionID string `json:"optionId"`
+	Value    string `json:"value"`
+}
+
+type ConfigRequest struct {
+	ConversationRef
+	Config          ConversationSettings `json:"config"`
+	ExpectedVersion string               `json:"expectedVersion"`
+}
+
+type Conversation struct {
+	Presentation *ConversationPresentation   `json:"presentation,omitempty"`
+	Header       *ConversationHeaderMetadata `json:"header,omitempty"`
+	ConversationRef
+	Name           string                   `json:"name"`
+	Mode           string                   `json:"mode"`
+	AgentID        string                   `json:"agentId,omitempty"`
+	Revision       Int64                    `json:"revision"`
+	ExecutionState string                   `json:"executionState"`
+	Availability   string                   `json:"availability"`
+	Archived       bool                     `json:"archived"`
+	Pinned         bool                     `json:"pinned"`
+	LastActivityAt Int64                    `json:"lastActivityAt"`
+	Capabilities   ConversationCapabilities `json:"capabilities"`
+}
+
+type ConversationAttachmentTarget struct {
+	ConversationStorageContext
+	StorageConversationID string `json:"storageConversationId"`
+	GroupPlatform         string `json:"groupPlatform"`
+}
+
+type ConversationCapabilities struct {
+	Send      Capability `json:"send"`
+	Configure Capability `json:"configure"`
+	Members   Capability `json:"members"`
+	Resources Capability `json:"resources"`
+}
+
+type ConversationGroupQuery struct {
+	SidebarFilter
+	Dimension           string   `json:"dimension"`
+	GroupSearch         string   `json:"groupSearch,omitempty"`
+	SpecialLabelMatches []string `json:"specialLabelMatches,omitempty"`
+	Limit               int      `json:"limit,omitempty"`
+	Cursor              string   `json:"cursor,omitempty"`
+}
+
+type ConversationHeaderMetadata struct {
+	Workspace *WorkspaceDisplay `json:"workspace,omitempty"`
+	Actions   HeaderActions     `json:"actions"`
+}
+
+type ConversationHistory struct {
+	Page[Message]
+	Conversation  *Conversation         `json:"conversation,omitempty"`
+	Members       []Member              `json:"members"`
+	TurnItems     []Item                `json:"turnItems"`
+	Turns         []Turn                `json:"turns"`
+	Activities    []ExecutionActivity   `json:"activities"`
+	Presentations []MessagePresentation `json:"presentations"`
+}
+
+type ConversationHistoryQuery struct {
+	ConversationReadQuery
+	GroupID string `json:"groupId,omitempty"`
+	Cursor  string `json:"cursor,omitempty"`
+	Limit   int    `json:"limit,omitempty"`
+}
+
+type ConversationPresentation struct {
+	ProductID        string `json:"productId,omitempty"`
+	EnvironmentID    string `json:"environmentId,omitempty"`
+	EnvironmentName  string `json:"environmentName,omitempty"`
+	Kind             string `json:"kind"`
+	VisibleInSidebar bool   `json:"visibleInSidebar"`
+	PinOrder         string `json:"pinOrder,omitempty"`
+	PinnedAt         string `json:"pinnedAt,omitempty"`
+}
+
+type ConversationQuery struct {
+	Pin       string `json:"pin,omitempty"`
+	Order     string `json:"order,omitempty"`
+	RuntimeID string `json:"runtimeId,omitempty"`
+	Search    string `json:"search,omitempty"`
+	Archive   string `json:"archive,omitempty"`
+	AgentID   string `json:"agentId,omitempty"`
+	Limit     int    `json:"limit,omitempty"`
+	Cursor    string `json:"cursor,omitempty"`
+}
+
+type ConversationReadBinding struct {
+	ConversationReadQuery
+	GroupID              string `json:"groupId"`
+	ControllerUserID     string `json:"controllerUserId"`
+	MembershipGeneration uint64 `json:"membershipGeneration"`
+	JoinedAfterSeq       Int64  `json:"joinedAfterSeq,omitempty"`
+	Name                 string `json:"name,omitempty"`
+}
+
+type ConversationReadQuery struct {
+	ConversationID string `json:"conversationId"`
+	RuntimeID      string `json:"runtimeId,omitempty"`
+}
+    Read locators do not grant Runtime execution authority.
+
+type ConversationRef struct {
+	RuntimeRef
+	ConversationID string `json:"conversationId"`
+}
+
+type ConversationSettings struct {
+	ThinkingLevel    *string `json:"thinkingLevel,omitempty"`
+	PermissionPreset *string `json:"permissionPreset,omitempty"`
+	ModelID          *string `json:"modelId,omitempty"`
+}
+
+type ConversationStorageContext struct {
+	ConversationRef
+	SchemaVersion      int    `json:"schemaVersion"`
+	State              string `json:"state"`
+	ProductType        string `json:"productType,omitempty"`
+	DriveType          string `json:"driveType,omitempty"`
+	IMGroupID          string `json:"imGroupId,omitempty"`
+	StorageEnvironment string `json:"storageEnvironment,omitempty"`
+	Reason             string `json:"reason,omitempty"`
+}
+
+type Coverage struct {
+	State      string `json:"state"`
+	ReasonCode string `json:"reasonCode,omitempty"`
+}
+
+type CreateDesktopsRequest struct {
+	RegionID       string
+	OfficeSiteID   string
+	BundleID       string
+	PolicyGroupID  string
+	DesktopName    string
+	Amount         int
+	EndUserIDs     []string
+	UserAssignMode string
+	ChargeType     string
+	Period         int
+	PeriodUnit     string
+	AutoPay        *bool
+	AutoRenew      *bool
+}
+    CreateDesktopsRequest supports template-based ECD CreateDesktops
+    (2020-09-30). Nil billing flags preserve the service defaults; explicit
+    false is transmitted.
+
+type CreateDesktopsResponse struct {
+	DesktopIDs []string `json:"DesktopId"`
+	OrderID    string   `json:"OrderId"`
+	RequestID  string   `json:"RequestId"`
+	Ready      bool     `json:"ready"`
+}
+    CreateDesktopsResponse reports acceptance or an order, not readiness or
+    payment.
+
+type CreateMember struct {
+	ModelID         string               `json:"modelId,omitempty"`
+	Responsibility  *ResponsibilityPatch `json:"responsibility,omitempty"`
+	ClientMemberKey string               `json:"clientMemberKey,omitempty"`
+	AgentID         string               `json:"agentId"`
+	DisplayName     string               `json:"displayName,omitempty"`
+}
+
+type CreateRequest struct {
+	WorkspaceID string `json:"workspaceId,omitempty"`
+	SubAgentID  string `json:"subAgentId,omitempty"`
+	RuntimeRef
+	Name               string                `json:"name"`
+	Mode               string                `json:"mode"`
+	AgentID            string                `json:"agentId,omitempty"`
+	CoordinatorAgentID string                `json:"coordinatorAgentId,omitempty"`
+	Members            []CreateMember        `json:"members,omitempty"`
+	Config             *ConversationSettings `json:"config,omitempty"`
+}
+
+type CreateWorkspaceRequest struct {
+	RuntimeRef
+	Name string `json:"name"`
+}
+
+type CreatedConversation struct {
+	ConversationRef
+	CoordinatorMemberID string          `json:"coordinatorMemberId,omitempty"`
+	MemberMappings      []MemberMapping `json:"memberMappings,omitempty"`
+	MappingState        string          `json:"mappingState,omitempty"`
+}
+
+type Credential interface {
+	Type() AuthType
+	PermissionLevel() PermissionLevel
+	SignRequest(req *http.Request) error
+	IsExpired() bool
+	Refresh(ctx context.Context) error
+}
+    Credential is the interface that all authentication methods must implement.
+
+type CreditPackageAgent struct {
+	AgentId     string `json:"agent_id"`
+	UsedCredit  string `json:"used_credit"`
+	TotalCredit string `json:"total_credit"`
+	ExpiredTime string `json:"expired_time"`
+}
+    CreditPackageAgent represents an agent bound to a credit package.
+
+type CreditTrendItem struct {
+	UsedCredit int64  `json:"used_credit"`
+	TimePoint  string `json:"time_point"`
+}
+    CreditTrendItem represents a single point in the credit usage trend.
+
+type CreditUsageData struct {
+	// Common fields (both Agent and User modes)
+	TotalUsedCredit int64 `json:"total_used_credit"`
+	DayUsedCredit   int64 `json:"day_used_credit"`
+	WeekUsedCredit  int64 `json:"week_used_credit"`
+
+	// 周期内额度与已用量（原始值 / 100000 后的积分单位）
+	PeriodTotalCredit float64 `json:"period_total_credit"`
+	PeriodUsedCredit  float64 `json:"period_used_credit"`
+
+	// Agent mode fields
+	TotalCredit int64 `json:"total_credit"`
+	WarnPercent int32 `json:"warn_percent"`
+
+	// User mode fields
+	CurrentRemainCredit int64             `json:"current_remain_credit"`
+	CurrentInstanceId   string            `json:"current_instance_id"`
+	RemainCredit        int64             `json:"remain_credit"`
+	CurrentTotalCredit  int64             `json:"current_total_credit"`
+	CurrentUsedCredit   int64             `json:"current_used_credit"`
+	CreditTrendList     []CreditTrendItem `json:"credit_trend_list"`
+}
+    CreditUsageData contains the credit usage details. Fields are populated
+    differently depending on UsageType (Agent vs User). 周期类字段（PeriodTotalCredit
+    / PeriodUsedCredit）需要将 API 原始值除以 100000 换算成积分单位。
+
+type CreditUsageInfo struct {
+	UsageInfoList []CreditUsageInfoItem `json:"usage_info_list"`
+}
+    CreditUsageInfo represents credit usage information.
+
+type CreditUsageInfoItem struct {
+	UsageInfoKey string          `json:"usage_info_key"`
+	UsageInfo    CreditUsageData `json:"usage_info"`
+}
+    CreditUsageInfoItem represents a single usage info entry.
+
+type DeleteWyDriveFileRequest struct {
+	RegionID         string `json:"regionId"`
+	FileID           string `json:"fileId,omitempty"`
+	FilePath         string `json:"filePath,omitempty"`
+	WyDriveID        string `json:"wyDriveId,omitempty"`
+	FileName         string `json:"fileName,omitempty"`
+	ETag             string `json:"eTag,omitempty"`
+	IsSyncDisk       *bool  `json:"isSyncDisk,omitempty"`
+	ProductType      string `json:"productType,omitempty"`
+	ParentFolderPath string `json:"parentFolderPath,omitempty"`
+}
+
+type DescribeCreditUsageInfoRequest struct {
+	UsageType string   `json:"usage_type,omitempty"`
+	AgentIds  []string `json:"agent_ids,omitempty"`
+	FillAgent bool     `json:"fill_agent,omitempty"`
+}
+    DescribeCreditUsageInfoRequest is the request for querying credit usage
+    info.
+
+type DescribeWyDriveFilesRequest struct {
+	RegionID         string `json:"regionId"`
+	WyDriveID        string `json:"wyDriveId,omitempty"`
+	ParentFolderID   string `json:"parentFolderId,omitempty"`
+	ParentFolderPath string `json:"parentFolderPath,omitempty"`
+	FileNameFilter   string `json:"fileNameFilter,omitempty"`
+	PageSize         int64  `json:"pageSize,omitempty"`
+	PageNumber       int64  `json:"pageNumber,omitempty"`
+	OrderType        string `json:"orderType,omitempty"`
+	ProductType      string `json:"productType,omitempty"`
+	JvsSessionID     string `json:"jvsSessionId,omitempty"`
+}
+
+type DescribeWyDriveFilesResult struct {
+	RequestID  string        `json:"requestId"`
+	Files      []WyDriveFile `json:"files"`
+	TotalCount int64         `json:"totalCount"`
+}
+
+type DescribeWyDrivesRequest struct {
+	ProductType string `json:"productType,omitempty"`
+	BotID       string `json:"botId,omitempty"`
+}
+
+type DescribeWyDrivesResult struct {
+	RequestID         string    `json:"requestId"`
+	Drives            []WyDrive `json:"drives"`
+	TotalSize         int64     `json:"totalSize"`
+	UsedSize          int64     `json:"usedSize"`
+	CapacityNotEnough bool      `json:"capacityNotEnough"`
+}
+
+type Desktop struct {
+	// DesktopId 桌面实例 ID。
+	DesktopId string `json:"desktop_id"`
+	// DesktopName 桌面名称。
+	DesktopName string `json:"desktop_name"`
+	// Status 桌面状态（来自 DesktopStatus）。
+	Status string `json:"status"`
+	// FotaUpdate FOTA 升级信息，仅在请求方设置 QueryFotaUpdate=true 且后端返回时存在。
+	FotaUpdate *FotaUpdate `json:"fota_update,omitempty"`
+}
+    Desktop 桌面实例。
+
+type DesktopCreateOptions struct {
+	Wait         bool
+	PollInterval time.Duration
+}
+
+type DesktopList struct {
+	// Desktops 桌面列表。
+	Desktops []*Desktop `json:"desktops"`
+	// NextToken 下一页 Token，空表示没有下一页。
+	NextToken string `json:"next_token,omitempty"`
+}
+    DesktopList 桌面列表（支持分页）。
+
+type DesktopOperationItem struct {
+	DesktopID string `json:"desktopId"`
+	Code      string `json:"code"`
+	Accepted  bool   `json:"accepted"`
+}
+
+type DesktopOperationRequest struct {
+	RegionID    string
+	DesktopIDs  []string
+	ClientToken string // User-mode token, ASCII 1..64; empty generates one UUID per call.
+	StoppedMode string // Administrator stop only: StopCharging or KeepCharging.
+	OSUpdate    *bool  // Stop/reboot only; nil preserves omission.
+	ImageID     string // Reset: required for users; empty preserves administrator service defaults.
+	OperateType string // Reset only: explicit "replace" replaces the data disk.
+}
+    DesktopOperationRequest targets explicit desktops only. Fields unsupported
+    by the selected operation/authentication mode are rejected instead of
+    ignored.
+
+type DesktopOperationResponse struct {
+	RequestID string                 `json:"requestId"`
+	Results   []DesktopOperationItem `json:"results,omitempty"`
+}
+    DesktopOperationResponse reports request/per-desktop acceptance, not
+    completion.
+
+type DownloadFileRef struct {
+	FileID   string `json:"fileId"`
+	FileName string `json:"fileName,omitempty"`
+	FilePath string `json:"filePath,omitempty"`
+}
+
+type DownloadKnowledgeFileResult struct {
+	TaskID   string `json:"taskId"`
+	FileID   string `json:"fileId"`
+	FileName string `json:"fileName"`
+	URL      string `json:"url"`
+}
+
+type DownloadKnowledgeFilesRequest struct {
+	KnowledgeSpaceID string            `json:"knowledgeSpaceId"`
+	Files            []DownloadFileRef `json:"files"`
+	UUID             string            `json:"uuid,omitempty"`
+}
+
+type DownloadUrlInfo struct {
+	URL        string `json:"url"`
+	ExpireTime string `json:"expireTime"`
+	FileName   string `json:"fileName"`
+	Size       int64  `json:"size"`
+}
+
+type DraftAttachment struct {
+	DraftRef
+	CommittedAttachment
+	CreatedAt string `json:"createdAt"`
+}
+
+type DraftAttachmentRequest struct {
+	DraftRef
+	ConversationID string   `json:"conversationId,omitempty"`
+	AttachmentIDs  []string `json:"attachmentIds"`
+}
+
+type DraftPreviewRequest struct {
+	DraftRef
+	AttachmentID string `json:"attachmentId"`
+}
+
+type DraftRef struct {
+	RuntimeRef
+	DraftID string `json:"draftId"`
+}
+
+type DraftSnapshot struct {
+	DraftRef
+	Items        []DraftAttachment `json:"items"`
+	RemoteUpload Capability        `json:"remoteUpload"`
+}
+
+type EffectiveConfig struct {
+	Desired      ConversationSettings  `json:"desired"`
+	Applied      *ConversationSettings `json:"applied,omitempty"`
+	Revision     Int64                 `json:"revision"`
+	WriteVersion string                `json:"writeVersion,omitempty"`
+	Application  string                `json:"application"`
+}
+
+type EntInstallSkillsResult struct {
+	OperationTasks  []EntOperationTask `json:"operation_tasks"`
+	SkippedSkillIds []string           `json:"skipped_skill_ids"`
+}
+    EntInstallSkillsResult represents the result of EntInstallSkills.
+
+type EntOperationTask struct {
+	SkillId string `json:"skill_id"`
+	TaskId  string `json:"task_id"`
+}
+    EntOperationTask represents an operation task in EntInstall/EntUninstall
+    response.
+
+type EntUninstallSkillsResult struct {
+	OperationTasks  []EntOperationTask `json:"operation_tasks"`
+	SkippedSkillIds []string           `json:"skipped_skill_ids"`
+}
+    EntUninstallSkillsResult represents the result of EntUninstallSkills.
+
+type ExecutionActivity struct {
+	Scope           string `json:"scope,omitempty"`
+	MessageID       string `json:"messageId,omitempty"`
+	MemberID        string `json:"memberId,omitempty"`
+	CanonicalItemID string `json:"canonicalItemId,omitempty"`
+	ToolCallID      string `json:"toolCallId,omitempty"`
+	ConversationRef
+	ActivityID string `json:"activityId"`
+	TurnID     string `json:"turnId"`
+	Kind       string `json:"kind"`
+	Name       string `json:"name"`
+	Text       string `json:"text"`
+	Result     string `json:"result,omitempty"`
+	State      string `json:"state"`
+	Sequence   Int64  `json:"sequence"`
+	Revision   Int64  `json:"revision"`
+	FrameCount int    `json:"frameCount"`
+}
+
+type ExecutionTiming struct {
+	StartedAt  string `json:"startedAt,omitempty"`
+	FinishedAt string `json:"finishedAt,omitempty"`
+	DurationMS string `json:"durationMs,omitempty"`
+}
+
+type Expert struct {
+	AgentRef
+	ExpertID       string `json:"expertId"`
+	Name           string `json:"name"`
+	Description    string `json:"description,omitempty"`
+	PrimaryAgentID string `json:"primaryAgentId"`
+	Status         string `json:"status"`
+	Capabilities   struct {
+		PrivateChat Capability `json:"privateChat"`
+		GroupMember Capability `json:"groupMember"`
+	} `json:"capabilities"`
+}
+
+type ExpertDirectory struct {
+	RuntimeRef
+	PrimaryAgentID string   `json:"primaryAgentId"`
+	Experts        []Expert `json:"experts"`
+	Complete       bool     `json:"complete"`
+}
+
+type ExpertQuery struct {
+	RuntimeRef
+	PrimaryAgentID string `json:"primaryAgentId"`
+}
+
+type FileTag struct {
+	Value string `json:"value"`
+	Desc  string `json:"desc"`
+	Style string `json:"style"`
+	Type  string `json:"type"`
+}
+
+type FotaUpdate struct {
+	// NewDcdVersion 新的 DCD 版本号。
+	NewDcdVersion string `json:"new_dcd_version"`
+	// CurrentAppVersion 当前应用版本。
+	CurrentAppVersion string `json:"current_app_version"`
+	// NewAppVersion 目标应用版本。
+	NewAppVersion string `json:"new_app_version"`
+	// ReleaseNote 发布说明。
+	ReleaseNote string `json:"release_note"`
+	// Size 升级包大小（字节）。
+	Size int64 `json:"size"`
+}
+    FotaUpdate FOTA 升级信息。 当桌面有新版本可用时，由 DescribeDesktops 接口在 QueryFotaUpdate=true
+    时返回。
+
+type GetAuthCodeRequest struct {
+	EndUserID      string
+	ExternalUserID string
+	Policy         string
+	AutoCreateUser bool
+	TokenType      string
+}
+
+type GetAuthCodeResponse struct {
+	AuthCode  string
+	RequestID string
+}
+
+func (r GetAuthCodeResponse) GoString() string
+
+func (r GetAuthCodeResponse) String() string
+
+type GetDownloadUrlRequest struct {
+	RegionID     string `json:"regionId"`
+	FileID       string `json:"fileId,omitempty"`
+	FilePath     string `json:"filePath,omitempty"`
+	WyDriveID    string `json:"wyDriveId,omitempty"`
+	EndpointType string `json:"endpointType,omitempty"`
+	ProductType  string `json:"productType,omitempty"`
+}
+
+type GetModelConfigRequest struct {
+	AgentInstanceId string `json:"agent_instance_id"`
+}
+    GetModelConfigRequest is the request for getting model configuration.
+
+type GroupDirectoryPage struct {
+	Groups     []GroupSummary `json:"groups"`
+	NextCursor string         `json:"nextCursor"`
+	HasMore    bool           `json:"hasMore"`
+}
+    GroupDirectoryPage 是一页服务器目录；HasMore 与 NextCursor 分开表达。
+
+type GroupDirectoryQuery struct {
+	RuntimeID                  string `json:"runtimeId"`
+	ConversationID             string `json:"conversationId,omitempty"`
+	ControllerClientInstanceID string `json:"controllerClientInstanceId,omitempty"`
+	Cursor                     string `json:"cursor,omitempty"`
+	Limit                      int    `json:"limit,omitempty"`
+}
+    GroupDirectoryQuery 查询服务器群目录的一页。ConversationID 是 AG 原始会话 ID，不是
+    agc_；它不会触发消息同步或历史拉取。
+
+type GroupRef struct {
+	RuntimeID string `json:"runtimeId"`
+	GroupID   string `json:"groupId"`
+}
+    GroupRef 显式指定一个群执行消息同步，不经过会话 ID 猜测。
+
+type GroupSummary struct {
+	RuntimeID            string `json:"runtimeId,omitempty"` // 仅在当前已授权目录中唯一关联时提供。
+	GroupID              string `json:"groupId"`
+	ConversationID       string `json:"conversationId"`
+	ConversationIDIm     string `json:"conversationIdIm"`
+	ControllerUserID     string `json:"controllerUserId"`
+	GroupName            string `json:"groupName"`
+	FaceURL              string `json:"faceURL"`
+	Status               string `json:"status"`
+	MembershipGeneration uint64 `json:"membershipGeneration"`
+	MemberRevision       uint64 `json:"memberRevision"`
+	JoinedAtMs           int64  `json:"joinedAtMs"`
+}
+    GroupSummary 是服务器目录中的群元数据；不等同本地消息已就绪。
+
+type GroupSyncState struct {
+	GroupID              string `json:"groupId"`
+	ConversationID       string `json:"conversationId"`
+	ControllerUserID     string `json:"controllerUserId"`
+	GroupName            string `json:"groupName"`
+	MembershipGeneration uint64 `json:"membershipGeneration"`
+	State                string `json:"state"`
+	TargetSeq            string `json:"targetSeq"`
+	ReceivedSeq          string `json:"receivedSeq"`
+	AppliedSeq           string `json:"appliedSeq"`
+	HasUpdates           bool   `json:"hasUpdates"`
+	ErrorCode            string `json:"errorCode,omitempty"`
+}
+    GroupSyncState表示某个群在当前SDK中的恢复状态；不等同服务端群已创建状态。
+
+type HeaderActions struct {
+	Pin           Capability `json:"pin"`
+	Rename        Capability `json:"rename"`
+	Archive       Capability `json:"archive"`
+	CopyWorkspace Capability `json:"copyWorkspace"`
+}
+
+type HostCapabilities struct {
+	RuntimeRef
+	WorkspaceQuery  Capability `json:"workspaceQuery"`
+	WorkspaceCreate Capability `json:"workspaceCreate"`
+	WorkspaceSearch Capability `json:"workspaceSearch"`
+	Voice           Capability `json:"voice"`
+	Plugins         Capability `json:"plugins"`
+	Clipboard       Capability `json:"clipboard"`
+}
+
+type IMGroupAttachmentResult struct {
+	ConversationRef
+	SchemaVersion int    `json:"schemaVersion"`
+	OperationID   string `json:"operationId"`
+	State         string `json:"state"`
+	AttachmentID  string `json:"attachmentId,omitempty"`
+	Name          string `json:"name,omitempty"`
+	Mime          string `json:"mime,omitempty"`
+	Size          Int64  `json:"size,omitempty"`
+	Kind          string `json:"kind,omitempty"`
+}
+
+type IMGroupFileRequest struct {
+	ConversationRef
+	OperationID        string `json:"operationId"`
+	RegionID           string `json:"regionId"`
+	DriveID            string `json:"driveId"`
+	FileID             string `json:"fileId"`
+	StorageEnvironment string `json:"storageEnvironment,omitempty"`
+}
+
+type InferenceMetadata struct {
+	RequestModality  []string `json:"request_modality"`
+	ResponseModality []string `json:"response_modality"`
+}
+    InferenceMetadata contains modality information for a model.
+
+type InputPart struct {
+	Kind         string `json:"kind"`
+	Text         string `json:"text,omitempty"`
+	MemberID     string `json:"memberId,omitempty"`
+	AttachmentID string `json:"attachmentId,omitempty"`
+}
+
+type InstalledSkill struct {
+	SkillId         string     `json:"skill_id"`
+	SkillName       string     `json:"skill_name"`
+	Slug            string     `json:"slug"`
+	Version         string     `json:"version"`
+	DisplayName     string     `json:"display_name"`
+	Description     string     `json:"description"`
+	SkillSummary    string     `json:"skill_summary"`
+	SkillIcon       string     `json:"skill_icon"`
+	SkillIconUrl    string     `json:"skill_icon_url"`
+	CategoryId      string     `json:"category_id"`
+	CategoryName    string     `json:"category_name"`
+	UserEnabled     bool       `json:"user_enabled"`
+	AdminEnabled    bool       `json:"admin_enabled"`
+	GmtInstalled    string     `json:"gmt_installed"`
+	OperationStatus string     `json:"operation_status"`
+	OperationType   string     `json:"operation_type"`
+	SupplierType    string     `json:"supplier_type"`
+	Author          string     `json:"author"`
+	SourceMarket    string     `json:"source_market"`
+	SourceLink      string     `json:"source_link"`
+	GmtCreated      string     `json:"gmt_created"`
+	Tags            []SkillTag `json:"tags"`
+	SupportOSList   []SkillTag `json:"support_os_list"`
+	TaskId          string     `json:"task_id"`
+	AutoInstall     bool       `json:"auto_install"`
+}
+    InstalledSkill represents an installed skill instance.
+
+type Int64 = string
+
+type Interaction struct {
+	UnavailableReason string `json:"unavailableReason,omitempty"`
+	ConversationRef
+	InteractionID       string              `json:"interactionId"`
+	TurnID              string              `json:"turnId"`
+	Kind                string              `json:"kind"`
+	State               string              `json:"state"`
+	Outcome             string              `json:"outcome,omitempty"`
+	DeliveryState       string              `json:"deliveryState"`
+	Title               string              `json:"title"`
+	Revision            string              `json:"revision"`
+	WriteVersion        string              `json:"writeVersion,omitempty"`
+	Options             []InteractionOption `json:"options,omitempty"`
+	Questions           []Question          `json:"questions,omitempty"`
+	AllowSkip           bool                `json:"allowSkip,omitempty"`
+	AgentID             string              `json:"agentId,omitempty"`
+	OwnerConversationID string              `json:"ownerConversationId,omitempty"`
+	ExpiresAt           string              `json:"expiresAt,omitempty"`
+}
+
+type InteractionOption struct {
+	OptionID string `json:"optionId"`
+	Label    string `json:"label"`
+	Kind     string `json:"kind,omitempty"`
+}
+
+type InteractionQuery struct {
+	ConversationRef
+	State string `json:"state,omitempty"`
+}
+
+type InteractionResponse struct {
+	InteractionID    string `json:"interactionId"`
+	State            string `json:"state"`
+	Status           string `json:"status,omitempty"`
+	Outcome          string `json:"outcome,omitempty"`
+	SelectedOptionID string `json:"selectedOptionId,omitempty"`
+	ResolvedAt       string `json:"resolvedAt,omitempty"`
+	IsAuto           bool   `json:"isAuto,omitempty"`
+}
+
+type Item struct {
+	ItemID    string  `json:"itemId"`
+	TurnID    string  `json:"turnId"`
+	MessageID string  `json:"messageId"`
+	Blocks    []Block `json:"blocks"`
+	State     string  `json:"state"`
+	Outcome   string  `json:"outcome,omitempty"`
+	Position  Int64   `json:"position"`
+	Revision  Int64   `json:"revision"`
+}
+
+type KnowledgeFile struct {
+	ID            int64  `json:"id"`
+	FileID        string `json:"fileId"`
+	FileName      string `json:"fileName"`
+	FileSize      int64  `json:"fileSize"`
+	FileType      string `json:"fileType"`
+	FileIconURL   string `json:"fileIconUrl"`
+	FileMD5       string `json:"fileMd5"`
+	CategoryID    string `json:"categoryId"`
+	Status        string `json:"status"`
+	FailReason    string `json:"failReason,omitempty"`
+	BailianFileID string `json:"bailianFileId,omitempty"`
+	GmtCreated    string `json:"gmtCreated"`
+	GmtModified   string `json:"gmtModified"`
+	GmtCompleted  string `json:"gmtCompleted,omitempty"`
+}
+
+type KnowledgeSpace struct {
+	SpaceID   string `json:"spaceId"`
+	SpaceName string `json:"spaceName"`
+	RegionID  string `json:"regionId"`
+	WyDriveID string `json:"wyDriveId"`
+}
+
+type ListAgentAuthedSkillsResult struct {
+	Skills     []*AgentAuthedSkill `json:"skills"`
+	TotalCount int32               `json:"total_count"`
+}
+    ListAgentAuthedSkillsResult represents the result of ListAgentAuthedSkills.
+
+type ListAgentKnowledgeSpacesRequest struct {
+	AgentID   string `json:"agentId"`
+	AgentType string `json:"agentType,omitempty"`
+}
+
+type ListKnowledgeFilesRequest struct {
+	KnowledgeSpaceID string `json:"knowledgeSpaceId"`
+	CategoryID       string `json:"categoryId,omitempty"`
+	FileNameFilter   string `json:"fileNameFilter,omitempty"`
+	PageNumber       int64  `json:"pageNumber,omitempty"`
+	PageSize         int64  `json:"pageSize,omitempty"`
+}
+
+type ListKnowledgeFilesResult struct {
+	RequestID  string          `json:"requestId"`
+	Files      []KnowledgeFile `json:"files"`
+	TotalCount int64           `json:"totalCount"`
+	PageNumber int64           `json:"pageNumber"`
+	PageSize   int64           `json:"pageSize"`
+}
+
+type LiveProcessDiagnostics struct {
+	Received   int  `json:"received"`
+	Accepted   int  `json:"accepted"`
+	Duplicates int  `json:"duplicates"`
+	Rejected   int  `json:"rejected"`
+	Gaps       int  `json:"gaps"`
+	Reasoning  int  `json:"reasoning"`
+	Tools      int  `json:"tools"`
+	Recoveries int  `json:"recoveries"`
+	Limited    bool `json:"limited"`
+}
+
+type LiveProcessItem struct {
+	ProcessID            string           `json:"processId"`
+	LiveProgress         *LiveProgress    `json:"liveProgress,omitempty"`
+	SourceConversationID string           `json:"sourceConversationId"`
+	RunID                string           `json:"runId,omitempty"`
+	TurnID               string           `json:"turnId,omitempty"`
+	Scope                string           `json:"scope"`
+	MessageID            string           `json:"messageId,omitempty"`
+	MemberID             string           `json:"memberId,omitempty"`
+	CanonicalItemID      string           `json:"canonicalItemId,omitempty"`
+	CanonicalRevision    Int64            `json:"canonicalRevision,omitempty"`
+	LegacyActivityID     string           `json:"legacyActivityId,omitempty"`
+	ToolCallID           string           `json:"toolCallId,omitempty"`
+	Order                Int64            `json:"order"`
+	OrderDomain          string           `json:"orderDomain"`
+	Revision             Int64            `json:"revision"`
+	State                string           `json:"state"`
+	Kind                 string           `json:"kind"`
+	Payload              ProcessPayload   `json:"payload"`
+	Timing               *ExecutionTiming `json:"timing,omitempty"`
+	Coverage             Coverage         `json:"coverage"`
+}
+
+type LiveProcessSnapshot struct {
+	ConversationRef
+	SchemaVersion string                 `json:"schemaVersion"`
+	LiveProgress  *LiveProgress          `json:"liveProgress,omitempty"`
+	Revision      Int64                  `json:"revision"`
+	Items         []LiveProcessItem      `json:"items"`
+	Coverage      Coverage               `json:"coverage"`
+	Diagnostics   LiveProcessDiagnostics `json:"diagnostics"`
+}
+
+type LiveProgress struct {
+	Generation string `json:"generation"`
+	Revision   Int64  `json:"revision"`
+}
+
+type LlmInfo struct {
+	LlmCode           string                 `json:"llm_code"`
+	Name              string                 `json:"name"`
+	Description       string                 `json:"description"`
+	PublishedTime     string                 `json:"published_time"`
+	Features          []string               `json:"features"`
+	RiskType          string                 `json:"risk_type"`
+	InferenceMetadata *InferenceMetadata     `json:"inference_metadata"`
+	ModelInfo         map[string]interface{} `json:"model_info"`
+	Prices            []PriceRange           `json:"prices"`
+}
+    LlmInfo represents a single LLM model info.
+
+type Member struct {
+	Configuration *MemberConfiguration `json:"configuration,omitempty"`
+	Capabilities  *MemberCapabilities  `json:"capabilities,omitempty"`
+	MemberID      string               `json:"memberId"`
+	Actor         Actor                `json:"actor"`
+	DisplayName   string               `json:"displayName"`
+	Role          string               `json:"role"`
+	Status        string               `json:"status"`
+	ModelID       string               `json:"modelId,omitempty"`
+	Revision      Int64                `json:"revision"`
+	WriteVersion  string               `json:"writeVersion,omitempty"`
+}
+
+type MemberCandidate struct {
+	AgentRef
+	Add                Capability `json:"add"`
+	MultipleIdentities Capability `json:"multipleIdentities"`
+	Configurable       struct {
+		DisplayName    Capability `json:"displayName"`
+		Model          Capability `json:"model"`
+		Responsibility Capability `json:"responsibility"`
+	} `json:"configurable"`
+}
+
+type MemberCapabilities struct {
+	EditName           Capability `json:"editName"`
+	EditModel          Capability `json:"editModel"`
+	EditResponsibility Capability `json:"editResponsibility"`
+	Remove             Capability `json:"remove"`
+}
+
+type MemberConfiguration struct {
+	Responsibility struct {
+		Source string `json:"source"`
+		Text   string `json:"text,omitempty"`
+	} `json:"responsibility"`
+	Desired     MemberSettings  `json:"desired"`
+	Applied     *MemberSettings `json:"applied,omitempty"`
+	Application string          `json:"application"`
+}
+
+type MemberMapping struct {
+	ClientMemberKey string `json:"clientMemberKey"`
+	MemberID        string `json:"memberId"`
+}
+
+type MemberMention struct {
+	MemberID string `json:"memberId"`
+}
+
+type MemberQuery struct {
+	ConversationRef
+	IncludeRemoved bool `json:"includeRemoved,omitempty"`
+}
+
+type MemberRequest struct {
+	Responsibility *ResponsibilityPatch `json:"responsibility,omitempty"`
+	ConversationRef
+	MemberID        string  `json:"memberId,omitempty"`
+	AgentID         string  `json:"agentId,omitempty"`
+	DisplayName     *string `json:"displayName,omitempty"`
+	ModelID         *string `json:"modelId,omitempty"`
+	ExpectedVersion string  `json:"expectedVersion,omitempty"`
+}
+
+type MemberResult struct {
+	ConversationRef
+	MemberID string `json:"memberId"`
+}
+
+type MemberSettings struct {
+	ModelID        string               `json:"modelId,omitempty"`
+	Responsibility *ResponsibilityPatch `json:"responsibility,omitempty"`
+}
+
+type MemberSnapshot struct {
+	Members    []Member `json:"members"`
+	Complete   bool     `json:"complete"`
+	KnownTotal *int     `json:"knownTotal,omitempty"`
+}
+
+type MemberSnapshotQuery struct {
+	ConversationRef
+	Consistency string `json:"consistency,omitempty"`
+}
+
+type Message struct {
+	Timing *ExecutionTiming `json:"timing,omitempty"`
+	ConversationRef
+	MessageID       string  `json:"messageId"`
+	ClientMessageID string  `json:"clientMessageId,omitempty"`
+	TurnID          string  `json:"turnId,omitempty"`
+	Sender          Sender  `json:"sender"`
+	Blocks          []Block `json:"blocks"`
+	State           string  `json:"state"`
+	Position        Int64   `json:"position"`
+	CreatedAt       Int64   `json:"createdAt"`
+	Revision        Int64   `json:"revision"`
+}
+
+type MessageAccepted struct {
+	ConversationRef
+	ClientMessageID string `json:"clientMessageId"`
+	MessageID       string `json:"messageId"`
+	TurnID          string `json:"turnId"`
+}
+
+type MessageCloudFile struct {
+	RefID        string `json:"refId"`
+	SourceKind   string `json:"sourceKind"`
+	AttachmentID string `json:"attachmentId,omitempty"`
+	Name         string `json:"name"`
+	Size         Int64  `json:"size,omitempty"`
+	State        string `json:"state"`
+	Reason       string `json:"reason,omitempty"`
+	GroupID      string `json:"groupId,omitempty"`
+	RegionID     string `json:"regionId,omitempty"`
+	DriveID      string `json:"driveId,omitempty"`
+	FileID       string `json:"fileId,omitempty"`
+}
+
+type MessageCompletion struct {
+	Accepted MessageAccepted `json:"accepted"`
+	Turn     Turn            `json:"turn"`
+}
+
+type MessageDetail struct {
+	Message        Message `json:"message"`
+	Items          []Item  `json:"items"`
+	Complete       bool    `json:"complete"`
+	NextItemCursor *string `json:"nextItemCursor"`
+}
+
+type MessageDetailQuery struct {
+	ConversationRef
+	MessageID  string `json:"messageId"`
+	ItemCursor string `json:"itemCursor,omitempty"`
+	Limit      int    `json:"limit,omitempty"`
+}
+
+type MessageFileSelection struct {
+	MessageID string `json:"messageId"`
+	Cursor    string `json:"cursor,omitempty"`
+}
+
+type MessageFilesPage struct {
+	MessageID        string             `json:"messageId"`
+	Files            []MessageCloudFile `json:"files"`
+	ResourceRevision string             `json:"resourceRevision"`
+	Coverage         string             `json:"coverage"`
+	NextCursor       string             `json:"nextCursor,omitempty"`
+}
+
+type MessageFilesQuery struct {
+	ConversationRef
+	Messages []MessageFileSelection `json:"messages"`
+}
+
+type MessageFilesResult struct {
+	ConversationRef
+	SchemaVersion int                `json:"schemaVersion"`
+	Messages      []MessageFilesPage `json:"messages"`
+}
+
+type MessagePresentation struct {
+	SchemaVersion    string              `json:"schemaVersion"`
+	Message          Message             `json:"message"`
+	SnapshotRevision string              `json:"snapshotRevision"`
+	Answer           PresentationAnswer  `json:"answer"`
+	Process          PresentationProcess `json:"process"`
+	Timing           *ExecutionTiming    `json:"timing,omitempty"`
+}
+
+type MessageQuery struct {
+	ConversationRef
+	Cursor string `json:"cursor,omitempty"`
+	Limit  int    `json:"limit,omitempty"`
+}
+
+type MessageStream interface {
+	Accepted(context.Context) (MessageAccepted, error)
+	Next(context.Context) (StreamChunk, error)
+	Result(context.Context) (Turn, error)
+	Cancel(context.Context) (StateResult, error)
+	Close()
+}
+    Next returns io.EOF after a terminal Turn; Close stops local waiting,
+    Cancel requests remote cancellation.
+
+type ModelCatalogQuery struct {
+	AgentRef
+	Consistency string `json:"consistency,omitempty"`
+}
+
+type ModelConfig struct {
+	ModelTemplateId     string          `json:"model_template_id"`
+	ModelTemplateName   string          `json:"model_template_name"`
+	DefaultModel        string          `json:"default_model"`
+	ChannelSessionModel string          `json:"channel_session_model"`
+	ModelProviderList   []ModelProvider `json:"model_provider_list"`
+}
+    ModelConfig represents the model configuration for an agent instance.
+
+type ModelProvider struct {
+	ModelProviderTemplateId string    `json:"model_provider_template_id"`
+	ProviderName            string    `json:"provider_name"`
+	Name                    string    `json:"name"`
+	ProviderAvatarUrl       string    `json:"provider_avatar_url"`
+	LlmInfoList             []LlmInfo `json:"llm_info_list"`
+}
+    ModelProvider represents a model provider in the model config.
+
+type ModelSummary struct {
+	IsDefault       *bool           `json:"isDefault,omitempty"`
+	ProviderName    string          `json:"providerName,omitempty"`
+	GroupName       string          `json:"groupName,omitempty"`
+	SortOrder       *float64        `json:"sortOrder,omitempty"`
+	Description     string          `json:"description,omitempty"`
+	Features        map[string]bool `json:"features,omitempty"`
+	Thinking        *ThinkingConfig `json:"thinking,omitempty"`
+	InputModalities []string        `json:"inputModalities,omitempty"`
+	ModelID         string          `json:"modelId"`
+	Name            string          `json:"name"`
+	Available       bool            `json:"available"`
+	Revision        Int64           `json:"revision"`
+}
+
+type MutationOptions struct {
+	MutationID string `json:"mutationId"`
+}
+
+type MutationRef struct {
+	ConversationRef
+	MutationID string `json:"mutationId"`
+}
+
+type MutationStatus struct {
+	MutationRef
+	State         string `json:"state"`
+	Result        any    `json:"result,omitempty"`
+	ErrorCode     string `json:"errorCode,omitempty"`
+	FailureEffect string `json:"failureEffect,omitempty"`
+	TraceID       string `json:"traceId,omitempty"`
+}
+
+type NetworkError struct {
+	SDKError
+	Cause error
+}
+    NetworkError represents a network connectivity issue.
+
+func (e *NetworkError) Error() string
+
+func (e *NetworkError) Unwrap() error
+
+type Observer[T any] struct {
+	OnSnapshot func(Snapshot[T])
+	OnError    func(error)
+}
+
+type OperationTask struct {
+	TaskId          string `json:"task_id"`
+	SkillId         string `json:"skill_id"`
+	OperationType   string `json:"operation_type"`
+	OperationStatus string `json:"operation_status"`
+	ErrorMsg        string `json:"error_msg"`
+	GmtComplete     string `json:"gmt_complete"`
+	SkillName       string `json:"skill_name"`
+}
+    OperationTask represents an asynchronous skill operation task.
+
+type Page[T any] struct {
+	Items      []T     `json:"items"`
+	NextCursor *string `json:"nextCursor"`
+}
+
+type PermissionError struct {
+	SDKError
+	Required string
+	Current  string
+}
+    PermissionError represents insufficient permissions.
+
+func (e *PermissionError) Error() string
+
+type PermissionLevel int
+    PermissionLevel represents the permission level of a credential.
+
+const (
+	PermissionUser PermissionLevel = 2 // 用户级权限
+)
+type PermissionRequest struct {
+	ConversationRef
+	InteractionID   string `json:"interactionId"`
+	OptionID        string `json:"optionId"`
+	ExpectedVersion string `json:"expectedVersion"`
+}
+
+type PinnedRequest struct {
+	ConversationRef
+	Pinned bool `json:"pinned"`
+}
+
+type PresentationAnswer struct {
+	State    string   `json:"state"`
+	ItemIDs  []string `json:"itemIds"`
+	Blocks   []Block  `json:"blocks"`
+	Coverage Coverage `json:"coverage"`
+}
+
+type PresentationItem struct {
+	ItemID     string           `json:"itemId"`
+	MessageID  string           `json:"messageId"`
+	TurnID     string           `json:"turnId"`
+	MemberID   string           `json:"memberId,omitempty"`
+	ToolCallID string           `json:"toolCallId,omitempty"`
+	Order      string           `json:"order"`
+	Revision   string           `json:"revision"`
+	State      string           `json:"state"`
+	Kind       string           `json:"kind"`
+	Payload    ProcessPayload   `json:"payload"`
+	Timing     *ExecutionTiming `json:"timing,omitempty"`
+}
+
+type PresentationProcess struct {
+	Items      []PresentationItem `json:"items"`
+	NextCursor *string            `json:"nextCursor"`
+	Coverage   Coverage           `json:"coverage"`
+}
+
+type PresentationQuery struct {
+	ConversationRef
+	MessageID   string `json:"messageId"`
+	Cursor      string `json:"cursor,omitempty"`
+	Limit       int    `json:"limit,omitempty"`
+	Consistency string `json:"consistency,omitempty"`
+}
+
+type PriceItem struct {
+	PriceName string `json:"price_name"`
+	Price     string `json:"price"`
+	PriceUnit string `json:"price_unit"`
+}
+    PriceItem represents a single price entry.
+
+type PriceRange struct {
+	RangeName string      `json:"range_name"`
+	Prices    []PriceItem `json:"prices"`
+}
+    PriceRange represents a price range group.
+
+type ProcessPayload struct {
+	Kind          string  `json:"kind"`
+	Text          string  `json:"text,omitempty"`
+	Name          string  `json:"name,omitempty"`
+	Input         any     `json:"input,omitempty"`
+	Output        any     `json:"output,omitempty"`
+	Error         any     `json:"error,omitempty"`
+	Truncated     bool    `json:"truncated,omitempty"`
+	Blocks        []Block `json:"blocks,omitempty"`
+	InteractionID string  `json:"interactionId,omitempty"`
+	// Has unexported fields.
+}
+
+func (p ProcessPayload) MarshalJSON() ([]byte, error)
+
+func (p *ProcessPayload) SetText(v string)
+    SetText preserves explicit empty reasoning content across JSON/native
+    boundaries.
+
+func (p *ProcessPayload) UnmarshalJSON(raw []byte) error
+
+type Product struct {
+	ProductID   string   `json:"productId"`
+	InstanceIDs []string `json:"instanceIds"`
+	State       string   `json:"state"`
+}
+
+type ProductCatalog struct {
+	Products []Product `json:"products"`
+	Complete bool      `json:"complete"`
+}
+
+type Projection struct {
+	ControlReady    *bool  `json:"controlReady,omitempty"`
+	ReadinessDomain string `json:"readinessDomain,omitempty"`
+	Phase           string `json:"phase"`
+	Coverage        string `json:"coverage"`
+	Generation      string `json:"generation"`
+	CommitID        string `json:"commitId,omitempty"`
+	ViewVersion     string `json:"viewVersion"`
+	StatusVersion   string `json:"statusVersion"`
+	LastSyncedAt    Int64  `json:"lastSyncedAt,omitempty"`
+}
+
+type ProtocolType string
+    ProtocolType 桌面协议类型
+
+    取值范围:
+      - "0" = HDX 协议
+      - "1" = ASP 协议（默认）
+
+    该值用于 DescribeDesktops 接口的 ProtocolType 入参。
+
+const (
+	// ProtocolTypeHDX HDX 协议
+	ProtocolTypeHDX ProtocolType = "0"
+	// ProtocolTypeASP ASP 协议（默认）
+	ProtocolTypeASP ProtocolType = "1"
+)
+type Question struct {
+	MaxSelections          *int                `json:"maxSelections,omitempty"`
+	AllowTextWithSelection *bool               `json:"allowTextWithSelection,omitempty"`
+	QuestionID             string              `json:"questionId"`
+	Title                  string              `json:"title"`
+	Options                []InteractionOption `json:"options"`
+	AllowText              bool                `json:"allowText"`
+	AllowMultiple          bool                `json:"allowMultiple"`
+	Required               bool                `json:"required"`
+}
+
+type QuestionAnswer struct {
+	QuestionID string   `json:"questionId"`
+	OptionIDs  []string `json:"optionIds"`
+	Text       string   `json:"text,omitempty"`
+}
+
+type QuestionRequest struct {
+	ConversationRef
+	InteractionID   string `json:"interactionId"`
+	ExpectedVersion string `json:"expectedVersion"`
+	Answer          struct {
+		Answers []QuestionAnswer `json:"answers,omitempty"`
+		Skip    bool             `json:"skip,omitempty"`
+	} `json:"answer"`
+}
+
+type QuestionResponseRef struct {
+	ConversationRef
+	InteractionID       string `json:"interactionId"`
+	OwnerConversationID string `json:"ownerConversationId"`
+	TurnID              string `json:"turnId"`
+	ExpectedVersion     string `json:"expectedVersion"`
+	ClientCommandID     string `json:"clientCommandId"`
+}
+
+type RateLimitError struct {
+	SDKError
+	RetryAfterMs int64
+}
+    RateLimitError represents a rate limiting response.
+
+func (e *RateLimitError) Error() string
+
+type RecoveredInteractions struct {
+	ConversationRef
+	Recovered int `json:"recovered"`
+}
+
+type RenameRequest struct {
+	ConversationRef
+	Name string `json:"name"`
+}
+
+type Resource struct {
+	ResourceID   string `json:"resourceId"`
+	RuntimeID    string `json:"runtimeId"`
+	Kind         string `json:"kind"`
+	Name         string `json:"name"`
+	Availability string `json:"availability"`
+	Revision     string `json:"revision"`
+	Capabilities struct {
+		Attach  Capability `json:"attach"`
+		Preview Capability `json:"preview"`
+	} `json:"capabilities"`
+}
+
+type ResourceQuery struct {
+	RuntimeRef
+	Kind string `json:"kind,omitempty"`
+}
+
+type ResourceRequest struct {
+	ConversationRef
+	ResourceIDs     []string `json:"resourceIds"`
+	ExpectedVersion string   `json:"expectedVersion"`
+}
+
+type ResourceSelection struct {
+	ConversationRef
+	ResourceIDs  []string `json:"resourceIds"`
+	Revision     string   `json:"revision"`
+	WriteVersion string   `json:"writeVersion,omitempty"`
+}
+
+type ResponsibilityPatch struct {
+	Mode string `json:"mode"`
+	Text string `json:"text,omitempty"`
+}
+
+type RuntimeCapabilities struct {
+	AgentQuery         Capability `json:"agentQuery"`
+	ConversationCreate Capability `json:"conversationCreate"`
+	ResourceQuery      Capability `json:"resourceQuery"`
+}
+
+type RuntimeRef struct {
+	RuntimeID string `json:"runtimeId"`
+}
+
+type RuntimeResourceInfo struct {
+	ResourceId      string `json:"resource_id"`
+	ResourceStatus  string `json:"resource_status"`
+	ResourceName    string `json:"resource_name"`
+	LocalDeviceName string `json:"local_device_name"`
+}
+    RuntimeResourceInfo contains runtime resource information for an agent.
+
+type RuntimeSummary struct {
+	RuntimeRef
+	Name         string              `json:"name"`
+	State        string              `json:"state"`
+	Capabilities RuntimeCapabilities `json:"capabilities"`
+}
+
+type SDKError struct {
+	Code      int    `json:"code"`     // Numeric error code
+	CodeStr   string `json:"code_str"` // String error code (deprecated, kept for compatibility)
+	Message   string `json:"message"`
+	RequestID string `json:"request_id,omitempty"`
+}
+    SDKError is the base error type for all SDK errors.
+
+func NewSDKError(code sdkerr.ErrorCode, message string) *SDKError
+    NewSDKError creates a new SDKError with the given code and message.
+
+func NewSDKErrorWithRequestID(code sdkerr.ErrorCode, message, requestID string) *SDKError
+    NewSDKErrorWithRequestID creates a new SDKError with request ID.
+
+func WrapError(code sdkerr.ErrorCode, message string, err error) *SDKError
+    WrapError wraps an error with an SDK error code and message.
+
+func (e *SDKError) Error() string
+
+func (e *SDKError) GetCode() int
+    GetCode returns the numeric error code.
+
+type SceneFeatureInfo struct {
+	FeatureID   string `json:"feature_id"`
+	FeatureName string `json:"feature_name"`
+	Icon        string `json:"icon"`
+}
+
+type SceneURLItem struct {
+	RequestID string           `json:"request_id"`
+	URL       string           `json:"url"`
+	Feature   SceneFeatureInfo `json:"feature"`
+}
+
+type SendRequest struct {
+	ClientCommandID string          `json:"clientCommandId,omitempty"`
+	Mentions        []MemberMention `json:"mentions,omitempty"`
+	InputParts      []InputPart     `json:"inputParts,omitempty"`
+	ConversationRef
+	Text           string   `json:"text"`
+	TargetMemberID string   `json:"targetMemberId,omitempty"`
+	AttachmentIDs  []string `json:"attachmentIds,omitempty"`
+}
+
+type Sender struct {
+	Actor       Actor  `json:"actor"`
+	MemberID    string `json:"memberId,omitempty"`
+	DisplayName string `json:"displayName,omitempty"`
+}
+
+type ServerError struct {
+	SDKError
+	StatusCode int
+}
+    ServerError represents a server-side error (5xx).
+
+func (e *ServerError) Error() string
+
+type SetChannelGroupModelRequest struct {
+	ChannelGroupId string `json:"channel_group_id"`
+	ModelId        string `json:"model_id"`
+}
+    SetChannelGroupModelRequest is the request for setting channel group model.
+
+type SetChannelGroupModelResult struct {
+	Success bool `json:"success"`
+}
+    SetChannelGroupModelResult is the result of setting channel group model.
+
+type SidebarFilter struct {
+	RuntimeID  string `json:"runtimeId,omitempty"`
+	TitleQuery string `json:"titleQuery,omitempty"`
+	Archive    string `json:"archive,omitempty"`
+	Pin        string `json:"pin,omitempty"`
+	Category   string `json:"category,omitempty"`
+}
+
+type SidebarGroup struct {
+	EnvironmentID   string `json:"environmentId,omitempty"`
+	EnvironmentType string `json:"environmentType,omitempty"`
+	GroupKey        string `json:"groupKey"`
+	Kind            string `json:"kind"`
+	DisplayName     string `json:"displayName,omitempty"`
+	Count           *int   `json:"count"`
+	CountAccuracy   string `json:"countAccuracy"`
+	LastActivityAt  string `json:"lastActivityAt"`
+	ProductID       string `json:"productId,omitempty"`
+	RuntimeID       string `json:"runtimeId,omitempty"`
+}
+
+type SidebarGroupRef struct {
+	Dimension string `json:"dimension"`
+	GroupKey  string `json:"groupKey"`
+}
+
+type SidebarRowsQuery struct {
+	Order string `json:"order,omitempty"`
+	SidebarFilter
+	Group  *SidebarGroupRef `json:"group,omitempty"`
+	Limit  int              `json:"limit,omitempty"`
+	Cursor string           `json:"cursor,omitempty"`
+}
+
+type SkillCategory struct {
+	CategoryId   string `json:"category_id"`
+	CategoryName string `json:"category_name"`
+}
+    SkillCategory represents a skill category.
+
+type SkillInfo struct {
+	SkillId        string     `json:"skill_id"`
+	DefaultVersion string     `json:"default_version"`
+	Slug           string     `json:"slug"`
+	Description    string     `json:"description"`
+	SkillName      string     `json:"skill_name"`
+	DisplayName    string     `json:"display_name"`
+	SkillIconUrl   string     `json:"skill_icon_url"`
+	CategoryName   string     `json:"category_name"`
+	Tags           []SkillTag `json:"tags"`
+	SupportOSList  []SkillTag `json:"support_os_list"`
+	SupplierType   string     `json:"supplier_type"`
+	SourceMarket   string     `json:"source_market"`
+}
+    SkillInfo represents detailed information about a skill.
+
+type SkillItem struct {
+	SkillId        string     `json:"skill_id"`
+	SkillName      string     `json:"skill_name"`
+	Slug           string     `json:"slug"`
+	SkillIconUrl   string     `json:"skill_icon_url"`
+	DisplayName    string     `json:"display_name"`
+	CategoryName   string     `json:"category_name"`
+	Tags           []SkillTag `json:"tags"`
+	SupportOSList  []SkillTag `json:"support_os_list"`
+	DefaultVersion string     `json:"default_version"`
+	Description    string     `json:"description"`
+	SupplierType   string     `json:"supplier_type"`
+	SourceMarket   string     `json:"source_market"`
+	Enable         string     `json:"enable"`
+}
+    SkillItem represents a skill in a list response.
+
+type SkillTag struct {
+	TagId    string `json:"tag_id"`
+	TagValue string `json:"tag_value"`
+	TagType  string `json:"tag_type,omitempty"`
+}
+    SkillTag represents a tag item in skill information.
+
+type Snapshot[T any] struct {
+	Data       T          `json:"data"`
+	Projection Projection `json:"projection"`
+}
+
+type StageAttachmentRequest struct {
+	ConversationRef
+	Data []byte `json:"-"`
+	Name string `json:"name"`
+	Mime string `json:"mime"`
+}
+
+type StageDraftAttachmentRequest struct {
+	DraftRef
+	Data     []byte `json:"-"`
+	Name     string `json:"name"`
+	Mime     string `json:"mime,omitempty"`
+	UploadID string `json:"uploadId"`
+}
+
+type StagedAttachment struct {
+	AttachmentID string `json:"attachmentId"`
+	Name         string `json:"name"`
+	Mime         string `json:"mime"`
+	Size         string `json:"size"`
+	ExpiresAt    string `json:"expiresAt,omitempty"`
+}
+
+type StateResult struct {
+	State string `json:"state"`
+}
+
+type SteerRequest struct {
+	TurnRef
+	Text            string `json:"text"`
+	ClientCommandID string `json:"clientCommandId"`
+}
+
+type SteerResult struct {
+	State     string `json:"state"`
+	TurnID    string `json:"turnId"`
+	MessageID string `json:"messageId"`
+}
+
+type StreamChunk struct {
+	Kind      string   `json:"kind"`
+	Message   *Message `json:"message,omitempty"`
+	Turn      *Turn    `json:"turn,omitempty"`
+	MessageID string   `json:"messageId,omitempty"`
+	TurnID    string   `json:"turnId,omitempty"`
+	ItemID    string   `json:"itemId,omitempty"`
+	Sequence  Int64    `json:"sequence,omitempty"`
+	Delta     string   `json:"delta,omitempty"`
+	Content   string   `json:"content,omitempty"`
+}
+
+type Subscription interface{ Unsubscribe() }
+    Subscription releases local observation only; it never cancels remote
+    execution.
+
+type ThinkingConfig struct {
+	Supported    bool     `json:"supported"`
+	Required     *bool    `json:"required,omitempty"`
+	DefaultValue string   `json:"defaultValue,omitempty"`
+	Options      []Choice `json:"options"`
+}
+
+type TimeoutError struct {
+	SDKError
+	Cause error
+}
+    TimeoutError represents a request timeout.
+
+func (e *TimeoutError) Error() string
+
+func (e *TimeoutError) Unwrap() error
+
+type Turn struct {
+	ConversationRef
+	TurnID     string   `json:"turnId"`
+	MessageIDs []string `json:"messageIds"`
+	State      string   `json:"state"`
+	ErrorCode  string   `json:"errorCode,omitempty"`
+	Revision   Int64    `json:"revision"`
+}
+
+type TurnRef struct {
+	ConversationRef
+	TurnID string `json:"turnId"`
+}
+
+type UninstallSkillInfo struct {
+	SkillID   string `json:"skill_id"`
+	SkillName string `json:"skill_name"`
+}
+    UninstallSkillInfo contains skill identification for uninstall operations.
+
+type WaitDesktopsRequest struct {
+	RegionID     string
+	DesktopIDs   []string
+	PollInterval time.Duration
+}
+
+type WaitDesktopsResponse struct {
+	DesktopIDs []string
+	Ready      bool
+}
+
+type Workspace struct {
+	WorkspaceID   string `json:"workspaceId"`
+	Name          string `json:"name"`
+	DisplayPath   string `json:"displayPath"`
+	EnvironmentID string `json:"environmentId,omitempty"`
+}
+
+type WorkspaceDisplay struct {
+	DisplayPath string `json:"displayPath"`
+	CopyPath    string `json:"copyPath,omitempty"`
+	Platform    string `json:"platform"`
+}
+
+type WorkspacePage struct {
+	Current           Workspace   `json:"current"`
+	ParentWorkspaceID string      `json:"parentWorkspaceId,omitempty"`
+	Entries           []Workspace `json:"entries"`
+	Truncated         bool        `json:"truncated"`
+}
+
+type WorkspaceQuery struct {
+	RuntimeRef
+	ParentWorkspaceID string `json:"parentWorkspaceId,omitempty"`
+}
+
+type WyDrive struct {
+	WyDriveID      string `json:"wyDriveId"`
+	CreatedTime    string `json:"createdTime"`
+	RegionID       string `json:"regionId"`
+	Name           string `json:"name"`
+	OwnerID        string `json:"ownerId"`
+	TotalSize      int64  `json:"totalSize"`
+	UsedSize       int64  `json:"usedSize"`
+	Status         string `json:"status"`
+	BotID          string `json:"botId"`
+	BotIcon        string `json:"botIcon"`
+	Deletable      bool   `json:"deletable"`
+	EnableAutoSync bool   `json:"enableAutoSync"`
+}
+
+type WyDriveFile struct {
+	FileID            string    `json:"fileId"`
+	FileName          string    `json:"fileName"`
+	Path              string    `json:"path"`
+	FileType          string    `json:"fileType"`
+	Size              int64     `json:"size"`
+	Status            string    `json:"status"`
+	FileFormatIconURL string    `json:"fileFormatIconUrl"`
+	GmtCreate         string    `json:"gmtCreate"`
+	GmtModified       string    `json:"gmtModified"`
+	ETag              string    `json:"eTag"`
+	ParentFileID      string    `json:"parentFileId"`
+	ParentFileName    string    `json:"parentFileName"`
+	SupportPreview    bool      `json:"supportPreview"`
+	Creator           string    `json:"creator"`
+	Tags              []FileTag `json:"tags"`
+}
+
+```

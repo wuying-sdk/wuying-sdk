@@ -1,0 +1,18 @@
+---
+title: "读取查询结果"
+description: "查询返回值里的实际数据放在哪里。"
+---
+
+查询 Runtime 后，先看返回值的 `data`。`Snapshot` 是“本次读到的数据，加上这份数据的状态”，不是另一种业务资源。
+
+```ts
+const runtimes = await client.buildRuntimeManager(ctx);
+const snapshot = await runtimes.listRuntimes(ctx);
+const environments = snapshot.data;
+```
+
+消息分页的读取方式不同：`snapshot.data.items` 是这一页的消息，`snapshot.data.nextCursor` 用来继续读取。返回路径以具体方法的签名为准，不能把所有接口都当作 `data.items`。
+
+还要检查 `snapshot.projection`：空数组可能来自尚未同步完成的结果，并不一定表示用户没有资源。下一步见[判断数据是否可用](/domain-model/projection)。
+
+[完整类型与语言差异](/sdk-reference/index)

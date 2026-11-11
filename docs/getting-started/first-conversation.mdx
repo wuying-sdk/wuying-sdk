@@ -1,0 +1,67 @@
+---
+title: "创建会话并发送第一个任务"
+description: "选择授权 Runtime 与 Agent，创建会话、发送一次任务，并核对真实执行终态。"
+---
+
+import FirstTask from '/snippets/first-task.mdx';
+
+开始前先完成[授权与认证](/integration/01-auth-and-lifecycle)、[初始化 Client 与只读验证](/getting-started/initialize-client)。
+
+目标：使用你选择的 Runtime/Agent 创建一个单 Agent 会话，发送一条任务，等待并确认 Turn 终态。先完成 [接入准备](/getting-started/overview) 和 [本语言安装](/domain-model/language-bindings)。
+
+## 1. 验证安装与身份
+
+先运行本语言指南的默认帮助或离线自检，再由宿主注入认证和私有数据配置，执行其只读示例。只读示例输出计数用于验证接线，不替你选择具体环境。
+
+CLI 可运行 `runtimes list`，再对选定的 Runtime 运行 `agents list --runtime RUNTIME_ID`；Go/Java/JS 在 AgentManager 中调用 listRuntimes/ListRuntimes 和 listAgents/ListAgents。返回数组、分页、Snapshot/直接 DTO 的形状按本语言类型读取，不统一写成 data.items。详见 [Runtime](/domain-model/02-runtime-agent) / [Agent](/domain-model/agent)。
+
+预期结果：查询成功且投影可用，返回你被授权使用的实际对象。目录尚未就绪时，不根据计数 0 推断无权限。
+
+## 2. 选定输入并保存请求身份
+
+宿主明确选择查询返回的 runtimeId/agentId；准备 UTF-8 任务文件，例如仅要求回复一句问候。为这次建会与消息操作分别生成、保存稳定 mutationId/clientCommandId。不要把指南中的占位名称原样当真实 ID，也不在失败时自动换 ID 重发。
+
+随包 Go/Java/Node workflow 接收以下环境变量：
+
+| 配置 | 来源 |
+|---|---|
+| WUYING_RUNTIME_ID / WUYING_AGENT_ID | 用户选定的查询结果 |
+| WUYING_CREATE_ID / WUYING_COMMAND_ID | 本次业务操作的稳定身份，由宿主生成并保存 |
+| WUYING_INPUT_FILE | 真实 UTF-8 任务文件路径 |
+| 认证及 WUYING_DATA_PATH | [本语言指南](/domain-model/language-bindings)；Go/Java 为文件，Node 为目录 |
+
+## 3. 执行完整示例
+
+下面只展示创建会话和发送消息的核心语句。`client`、`ctx`、目标标识和消息请求标识已准备好；Go 片段放在返回 error 的函数内，Java 异步结果由调用方处理。完整程序见下方链接；全部参数见[创建会话](/api-reference/conversations/create)与[发送并等待](/api-reference/messages/wait)。建会的可选 mutationId 在最短示例中省略；生产重试仍需提前保存该标识并查询原回执。
+
+<FirstTask />
+
+
+从 [本语言完整示例](/domain-model/language-bindings) 进入可运行源码：Go 的 go-workflow、Java 的 WorkflowExample、Node 的 workflow.mjs。先按语言指南编译/安装并运行 --help；只有显式 --send 才执行一次真实建会和发送。SDK npm 包中的 TypeScript composition 函数用于接线，不是带命令行参数的 Node driver。
+
+CLI 安装后可执行以下流程；大写值须替换为上述真实身份，创建结果中的 conversationId 用于下一条命令：
+
+```sh
+wuying conversations create --runtime RUNTIME_ID --agent AGENT_ID --name "First conversation" --mutation-id STABLE_CREATE_ID
+wuying --output jsonl run --runtime RUNTIME_ID --conversation CONVERSATION_ID --input-file ./task.txt --client-command-id STABLE_COMMAND_ID
+wuying turns status --runtime RUNTIME_ID --conversation CONVERSATION_ID --turn TURN_ID
+wuying messages list --runtime RUNTIME_ID --conversation CONVERSATION_ID
+```
+
+CLI 命令仅供包含 CLI 的交付使用；其他单语言包通过自己的示例完成相同流程。四种语言已提供的操作以 [参考入口](/sdk-reference/index) 为准。
+
+## 4. 判断结果
+
+| 观察到什么 | 下一步 |
+|---|---|
+| create 返回 conversationId | 保存会话引用；之后的轮次可以复用它 |
+| 发送返回 accepted | 保存 Turn/Message 关联；这只代表受理 |
+| Turn completed 且最终展示覆盖完整 | 本次执行与展示均可确认完成 |
+| pending Interaction | 展示真实问题/审批详情，等待用户选择；不要自动批准 |
+| 本地超时、断线或 unknown | 按原请求/Turn 身份查询；不要再新建一条消息 |
+
+最后取消观察订阅并关闭 Client。不要把应用退出当作远端任务取消；如需停止，显式取消对应 Turn 并核对结果。
+
+## 下一步
+
+[流式展示](/guides/index) · [附件与审批](/integration/03-attachments-and-interactions) · [错误排查](/support/troubleshooting)

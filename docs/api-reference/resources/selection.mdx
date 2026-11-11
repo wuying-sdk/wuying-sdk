@@ -1,0 +1,26 @@
+---
+title: "ResourceSelection（预留）"
+description: "查看通用 ResourceSelection 的当前支持边界，区分资源选择与已交付文件操作。"
+---
+
+<Note>
+当前是预留接口。通用资源目录与会话资源绑定尚未支持生产集成，调用返回 UNSUPPORTED；不能作为当前已开放的资源选择能力使用。
+</Note>
+
+## 当前接口边界
+
+| ResourceManager 操作 | 当前支持情况 |
+|---|---|
+| listResources / observeResources | 通用目录生产集成仍不支持 |
+| getConversationResources / observeConversationResources | 通用资源选择生产集成仍不支持 |
+| setConversationResources | 通用绑定生产集成仍不支持 |
+
+收到 `UNSUPPORTED` 时保留明确提示，依据实际能力隐藏相应操作入口。不要从资源类型或方法声明推断 Skill/MCP 等绑定已经可用。
+
+## 当前可以分别查阅的操作
+
+- [Workspace 工作空间](/api-reference/workspaces/list)：查询和创建工作空间对象。
+- [Attachment 附件](/api-reference/attachments/stage)：暂存文件、获取访问描述与丢弃未提交附件。
+- [能力地图](/domain-model/00-overview)：云资源、AI 能力、存储能力与计量的分类及边界。
+
+无影各类资源和资源内操作系统的整体集成方向见 [SDK 简介](/index)，具体交付以本版本公开接口为准。ResourceSelection 不等于任意远端文件系统或操作系统权限。

@@ -1,0 +1,49 @@
+---
+title: "turns"
+sidebarTitle: "turns"
+description: "CLI 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## turns
+
+```sh
+wuying turns
+
+```
+
+[查看操作或完整契约](/reference/cli/public#entry-ce85ac68437ecca9)
+
+## turns cancel
+
+```sh
+wuying turns cancel
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --turn <id> — Turn ID
+```
+
+[查看操作或完整契约](/api-reference/turns/cancel)
+
+## turns status
+
+```sh
+wuying turns status
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --turn <id> — Turn ID
+```
+
+[查看操作或完整契约](/api-reference/turns/get)
+
+## turns wait
+
+```sh
+wuying turns wait
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --turn <id> — Turn ID
+```
+
+[查看操作或完整契约](/api-reference/cli/turns-wait)

@@ -1,0 +1,111 @@
+---
+title: "SkillManager"
+sidebarTitle: "SkillManager"
+description: "JavaScript / TypeScript 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## listCategories
+
+```ts
+listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/list-categories)
+
+## listInstalledSkills
+
+```ts
+listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/installed)
+
+## setSkillEnabled
+
+```ts
+setSkillEnabled(ctx: ExecutionContext, req: SetSkillEnabledRequest): Promise<OperationTask[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/set-skill-enabled)
+
+## listAgentAuthedSkills
+
+```ts
+listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
+```
+
+[查看操作或完整契约](/api-reference/skills/list-agent-authed-skills)
+
+## entInstallSkills
+
+```ts
+entInstallSkills(ctx: ExecutionContext, req: EntInstallSkillsRequest): Promise<OperationTask[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/ent-install-skills)
+
+## entUninstallSkills
+
+```ts
+entUninstallSkills(ctx: ExecutionContext, req: EntUninstallSkillsRequest): Promise<OperationTask[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/ent-uninstall-skills)
+
+## buildSkillManager · static
+
+```ts
+buildSkillManager(ctx: ExecutionContext, container: ServiceContainer): Promise<SkillManager>;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-ae1f2cda77638211)
+
+## listCategories
+
+```ts
+listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/list-categories)
+
+## listInstalledSkills
+
+```ts
+listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/installed)
+
+## setSkillEnabled
+
+```ts
+setSkillEnabled(ctx: ExecutionContext, req: SetSkillEnabledRequest): Promise<OperationTask[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/set-skill-enabled)
+
+## listAgentAuthedSkills
+
+```ts
+listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
+```
+
+[查看操作或完整契约](/api-reference/skills/list-agent-authed-skills)
+
+## entInstallSkills
+
+```ts
+entInstallSkills(ctx: ExecutionContext, req: EntInstallSkillsRequest): Promise<OperationTask[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/ent-install-skills)
+
+## entUninstallSkills
+
+```ts
+entUninstallSkills(ctx: ExecutionContext, req: EntUninstallSkillsRequest): Promise<OperationTask[]>;
+```
+
+[查看操作或完整契约](/api-reference/skills/ent-uninstall-skills)

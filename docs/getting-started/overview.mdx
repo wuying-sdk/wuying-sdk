@@ -1,0 +1,36 @@
+---
+title: "接入准备与安装"
+description: "选择 Go、Java、JS 或 CLI，准备身份、运行环境与独占数据位置。"
+---
+
+先确定[服务端或用户端认证路径](/integration/01-auth-and-lifecycle)，完成本页的安装与环境准备，再进入[初始化 Client](/getting-started/initialize-client)。
+
+无影 SDK 是无影对外集成能力的统一入口，面向资源管理、资源内操作系统操作与 Agent 集成等场景。整体能力范围见[SDK 简介](/index)。
+
+本指南从当前已交付的 Agent 接入流程开始：发现已授权的执行环境和 Agent，管理业务会话，发送任务，并消费消息、执行过程、附件与交互。其他资源与系统操作按各自已交付的公开接口接入，具体范围见 [SDK Reference](/sdk-reference/index)。
+
+## 选择接入方式
+
+| 你要做什么 | 从这里开始 | 运行条件 |
+|---|---|---|
+| 在自己的应用中接入 | [安装与语言绑定](/domain-model/language-bindings) | 选择 Go、Java 或 JS；安装同版本 SDK |
+| 用脚本或自动化调用 | [CLI 绑定与命令](/sdk-reference/index) | 在目标机器安装 CLI 与 Node 依赖 |
+| 完成第一次会话 | [创建会话并发送任务](/getting-started/first-conversation) | 已授权身份、Client ID、可用 Runtime 与 Agent |
+| 理解对象关系 | [领域模型总览](/domain-model/00-overview) | 无需运行环境 |
+
+本包以固定源码和制品交付；可安装的包路径与构建信息见本语言指南。GitHub 地址、公共包仓库或发布 tag 未指定时，不推测安装坐标。
+
+## 调用前准备
+
+1. 由应用宿主取得有效 AuthCode，或完整 loginToken/sessionId/endUserId 登录材料，并提供获授权 Client ID。四种 SDK 的业务入口不等于桌面端用户名密码登录界面。
+2. 为当前账号准备私有数据位置：Go/Java 使用数据库文件；Node 的 IndexedDB shim 与 CLI 使用私有目录。账号切换不得复用另一账号的数据。
+3. 使用同版本公开查询选出 Runtime 和 Agent，保留返回的真实 ID 与可用性信息。先确认投影就绪，再判断目录是否为空。
+4. 在目标 OS/CPU 上安装依赖并先跑默认帮助/只读检查。Windows/Linux/macOS 的支持范围与实际验证范围分别记录。
+
+认证材料由宿主安全注入，不能把本示例的变量名当作凭据；不要把真实 token 放进源码、URL 或公开 Issue。具体接线见 [Client](/domain-model/01-client) 与 [认证指南](/integration/01-auth-and-lifecycle)。
+
+## 你将使用的核心对象
+
+Client 管理身份与连接；Runtime/Agent 指定执行位置和执行者；Conversation 聚合 Member、Message 与 Turn；Interaction 承载审批或问答；Attachment/Workspace 处理文件上下文。Manager 只是这些对象的公开操作入口。
+
+接下来：[安装 SDK](/domain-model/language-bindings) → [第一次会话](/getting-started/first-conversation) → [按任务查用法](/guides/index)。

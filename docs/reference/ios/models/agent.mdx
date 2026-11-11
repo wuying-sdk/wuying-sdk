@@ -1,0 +1,217 @@
+---
+title: "AgentManager"
+sidebarTitle: "AgentManager"
+description: "iOS · 当前移动绑定的完整方法列表。"
+---
+
+通过同一 Client 调用下列 `Methods` 常量。请求与结果沿用 Go 移动 JSON 合同；下面的 Go 签名用于定位 DTO，**不是原生 Java / Swift 签名**。授权、请求封装、事件与取消规则见[移动合同](/reference/mobile/contract)，调用示例见[Client](/reference/ios/client)。
+
+<a id="deletewydrivefile" />
+
+## Methods.agentDeleteWyDriveFile
+
+`Methods.agentDeleteWyDriveFile` → `agent.deleteWyDriveFile`
+
+**模式：** `call`。**请求类型：** `m.DeleteWyDriveFileRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.DeleteWyDriveFile
+func(ctx context.Context, r m.DeleteWyDriveFileRequest) error
+```
+
+[模型操作、完整参数与能力边界](/api-reference/files/delete-wy-drive-file) · [Go DTO 参考](/reference/go/api)
+
+<a id="describewydrivefiles" />
+
+## Methods.agentDescribeWyDriveFiles
+
+`Methods.agentDescribeWyDriveFiles` → `agent.describeWyDriveFiles`
+
+**模式：** `call`。**请求类型：** `m.DescribeWyDriveFilesRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.DescribeWyDriveFiles
+func(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/files/describe-wy-drive-files) · [Go DTO 参考](/reference/go/api)
+
+<a id="describewydrives" />
+
+## Methods.agentDescribeWyDrives
+
+`Methods.agentDescribeWyDrives` → `agent.describeWyDrives`
+
+**模式：** `call`。**请求类型：** `m.DescribeWyDrivesRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.DescribeWyDrives
+func(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/files/describe-wy-drives) · [Go DTO 参考](/reference/go/api)
+
+<a id="downloadknowledgefiles" />
+
+## Methods.agentDownloadKnowledgeFiles
+
+`Methods.agentDownloadKnowledgeFiles` → `agent.downloadKnowledgeFiles`
+
+**模式：** `call`。**请求类型：** `m.DownloadKnowledgeFilesRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.DownloadKnowledgeFiles
+func(ctx context.Context, r m.DownloadKnowledgeFilesRequest) ([]m.DownloadKnowledgeFileResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/knowledge/download-knowledge-files) · [Go DTO 参考](/reference/go/api)
+
+<a id="getagentmodelcatalog" />
+
+## Methods.agentGetAgentModelCatalog
+
+`Methods.agentGetAgentModelCatalog` → `agent.getAgentModelCatalog`
+
+**模式：** `call`。**请求类型：** `m.ModelCatalogQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.GetAgentModelCatalog
+func(ctx context.Context, r m.ModelCatalogQuery) (m.Snapshot[m.AgentModelCatalog], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/agents/get-agent-model-catalog) · [Go DTO 参考](/reference/go/api)
+
+<a id="getdownloadurl" />
+
+## Methods.agentGetDownloadURL
+
+`Methods.agentGetDownloadURL` → `agent.getDownloadURL`
+
+**模式：** `call`。**请求类型：** `m.GetDownloadUrlRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.GetDownloadURL
+func(ctx context.Context, r m.GetDownloadUrlRequest) (m.DownloadUrlInfo, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/files/get-download-url) · [Go DTO 参考](/reference/go/api)
+
+<a id="getexpertdirectory" />
+
+## Methods.agentGetExpertDirectory
+
+`Methods.agentGetExpertDirectory` → `agent.getExpertDirectory`
+
+**模式：** `call`。**请求类型：** `m.ExpertQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.GetExpertDirectory
+func(ctx context.Context, r m.ExpertQuery) (m.Snapshot[m.ExpertDirectory], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/agents/get-expert-directory) · [Go DTO 参考](/reference/go/api)
+
+<a id="listagentknowledgespaces" />
+
+## Methods.agentListAgentKnowledgeSpaces
+
+`Methods.agentListAgentKnowledgeSpaces` → `agent.listAgentKnowledgeSpaces`
+
+**模式：** `call`。**请求类型：** `m.ListAgentKnowledgeSpacesRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.ListAgentKnowledgeSpaces
+func(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/knowledge/list-agent-knowledge-spaces) · [Go DTO 参考](/reference/go/api)
+
+<a id="listagentmodels" />
+
+## Methods.agentListAgentModels
+
+`Methods.agentListAgentModels` → `agent.listAgentModels`
+
+**模式：** `call`。**请求类型：** `m.AgentRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.ListAgentModels
+func(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/agents/models) · [Go DTO 参考](/reference/go/api)
+
+<a id="listagentproducts" />
+
+## Methods.agentListAgentProducts
+
+`Methods.agentListAgentProducts` → `agent.listAgentProducts`
+
+**模式：** `call`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.ListAgentProducts
+func(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/agents/list-agent-products) · [Go DTO 参考](/reference/go/api)
+
+<a id="listagents" />
+
+## Methods.agentListAgents
+
+`Methods.agentListAgents` → `agent.listAgents`
+
+**模式：** `call`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.ListAgents
+func(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/agents/list) · [Go DTO 参考](/reference/go/api)
+
+<a id="listexperts" />
+
+## Methods.agentListExperts
+
+`Methods.agentListExperts` → `agent.listExperts`
+
+**模式：** `call`。**请求类型：** `m.ExpertQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.ListExperts
+func(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/agents/list-experts) · [Go DTO 参考](/reference/go/api)
+
+<a id="listknowledgefiles" />
+
+## Methods.agentListKnowledgeFiles
+
+`Methods.agentListKnowledgeFiles` → `agent.listKnowledgeFiles`
+
+**模式：** `call`。**请求类型：** `m.ListKnowledgeFilesRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.ListKnowledgeFiles
+func(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/knowledge/list-knowledge-files) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeagents" />
+
+## Methods.agentObserveAgents
+
+`Methods.agentObserveAgents` → `agent.observeAgents`
+
+**模式：** `observe`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*AgentManager.ObserveAgents
+func(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/agents/observe-agents) · [Go DTO 参考](/reference/go/api)

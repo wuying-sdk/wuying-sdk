@@ -1,0 +1,86 @@
+---
+title: "AdminImClient"
+sidebarTitle: "AdminImClient"
+description: "Java 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## builder · static
+
+```java
+public static com.aliyun.wuying.sdk.admin.AdminImClient$Builder builder();
+```
+
+[查看操作或完整契约](/reference/java/public#entry-57049736f7305784)
+
+## listAuthorizedUsers
+
+```java
+public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.AuthorizedUser> listAuthorizedUsers(java.lang.String, int);
+public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.AuthorizedUser> listAuthorizedUsers(com.aliyun.wuying.sdk.CallContext, java.lang.String, int);
+```
+
+[查看操作或完整契约](/api-reference/admin/list-authorized-users)
+
+## listGroups
+
+```java
+public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.UserGroup> listGroups(java.lang.String, java.lang.String, int);
+public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.UserGroup> listGroups(com.aliyun.wuying.sdk.CallContext, java.lang.String, java.lang.String, int);
+```
+
+[查看操作或完整契约](/api-reference/admin/list-groups)
+
+## getGroup
+
+```java
+public com.aliyun.wuying.sdk.admin.UserGroup getGroup(java.lang.String, java.lang.String);
+public com.aliyun.wuying.sdk.admin.UserGroup getGroup(com.aliyun.wuying.sdk.CallContext, java.lang.String, java.lang.String);
+```
+
+[查看操作或完整契约](/api-reference/admin/get-group)
+
+## exportHistory
+
+```java
+public com.aliyun.wuying.sdk.admin.HistoryPage exportHistory(com.aliyun.wuying.sdk.admin.HistoryQuery);
+public com.aliyun.wuying.sdk.admin.HistoryPage exportHistory(com.aliyun.wuying.sdk.CallContext, com.aliyun.wuying.sdk.admin.HistoryQuery);
+```
+
+[查看操作或完整契约](/api-reference/admin/export-history)
+
+## publishDurable
+
+```java
+public com.aliyun.wuying.sdk.admin.PublishReceipt publishDurable(com.aliyun.wuying.sdk.admin.PublishRequest);
+public com.aliyun.wuying.sdk.admin.PublishReceipt publishDurable(com.aliyun.wuying.sdk.CallContext, com.aliyun.wuying.sdk.admin.PublishRequest);
+```
+
+[查看操作或完整契约](/api-reference/admin/publish-durable)
+
+## subscribeGroup
+
+```java
+public com.aliyun.wuying.sdk.admin.GroupSubscription subscribeGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.DurableMessageHandler);
+public com.aliyun.wuying.sdk.admin.GroupSubscription subscribeGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.admin.GroupSubscriptionListener);
+public com.aliyun.wuying.sdk.admin.GroupSubscription subscribeGroup(com.aliyun.wuying.sdk.CallContext, java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.admin.GroupSubscriptionListener);
+```
+
+[查看操作或完整契约](/api-reference/admin/subscribe-group)
+
+## unsubscribeGroup
+
+```java
+public void unsubscribeGroup(com.aliyun.wuying.sdk.admin.GroupSubscription);
+```
+
+[查看操作或完整契约](/api-reference/admin/unsubscribe-group)
+
+## close
+
+```java
+public void close();
+```
+
+[查看操作或完整契约](/api-reference/admin/close)

@@ -1,0 +1,31 @@
+---
+title: "Client"
+sidebarTitle: "Client"
+description: "Go 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## Close
+
+```go
+func (receiver *Client) Close() *Failure
+```
+
+[查看操作或完整契约](/api-reference/mobile/close)
+
+## StartWithData
+
+```go
+func (receiver *Client) StartWithData(method, requestJSON string, data []byte, timeoutMillis int64, callback Callback) *Operation
+```
+
+[查看操作或完整契约](/api-reference/mobile/start-with-data)
+
+## Start
+
+```go
+func (receiver *Client) Start(method, requestJSON string, timeoutMillis int64, callback Callback) *Operation
+```
+
+[查看操作或完整契约](/api-reference/mobile/start)

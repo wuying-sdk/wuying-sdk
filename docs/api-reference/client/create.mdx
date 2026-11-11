@@ -1,0 +1,30 @@
+---
+title: "Client.create"
+description: "选择用户态或服务端签名入口，再创建对应身份的 Client。"
+---
+
+import ClientInitialization from '/snippets/client-initialization.mdx';
+
+Client 是 SDK 的调用入口。先按[授权与认证](/integration/01-auth-and-lifecycle)确定调用身份：用户态使用 AuthCode 或完整登录态；服务端签名云 API 使用对应的签名 Client。
+
+## 用户态参数
+
+| 参数 | 含义 |
+|---|---|
+| AuthCode 或登录三元组 | 当前用户的认证材料，两条路径选择一种 |
+| clientId | 获授权的应用接入标识，不是用户 ID 或 AccessKey ID |
+| 私有数据位置 | Go / Java / Android / iOS 使用独占库文件；Node 按语言指南预先配置持久目录 |
+
+## 初始化示例
+
+以下为六种接入方式的核心语句，`authCode`、`clientId` 与数据文件由宿主提供。Android / iOS 的 `dataFile` 是应用私有目录中、按账号隔离的绝对数据库文件路径字符串；完整导入和配置见[初始化指南](/getting-started/initialize-client)。
+
+<ClientInitialization />
+
+Android / iOS 在工作线程初始化；同一数据库文件只供一个活跃 Client 使用。Android 需配套双 AAR，iOS 需带 XCFramework 的 Swift Package；最低平台分别为 Android API 23、iOS 13，制品及安装说明见 [Android](/sdk-reference/android) / [iOS](/sdk-reference/ios)。
+
+返回 Client 对象不代表在线认证通过。下一步建立 Manager、查询授权目录并保留投影；完整步骤、已有登录态示例和账号隔离见 [SDK Client](/getting-started/initialize-client)。
+
+## 服务端签名入口
+
+当前 JS、Go、Java 的统一根 Client 均支持 AK/SK 管理员态，初始化及取票示例见[服务端认证](/integration/01-auth-and-lifecycle)。管理员态调用 create / wait / getAuthCode；用户态通过 RuntimeManager 查询与操作已授权环境。两种身份不能混合初始化，管理员 Client 不能构建用户 Manager。Android/iOS 使用后端签发的用户票据；CLI 从环境或管理员 profile 提供 AK/SK，并通过 desktops / auth code 命令调用根 Client，见 [CLI 指南](/sdk-reference/cli)。

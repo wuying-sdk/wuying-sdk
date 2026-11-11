@@ -1,0 +1,50 @@
+---
+title: "错误、诊断、升级和生产接入检查"
+description: "错误、诊断、升级和生产接入检查：职责、模型关联、生命周期、公开操作与使用边界。"
+---
+
+## 按 code 与 outcome 一起决策
+
+| code / 情况 | 客户处理 |
+|---|---|
+| INVALID_ARGUMENT | 核对必填字段、枚举、未知字段、游标和版本；仅确认是写前预检失败时可修正后新提交，否则先按原 ID 核对 |
+| UNAUTHENTICATED | 走宿主登录流程取得有效材料，再建立正确身份 Client |
+| FORBIDDEN | 核对账号/租户/Runtime/会话/附件授权，不用重试绕过 |
+| UNSUPPORTED | 当前公开面或远端能力未提供；停用该项业务入口并说明原因 |
+| SYNC_NOT_READY | 同步/必要锚点未就绪；保留投影状态，按 SDK 公开观察或刷新恢复 |
+| STORAGE_UNAVAILABLE | 核对持久化能力、权限、空间、版本升级和消费者速度；不删库掩盖未知写入 |
+| CURSOR_EXPIRED | 当前投影代际改变，重新第一页并保留原筛选条件 |
+| CONFLICT | 查询最新实体 / Interaction / 写版本，核对是否已在另一端处理 |
+| BUSINESS_REJECTED | owner 明确拒绝或执行失败；展示脱敏原因，结合 outcome 判断 |
+| OUTCOME_UNKNOWN、TIMEOUT、CANCELLED | 保留原操作 ID，对账或继续等待；不是自动重发依据 |
+| PROTOCOL_ERROR | 保存脱敏错误码、关联 ID 与版本，交支持人员定位；不本地猜测修正 owner 数据 |
+| CLIENT_CLOSED | 停止旧 Client 上的请求/观察，重新建立生命周期 |
+
+语言绑定可能还暴露云 API 错误与兼容错误；以实际类型为准。Java 的 CompletionStage/ExecutionException 需要解出 BusinessException 后读取字段；Go 使用 errors.As 判断业务错误；JS 用 BusinessError，非业务错误走通用脱敏提示。不要将任意 Error 序列化到浏览器或日志。
+
+retryable=true 也不代表可直接重放未知写入。普通 SDK 错误里的 outcome=not_started 可能只是默认值，不能独立证明未提交。owner 已成功而 SDK 后续 decode 失败时也可能出现该值。只有写前预检或 owner 明确的未受理/无副作用证明，才可确定该项未执行；其余先按原稳定 ID 对账。前置附件上传也可能已有独立副作用。outcome=confirmed 表示收到确定结果，并非一律成功；unknown 表示不能证明最终结果。
+
+## 最小诊断信息
+
+包 ZIP SHA-256、manifest SDK commit、语言/版本、OS/CPU、Node/JDK/Go 版本、时间、Runtime/Conversation/Turn/Message/operation关联 ID、脱敏错误 code/outcome、projection.phase/coverage 和精确复现步骤。可保留有界计数与耗时；不逐 token 采集、不保存密码/票据/SceneKey/完整数据库/原始工具参数。
+
+## 升级与回滚
+
+1. 固定同一源码基线与制品哈希，核对 .d.ts / Go 公共类型 / Java Javadoc 与实际包相同。
+2. 阅读本包迁移文档；旧 OpenIM、Session/SingleAgent 和旧 JS 子路径不因换包恢复。
+3. 在隔离测试账号与独立数据位置验证新版本，关闭旧进程/标签页后再切换。
+4. 数据库版本可能升级；旧程序不一定能打开新库。回滚程序之前先核对 SDK 存储合同，禁止默认删库或把新库复制回旧程序。
+5. 本包 manifest 是完整性与版本追溯，不是发布签名；从可信渠道取得包与外部 SHA。
+
+## 客户验收清单
+
+- 安装和类型/编译通过；默认帮助/离线 smoke 不发业务请求。
+- 只读认证与 Runtime 查询通过，投影缺口不解释为空。
+- 在用户明确选定环境创建测试会话，一条发送对应一个业务轮次。
+- 权威 completed、最终展示、刷新/重开历史和图标身份分别核对。
+- 附件与审批/问答按专门指南验收，不用 fixture 冒充真实服务。
+- 断线、超时、未知回执保留原身份；不出现自动重复执行。
+- 退出、订阅清理、账号隔离、应用重启、凭据过期符合本语言行为。
+- Windows/Linux/macOS 每种实际使用的 OS/架构单独留证；跨编译不等于运行通过。
+
+本包默认验证只覆盖本地制品和示例；没有账号/远端资源时，真实认证、任务、审批都标为未执行。CLI 的退出码及 JSON 状态见 CLI 命令参考，自动化同时检查退出码和结构化 outcome。

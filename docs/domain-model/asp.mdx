@@ -1,0 +1,28 @@
+---
+title: "ASP"
+description: "ASP 负责云桌面或云应用的流化会话，用于将授权资源画面接入应用。"
+---
+
+ASP 负责云桌面或云应用的流化会话，用于将授权资源画面接入应用。
+
+## 模型与关联
+
+当前对客 JS / TypeScript 通过 AspManager 及 AspStreamSession 表达流化状态。
+
+[Conversation](/domain-model/03-conversation) 是业务会话，[Turn](/domain-model/06-turn-items) 是执行轮次；流化会话不替代这两种身份。
+
+## 生命周期
+
+准备浏览器 DOM 与配套环境 → 按能力启动流化 → 读取当前会话 → 页面结束时停止流化。
+
+## 操作入口
+
+- [`startAspStream`](/api-reference/asp/start)
+- [`getAspStreamSession`](/api-reference/asp/get-asp-stream-session)
+- [`stopAspStream`](/api-reference/asp/stop-asp-stream)
+
+## 使用边界
+
+本基线 Go / Java 根 Client、CLI 与 Android / iOS 移动清单没有对等 AspManager 工厂。打开桌面不代表 Agent Turn 成功；停止流化也不等于取消远端任务。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

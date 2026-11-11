@@ -1,0 +1,51 @@
+---
+title: "授权与认证"
+description: "区分 aliuid 维度的管理员 AK/SK 权限与无影客户端用户态权限；用户态支持 AuthCode 和 LoginToken 两种认证方式。"
+sidebarTitle: "授权与认证"
+icon: "key"
+---
+
+import AuthenticationModel from '/snippets/authentication-model.mdx';
+
+<AuthenticationModel />
+
+本文适用于本包 `manifest.json.versions.sdkCommit` 对应的公共 SDK；业务与方法签名见本语言 API 参考。不要将 demo 的私有兼容扩展当成公开 API。
+
+## 接入前必须取得的配置
+
+| 配置 | 提供方 | 验证方式 |
+|---|---|---|
+| 接入方 Client ID | 平台授权管理员 | 用客户已授权身份查询 Runtime；默认 sdk-client 并非通用授权 |
+| AuthCode 或 LoginToken 登录态 | 客户自己的认证后端 | SDK 建立 Manager 后查询授权环境；仅构造 Client 不等于在线认证通过 |
+| loginRegionId（如需要） | 认证系统 | 保持与票据地域一致；不将环境 ID 当地域 |
+| 独占的数据位置 | 客户宿主 | 用户私有、可写、容量足够；Go/Java 是库文件，Node shim 是目录 |
+| 已允许访问的网络 | 企业网络管理员 | SDK 的服务端点 / WebSocket 可达；不以临时放开鉴权代替排障 |
+
+只选一种凭据方式。AuthCode 短效且可能一次性消费，应在创建 Client 前获取；多条独立 CLI 命令不要反复消费同一个旧票。LoginToken 方式使用 SDK 参数 loginToken，并必须同时提供 sessionId、endUserId，字段不能用账户显示名或桌面 ID 替换。SDK 负责令牌交换、续期和连接；宿主不能同时维护另一套刷新器。
+
+管理员权限使用 aliuid 维度的 AK/SK；当前 JS / Go / Java 根 Client 提供 AK/SK 模式，AK/SK 保留在受信任服务端。无影客户端用户态使用 AuthCode 或 LoginToken；具体初始化参数按本语言接口使用。demo 的组织/用户名/密码登录属于 demo Host，不是需要客户照搬的 SDK 登录接口。认证完成后，宿主通过安全内存/配置注入材料；不要写 URL、代码仓库、日志或浏览器 localStorage。
+
+## 正确的生命周期
+
+1. 宿主完成登录并确定租户/用户/环境隔离边界。
+2. 建立根 Client，准备需要的 Manager；对准备操作设置本地超时。
+3. 查询 Runtime 与 Agent，并由用户/业务明确选择授权对象，不自动选第一个。
+4. 一个业务宿主共享其 Client；页面或组件分别拥有自己的订阅句柄。
+5. 切换页面只退订该页面的观察；退出账号才释放全部观察并关闭根 Client。
+6. 更换身份使用新 Client 与隔离的数据位置。不要用另一个身份复用同一 Client，也不要并发打开同一库。
+
+Go 的调用期限由 context.Context 传递，Java 用 CallContext，JS 用 Context.timeout/signal，CLI 用 --timeout。它们取消本地等待，不表示已取消远端任务；远端取消需调用取消 Turn 并观察终态。
+
+## Node 与浏览器的区别
+
+浏览器需要真实持久 IndexedDB、WebSocket、fetch 等能力；fake-indexeddb 只用于单元测试。Node 没有原生 IndexedDB，本包示例使用 IndexedDBShim 19.0.7 + SQLite 和固定调度兼容补丁，安装时必须保留 postinstall。不要定义空 window/document/location 冒充浏览器，否则 SDK 会选择错误的运行分支。
+
+Node 的原生依赖在 Windows/Linux/macOS 目标机安装，不能拷贝另一平台 node_modules。只有 SDK 自身的 CJS/ESM/类型及浏览器 ESM 是平台无关构建输出。Go SDK 源码 module 与 Java SDK jar 的安装方式分别见本语言指南。
+
+## CLI 凭据行为
+
+环境凭据是进程临时输入。POSIX auth import 保存私有 0600 明文文件，不是钥匙串；Windows 当前禁止持久凭据导入，使用环境注入。auth status 不验证在线身份，auth logout 不撤销远端 token，也不清除父进程环境；完整状态见 CLI 参考。
+
+## 接入验收
+
+依次验收离线加载、真实只读 Runtime 查询、账号隔离、正常关闭/重启、过期凭据重新认证。记录平台、包哈希、脱敏错误码、身份关联 ID，不上传凭据或数据库。默认示例 --help 不发请求；真实 --live-read 和 --send 需要宿主主动提供配置，按授权范围执行。

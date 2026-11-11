@@ -1,0 +1,109 @@
+---
+title: "Java SDK 客户集成指南"
+description: "Java SDK 客户集成指南：职责、模型关联、生命周期、公开操作与使用边界。"
+---
+
+当前为 **RuntimeManager 首版未提交草稿**；下文 SHA 为基础提交，非当前完整源码身份。源码归档及逐文件哈希见文档站覆盖清单；不代表已发布制品。
+
+以下文中的交付路径必须替换为本次源码重新构建的制品；旧交付包不具备这些接口。
+
+业务模型、关系与生命周期先读 [领域文档](/index)；本页保留该语言的安装、配置和代码接线。
+
+当前草稿基线：2026-11-11，源码 `ea48f8775d28753cefef13b937982dd44587aa51`。公共 SDK Maven 坐标为 `com.aliyun:wuying-sdk-java:0.1.0-SNAPSHOT`，此处以随包 jar 交付，未宣称已上架 Maven Central。请同时记录 manifest 中源码 SHA 和制品 SHA。
+
+## 环境与制品
+
+公共 SDK 以 JDK 11 构建、Java 8 字节码目标；优先使用 JDK 11/17/21 验收。AgentShell Java demo 额外要求 Java 11+，不能根据公共 SDK 的目标版本降低 demo 要求。Windows / Linux / macOS 的 SQLite JDBC 原生库由随包依赖提供；Linux 当前测试目标为 glibc 环境，目标系统仍需运行实测。
+
+`sdks/java/` 包含 `sdk.jar`、`sdk-sources.jar`、`sdk-javadoc.jar`、原始 pom 和 `lib/*.jar`。`sdk.jar` 不是包含所有依赖的 fat jar，运行时必须带上 `lib/`。已有 Maven 企业私服时，把随包 SDK、POM 和依赖按客户制品管理流程导入，固定源码/校验值；本指南的最小示例直接使用 classpath，无需先搭私服。
+
+## 编译并运行只读示例
+
+在测试包根目录执行：
+
+```sh
+node scripts/qa.mjs sdk-smoke --language=java
+```
+
+如未配置 JAVA_HOME，加 `"--java-home=实际 JDK 路径"`。该命令调用 javac 编译 [ReadOnlyExample.java](/downloads/examples/java/ReadOnlyExample.java.txt)，并以 `--help` 运行，不登录。
+
+手动命令（在包根目录；先创建 `classes` 目录）：
+
+```sh
+# macOS / Linux，类路径分隔符为冒号
+javac -encoding UTF-8 -cp 'sdks/java/sdk.jar:sdks/java/lib/*' -d classes examples/java/ReadOnlyExample.java
+java -cp 'classes:sdks/java/sdk.jar:sdks/java/lib/*' ReadOnlyExample --help
+```
+
+```bat
+rem Windows CMD，类路径分隔符为分号
+javac -encoding UTF-8 -cp "sdks/java/sdk.jar;sdks/java/lib/*" -d classes examples\java\ReadOnlyExample.java
+java -cp "classes;sdks/java/sdk.jar;sdks/java/lib/*" ReadOnlyExample --help
+```
+
+JDK 示例与主类使用默认包，仅供接入自检，不需要放入客户业务类路径。
+
+## Client 接入
+
+```java
+ClientOptions options = ClientOptions.builder()
+    .authCode(hostAuthCode)
+    .build();
+SdkConfig config = SdkConfig.builder()
+    .clientId(authorizedClientId)
+    .dataPath(Paths.get(privateDatabasePath))
+    .build();
+try (WuyingClient client = new WuyingClient(options, config);
+     CallContext context = CallContext.withTimeout(Duration.ofSeconds(60))) {
+    RuntimeManager runtimesAPI = client.buildRuntimeManager(context);
+    int count = runtimesAPI.listRuntimes(context)
+        .toCompletableFuture().get(65, TimeUnit.SECONDS).data.size();
+    // 正式业务还需保留查询返回的 projection，不只读取数量。
+}
+```
+
+类所在包：`com.aliyun.wuying.sdk.WuyingClient`、`com.aliyun.wuying.sdk.config.ClientOptions` / `SdkConfig`；其余精确导入和类型请直接采用随包可编译示例，或 Javadoc。
+
+真实只读自检：由宿主注入 `WUYING_CLIENT_ID`、`WUYING_DATA_PATH`（独占数据库文件），以及 `WUYING_AUTH_CODE`，或完整的 `WUYING_LOGIN_TOKEN` / `WUYING_SESSION_ID` / `WUYING_END_USER_ID`；可选 `WUYING_LOGIN_REGION_ID`。将上述手动运行命令末尾改为 `--live-read`，仅查询运行环境数量。不要把实际令牌粘到 shell 参数或日志中。
+
+## 业务、异步与资源释放
+
+通过根 Client 建立 `AgentManager` / `ConversationManager`，按授权查询取得真实 Runtime 与 Agent 身份后创建会话。操作返回 CompletionStage 时应在业务线程异步等待，避免阻塞 UI 线程；每次调用使用有界 CallContext。观察消息 / 审批时释放相应订阅，最后关闭 Client。不要在每个收到的消息事件中再创建一个 Client。
+
+公开 API 的详细参数在 `sdk-javadoc.jar` 和 `sdk-sources.jar`，附带原始 POM 可核对依赖。消息是投影快照，不能重复追加为多条卡片。消息写入或审批结果未知时按原 ID 对账；本地 future 超时不证明远端未执行。审批只能提交当前 Interaction 的真实 option ID 与写版本，不用界面显示文案替代。
+
+SDK 管理持久副本和连接；每账号/环境使用独立数据库，应用不能绕过 Manager 直接修改 SDK 表。认证、权限、投影与安全边界见 [集成说明](/domain-model/00-overview)。
+
+## 验收
+
+首先运行包完整性校验、javac 示例，再按 [测试清单](/support/validation) 进行真实会话业务验收。`NoClassDefFoundError` 先检查 `lib/*` 与 classpath 分隔符；SQLite 加载失败检查 OS/CPU 架构及可写临时目录。只附脱敏错误码、包哈希和关联 ID 进行排查。
+
+## 完整业务示例与 API 参考
+
+[WorkflowExample.java](/downloads/examples/java/WorkflowExample.java.txt) 实现创建会话 → 订阅消息 → 发送并等待 → 核对 Turn → try-with-resources 退订和关闭。默认 `--help` 不发请求，只有 `--send` 执行真实写入。宿主还需注入 `WUYING_RUNTIME_ID`、`WUYING_AGENT_ID`、`WUYING_CREATE_ID`、`WUYING_COMMAND_ID`、`WUYING_INPUT_FILE`；输入文件是 UTF-8，输出仅关联 ID / 状态。稳定 ID 在发出前由业务保存，超时后不换 ID 自动重发。
+
+使用前面的 classpath 命令将源文件名/主类换为 WorkflowExample；编译后先以 --help 运行。示例中的消息快照回调只展示 phase，真实 UI 应按 Message ID 更新快照，不能反复追加。示例需要执行至终态才返回；需要尽早保存 accepted 的产品应使用 MessageStream 的 accepted/result，并处理两个异步结果。
+
+| 业务 | Java 公共入口 | Java 特点 |
+|---|---|---|
+| 构造 | new WuyingClient(options, config) | AutoCloseable 根 Client |
+| Manager | buildRuntimeManager / buildAgentManager / buildConversationManager / buildResourceManager | CallContext 显式传入 |
+| 环境 | listRuntimes(ctx) / listAgents(request, ctx) | CompletionStage，保存 Snapshot.projection |
+| 建会 | createConversation(request, options, ctx) | CreateRequest，MutationOptions.mutationId |
+| 消息 | listMessages / observeMessages | 请求在前，ctx 在后；Observer 接收 Snapshot |
+| 发送 | sendMessageStream / sendMessageAndWait | SendRequest.clientCommandId，MessageCompletion.accepted/turn |
+| 交互 | respondPermission / respondQuestion | typed 请求，不能发送对象 toString |
+| 释放 | Subscription.close / WuyingClient.close | 本地取消不等于远端 Turn 取消 |
+
+[Java API 参考](/reference/java/api) 提供当前 jar 的公开入口签名；独立 Java 包另提供 `docs/reference/java/javadoc/index.html` 可离线浏览，包含方法参数、DTO 字段和返回类型。API 实现是随包 sdk.jar，源代码在 sdk-sources.jar，不用 demo 的 Host 私有接口。
+
+## 配套场景指南
+
+- [认证与生命周期](/integration/01-auth-and-lifecycle)：配置来源、账号/存储隔离、关闭和重登。
+- [会话与流式](/integration/02-conversations-and-streams)：受理/终态、快照渲染、分页、未知结果恢复。
+- [附件和交互](/integration/03-attachments-and-interactions)：暂存、审批、问答、工作空间与产物边界。
+- [错误与运维](/integration/04-errors-and-operations)：错误决策、诊断、升级回滚与客户验收。
+
+## 当前草稿的制品
+
+以下 `sdks/`、测试包及本地 tgz/jar 路径描述交付布局。本次源码尚未重新封装为完整交付包；审核当前接口须先用 RuntimeManager 草稿源码重新构建并替换对应制品。旧交付包与公网上同名版本不具备本页的新接口。源码和构建命令见各 SDK README；来源身份见 文档站的全量覆盖清单。

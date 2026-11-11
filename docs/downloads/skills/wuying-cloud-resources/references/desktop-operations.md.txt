@@ -1,0 +1,67 @@
+# Desktop request guide
+
+Use the actual CLI's `--help` for flags. JSON uses the SDK's camelCase fields, not
+cloud API wire names. The examples contain placeholders, not discovered resources.
+
+## Existing desktop
+
+```json
+{"regionId":"cn-hangzhou","desktopIds":["desktop-id"]}
+```
+
+Use this target for `desktops start`, `stop`, `reboot`, `wait` or administrator `delete`.
+IDs must be nonblank and unique. The SDK rejects excessive batches; it does not
+automatically split writes. User start/stop/reboot/reset accept up to 20 IDs;
+administrator reset accepts up to 20, and administrator start/stop/reboot/delete up to 100.
+
+`stop` and `reboot` accept optional `osUpdate`, including explicit `false`.
+`stoppedMode` is only for administrator stop: `StopCharging` or `KeepCharging`.
+Omit unrelated optional fields. User operations may use `clientToken`; the SDK
+generates one when absent, without automatically retrying. Administrator operations
+do not accept it.
+
+## Reset
+
+User mode requires an explicitly authorized image:
+
+```json
+{"regionId":"cn-hangzhou","desktopIds":["desktop-id"],"imageId":"image-id"}
+```
+
+Administrator mode can omit `imageId`, retaining the service default. Do not look up
+or guess an image just to fill it. Optional `operateType` currently accepts `replace`;
+do not add it unless requested. Reset uses RebuildDesktops and initializes the system
+disk; image/data-disk replacement follows service rules. Inspect every returned
+`results` entry (`desktopId`, `accepted`, `code`) and retain requestId.
+
+## Create, then wait
+
+Creation is administrator-only. It can incur resource charges. Use the user's
+selected region, office site, bundle and assigned end users, not invented defaults:
+
+```json
+{"regionId":"cn-hangzhou","officeSiteId":"office-id","bundleId":"bundle-id","endUserIds":["user-id"]}
+```
+
+```sh
+wuying desktops create --profile <admin-profile> --request-file <create.json> > <receipt.json>
+wuying desktops wait --profile <admin-profile> --request-file <target.json>
+```
+
+Construct target.json from the preserved receipt's `data.desktopIds` and the original
+regionId. Keep the receipt when waiting fails. `create --wait` is also supported,
+but an unknown failed wait is not authorization to submit create again. The wait
+result represents creation readiness, not Agent/IM availability.
+
+## AuthCode for a user
+
+`auth code` accepts `{"endUserId":"verified-user-id"}` using an administrator profile.
+The user mapping must already be authorized. It does not create users or grant all
+resource permissions. New codes may invalidate earlier codes for the same user.
+The JSON response's `data.authCode` is a credential; deliver it through the customer's
+trusted authentication flow. Do not display, persist as a normal receipt or log it.
+
+There is no new lifecycle-status listing command in this CLI. Do not use `runtimes list`
+IM status or `desktops wait` as a generic power-state query. When an operation's final
+state is unknown, report the receipt and use the customer's authorized resource status
+source rather than inventing a CLI poller.

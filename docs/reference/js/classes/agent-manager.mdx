@@ -1,0 +1,239 @@
+---
+title: "AgentManager"
+sidebarTitle: "AgentManager"
+description: "JavaScript / TypeScript 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## describeWyDrives
+
+```ts
+describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest | undefined): Promise<DescribeWyDrivesResult>;
+```
+
+[查看操作或完整契约](/api-reference/files/describe-wy-drives)
+
+## describeWyDriveFiles
+
+```ts
+describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+```
+
+[查看操作或完整契约](/api-reference/files/describe-wy-drive-files)
+
+## getDownloadUrl
+
+```ts
+getDownloadUrl(ctx: ExecutionContext, req: GetDownloadUrlRequest): Promise<GetDownloadUrlResult>;
+```
+
+[查看操作或完整契约](/api-reference/files/get-download-url)
+
+## deleteWyDriveFile
+
+```ts
+deleteWyDriveFile(ctx: ExecutionContext, req: DeleteWyDriveFileRequest): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/files/delete-wy-drive-file)
+
+## listAgentKnowledgeSpaces
+
+```ts
+listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
+```
+
+[查看操作或完整契约](/api-reference/knowledge/list-agent-knowledge-spaces)
+
+## listKnowledgeFiles
+
+```ts
+listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+```
+
+[查看操作或完整契约](/api-reference/knowledge/list-knowledge-files)
+
+## downloadKnowledgeFiles
+
+```ts
+downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest): Promise<DownloadKnowledgeFileResult[]>;
+```
+
+[查看操作或完整契约](/api-reference/knowledge/download-knowledge-files)
+
+## listAgents
+
+```ts
+listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list)
+
+## observeAgents
+
+```ts
+observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/agents/observe-agents)
+
+## listAgentModels
+
+```ts
+listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<(ModelSummary & AgentRef)[]>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/models)
+
+## listAgentProducts
+
+```ts
+listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list-agent-products)
+
+## listExperts
+
+```ts
+listExperts(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<Expert[]>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list-experts)
+
+## getExpertDirectory
+
+```ts
+getExpertDirectory(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<ExpertDirectory>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/get-expert-directory)
+
+## getAgentModelCatalog
+
+```ts
+getAgentModelCatalog(ctx: Context, req: AgentRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<AgentModelCatalog>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/get-agent-model-catalog)
+
+## constructor
+
+```ts
+new new (service: Service, cloud?: CloudResources | undefined): AgentManager;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-c0944a4674945cdf)
+
+## listAgents
+
+```ts
+listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list)
+
+## observeAgents
+
+```ts
+observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/agents/observe-agents)
+
+## listAgentModels
+
+```ts
+listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<ModelSummary[]>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/models)
+
+## listAgentProducts
+
+```ts
+listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list-agent-products)
+
+## getExpertDirectory
+
+```ts
+getExpertDirectory(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<ExpertDirectory>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/get-expert-directory)
+
+## listExperts
+
+```ts
+listExperts(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<Expert[]>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list-experts)
+
+## getAgentModelCatalog
+
+```ts
+getAgentModelCatalog(ctx: Context, req: AgentRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<AgentModelCatalog>>;
+```
+
+[查看操作或完整契约](/api-reference/agents/get-agent-model-catalog)
+
+## describeWyDrives
+
+```ts
+describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest): Promise<DescribeWyDrivesResult>;
+```
+
+[查看操作或完整契约](/api-reference/files/describe-wy-drives)
+
+## describeWyDriveFiles
+
+```ts
+describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+```
+
+[查看操作或完整契约](/api-reference/files/describe-wy-drive-files)
+
+## getDownloadUrl
+
+```ts
+getDownloadUrl(ctx: ExecutionContext, req: GetDownloadUrlRequest): Promise<GetDownloadUrlResult>;
+```
+
+[查看操作或完整契约](/api-reference/files/get-download-url)
+
+## deleteWyDriveFile
+
+```ts
+deleteWyDriveFile(ctx: ExecutionContext, req: DeleteWyDriveFileRequest): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/files/delete-wy-drive-file)
+
+## listAgentKnowledgeSpaces
+
+```ts
+listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
+```
+
+[查看操作或完整契约](/api-reference/knowledge/list-agent-knowledge-spaces)
+
+## listKnowledgeFiles
+
+```ts
+listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+```
+
+[查看操作或完整契约](/api-reference/knowledge/list-knowledge-files)
+
+## downloadKnowledgeFiles
+
+```ts
+downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest): Promise<DownloadKnowledgeFileResult[]>;
+```
+
+[查看操作或完整契约](/api-reference/knowledge/download-knowledge-files)

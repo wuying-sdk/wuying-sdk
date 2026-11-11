@@ -1,0 +1,37 @@
+---
+title: "ModelManager"
+sidebarTitle: "ModelManager"
+description: "Android · 当前移动绑定的完整方法列表。"
+---
+
+通过同一 Client 调用下列 `Methods` 常量。请求与结果沿用 Go 移动 JSON 合同；下面的 Go 签名用于定位 DTO，**不是原生 Java / Swift 签名**。授权、请求封装、事件与取消规则见[移动合同](/reference/mobile/contract)，调用示例见[Client](/reference/android/client)。
+
+<a id="getagentinstancemodelconfig" />
+
+## Methods.modelGetAgentInstanceModelConfig
+
+`Methods.modelGetAgentInstanceModelConfig` → `model.getAgentInstanceModelConfig`
+
+**模式：** `call`。**请求类型：** `*manager.GetModelConfigRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ModelManager.GetAgentInstanceModelConfig
+func(ctx context.Context, req *GetModelConfigRequest, opts ...CallOption) (*model.ModelConfig, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/models/get) · [Go DTO 参考](/reference/go/api)
+
+<a id="setchannelgroupmodel" />
+
+## Methods.modelSetChannelGroupModel
+
+`Methods.modelSetChannelGroupModel` → `model.setChannelGroupModel`
+
+**模式：** `call`。**请求类型：** `*manager.SetChannelGroupModelRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ModelManager.SetChannelGroupModel
+func(ctx context.Context, req *SetChannelGroupModelRequest, opts ...CallOption) (*model.SetChannelGroupModelResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/models/set-channel-group-model) · [Go DTO 参考](/reference/go/api)

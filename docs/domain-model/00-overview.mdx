@@ -1,0 +1,45 @@
+---
+title: "无影能力模型"
+sidebarTitle: "能力地图"
+description: "按云资源、AI 能力、存储能力与计量查找无影 SDK 的集成入口。"
+---
+
+无影 SDK 对外按四类能力组织。先确定你要接入哪种能力，再查看对应模型和公开方法。
+
+| 能力分类 | 包含的模型 | 可以做什么 |
+|---|---|---|
+| 云资源 | [Runtime](/domain-model/02-runtime-agent)、[ASP 流化](/domain-model/asp)、[端口服务](/domain-model/port-service) | 查询授权执行环境、操作资源、接入桌面画面或资源内服务 |
+| AI 能力 | [Agent](/domain-model/agent)、[Conversation](/domain-model/03-conversation)、[Skill](/domain-model/11-cloud-capabilities)、[Model](/domain-model/model)、[Resource（预留）](/domain-model/08-resource-attachment) | 调用 Agent、管理会话、使用技能、配置模型及会话资源 |
+| 存储能力 | [WyDrive](/domain-model/wy-drive)、[KnowledgeSpace](/domain-model/knowledge-space) | 查询云盘文件、知识空间及知识文件 |
+| 计量 | [Credit](/domain-model/credit) | 查询套餐与用量 |
+
+这是能力分类，不是所有能力都使用同一种认证或支持全部平台。每个模型页说明当前版本的具体接口和限制；例如通用 Resource 选择仍需处理 UNSUPPORTED。Client 是共享调用入口，初始化见 [Client](/domain-model/01-client)。
+
+## 云资源
+
+Runtime 定位用户已获授权的执行环境。ASP 将桌面或应用画面接入界面；端口服务通过当前公开的场景地址接口访问资源内服务。画面连接成功、服务地址生成成功与 Agent 任务完成分别判断。
+
+## AI 能力
+
+Agent 是可调用的智能体；Conversation 组织一次业务会话。会话内再区分 Member、Config、Message 和 Turn：成员与配置决定会话设置，消息用于展示，执行轮次用于确认任务状态。附件、工作空间和消息文件按各自能力接入。
+
+Skill 表达技能目录与安装状态；Model 表达模型配置。Resource 指 AI 会话可选资源，不是云电脑实例，也不是云盘。
+
+## 存储能力
+
+WyDrive 与 WyDriveFile 说明云盘及文件；KnowledgeSpace 与 KnowledgeFile 说明知识空间及其中的文件。它们与会话工作空间、消息附件分别使用自己的接口和标识。
+
+## 计量
+
+Credit 说明套餐、用量与相关明细。用量数据不替代资源状态或任务执行状态，也不授予操作权限。
+
+## 查询结果、实时更新与失败处理
+
+这些是各类能力共用的接入方法，放在 Guides：
+
+- [读取查询结果](/domain-model/10-projection-events)：从返回值里取出实际数据。
+- [判断数据是否可用](/domain-model/projection)：区分未就绪、部分数据与可用结果。
+- [实时观察与停止监听](/domain-model/subscription)：接收变化并释放本地订阅。
+- [超时后查询原结果](/domain-model/command-receipt)：避免把超时当成任务失败后重复提交。
+
+具体参数查 [API Reference](/api-reference/index)，语言签名查 [SDK Reference](/sdk-reference/index)。

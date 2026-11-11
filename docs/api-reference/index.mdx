@@ -1,0 +1,75 @@
+---
+title: "API Reference"
+sidebarTitle: "接口目录"
+description: "按云资源、AI 能力、存储能力与计量查找当前 SDK 公开操作。"
+---
+
+当前共有 **320 项公开操作**，业务能力与 Docs 使用相同的四类划分。Client、认证和集成辅助接口另列；各语言完整声明仍保留。
+
+[全量覆盖与来源](/api-reference/coverage/index) · [按语言查看](/sdk-reference/index)
+
+## 公共入口
+
+| 模型或用途 | 目录入口数 |
+|---|---:|
+| [Client](/api-reference/client/create) | 15 |
+| [Admin](/api-reference/admin/close) | 8 |
+| [Auth](/api-reference/auth/get-auth-code) | 1 |
+| [CloudClient](/api-reference/cloud-api/close) | 2 |
+
+## 云资源
+
+| 模型或用途 | 目录入口数 |
+|---|---:|
+| [Runtime](/api-reference/client/create-desktops) | 12 |
+| [ASP](/api-reference/asp/get-asp-stream-session) | 3 |
+| [端口服务](/api-reference/runtimes/generate-scene-url) | 1 |
+
+## AI 能力
+
+| 模型或用途 | 目录入口数 |
+|---|---:|
+| [Agent](/api-reference/agents/get-agent-model-catalog) | 7 |
+| [Conversation](/api-reference/conversations/archive) | 22 |
+| [Member](/api-reference/members/add) | 7 |
+| [Config](/api-reference/configuration/get) | 5 |
+| [Message](/api-reference/messages/detail) | 13 |
+| [Turn](/api-reference/turns/cancel) | 4 |
+| [Execution](/api-reference/executions/cancel-execution) | 6 |
+| [Interaction](/api-reference/interactions/list) | 6 |
+| [Skill](/api-reference/skills/ent-install-skills) | 6 |
+| [Model](/api-reference/models/get) | 2 |
+| [Resource](/api-reference/resources/selection) | 6 |
+| [Attachment](/api-reference/attachments/access) | 6 |
+| [DraftAttachment](/api-reference/drafts/commit-draft-attachments) | 5 |
+| [Workspace](/api-reference/workspaces/create) | 3 |
+
+## 存储能力
+
+| 模型或用途 | 目录入口数 |
+|---|---:|
+| [WyDrive](/api-reference/files/describe-wy-drives) | 1 |
+| [WyDriveFile](/api-reference/files/delete-wy-drive-file) | 3 |
+| [KnowledgeSpace](/api-reference/knowledge/list-agent-knowledge-spaces) | 1 |
+| [KnowledgeFile](/api-reference/knowledge/download-knowledge-files) | 2 |
+
+## 计量
+
+| 模型或用途 | 目录入口数 |
+|---|---:|
+| [Credit](/api-reference/credits/describe-credit-package-agents) | 4 |
+
+## 集成辅助接口
+
+| 模型或用途 | 目录入口数 |
+|---|---:|
+| [CLI](/api-reference/cli/auth-import) | 8 |
+| [Mobile](/api-reference/mobile/cancel) | 7 |
+| [超时后查询原结果](/api-reference/receipts/get-command-receipt) | 2 |
+| [跟踪一次写入结果](/api-reference/receipts/get-mutation) | 2 |
+| [处理发送流中的更新](/api-reference/streams/accepted) | 5 |
+| [实时观察与停止监听](/api-reference/subscriptions/close) | 2 |
+| [查看会话同步进度](/api-reference/sync/list-group-sync-states) | 5 |
+| [Transport](/api-reference/transport/add-virtual-group-members) | 140 |
+
+目录入口包含少量初始化与选择说明页，数量不等于独立业务操作数。方法名、签名和语言差异均来自当前源码声明；分类不新增 Manager、认证权限或未交付能力。

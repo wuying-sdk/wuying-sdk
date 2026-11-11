@@ -1,0 +1,30 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { dirname, join } from 'node:path';
+
+// IndexedDBShim 19.0.7 deactivates the next queued request after a single
+// microtask, before the SDK's nested await continuations have finished.
+// In Node, nextTick scheduled *from* a microtask runs after that microtask
+// checkpoint, but before timers/I/O. Preserve that active window without
+// keeping a transaction active across another event-loop task.
+const require = createRequire(import.meta.url);
+const root = dirname(require.resolve('indexeddbshim/package.json'));
+const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
+if (pkg.version !== '19.0.7') throw new Error('Revalidate the IndexedDB compatibility patch before changing versions.');
+const path = join(root, 'src/IDBTransaction.js');
+let source = await readFile(path, 'utf8');
+const original = 'if (!isStandardDriver) {\n                    queueMicrotask(cb);\n                    return;\n                }';
+const patched = 'if (!isStandardDriver) {\n                    // wuying-cli: preserve the full Node microtask checkpoint.\n                    queueMicrotask(() => process.nextTick(cb));\n                    return;\n                }';
+if (!source.includes(patched)) {
+  if (source.split(original).length !== 2) throw new Error('Unexpected IndexedDB transaction scheduler; installation stopped.');
+  source = source.replace(original, patched);
+}
+// Aborting a freshly created transaction must not later start an empty SQL
+// transaction whose non-standard completion callback can never be released.
+const start = 'IDBTransaction.prototype.__executeRequests = function () {\n    const me = this;';
+const guarded = start + '\n    // wuying-cli: abort-before-start must not acquire a SQL writer.\n    if (me.__errored) return;';
+if (!source.includes(guarded)) {
+  if (source.split(start).length !== 2) throw new Error('Unexpected IndexedDB transaction entry; installation stopped.');
+  source = source.replace(start, guarded);
+}
+await writeFile(path, source);

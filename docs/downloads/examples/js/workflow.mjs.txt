@@ -1,0 +1,24 @@
+// Install the supplied SDK tgz and indexeddbshim in this example directory.
+import {Client} from '@aliyun/wuying-sdk';
+import setGlobalVars from 'indexeddbshim';
+import {mkdirSync,readFileSync} from 'node:fs';
+import path from 'node:path';
+if(process.argv[2]!=='--send'){console.log('Default: no network/writes. --send requires host credentials and WUYING_CLIENT_ID/DATA_PATH/RUNTIME_ID/AGENT_ID/CREATE_ID/COMMAND_ID/INPUT_FILE. Creates one conversation and sends one task; no automatic retry.');process.exit(0);}
+const required=key=>{if(!process.env[key])throw Error('MISSING_CONFIGURATION');return process.env[key];};
+let client;
+try {
+ const directory=path.resolve(required('WUYING_DATA_PATH'));mkdirSync(directory,{recursive:true,mode:0o700});
+ const namespace={shimNS:true};setGlobalVars(namespace,{checkOrigin:false,databaseBasePath:directory+path.sep,sysDatabaseBasePath:directory+path.sep,addNonIDBGlobals:false,sqlBusyTimeout:5000});
+ namespace.shimIndexedDB.__useShim();
+ for(const name of ['indexedDB','IDBFactory','IDBKeyRange','IDBRequest','IDBOpenDBRequest','IDBDatabase','IDBObjectStore','IDBIndex','IDBTransaction','IDBCursor','IDBCursorWithValue','IDBVersionChangeEvent'])if(namespace[name])Object.defineProperty(globalThis,name,{value:namespace[name],configurable:true});
+ const options=process.env.WUYING_AUTH_CODE?{authCode:process.env.WUYING_AUTH_CODE}:{loginToken:required('WUYING_LOGIN_TOKEN'),sessionId:required('WUYING_SESSION_ID'),endUserId:required('WUYING_END_USER_ID')};
+ if(process.env.WUYING_LOGIN_REGION_ID)options.loginRegionId=process.env.WUYING_LOGIN_REGION_ID;
+ client=Client.create(options,{clientId:required('WUYING_CLIENT_ID'),logger:{info(){},warn(){},error(){},debug(){}}});
+ const runtimeId=required('WUYING_RUNTIME_ID'),agentId=required('WUYING_AGENT_ID'),mutationId=required('WUYING_CREATE_ID'),clientCommandId=required('WUYING_COMMAND_ID'),text=readFileSync(required('WUYING_INPUT_FILE'),'utf8');
+ const ctx={timeout:60000},streamContext={timeout:600000},conversations=await client.buildConversationManager(ctx);
+ console.log(JSON.stringify({mutationId,clientCommandId}));
+ const created=await conversations.createConversation(ctx,{runtimeId,agentId,mode:'single',name:'Customer SDK workflow'},{mutationId});
+ const ref={runtimeId,conversationId:created.conversationId};console.log(JSON.stringify(ref));
+ const subscription=await conversations.observeMessages(ctx,ref,{onSnapshot(snapshot){console.log(JSON.stringify({phase:snapshot.projection.phase,count:snapshot.data.items.length}));},onError(){console.error('Observation failed; reconcile original IDs.');}});
+ try{const completion=await conversations.sendMessageAndWait(streamContext,{...ref,text,clientCommandId});console.log(JSON.stringify({turnId:completion.accepted.turnId,state:completion.turn.state}));}finally{subscription.unsubscribe();}
+}catch{console.error('Workflow failed or outcome unknown; reconcile original mutation/command/Turn before retry. No raw error/credential is logged.');process.exitCode=1;}finally{await client?.close();}

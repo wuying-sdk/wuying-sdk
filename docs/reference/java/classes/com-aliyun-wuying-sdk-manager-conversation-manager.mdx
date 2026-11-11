@@ -1,0 +1,604 @@
+---
+title: "ConversationManager"
+sidebarTitle: "ConversationManager"
+description: "Java 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## constructor
+
+```java
+public com.aliyun.wuying.sdk.manager.ConversationManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
+```
+
+[查看操作或完整契约](/reference/java/public#entry-1c406155b7d491d7)
+
+## createConversation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedConversation> createConversation(com.aliyun.wuying.sdk.model.CreateRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedConversation> createConversation(com.aliyun.wuying.sdk.model.CreateRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/create)
+
+## listConversations
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/list)
+
+## getConversation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/get)
+
+## getConversationConfig
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.EffectiveConfig>> getConversationConfig(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/configuration/get)
+
+## renameConversation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> renameConversation(com.aliyun.wuying.sdk.model.RenameRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> renameConversation(com.aliyun.wuying.sdk.model.RenameRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/rename)
+
+## archiveConversation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> archiveConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> archiveConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/archive)
+
+## unarchiveConversation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> unarchiveConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> unarchiveConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/unarchive-conversation)
+
+## updateConversationConfig
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> updateConversationConfig(com.aliyun.wuying.sdk.model.ConfigRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> updateConversationConfig(com.aliyun.wuying.sdk.model.ConfigRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/configuration/update)
+
+## setConversationConfigOption
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> setConversationConfigOption(com.aliyun.wuying.sdk.model.ConfigOptionRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> setConversationConfigOption(com.aliyun.wuying.sdk.model.ConfigOptionRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/configuration/set-conversation-config-option)
+
+## listMembers
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Member>>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/members/list)
+
+## addMember
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> addMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> addMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/members/add)
+
+## updateMember
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> updateMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> updateMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/members/update)
+
+## removeMember
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> removeMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> removeMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/members/remove)
+
+## sendMessage
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageAccepted> sendMessage(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageAccepted> sendMessage(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/send)
+
+## listMessages
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>> listMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/list)
+
+## getMessageDetail
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MessageDetail>> getMessageDetail(com.aliyun.wuying.sdk.model.MessageDetailQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/detail)
+
+## getTurn
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Turn>> getTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/turns/get)
+
+## cancelTurn
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> cancelTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/turns/cancel)
+
+## listExecutionActivity
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.ExecutionActivity>>> listExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/executions/list-execution-activity)
+
+## observeConversations
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversations)
+
+## observeConversation
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Conversation>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversation)
+
+## observeConversationConfig
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeConversationConfig(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.EffectiveConfig>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/configuration/observe-conversation-config)
+
+## observeMembers
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Member>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/members/observe-members)
+
+## observeMessages
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/observe)
+
+## observeTurn
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Turn>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/turns/observe-turn)
+
+## observeExecutionActivity
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.ExecutionActivity>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-execution-activity)
+
+## listGroupSyncStates
+
+```java
+public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/sync/list-group-sync-states)
+
+## syncConversation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/sync/sync-conversation)
+
+## sendMessageStream
+
+```java
+public com.aliyun.wuying.sdk.model.MessageStream sendMessageStream(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/stream)
+
+## sendMessageAndWait
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageCompletion> sendMessageAndWait(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/wait)
+
+## listInteractions
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Interaction>>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/interactions/list)
+
+## observeInteractions
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Interaction>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/interactions/observe-interactions)
+
+## respondPermission
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondPermission(com.aliyun.wuying.sdk.model.PermissionRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/interactions/permission)
+
+## respondQuestion
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondQuestion(com.aliyun.wuying.sdk.model.QuestionRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondQuestion(com.aliyun.wuying.sdk.model.QuestionRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/interactions/question)
+
+## onGroupSyncState
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onGroupSyncState(com.aliyun.wuying.sdk.model.RuntimeRef, java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/sync/on-group-sync-state)
+
+## getConversationSummary
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversationSummary(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-conversation-summary)
+
+## listConversationGroups
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>>> listConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
+
+## observeConversationGroups
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversation-groups)
+
+## listSidebarConversations
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
+
+## observeSidebarConversations
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-sidebar-conversations)
+
+## setConversationPinned
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> setConversationPinned(com.aliyun.wuying.sdk.model.PinnedRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> setConversationPinned(com.aliyun.wuying.sdk.model.PinnedRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/set-conversation-pinned)
+
+## getConversationStorageContext
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationStorageContext> getConversationStorageContext(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/workspaces/get-conversation-storage-context)
+
+## prepareConversationAttachmentTarget
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationAttachmentTarget> prepareConversationAttachmentTarget(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/attachments/prepare-conversation-attachment-target)
+
+## getMessageFiles
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MessageFilesResult>> getMessageFiles(com.aliyun.wuying.sdk.model.MessageFilesQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/get-message-files)
+
+## getMessagePresentation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MessagePresentation>> getMessagePresentation(com.aliyun.wuying.sdk.model.PresentationQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/presentation)
+
+## listActiveExecutions
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ActiveExecutionSnapshot>> listActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/executions/list-active-executions)
+
+## observeActiveExecutions
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ActiveExecutionSnapshot>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-active-executions)
+
+## cancelExecution
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> cancelExecution(com.aliyun.wuying.sdk.model.CancelExecutionRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/executions/cancel-execution)
+
+## getComposerCapabilities
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ComposerCapabilities>> getComposerCapabilities(com.aliyun.wuying.sdk.model.ComposerQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/configuration/get-composer-capabilities)
+
+## steerTurn
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.SteerResult> steerTurn(com.aliyun.wuying.sdk.model.SteerRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/turns/steer-turn)
+
+## getConversationHeaderMetadata
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ConversationHeaderMetadata>> getConversationHeaderMetadata(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-conversation-header-metadata)
+
+## listMemberCandidates
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.MemberCandidate>>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/members/list-member-candidates)
+
+## getMemberSnapshot
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MemberSnapshot>> getMemberSnapshot(com.aliyun.wuying.sdk.model.MemberSnapshotQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/members/get-member-snapshot)
+
+## getCommandReceipt
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.CommandReceipt>> getCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-command-receipt)
+
+## observeCommandReceipt
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.CommandReceipt>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/receipts/observe-command-receipt)
+
+## getMutation
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MutationStatus>> getMutation(com.aliyun.wuying.sdk.model.MutationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-mutation)
+
+## observeMutation
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeMutation(com.aliyun.wuying.sdk.model.MutationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.MutationStatus>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/receipts/observe-mutation)
+
+## getQuestionResponseReceipt
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.CommandReceipt>> getQuestionResponseReceipt(com.aliyun.wuying.sdk.model.QuestionResponseRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-question-response-receipt)
+
+## refreshPendingInteractions
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionRefresh> refreshPendingInteractions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/interactions/refresh-pending-interactions)
+
+## resolveConversationRead
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationReadBinding> resolveConversationRead(com.aliyun.wuying.sdk.model.ConversationReadQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/resolve-conversation-read)
+
+## listConversationHistory
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ConversationHistory>> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/list-conversation-history)
+
+## observeConversationHistory
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ConversationHistory>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/observe-conversation-history)
+
+## listGroups
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupDirectoryPage> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/sync/list-groups)
+
+## syncGroup
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncGroup(com.aliyun.wuying.sdk.model.GroupRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/sync/sync-group)
+
+## observeLiveProcess
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeLiveProcess(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.LiveProcessSnapshot>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-live-process)
+
+## listAuthorizedUsers
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.admin.AuthorizedUser>> listAuthorizedUsers(com.aliyun.wuying.sdk.model.AuthorizedUserQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-authorized-users)
+
+## listAuthorizedGroups
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.admin.UserGroup>> listAuthorizedGroups(com.aliyun.wuying.sdk.model.AuthorizedGroupQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-authorized-groups)
+
+## getAuthorizedGroup
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.UserGroup> getAuthorizedGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-authorized-group)
+
+## exportGroupHistory
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.HistoryPage> exportGroupHistory(com.aliyun.wuying.sdk.admin.HistoryQuery, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/export-group-history)
+
+## publishGroupMessage
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.PublishReceipt> publishGroupMessage(com.aliyun.wuying.sdk.admin.PublishRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/messages/publish-group-message)
+
+## subscribeGroup
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.GroupSubscription> subscribeGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.admin.GroupSubscriptionListener, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.GroupSubscription> subscribeGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/subscribe-group)
+
+## unsubscribeGroup
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> unsubscribeGroup(com.aliyun.wuying.sdk.admin.GroupSubscription, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/conversations/unsubscribe-group)

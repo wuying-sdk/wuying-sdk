@@ -1,0 +1,33 @@
+---
+title: "实时展示消息和执行过程"
+description: "按稳定身份更新快照，区分消息受理、执行结束和最终展示完整。"
+---
+
+[查看可接入界面的消息观察代码 →](/examples/index#2-观察会话消息)
+
+目标：一次用户发送只展示真实的消息和过程更新；恢复观察后不重复追加旧卡片。前置条件是已取得 ConversationRef 和同账号 Client。
+
+## 选择发送方式
+
+需要尽早保存受理并实时展示时使用 sendMessageStream；简单等待可使用 sendMessageAndWait；只提交后台任务使用 sendMessage。入口在 ConversationManager，各语言大小写和异步返回见 [参考](/sdk-reference/index)。
+
+## 推荐顺序
+
+1. 先观察会话消息，保留订阅句柄和 Snapshot.projection。
+2. 用稳定 clientCommandId 提交一次任务，保存返回的 accepted/turnId；不要把 accepted 当作已完成。
+3. 将完整快照按 Message ID 对账/替换。只有真正的文本增量才追加；text.replace 替换其关联文本。
+4. 消费结果时核对 Turn 状态；流关闭、本地超时、cancel requested 都不等于远端 completed。
+5. 展示最终答案前核对 MessagePresentation 的覆盖状态。Turn 已结束但答案尚未覆盖完整时继续精确读取，不编造文本。
+6. 页面离开时退订，最后关闭 Client。
+
+## 处理重复和恢复
+
+observeMessages 的分页视图读取 data.items；listRuntimes 等数组快照则读取 data。不要为方便把所有查询返回强行归一成同一层级。
+
+一轮可以有多条真实消息。去重必须使用服务端 Message/Turn/Item 的身份，不能仅按 Agent 名称或正文合并；相同 Agent 的两轮也不能混为一张卡片。历史/实时的归并规则见 [Message](/domain-model/05-message) 和 [投影](/domain-model/10-projection-events)。
+
+重连后重新观察同一会话并对账稳定 ID；如发送结果未知，按原请求身份核对。完整组合代码见 [语言示例](/domain-model/language-bindings)，恢复决策见 [会话与流式指南](/integration/02-conversations-and-streams)。
+
+## 当前 JS 业务流的交付范围
+
+当前 JS `sendMessageStream()` 实现交付 `message` 与 `turn` 快照。`StreamChunk` 声明中的 `text.delta` / `text.replace` 不代表此版本会实际交付这两类事件；界面以真实消息快照更新，不能等待尚未交付的文本增量。各语言按其实际实现与同版本类型使用。

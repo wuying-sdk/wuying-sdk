@@ -1,0 +1,30 @@
+---
+title: "端口服务"
+description: "取得资源内服务的授权访问地址，使用真实云资源标识访问已配置的服务。"
+---
+
+端口服务用于从应用访问授权云资源内已配置的服务。当前 SDK 通过 RuntimeManager 的 `generateSceneUrl` 获取场景访问地址：内部查询 PortService 类型的 Feature，再为相应场景生成 URL。
+
+## 与 Runtime、ASP 的关系
+
+Runtime 用于发现执行环境；ASP 连接桌面或应用画面；端口服务取得服务访问地址。它们都属于云资源能力，不共用同一种连接结果，也不能把 Runtime ID 直接当作云桌面资源 ID。
+
+## 最短示例
+
+已完成用户态 Client 初始化，`desktopId` 与 `regionId` 是宿主已确认的真实云桌面资源标识和地域。
+
+```ts
+const runtimes = await client.buildRuntimeManager(ctx);
+const result = await runtimes.generateSceneUrl(ctx, { desktopId, regionId });
+const addresses = result?.items ?? [];
+```
+
+每一项包含 `url` 与对应的 `feature` 信息。调用方按需要的服务选择地址；空数组表示本次没有取得可用地址，不能据此判断资源不存在。地址生成不证明服务已启动或业务请求成功，不能把访问地址作为长期固定地址保存。
+
+## 操作入口
+
+- [`generateSceneUrl`](/api-reference/runtimes/generate-scene-url)
+
+当前公开接口没有独立的 PortServiceManager，也没有创建任意端口、启动监听、端口枚举或通用 TCP 转发方法。服务应先由资源侧完成配置；本文不把内部 Feature 查询扩展成这些尚未交付的接口。
+
+语言差异和完整请求见接口页；ASP 的平台限制另见 [ASP](/domain-model/asp)。

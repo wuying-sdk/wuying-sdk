@@ -1,0 +1,60 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	wuying "github.com/aliyun/wuying-sdk-go"
+	"github.com/aliyun/wuying-sdk-go/config"
+	"os"
+	"path/filepath"
+	"time"
+)
+
+func required(key string) (string, error) {
+	v := os.Getenv(key)
+	if v == "" {
+		return "", fmt.Errorf("missing %s", key)
+	}
+	return v, nil
+}
+func main() {
+	if len(os.Args) != 2 || os.Args[1] != "--live-read" {
+		fmt.Println("Use --live-read with WUYING_CLIENT_ID and host-supplied credentials. Reads runtime count only; no conversation/message writes.")
+		return
+	}
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, "SDK read failed; verify credentials, authorization and network. Error details are intentionally not logged.")
+		os.Exit(1)
+	}
+}
+func run() error {
+	id, err := required("WUYING_CLIENT_ID")
+	if err != nil {
+		return err
+	}
+	db, err := required("WUYING_DATA_PATH")
+	if err != nil {
+		return err
+	}
+	if err = os.MkdirAll(filepath.Dir(db), 0700); err != nil {
+		return err
+	}
+	opts := wuying.ClientOptions{AuthCode: os.Getenv("WUYING_AUTH_CODE"), LoginToken: os.Getenv("WUYING_LOGIN_TOKEN"), SessionID: os.Getenv("WUYING_SESSION_ID"), EndUserID: os.Getenv("WUYING_END_USER_ID"), LoginRegionID: os.Getenv("WUYING_LOGIN_REGION_ID")}
+	client, err := wuying.NewClient(opts, &config.UserConfig{ClientID: id, DataPath: db, Logger: config.DiscardLogger})
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	runtimesAPI, err := client.BuildRuntimeManager(ctx)
+	if err != nil {
+		return err
+	}
+	result, err := runtimesAPI.ListRuntimes(ctx)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("runtimes=%d phase=%s coverage=%s\n", len(result.Data), result.Projection.Phase, result.Projection.Coverage)
+	return nil
+}

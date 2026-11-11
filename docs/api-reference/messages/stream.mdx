@@ -1,0 +1,92 @@
+---
+title: "sendMessageStream"
+sidebarTitle: "sendMessageStream"
+description: "完整公开接口 · Message"
+---
+
+`sendMessageStream` · Message
+
+当前 JS 流交付 message / turn 快照，不承诺 text.delta 或 text.replace。保存受理身份；停止本地消费可退出迭代或使用 ctx.signal 结束等待，stream.cancel() 会请求远端取消，仍需核对终态。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `ConversationManager.sendMessageStream` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SendMessageStream` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.ConversationManager.sendMessageStream` | 已公开声明，需核对环境能力 |
+| CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Android | [`Methods.conversationSendMessageStream`](/reference/android/models/conversation#sendmessagestream) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.conversationSendMessageStream`](/reference/ios/models/conversation#sendmessagestream) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · ConversationManager
+
+```ts
+sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
+
+```go
+func (receiver *ConversationManager) SendMessageStream(ctx context.Context, r m.SendRequest) m.MessageStream
+```
+
+### Java · com.aliyun.wuying.sdk.manager.ConversationManager
+
+```java
+public com.aliyun.wuying.sdk.model.MessageStream sendMessageStream(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface Context {
+    signal?: AbortSignal;
+    timeout?: number;
+    traceId?: string;
+}
+
+interface SendRequest extends ConversationRef {
+    text: string;
+    clientCommandId?: string;
+    inputParts?: InputPart[];
+    targetMemberId?: string;
+    attachmentIds?: string[];
+    /** Structured references, routed by the existing Gateway group mention contract. */
+    mentions?: {
+        memberId: string;
+    }[];
+}
+
+interface ConversationRef extends RuntimeRef {
+    conversationId: string;
+}
+
+interface RuntimeRef {
+    runtimeId: string;
+}
+
+interface MessageStream extends AsyncIterable<StreamChunk> {
+    readonly accepted: Promise<MessageAccepted>;
+    readonly result: Promise<Turn & {
+        state: 'completed' | 'cancelled' | 'interrupted';
+    }>;
+    cancel(ctx?: Context): Promise<{
+        state: 'requested' | 'cancelled' | 'already_finished';
+    }>;
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/05-message) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

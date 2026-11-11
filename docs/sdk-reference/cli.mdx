@@ -1,0 +1,99 @@
+---
+title: "无影 CLI 客户使用与自动化集成"
+description: "无影 CLI 客户使用与自动化集成：职责、模型关联、生命周期、公开操作与使用边界。"
+---
+
+import CliAdministration from '/snippets/cli-administration.mdx';
+
+当前为 **RuntimeManager 首版未提交草稿**；下文 SHA 为基础提交，非当前完整源码身份。源码归档及逐文件哈希见文档站覆盖清单；不代表已发布制品。
+
+以下文中的交付路径必须替换为本次源码重新构建的制品；旧交付包不具备这些接口。
+
+业务模型、关系与生命周期先读 [领域文档](/index)；本页保留该语言的安装、配置和代码接线。
+
+当前草稿基线：2026-11-11，源码 `ea48f8775d28753cefef13b937982dd44587aa51`，`@aliyun/wuying-cli@0.1.0`，内置本次 RuntimeManager 草稿构建的公共 JS SDK。制品是 `sdks/cli/aliyun-wuying-cli-0.1.0.tgz`。这是客户端工具，不是任意本机 shell 执行器。
+
+## 安装与离线自检
+
+要求 Node **^22.18.0 或 &gt;=24.11.0**（Node 23 不在范围）。Windows / Linux / macOS 都在目标机器安装，不复制别的平台 node_modules。
+
+```sh
+npm install --prefix ./wuying-tools /absolute/path/to/kit/sdks/cli/aliyun-wuying-cli-0.1.0.tgz
+node ./wuying-tools/node_modules/@aliyun/wuying-cli/bin/wuying.mjs --help
+node ./wuying-tools/node_modules/@aliyun/wuying-cli/bin/wuying.mjs --data-dir ./private-cli-data doctor --offline
+```
+
+上面使用 node + 确定路径避免依赖全局 PATH；Windows CMD/PowerShell 同样可执行，给含空格路径加双引号。也可 `npm install -g` 后直接用 `wuying`。npm 会安装 Commander / IndexedDBShim 等依赖并运行随包 SQLite 补丁；需要网络或 npm 缓存，SQLite 预编译件不可用时须目标平台构建工具。包自带 SDK，但不表示所有 npm 依赖都已离线打包。
+
+后文 `wuying` 代表已安装的可执行入口，也可替换为上述 node 完整路径。`--data-dir` 使用只属于该用户的可写目录。离线 doctor 不验证凭据或远端可达性，成功输出 `onlineChecked:false`。
+
+## 认证
+
+由宿主的安全配置机制注入下列环境变量，勿把实际凭据放入参数或版本库：
+
+| 方式 | 环境变量 |
+|---|---|
+| AuthCode | `WUYING_AUTH_CODE`、`WUYING_CLIENT_ID` |
+| 已登录材料 | `WUYING_LOGIN_TOKEN`、`WUYING_SESSION_ID`、`WUYING_END_USER_ID`、`WUYING_CLIENT_ID` |
+| 可选地域 | `WUYING_LOGIN_REGION_ID` |
+| JSON 凭据（替代上面组合） | `WUYING_CREDENTIALS`：authCode 或 loginToken/sessionId/endUserId，加 clientId、可选 loginRegionId |
+
+明确选一种，不同时混用；环境凭据优先于已保存 profile。Client ID 需获平台授权。CLI 不接受用户名密码参数，也不会读取 AgentShell 的登录文件。
+
+macOS/Linux 可通过宿主保密输出管道向 `wuying auth import --stdin` 提交 JSON。文件按 POSIX 0700/0600 存储，**未加密、不是系统钥匙串**；短效 AuthCode 保存后仍会到期/被消费。Windows 当前禁止凭据文件写入，请只用宿主注入的环境凭据。`auth status` 只说明配置存在，不验证在线登录；`auth logout` 删除本地材料，不撤销远端 token，也不会清除父进程环境。
+
+<CliAdministration />
+
+## 查询、建会与运行
+
+```sh
+wuying runtimes list
+wuying agents list --runtime RUNTIME_ID
+wuying conversations list --runtime RUNTIME_ID --limit 20
+wuying conversations create --runtime RUNTIME_ID --agent AGENT_ID --name "集成测试" --mutation-id STABLE_CREATE_ID
+wuying --output jsonl run --runtime RUNTIME_ID --conversation CONVERSATION_ID --input-file ./task.txt --client-command-id STABLE_COMMAND_ID
+wuying turns status --runtime RUNTIME_ID --conversation CONVERSATION_ID --turn TURN_ID
+wuying messages list --runtime RUNTIME_ID --conversation CONVERSATION_ID
+```
+
+大写 ID 均需替换为 SDK/CLI 返回的真实身份；稳定请求 ID 由宿主为该业务操作生成并持久保存，不要把同一 ID 用于不同内容。`create` 与 `run` 会写远端业务，仅在客户授权测试范围执行。`--input-file` 是 UTF-8 文本；可用 `--stdin` 从安全管道读取任务。`--attach PATH` 可重复指定本地附件，CLI 先上传再发送，不需要在 task 文本里伪造远程文件路径。
+
+`run --no-wait` 仅等待持久接收；后续用返回 Turn ID 执行 `turns status/wait`。`--timeout` 结束本地等待，不取消远端。显式 `turns cancel` 的 requested 仅代表取消已请求，仍需查最终状态。
+
+## 问答与审批
+
+```sh
+wuying interactions list --runtime RUNTIME_ID --conversation CONVERSATION_ID
+wuying interactions respond --runtime RUNTIME_ID --conversation CONVERSATION_ID --interaction INTERACTION_ID --expected-version WRITE_VERSION --option OPTION_ID
+```
+
+仅把用户明确批准的真实选项 ID 传入，不能用界面翻译文案或固定 allow-once 替代任意选项。问题使用 `--answer-file ./answer.json`（不与 --option 同用），JSON 必须符合该 Interaction 题目结构，限制 64 KiB。respond 会在本进程重新刷新 pending 上下文；过期写版本或 owner 拒绝时先读回，不绕过检查。没有自动全批模式。
+
+## 自动化输出和失败恢复
+
+默认 JSON / `--output jsonl`（事件）/ text（缩进 JSON）均含 schemaVersion。保存 runtimeId、conversationId、turnId、clientCommandId/mutationId、脱敏错误 code 与 outcome；具体退出码/状态见随 tgz 提供的 `CONTRACT.md`，调用方同时判断退出码和结构化结果。消息、问题和工具结果可能包含业务数据，不直接收集整份 stdout 进公共日志。
+
+`outcome=unknown`、超时或断网时先按原身份查询，不能重新生成 command ID 重发任务。PROFILE_BUSY 表示该 profile 由另一个进程使用，不能直接删除锁来同时写库；需要并行任务时使用不同 profile / 数据目录并遵守业务权限。完整通用边界见 [集成说明](/domain-model/00-overview)。
+
+包内 `node scripts/qa.mjs sdk-smoke --language=cli` 会在独立目录安装并跑无凭据 doctor，不执行业务。[测试清单](/support/validation) 的真实审批、附件与重连仍应单独验收。
+
+## 完整命令参考与自动化验收
+
+[CLI 完整参考](/reference/cli/commands) 随包保留当前版本的全部命令、选项、JSON/JSONL 状态、退出码、限制和恢复语义。安装后 `wuying --help` 与各子命令 `--help` 可自查；维护者构建指令不代表客户必须拥有 SDK 仓库。当前公开命令没有实现的能力不能通过拼接 Gateway 方法名补入。
+
+推荐在自动化中保存本次输出的 schemaVersion/status/outcome 与稳定业务 ID，将 stdout 作为结构化结果消费、stderr 作为脱敏诊断。不要仅凭进程 exit 0 或收到 accepted 判断任务成功；不能在超时后无条件重新 run。
+
+完整验证顺序：doctor --offline → auth status（只检查配置）→ doctor（在线认证）→ runtimes/agents 查询 → 受控测试会话 create → run → turns status/wait → messages get → 如有待处理交互，读取并由人决定 respond。只有明确授权时才执行 create/run/respond/cancel，离线自检不会替用户操作。
+
+消息、附件、审批和问答沿用 SDK 的身份与版本合同。Profile 的请求日志只记录恢复所需元数据，不是第二份远端任务数据库；同 profile 不能并发持有连接。将 profile/data-dir 隔离与真实业务授权分开考虑，不把不同目录视为权限隔离的替代。
+
+## 配套场景指南
+
+- [认证与生命周期](/integration/01-auth-and-lifecycle)：配置来源、账号/存储隔离、关闭和重登。
+- [会话与流式](/integration/02-conversations-and-streams)：受理/终态、快照渲染、分页、未知结果恢复。
+- [附件和交互](/integration/03-attachments-and-interactions)：暂存、审批、问答、工作空间与产物边界。
+- [错误与运维](/integration/04-errors-and-operations)：错误决策、诊断、升级回滚与客户验收。
+
+## 当前草稿的制品
+
+以下 `sdks/`、测试包及本地 tgz/jar 路径描述交付布局。本次源码尚未重新封装为完整交付包；审核当前接口须先用 RuntimeManager 草稿源码重新构建并替换对应制品。旧交付包与公网上同名版本不具备本页的新接口。源码和构建命令见各 SDK README；来源身份见 文档站的全量覆盖清单。

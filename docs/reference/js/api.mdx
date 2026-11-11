@@ -1,0 +1,48 @@
+---
+title: "JavaScript / TypeScript API"
+description: "从公开根 Client 获取 Manager，用同版本类型声明查方法、参数和返回值。"
+---
+
+统一从 `@aliyun/wuying-sdk` 根入口导入。安装和实际运行前提见 [JS 接入指南](/sdk-reference/js)；不要从内部目录或历史子路径导入。
+
+## Client 与 Manager
+
+| 根入口 | 负责的能力 |
+| --- | --- |
+| `Client.create(options, config?)` | 建立当前身份的根 Client |
+| `buildAgentManager(ctx)` | Agent、模型与产品目录 |
+| `buildConversationManager(ctx)` | Conversation、Member、消息、执行与交互 |
+| `buildResourceManager(ctx)` | 工作空间、附件与资源相关公开操作；按实际能力使用 |
+| `buildSkillManager(ctx)` | 技能目录、安装与启停 |
+| `buildCreditManager(ctx)` / `buildModelManager(ctx)` | 积分与独立云模型配置 |
+| `buildRuntimeManager(ctx)` | Runtime 目录、环境能力与云实例管理 |
+| `buildAspManager(ctx)` | 浏览器流化，依赖 DOM 与配套环境 |
+| `close()` / `logout()` | 结束当前身份的 SDK 生命周期 |
+
+## 在编辑器里取得精确签名
+
+工厂返回的类型是当前业务接口。通过参数和返回值类型提取，避免手写一份容易漂移的接口副本。
+
+```typescript
+import { Client } from '@aliyun/wuying-sdk';
+
+type Conversations = Awaited<ReturnType<Client['buildConversationManager']>>;
+type CreateArguments = Parameters<Conversations['createConversation']>;
+type CreateResult = Awaited<ReturnType<Conversations['createConversation']>>;
+type MessageStream = ReturnType<Conversations['sendMessageStream']>;
+```
+
+完整方法、DTO、枚举和返回值请查[同版本声明文件](/reference/js/types)。声明中的类型存在，不表示目标 Runtime 已开放全部能力；方法能力与使用语义还应结合对应指南。
+
+## 按业务查参考
+
+| 目的 | 入口 |
+| --- | --- |
+| 认证、账号隔离与关闭 | [Client](/domain-model/01-client) |
+| 目录及对象身份 | [Runtime / Agent](/domain-model/02-runtime-agent) |
+| 创建、分页与配置 | [Conversation](/domain-model/03-conversation) |
+| 消息与最终展示 | [Message / Presentation](/domain-model/05-message) |
+| accepted、流与终态 | [Turn / Item](/domain-model/06-turn-items) |
+| 问题和审批 | [Interaction](/domain-model/07-interaction) |
+| 文件暂存和访问 | [Resource / Attachment](/domain-model/08-resource-attachment) |
+| 错误与未知结果 | [恢复规则](/domain-model/12-errors-examples) |

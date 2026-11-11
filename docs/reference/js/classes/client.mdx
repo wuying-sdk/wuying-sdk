@@ -1,0 +1,207 @@
+---
+title: "Client"
+sidebarTitle: "Client"
+description: "JavaScript / TypeScript 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## start
+
+```ts
+start(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/start)
+
+## stop
+
+```ts
+stop(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/stop)
+
+## reboot
+
+```ts
+reboot(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/reboot)
+
+## reset
+
+```ts
+reset(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/reset)
+
+## delete
+
+```ts
+delete(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/delete)
+
+## create
+
+```ts
+create(context: ExecutionContext, request: CreateDesktopsRequest, options?: DesktopCreateOptions): Promise<CreateDesktopsResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/create-desktops)
+
+## wait
+
+```ts
+wait(context: ExecutionContext, request: WaitDesktopsRequest): Promise<WaitDesktopsResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/wait)
+
+## getAuthCode
+
+```ts
+getAuthCode(context: ExecutionContext, request: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/get-auth-code)
+
+## getIMCredentials
+
+```ts
+getIMCredentials(context?: ExecutionContext): Promise<ConsumerUserGetExtTokenResponse>;
+```
+
+[查看操作或完整契约](/api-reference/client/get-imcredentials)
+
+## updateLoginCredentials
+
+```ts
+updateLoginCredentials(context: Context, credentials: { loginToken: string; sessionId: string; endUserId: string; loginRegionId?: string; }): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/client/update-login-credentials)
+
+## buildRuntimeManager
+
+```ts
+buildRuntimeManager(_context: ExecutionContext): Promise<RuntimeManager>;
+```
+
+[查看操作或完整契约](/api-reference/client/build-runtime-manager)
+
+## buildAgentManager
+
+```ts
+buildAgentManager(_context: Context): Promise<AgentManager$1>;
+```
+
+[查看操作或完整契约](/api-reference/client/build-agent-manager)
+
+## buildConversationManager
+
+```ts
+buildConversationManager(_context: Context): Promise<ConversationManager$1>;
+```
+
+[查看操作或完整契约](/api-reference/client/build-conversation-manager)
+
+## buildResourceManager
+
+```ts
+buildResourceManager(_context: Context): Promise<ResourceManager$1>;
+```
+
+[查看操作或完整契约](/api-reference/client/build-resource-manager)
+
+## buildCreditManager
+
+```ts
+buildCreditManager(_context: ExecutionContext): Promise<CreditManager>;
+```
+
+[查看操作或完整契约](/api-reference/client/build-credit-manager)
+
+## onStreamEvent
+
+```ts
+onStreamEvent(handler: (event: StreamEvent) => void): () => void;
+```
+
+[查看操作或完整契约](/api-reference/client/on-stream-event)
+
+## buildAspManager
+
+```ts
+buildAspManager(context: ExecutionContext): Promise<AspManager>;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-e2e546d6d28afc25)
+
+## buildSkillManager
+
+```ts
+buildSkillManager(context: ExecutionContext): Promise<SkillManager>;
+```
+
+[查看操作或完整契约](/api-reference/client/build-skill-manager)
+
+## buildModelManager
+
+```ts
+buildModelManager(context: ExecutionContext): Promise<ModelManager>;
+```
+
+[查看操作或完整契约](/api-reference/client/build-model-manager)
+
+## getAuthCodeCredential
+
+```ts
+getAuthCodeCredential(): AuthCodeCredential;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-06298aa869bb69cf)
+
+## close
+
+```ts
+close(): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/client/close)
+
+## logout
+
+```ts
+logout(): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/client/logout)
+
+## create · static
+
+```ts
+create(options: ClientOptions, userConfig?: UserConfig): Client;
+```
+
+[查看操作或完整契约](/api-reference/client/create)
+
+## resetInstance · static
+
+```ts
+resetInstance(): void;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-d6016468ca85be7a)
+
+## constructor
+
+```ts
+new new (options: ClientOptions, userConfig?: UserConfig): Client;
+```
+
+[查看操作或完整契约](/api-reference/client/create)

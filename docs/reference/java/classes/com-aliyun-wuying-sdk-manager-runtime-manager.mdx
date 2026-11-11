@@ -1,0 +1,79 @@
+---
+title: "RuntimeManager"
+sidebarTitle: "RuntimeManager"
+description: "Java 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## constructor
+
+```java
+public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
+```
+
+[查看操作或完整契约](/reference/java/public#entry-3792455a7160b31f)
+
+## updateAgentInstance
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/update-agent-instance)
+
+## describeCreditPackageAgents
+
+```java
+public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/describe-credit-package-agents)
+
+## describeCreditUsageInfo
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUsageInfo> describeCreditUsageInfo(com.aliyun.wuying.sdk.model.DescribeCreditUsageInfoRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/describe-credit-usage-info)
+
+## approveFotaUpdate
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> approveFotaUpdate(com.aliyun.wuying.sdk.model.ApproveFotaUpdateRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/approve-fota-update)
+
+## generateSceneUrl
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GenerateSceneUrlResponse> generateSceneUrl(com.aliyun.wuying.sdk.model.GenerateSceneUrlRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/generate-scene-url)
+
+## listRuntimes
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/list)
+
+## observeRuntimes
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/observe)
+
+## getHostCapabilities
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.HostCapabilities>> getHostCapabilities(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/capabilities)

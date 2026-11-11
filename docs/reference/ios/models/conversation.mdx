@@ -1,0 +1,967 @@
+---
+title: "ConversationManager"
+sidebarTitle: "ConversationManager"
+description: "iOS · 当前移动绑定的完整方法列表。"
+---
+
+通过同一 Client 调用下列 `Methods` 常量。请求与结果沿用 Go 移动 JSON 合同；下面的 Go 签名用于定位 DTO，**不是原生 Java / Swift 签名**。授权、请求封装、事件与取消规则见[移动合同](/reference/mobile/contract)，调用示例见[Client](/reference/ios/client)。
+
+<a id="addmember" />
+
+## Methods.conversationAddMember
+
+`Methods.conversationAddMember` → `conversation.addMember`
+
+**模式：** `call`。**请求类型：** `m.MemberRequest`。**MutationOptions：** 支持；原生 `mutationId` 参数用于该选项。
+
+```go
+*ConversationManager.AddMember
+func(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/members/add) · [Go DTO 参考](/reference/go/api)
+
+<a id="archiveconversation" />
+
+## Methods.conversationArchiveConversation
+
+`Methods.conversationArchiveConversation` → `conversation.archiveConversation`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ArchiveConversation
+func(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/archive) · [Go DTO 参考](/reference/go/api)
+
+<a id="cancelexecution" />
+
+## Methods.conversationCancelExecution
+
+`Methods.conversationCancelExecution` → `conversation.cancelExecution`
+
+**模式：** `call`。**请求类型：** `m.CancelExecutionRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.CancelExecution
+func(ctx context.Context, r m.CancelExecutionRequest) (m.StateResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/cancel-execution) · [Go DTO 参考](/reference/go/api)
+
+<a id="cancelturn" />
+
+## Methods.conversationCancelTurn
+
+`Methods.conversationCancelTurn` → `conversation.cancelTurn`
+
+**模式：** `call`。**请求类型：** `m.TurnRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.CancelTurn
+func(ctx context.Context, r m.TurnRef) (m.StateResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/turns/cancel) · [Go DTO 参考](/reference/go/api)
+
+<a id="createconversation" />
+
+## Methods.conversationCreateConversation
+
+`Methods.conversationCreateConversation` → `conversation.createConversation`
+
+**模式：** `call`。**请求类型：** `m.CreateRequest`。**MutationOptions：** 支持；原生 `mutationId` 参数用于该选项。
+
+```go
+*ConversationManager.CreateConversation
+func(ctx context.Context, r m.CreateRequest, options ...m.MutationOptions) (m.CreatedConversation, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/create) · [Go DTO 参考](/reference/go/api)
+
+<a id="getcommandreceipt" />
+
+## Methods.conversationGetCommandReceipt
+
+`Methods.conversationGetCommandReceipt` → `conversation.getCommandReceipt`
+
+**模式：** `call`。**请求类型：** `m.CommandReceiptRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetCommandReceipt
+func(ctx context.Context, r m.CommandReceiptRef) (m.Snapshot[m.CommandReceipt], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/receipts/get-command-receipt) · [Go DTO 参考](/reference/go/api)
+
+<a id="getcomposercapabilities" />
+
+## Methods.conversationGetComposerCapabilities
+
+`Methods.conversationGetComposerCapabilities` → `conversation.getComposerCapabilities`
+
+**模式：** `call`。**请求类型：** `m.ComposerQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetComposerCapabilities
+func(ctx context.Context, r m.ComposerQuery) (m.Snapshot[m.ComposerCapabilities], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/configuration/get-composer-capabilities) · [Go DTO 参考](/reference/go/api)
+
+<a id="getconversation" />
+
+## Methods.conversationGetConversation
+
+`Methods.conversationGetConversation` → `conversation.getConversation`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetConversation
+func(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/get) · [Go DTO 参考](/reference/go/api)
+
+<a id="getconversationconfig" />
+
+## Methods.conversationGetConversationConfig
+
+`Methods.conversationGetConversationConfig` → `conversation.getConversationConfig`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetConversationConfig
+func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.EffectiveConfig], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/configuration/get) · [Go DTO 参考](/reference/go/api)
+
+<a id="getconversationheadermetadata" />
+
+## Methods.conversationGetConversationHeaderMetadata
+
+`Methods.conversationGetConversationHeaderMetadata` → `conversation.getConversationHeaderMetadata`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetConversationHeaderMetadata
+func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ConversationHeaderMetadata], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/get-conversation-header-metadata) · [Go DTO 参考](/reference/go/api)
+
+<a id="getconversationstoragecontext" />
+
+## Methods.conversationGetConversationStorageContext
+
+`Methods.conversationGetConversationStorageContext` → `conversation.getConversationStorageContext`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetConversationStorageContext
+func(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/workspaces/get-conversation-storage-context) · [Go DTO 参考](/reference/go/api)
+
+<a id="getconversationsummary" />
+
+## Methods.conversationGetConversationSummary
+
+`Methods.conversationGetConversationSummary` → `conversation.getConversationSummary`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetConversationSummary
+func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.Conversation], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/get-conversation-summary) · [Go DTO 参考](/reference/go/api)
+
+<a id="getmembersnapshot" />
+
+## Methods.conversationGetMemberSnapshot
+
+`Methods.conversationGetMemberSnapshot` → `conversation.getMemberSnapshot`
+
+**模式：** `call`。**请求类型：** `m.MemberSnapshotQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetMemberSnapshot
+func(ctx context.Context, r m.MemberSnapshotQuery) (m.Snapshot[m.MemberSnapshot], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/members/get-member-snapshot) · [Go DTO 参考](/reference/go/api)
+
+<a id="getmessagedetail" />
+
+## Methods.conversationGetMessageDetail
+
+`Methods.conversationGetMessageDetail` → `conversation.getMessageDetail`
+
+**模式：** `call`。**请求类型：** `m.MessageDetailQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetMessageDetail
+func(ctx context.Context, r m.MessageDetailQuery) (m.Snapshot[*m.MessageDetail], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/detail) · [Go DTO 参考](/reference/go/api)
+
+<a id="getmessagefiles" />
+
+## Methods.conversationGetMessageFiles
+
+`Methods.conversationGetMessageFiles` → `conversation.getMessageFiles`
+
+**模式：** `call`。**请求类型：** `m.MessageFilesQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetMessageFiles
+func(ctx context.Context, r m.MessageFilesQuery) (m.Snapshot[m.MessageFilesResult], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/get-message-files) · [Go DTO 参考](/reference/go/api)
+
+<a id="getmessagepresentation" />
+
+## Methods.conversationGetMessagePresentation
+
+`Methods.conversationGetMessagePresentation` → `conversation.getMessagePresentation`
+
+**模式：** `call`。**请求类型：** `m.PresentationQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetMessagePresentation
+func(ctx context.Context, r m.PresentationQuery) (m.Snapshot[*m.MessagePresentation], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/presentation) · [Go DTO 参考](/reference/go/api)
+
+<a id="getmutation" />
+
+## Methods.conversationGetMutation
+
+`Methods.conversationGetMutation` → `conversation.getMutation`
+
+**模式：** `call`。**请求类型：** `m.MutationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetMutation
+func(ctx context.Context, r m.MutationRef) (m.Snapshot[m.MutationStatus], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/receipts/get-mutation) · [Go DTO 参考](/reference/go/api)
+
+<a id="getquestionresponsereceipt" />
+
+## Methods.conversationGetQuestionResponseReceipt
+
+`Methods.conversationGetQuestionResponseReceipt` → `conversation.getQuestionResponseReceipt`
+
+**模式：** `call`。**请求类型：** `m.QuestionResponseRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetQuestionResponseReceipt
+func(ctx context.Context, r m.QuestionResponseRef) (m.Snapshot[m.CommandReceipt], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/receipts/get-question-response-receipt) · [Go DTO 参考](/reference/go/api)
+
+<a id="getturn" />
+
+## Methods.conversationGetTurn
+
+`Methods.conversationGetTurn` → `conversation.getTurn`
+
+**模式：** `call`。**请求类型：** `m.TurnRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.GetTurn
+func(ctx context.Context, r m.TurnRef) (m.Snapshot[*m.Turn], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/turns/get) · [Go DTO 参考](/reference/go/api)
+
+<a id="listactiveexecutions" />
+
+## Methods.conversationListActiveExecutions
+
+`Methods.conversationListActiveExecutions` → `conversation.listActiveExecutions`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListActiveExecutions
+func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnapshot], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/list-active-executions) · [Go DTO 参考](/reference/go/api)
+
+<a id="listconversationgroups" />
+
+## Methods.conversationListConversationGroups
+
+`Methods.conversationListConversationGroups` → `conversation.listConversationGroups`
+
+**模式：** `call`。**请求类型：** `m.ConversationGroupQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListConversationGroups
+func(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.SidebarGroup]], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/list-conversation-groups) · [Go DTO 参考](/reference/go/api)
+
+<a id="listconversationhistory" />
+
+## Methods.conversationListConversationHistory
+
+`Methods.conversationListConversationHistory` → `conversation.listConversationHistory`
+
+**模式：** `call`。**请求类型：** `m.ConversationHistoryQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListConversationHistory
+func(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/list-conversation-history) · [Go DTO 参考](/reference/go/api)
+
+<a id="listconversations" />
+
+## Methods.conversationListConversations
+
+`Methods.conversationListConversations` → `conversation.listConversations`
+
+**模式：** `call`。**请求类型：** `m.ConversationQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListConversations
+func(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/list) · [Go DTO 参考](/reference/go/api)
+
+<a id="listexecutionactivity" />
+
+## Methods.conversationListExecutionActivity
+
+`Methods.conversationListExecutionActivity` → `conversation.listExecutionActivity`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListExecutionActivity
+func(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/list-execution-activity) · [Go DTO 参考](/reference/go/api)
+
+<a id="listgroupsyncstates" />
+
+## Methods.conversationListGroupSyncStates
+
+`Methods.conversationListGroupSyncStates` → `conversation.listGroupSyncStates`
+
+**模式：** `call`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListGroupSyncStates
+func(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/sync/list-group-sync-states) · [Go DTO 参考](/reference/go/api)
+
+<a id="listgroups" />
+
+## Methods.conversationListGroups
+
+`Methods.conversationListGroups` → `conversation.listGroups`
+
+**模式：** `call`。**请求类型：** `m.GroupDirectoryQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListGroups
+func(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/sync/list-groups) · [Go DTO 参考](/reference/go/api)
+
+<a id="listinteractions" />
+
+## Methods.conversationListInteractions
+
+`Methods.conversationListInteractions` → `conversation.listInteractions`
+
+**模式：** `call`。**请求类型：** `m.InteractionQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListInteractions
+func(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/interactions/list) · [Go DTO 参考](/reference/go/api)
+
+<a id="listmembercandidates" />
+
+## Methods.conversationListMemberCandidates
+
+`Methods.conversationListMemberCandidates` → `conversation.listMemberCandidates`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListMemberCandidates
+func(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/members/list-member-candidates) · [Go DTO 参考](/reference/go/api)
+
+<a id="listmembers" />
+
+## Methods.conversationListMembers
+
+`Methods.conversationListMembers` → `conversation.listMembers`
+
+**模式：** `call`。**请求类型：** `m.MemberQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListMembers
+func(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/members/list) · [Go DTO 参考](/reference/go/api)
+
+<a id="listmessages" />
+
+## Methods.conversationListMessages
+
+`Methods.conversationListMessages` → `conversation.listMessages`
+
+**模式：** `call`。**请求类型：** `m.MessageQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListMessages
+func(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/list) · [Go DTO 参考](/reference/go/api)
+
+<a id="listsidebarconversations" />
+
+## Methods.conversationListSidebarConversations
+
+`Methods.conversationListSidebarConversations` → `conversation.listSidebarConversations`
+
+**模式：** `call`。**请求类型：** `m.SidebarRowsQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ListSidebarConversations
+func(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/list-sidebar-conversations) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeactiveexecutions" />
+
+## Methods.conversationObserveActiveExecutions
+
+`Methods.conversationObserveActiveExecutions` → `conversation.observeActiveExecutions`
+
+**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveActiveExecutions
+func(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/observe-active-executions) · [Go DTO 参考](/reference/go/api)
+
+<a id="observecommandreceipt" />
+
+## Methods.conversationObserveCommandReceipt
+
+`Methods.conversationObserveCommandReceipt` → `conversation.observeCommandReceipt`
+
+**模式：** `observe`。**请求类型：** `m.CommandReceiptRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveCommandReceipt
+func(ctx context.Context, r m.CommandReceiptRef, o m.Observer[m.CommandReceipt]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/receipts/observe-command-receipt) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeconversationconfig" />
+
+## Methods.conversationObserveConversationConfig
+
+`Methods.conversationObserveConversationConfig` → `conversation.observeConversationConfig`
+
+**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveConversationConfig
+func(ctx context.Context, r m.ConversationRef, o m.Observer[m.EffectiveConfig]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/configuration/observe-conversation-config) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeconversationgroups" />
+
+## Methods.conversationObserveConversationGroups
+
+`Methods.conversationObserveConversationGroups` → `conversation.observeConversationGroups`
+
+**模式：** `observe`。**请求类型：** `m.ConversationGroupQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveConversationGroups
+func(ctx context.Context, r m.ConversationGroupQuery, o m.Observer[m.Page[m.SidebarGroup]]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/observe-conversation-groups) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeconversationhistory" />
+
+## Methods.conversationObserveConversationHistory
+
+`Methods.conversationObserveConversationHistory` → `conversation.observeConversationHistory`
+
+**模式：** `observe`。**请求类型：** `m.ConversationHistoryQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveConversationHistory
+func(ctx context.Context, r m.ConversationHistoryQuery, o m.Observer[m.ConversationHistory]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/observe-conversation-history) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeconversations" />
+
+## Methods.conversationObserveConversations
+
+`Methods.conversationObserveConversations` → `conversation.observeConversations`
+
+**模式：** `observe`。**请求类型：** `m.ConversationQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveConversations
+func(ctx context.Context, r m.ConversationQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/observe-conversations) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeexecutionactivity" />
+
+## Methods.conversationObserveExecutionActivity
+
+`Methods.conversationObserveExecutionActivity` → `conversation.observeExecutionActivity`
+
+**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveExecutionActivity
+func(ctx context.Context, r m.ConversationRef, o m.Observer[[]m.ExecutionActivity]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/observe-execution-activity) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeinteractions" />
+
+## Methods.conversationObserveInteractions
+
+`Methods.conversationObserveInteractions` → `conversation.observeInteractions`
+
+**模式：** `observe`。**请求类型：** `m.InteractionQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveInteractions
+func(ctx context.Context, r m.InteractionQuery, o m.Observer[[]m.Interaction]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/interactions/observe-interactions) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeliveprocess" />
+
+## Methods.conversationObserveLiveProcess
+
+`Methods.conversationObserveLiveProcess` → `conversation.observeLiveProcess`
+
+**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveLiveProcess
+func(ctx context.Context, r m.ConversationRef, o m.Observer[m.LiveProcessSnapshot]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/observe-live-process) · [Go DTO 参考](/reference/go/api)
+
+<a id="observemembers" />
+
+## Methods.conversationObserveMembers
+
+`Methods.conversationObserveMembers` → `conversation.observeMembers`
+
+**模式：** `observe`。**请求类型：** `m.MemberQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveMembers
+func(ctx context.Context, r m.MemberQuery, o m.Observer[[]m.Member]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/members/observe-members) · [Go DTO 参考](/reference/go/api)
+
+<a id="observemessages" />
+
+## Methods.conversationObserveMessages
+
+`Methods.conversationObserveMessages` → `conversation.observeMessages`
+
+**模式：** `observe`。**请求类型：** `m.MessageQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveMessages
+func(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/observe) · [Go DTO 参考](/reference/go/api)
+
+<a id="observemutation" />
+
+## Methods.conversationObserveMutation
+
+`Methods.conversationObserveMutation` → `conversation.observeMutation`
+
+**模式：** `observe`。**请求类型：** `m.MutationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveMutation
+func(ctx context.Context, r m.MutationRef, o m.Observer[m.MutationStatus]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/receipts/observe-mutation) · [Go DTO 参考](/reference/go/api)
+
+<a id="observesidebarconversations" />
+
+## Methods.conversationObserveSidebarConversations
+
+`Methods.conversationObserveSidebarConversations` → `conversation.observeSidebarConversations`
+
+**模式：** `observe`。**请求类型：** `m.SidebarRowsQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveSidebarConversations
+func(ctx context.Context, r m.SidebarRowsQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/observe-sidebar-conversations) · [Go DTO 参考](/reference/go/api)
+
+<a id="observeturn" />
+
+## Methods.conversationObserveTurn
+
+`Methods.conversationObserveTurn` → `conversation.observeTurn`
+
+**模式：** `observe`。**请求类型：** `m.TurnRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ObserveTurn
+func(ctx context.Context, r m.TurnRef, o m.Observer[*m.Turn]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/turns/observe-turn) · [Go DTO 参考](/reference/go/api)
+
+<a id="ongroupsyncstate" />
+
+## Methods.conversationOnGroupSyncState
+
+`Methods.conversationOnGroupSyncState` → `conversation.onGroupSyncState`
+
+**模式：** `observe`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.OnGroupSyncState
+func(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/sync/on-group-sync-state) · [Go DTO 参考](/reference/go/api)
+
+<a id="prepareconversationattachmenttarget" />
+
+## Methods.conversationPrepareConversationAttachmentTarget
+
+`Methods.conversationPrepareConversationAttachmentTarget` → `conversation.prepareConversationAttachmentTarget`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.PrepareConversationAttachmentTarget
+func(ctx context.Context, r m.ConversationRef) (m.ConversationAttachmentTarget, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/attachments/prepare-conversation-attachment-target) · [Go DTO 参考](/reference/go/api)
+
+<a id="refreshpendinginteractions" />
+
+## Methods.conversationRefreshPendingInteractions
+
+`Methods.conversationRefreshPendingInteractions` → `conversation.refreshPendingInteractions`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.RefreshPendingInteractions
+func(ctx context.Context, r m.ConversationRef) (m.RecoveredInteractions, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/interactions/refresh-pending-interactions) · [Go DTO 参考](/reference/go/api)
+
+<a id="removemember" />
+
+## Methods.conversationRemoveMember
+
+`Methods.conversationRemoveMember` → `conversation.removeMember`
+
+**模式：** `call`。**请求类型：** `m.MemberRequest`。**MutationOptions：** 支持；原生 `mutationId` 参数用于该选项。
+
+```go
+*ConversationManager.RemoveMember
+func(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/members/remove) · [Go DTO 参考](/reference/go/api)
+
+<a id="renameconversation" />
+
+## Methods.conversationRenameConversation
+
+`Methods.conversationRenameConversation` → `conversation.renameConversation`
+
+**模式：** `call`。**请求类型：** `m.RenameRequest`。**MutationOptions：** 支持；原生 `mutationId` 参数用于该选项。
+
+```go
+*ConversationManager.RenameConversation
+func(ctx context.Context, r m.RenameRequest, options ...m.MutationOptions) (m.ConversationRef, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/rename) · [Go DTO 参考](/reference/go/api)
+
+<a id="resolveconversationread" />
+
+## Methods.conversationResolveConversationRead
+
+`Methods.conversationResolveConversationRead` → `conversation.resolveConversationRead`
+
+**模式：** `call`。**请求类型：** `m.ConversationReadQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.ResolveConversationRead
+func(ctx context.Context, r m.ConversationReadQuery) (m.ConversationReadBinding, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/resolve-conversation-read) · [Go DTO 参考](/reference/go/api)
+
+<a id="respondpermission" />
+
+## Methods.conversationRespondPermission
+
+`Methods.conversationRespondPermission` → `conversation.respondPermission`
+
+**模式：** `call`。**请求类型：** `m.PermissionRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.RespondPermission
+func(ctx context.Context, r m.PermissionRequest) (m.InteractionResponse, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/interactions/permission) · [Go DTO 参考](/reference/go/api)
+
+<a id="respondquestion" />
+
+## Methods.conversationRespondQuestion
+
+`Methods.conversationRespondQuestion` → `conversation.respondQuestion`
+
+**模式：** `call`。**请求类型：** `m.QuestionRequest`。**MutationOptions：** 支持；原生 `mutationId` 参数用于该选项。
+
+```go
+*ConversationManager.RespondQuestion
+func(ctx context.Context, r m.QuestionRequest, options ...m.MutationOptions) (m.InteractionResponse, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/interactions/question) · [Go DTO 参考](/reference/go/api)
+
+<a id="sendmessage" />
+
+## Methods.conversationSendMessage
+
+`Methods.conversationSendMessage` → `conversation.sendMessage`
+
+**模式：** `call`。**请求类型：** `m.SendRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SendMessage
+func(ctx context.Context, r m.SendRequest) (m.MessageAccepted, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/send) · [Go DTO 参考](/reference/go/api)
+
+<a id="sendmessageandwait" />
+
+## Methods.conversationSendMessageAndWait
+
+`Methods.conversationSendMessageAndWait` → `conversation.sendMessageAndWait`
+
+**模式：** `call`。**请求类型：** `m.SendRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SendMessageAndWait
+func(ctx context.Context, r m.SendRequest) (m.MessageCompletion, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/wait) · [Go DTO 参考](/reference/go/api)
+
+<a id="sendmessagestream" />
+
+## Methods.conversationSendMessageStream
+
+`Methods.conversationSendMessageStream` → `conversation.sendMessageStream`
+
+**模式：** `stream`。**请求类型：** `m.SendRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SendMessageStream
+func(ctx context.Context, r m.SendRequest) m.MessageStream
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/stream) · [Go DTO 参考](/reference/go/api)
+
+<a id="setconversationconfigoption" />
+
+## Methods.conversationSetConversationConfigOption
+
+`Methods.conversationSetConversationConfigOption` → `conversation.setConversationConfigOption`
+
+**模式：** `call`。**请求类型：** `m.ConfigOptionRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SetConversationConfigOption
+func(ctx context.Context, r m.ConfigOptionRequest) (m.ConversationRef, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/configuration/set-conversation-config-option) · [Go DTO 参考](/reference/go/api)
+
+<a id="setconversationpinned" />
+
+## Methods.conversationSetConversationPinned
+
+`Methods.conversationSetConversationPinned` → `conversation.setConversationPinned`
+
+**模式：** `call`。**请求类型：** `m.PinnedRequest`。**MutationOptions：** 支持；原生 `mutationId` 参数用于该选项。
+
+```go
+*ConversationManager.SetConversationPinned
+func(ctx context.Context, r m.PinnedRequest, options ...m.MutationOptions) (m.ConversationRef, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/set-conversation-pinned) · [Go DTO 参考](/reference/go/api)
+
+<a id="steerturn" />
+
+## Methods.conversationSteerTurn
+
+`Methods.conversationSteerTurn` → `conversation.steerTurn`
+
+**模式：** `call`。**请求类型：** `m.SteerRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SteerTurn
+func(ctx context.Context, r m.SteerRequest) (m.SteerResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/turns/steer-turn) · [Go DTO 参考](/reference/go/api)
+
+<a id="syncconversation" />
+
+## Methods.conversationSyncConversation
+
+`Methods.conversationSyncConversation` → `conversation.syncConversation`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SyncConversation
+func(ctx context.Context, r m.ConversationRef) (m.GroupSyncState, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/sync/sync-conversation) · [Go DTO 参考](/reference/go/api)
+
+<a id="syncgroup" />
+
+## Methods.conversationSyncGroup
+
+`Methods.conversationSyncGroup` → `conversation.syncGroup`
+
+**模式：** `call`。**请求类型：** `m.GroupRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SyncGroup
+func(ctx context.Context, r m.GroupRef) (m.GroupSyncState, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/sync/sync-group) · [Go DTO 参考](/reference/go/api)
+
+<a id="unarchiveconversation" />
+
+## Methods.conversationUnarchiveConversation
+
+`Methods.conversationUnarchiveConversation` → `conversation.unarchiveConversation`
+
+**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.UnarchiveConversation
+func(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/unarchive-conversation) · [Go DTO 参考](/reference/go/api)
+
+<a id="updateconversationconfig" />
+
+## Methods.conversationUpdateConversationConfig
+
+`Methods.conversationUpdateConversationConfig` → `conversation.updateConversationConfig`
+
+**模式：** `call`。**请求类型：** `m.ConfigRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.UpdateConversationConfig
+func(ctx context.Context, r m.ConfigRequest) (m.ConversationRef, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/configuration/update) · [Go DTO 参考](/reference/go/api)
+
+<a id="updatemember" />
+
+## Methods.conversationUpdateMember
+
+`Methods.conversationUpdateMember` → `conversation.updateMember`
+
+**模式：** `call`。**请求类型：** `m.MemberRequest`。**MutationOptions：** 支持；原生 `mutationId` 参数用于该选项。
+
+```go
+*ConversationManager.UpdateMember
+func(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/members/update) · [Go DTO 参考](/reference/go/api)

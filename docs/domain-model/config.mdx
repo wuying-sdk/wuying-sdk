@@ -1,0 +1,30 @@
+---
+title: "Config"
+description: "本页介绍会话执行配置：用户希望使用什么配置，以及它是否已经真正生效。"
+---
+
+本页介绍会话执行配置：用户希望使用什么配置，以及它是否已经真正生效。
+
+## 模型与关联
+
+`EffectiveConfig` 分别携带 desired、applied、application 与版本。`ResponsibilityPatch` 明确表达继承或覆盖；成员级覆盖见 [Member](/domain-model/04-member-config)。
+
+JS 声明中的会话配置在根模块导出为 `ConversationSettings`；不要与另一个根导出 `Config` 配置类型混用。精确字段由当前方法签名决定。
+
+## 生命周期
+
+读取当前配置与能力 → 用户选择修改 → 按当前版本提交 → 观察 desired / applied / application → 核对实际应用结果。
+
+## 操作入口
+
+- [`getConversationConfig`](/api-reference/configuration/get)
+- [`observeConversationConfig`](/api-reference/configuration/observe-conversation-config)
+- [`updateConversationConfig`](/api-reference/configuration/update)
+- [`setConversationConfigOption`](/api-reference/configuration/set-conversation-config-option)
+- [`getComposerCapabilities`](/api-reference/configuration/get-composer-capabilities)
+
+## 使用边界
+
+写入受理不等于已应用，不能把本地选择直接显示为生效。会话可选模型来自 [Agent](/domain-model/agent)，独立云模型配置属于 [Model](/domain-model/model)，作用域和身份不能互换。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

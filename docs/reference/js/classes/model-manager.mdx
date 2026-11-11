@@ -1,0 +1,47 @@
+---
+title: "ModelManager"
+sidebarTitle: "ModelManager"
+description: "JavaScript / TypeScript 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## getAgentInstanceModelConfig
+
+```ts
+getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
+```
+
+[查看操作或完整契约](/api-reference/models/get)
+
+## setChannelGroupModel
+
+```ts
+setChannelGroupModel(ctx: ExecutionContext, req: SetChannelGroupModelRequest, ...opts: CallOption[]): Promise<SetChannelGroupModelResult | null>;
+```
+
+[查看操作或完整契约](/api-reference/models/set-channel-group-model)
+
+## buildModelManager · static
+
+```ts
+buildModelManager(ctx: ExecutionContext, container: ServiceContainer): Promise<ModelManager>;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-396a23bb8cbb5f69)
+
+## getAgentInstanceModelConfig
+
+```ts
+getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
+```
+
+[查看操作或完整契约](/api-reference/models/get)
+
+## setChannelGroupModel
+
+```ts
+setChannelGroupModel(ctx: ExecutionContext, req: SetChannelGroupModelRequest, ...opts: CallOption[]): Promise<SetChannelGroupModelResult | null>;
+```
+
+[查看操作或完整契约](/api-reference/models/set-channel-group-model)

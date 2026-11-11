@@ -1,0 +1,19 @@
+---
+title: "Client.close"
+description: "由应用释放当前身份的连接与本地资源，区分退订、退出与远端取消。"
+---
+
+## 生命周期与调用
+
+应用持有当前登录上下文的 Client；页面离开时只释放自己拥有的订阅，退出账号时退订并关闭根 Client。
+
+| 入口 | 关闭方式 |
+|---|---|
+| JS / TypeScript | `await client.close()` |
+| Go | `client.Close()`，处理返回错误 |
+| Java | `client.close()` 或 try-with-resources |
+| CLI | 本条命令结束时释放连接；`auth logout` 只处理本地凭据 |
+
+关闭本地 Client 不等于远端任务取消或云端登录态撤销。停止任务应使用[取消 Turn](/api-reference/turns/cancel)并核对真实终态。
+
+更换身份时建立新的登录上下文并隔离数据位置；不把新的用户票据塞进仍属于其他账号的 Client。完整规则见 [SDK Client](/getting-started/initialize-client) 与[身份生命周期](/integration/01-auth-and-lifecycle)。

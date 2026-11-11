@@ -1,0 +1,72 @@
+---
+title: "移动端数据与生命周期"
+description: "Android 与 iOS 共用的方法、认证、JSON 数据、取消和交付边界。"
+---
+
+Android 的 Java 包装和 iOS 的 Swift 包装复用 Go mobile 的唯一方法清单和根 Client；原生层负责数据转换、回调派发与本地句柄，不维护第二套会话、授权或路由状态。
+
+## 认证与配置
+
+移动应用属于用户端。配置选择后端签发的 `authCode`，或完整的 `loginToken/sessionId/endUserId`；服务端 AK/SK 不进入移动应用。真实用户与资源授权仍由服务端校验。认证路径见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+| 配置 | 含义 |
+|---|---|
+| `authCode` | 用户端一次接入票据；与完整登录态择一 |
+| `loginToken` / `sessionId` / `endUserId` | 已有完整用户登录态；不能只提供其中一项 |
+| `dataPath` | 必须是应用私有目录内的绝对数据库文件路径；每个文件仅一个活跃 Client |
+| `loginRegionId` / `clientId` | 按实际授权接入配置提供地域及应用身份 |
+| `appStreamEndpoint` / `skillMgmtEndpoint` / `salesEndpoint` | 使用实际环境的配套服务地址；按接入需要配置 |
+| `timeoutSeconds` | 根 Client 调用配置；单个移动请求另有 timeoutMillis |
+| `streamingEnabled` | 设为 true 才协商 replay_v1 瞬态流；默认不启用 |
+
+初始化和关闭放在工作线程。账号路径由应用安全映射并预先创建；换账号先关闭旧实例，再使用不同私有文件新建。SDK 不提供移动端 AK/SK 管理入口。
+
+## 方法与请求
+
+两端各提供 113 个 `Methods` 常量，经 `Client.request` 分发到七个 Manager。各方法页面明确列出 `call`、`observe` 或流模式以及是否接受 MutationOptions。
+
+```json
+{
+  "request": {
+    "runtimeId": "<实际 runtimeId>",
+    "conversationId": "<实际 conversationId>"
+  },
+  "options": [{ "mutationId": "<提前保存的稳定标识>" }]
+}
+```
+
+这是信封结构示意，不是每个方法都需要这两个字段。包装器自动生成信封，应用向 `request` 参数传业务对象，**不再嵌套一层 request**。只有标为支持 MutationOptions 的方法才传 `mutationId`；其余省略。字段由对应 Go 移动请求 DTO 决定；新增云管理方法在移动边界使用 camelCase，不能从 Java DTO 字段或 Go 标识机械翻译 JSON。
+
+64 位标识、版本、大小与序号以 JSON 字符串传递；拒绝未知请求字段。附件字节通过 Android `byte[]` / Swift `Data` 传给 `data` 参数，只用于 `resource.stageAttachment` 和 `resource.stageDraftAttachment`；不要放入 JSON。
+
+## 事件与结果
+
+| kind | 含义 |
+|---|---|
+| `result` | 普通调用结果；终结本地请求 |
+| `snapshot` | 业务快照；多数观察持续，回执终态快照可 terminal=true |
+| `accepted` / `chunk` / `completed` | 流受理、片段与执行完成；消费具体业务结果，不把受理当作成功 |
+| `error` | 结构化失败，终结本地请求 |
+
+每个事件包含 `kind`、`terminal`，以及按方法定义的 `data` 或 `error`。快照的投影和版本原样保留，不能将实时过程写成另一份历史消息状态。Android 默认主 Looper、iOS 默认主队列；同一请求按顺序交付，跨请求不保证顺序。观察失败会终结本地订阅，应用处理错误后可显式重建只读订阅。
+
+## 取消、超时与恢复
+
+`Request.cancel` 停止本地等待和回调；`Client.close` 释放该实例所有请求并关闭根 Client，均不代表远端任务已取消。需要远端取消时，显式调用 `conversation.cancelTurn` / `conversation.cancelExecution`，使用返回的真实执行身份及版本并核对终态。
+
+普通调用默认 60 秒，流/SendMessageAndWait 默认 10 分钟，观察无默认截止。单次 `timeoutMillis=0` 使用默认，显式范围 1..600000 毫秒。超时或取消不证明写操作没有发生；保留原 clientCommandId/mutationId 并查原回执。云管理 API 复用云 Service 的有限重试，不提供 IM 回执去重合同。
+
+单 Client 最多 64 个活动操作；JSON 输入 1 MiB；单附件 16 MiB、总在途附件 32 MiB。单事件 8 MiB，原生每操作回调队列最多 64 条或 8 MiB；积压会返回 CALLBACK_OVERFLOW 并停止本地等待。这些是移动适配层预算，不代表上游业务容量保证。
+
+## 版本与验证范围
+
+本文使用 **RuntimeManager 首版未提交草稿**：基础提交 `ea48f8775d28753cefef13b937982dd44587aa51` 加本次源码变更。完整身份是覆盖清单中的源码归档 SHA-256，不是旧提交原始制品。Android/iOS 清单来自该归档，逐文件校验哈希，两个平台各 113 个方法常量与 Go mobile 清单完全一致。
+
+方法清单覆盖不代表任意 AAR/XCFramework 已包含这些入口。当前文档未提供公共移动包坐标，也未将原生制品放入站点。请按实际交付的制品哈希、平台架构与版本核对；历史 98 个入口的设备测试不能替代新增至 113 个入口的验证。iOS 原生构建及真实登录、双端收发、授权撤回和后台恢复需对应设备与制品验收。
+
+[Android 安装与初始化](/sdk-reference/android) · [iOS 安装与初始化](/sdk-reference/ios) · [全量覆盖口径](/api-reference/coverage/index)
+
+
+## RuntimeManager 首版接口
+
+目录、能力与云实例共 8 个入口统一使用 `runtime.*`。不存在 `cloudAgent.*` 或 AgentManager 的 Runtime 方法别名。原生 AAR/XCFramework 必须用本次源码重新构建，旧二进制不能配合新常量使用。本次通过 Go 移动合同与宿主 Swift 包装测试，未完成 Android/iOS 真机或模拟器验收。

@@ -1,0 +1,483 @@
+---
+title: "CLI 完整公开清单"
+sidebarTitle: "CLI 完整公开清单"
+description: "按原始声明核对所有公开调用入口，包括配置、DTO、回调与辅助方法。"
+---
+
+本页完整列出当前快照中的公开函数、方法与命令，包含重载。业务操作按模型拆页；构造、配置、DTO/错误辅助、回调契约等保留完整签名，不当作新的资源操作。
+
+统计当前 CLI 显式注册的所有命令及子命令。分组入口与可执行叶命令分别列出；以下签名来自静态注册，不执行命令。
+
+## 全局选项
+
+```sh
+optional --profile <name> — Credential and database profile (default: default)
+optional --data-dir <directory> — Private CLI data directory (or WUYING_CLI_HOME)
+optional --output <format> — json, jsonl, or text (default: json)
+optional --timeout <milliseconds> — Local wait deadline; never cancels a remote task (default: 120000)
+optional --no-input — Never prompt (v0.1 always uses explicit inputs)
+```
+
+CLI 框架的 help / --help 与 --version 用于查看帮助和版本，不计作业务 API；以安装包帮助为准。
+
+<a id="entry-ef76b3a706cf5aa2" />
+
+### agents.agents
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying agents
+
+```
+
+<a id="entry-449fe2c244113ff1" />
+
+### agents.agents list
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
+
+```sh
+wuying agents list
+required --runtime <id> — Explicit authorized Runtime ID
+```
+
+<a id="entry-eaa0a1305122d77b" />
+
+### auth.auth
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying auth
+
+```
+
+<a id="entry-b538faf993187d96" />
+
+### auth.auth code
+
+类别：模型操作。[按模型查看操作](/api-reference/client/get-auth-code)。
+
+```sh
+wuying auth code
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-7aa851af6880622f" />
+
+### auth.auth import
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/auth-import)。
+
+```sh
+wuying auth import
+required --stdin — Read a credential JSON object from stdin
+```
+
+<a id="entry-7a423a6514b8c30e" />
+
+### auth.auth logout
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/auth-logout)。
+
+```sh
+wuying auth logout
+
+```
+
+<a id="entry-d759b848fd5ad056" />
+
+### auth.auth status
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/auth-status)。
+
+```sh
+wuying auth status
+
+```
+
+<a id="entry-4147c6f11bf54003" />
+
+### codex.codex
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying codex
+
+```
+
+<a id="entry-2df7fe9b403fede8" />
+
+### codex.codex install
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/codex-install)。
+
+```sh
+wuying codex install
+optional --scope <scope> — user or project (default: user)
+optional --project-dir <directory> — Project root for project scope
+```
+
+<a id="entry-96b1795aed245d53" />
+
+### conversations.conversations
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying conversations
+
+```
+
+<a id="entry-d153a084ff5d7636" />
+
+### conversations.conversations create
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/create)。
+
+```sh
+wuying conversations create
+required --runtime <id> — Explicit authorized Runtime ID
+required --agent <id> — Agent ID
+required --name <name> — Conversation title
+optional --mutation-id <id> — Stable ID for retrying the same create request
+```
+
+<a id="entry-d53471dfe6cc50fb" />
+
+### conversations.conversations get
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/get)。
+
+```sh
+wuying conversations get
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+```
+
+<a id="entry-8724028aa5ae53bc" />
+
+### conversations.conversations list
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/list)。
+
+```sh
+wuying conversations list
+required --runtime <id> — Explicit authorized Runtime ID
+optional --limit <count> — Page size (default: 20)
+optional --cursor <cursor> — Opaque nextCursor
+```
+
+<a id="entry-b7b846eb337f87d0" />
+
+### desktops.desktops
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying desktops
+
+```
+
+<a id="entry-6d842fe498fb5296" />
+
+### desktops.desktops create
+
+类别：模型操作。[按模型查看操作](/api-reference/client/create-desktops)。
+
+```sh
+wuying desktops create
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+optional --wait — Wait for resource creation to complete
+```
+
+<a id="entry-c4d9e84b05f291f6" />
+
+### desktops.desktops delete
+
+类别：模型操作。[按模型查看操作](/api-reference/client/delete)。
+
+```sh
+wuying desktops delete
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-d3665f72648a2f40" />
+
+### desktops.desktops reboot
+
+类别：模型操作。[按模型查看操作](/api-reference/client/reboot)。
+
+```sh
+wuying desktops reboot
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-23382f0ae24b806a" />
+
+### desktops.desktops reset
+
+类别：模型操作。[按模型查看操作](/api-reference/client/reset)。
+
+```sh
+wuying desktops reset
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-e852b7c16100339e" />
+
+### desktops.desktops start
+
+类别：模型操作。[按模型查看操作](/api-reference/client/start)。
+
+```sh
+wuying desktops start
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-1b2643d60c0fbeaf" />
+
+### desktops.desktops stop
+
+类别：模型操作。[按模型查看操作](/api-reference/client/stop)。
+
+```sh
+wuying desktops stop
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-7e11293273aa5e88" />
+
+### desktops.desktops wait
+
+类别：模型操作。[按模型查看操作](/api-reference/client/wait)。
+
+```sh
+wuying desktops wait
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-9a7c367600208b45" />
+
+### doctor.doctor
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/doctor)。
+
+```sh
+wuying doctor
+optional --offline — Check SDK loading and persistent storage without network requests
+```
+
+<a id="entry-7e71cf1eae6768e9" />
+
+### interactions.interactions
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying interactions
+
+```
+
+<a id="entry-e80df33d7049764f" />
+
+### interactions.interactions list
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/list)。
+
+```sh
+wuying interactions list
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+```
+
+<a id="entry-7ef9eb0b28a4af84" />
+
+### interactions.interactions refresh
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/refresh-pending-interactions)。
+
+```sh
+wuying interactions refresh
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+```
+
+<a id="entry-d022566a7c40569e" />
+
+### interactions.interactions respond
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/interactions-respond)。
+
+```sh
+wuying interactions respond
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --interaction <id> — Interaction ID
+required --expected-version <version> — Current interaction writeVersion
+optional --option <id> — Permission option ID
+optional --answer-file <path> — Question answer JSON: {answers:[...]} or {skip:true}
+```
+
+<a id="entry-37a4ffba0afb77e6" />
+
+### messages.messages
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying messages
+
+```
+
+<a id="entry-5faddd0d0c1819cb" />
+
+### messages.messages get
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/presentation)。
+
+```sh
+wuying messages get
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --message <id> — Message ID from the Turn
+optional --limit <count> — Process-item page size (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
+```
+
+<a id="entry-11dc5717daed42e0" />
+
+### messages.messages list
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/list)。
+
+```sh
+wuying messages list
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+optional --limit <count> — Page size (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
+```
+
+<a id="entry-757b2b880b5cfd90" />
+
+### models.models
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying models
+
+```
+
+<a id="entry-81617beb4d94bfa9" />
+
+### models.models list
+
+类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
+
+```sh
+wuying models list
+required --runtime <id> — Explicit authorized Runtime ID
+required --agent <id> — Agent ID
+```
+
+<a id="entry-89a349421bd6ff43" />
+
+### run.run
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/run)。
+
+```sh
+wuying run
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+optional --text <text> — Task text
+optional --input-file <path> — Read UTF-8 task text from a local file
+optional --stdin — Read task text from stdin
+optional --attach <path> — Stage a local attachment (repeatable) (default: [])
+optional --client-command-id <id> — Stable ID for request recovery
+optional --no-wait — Return after durable acceptance; remote execution continues
+```
+
+<a id="entry-24ba230b8878d7dd" />
+
+### runtimes.runtimes
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying runtimes
+
+```
+
+<a id="entry-19b1335934977c6d" />
+
+### runtimes.runtimes list
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
+
+```sh
+wuying runtimes list
+
+```
+
+<a id="entry-ce85ac68437ecca9" />
+
+### turns.turns
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying turns
+
+```
+
+<a id="entry-0bc30426610201ec" />
+
+### turns.turns cancel
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/cancel)。
+
+```sh
+wuying turns cancel
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --turn <id> — Turn ID
+```
+
+<a id="entry-2db1fb4fcea1a542" />
+
+### turns.turns status
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/get)。
+
+```sh
+wuying turns status
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --turn <id> — Turn ID
+```
+
+<a id="entry-0cf6e970ea7b687f" />
+
+### turns.turns wait
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/turns-wait)。
+
+```sh
+wuying turns wait
+required --runtime <id> — Explicit authorized Runtime ID
+required --conversation <id> — Product Conversation ID
+required --turn <id> — Turn ID
+```

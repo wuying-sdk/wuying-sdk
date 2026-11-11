@@ -1,0 +1,3 @@
+Use `wuying --help` when the CLI is on PATH. Ask the user to install the local CLI
+and run `wuying codex install` if it is unavailable. That command writes an
+installation reference containing the absolute executable path; do not guess a path.

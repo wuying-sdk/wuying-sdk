@@ -1,0 +1,30 @@
+---
+title: "Attachment"
+description: "Attachment 管理真实文件字节的暂存、消息引用与短期访问。"
+---
+
+Attachment 管理真实文件字节的暂存、消息引用与短期访问。
+
+## 模型与关联
+
+`StagedAttachment` 是暂存结果；发送请求引用 attachmentId。`CommittedAttachment` 与 `AttachmentPreview` 按各自接口解释。
+
+会话前上传见 [DraftAttachment](/domain-model/draft)，消息产生的文件摘要见 [MessageCloudFile](/domain-model/message-cloud-file)。
+
+## 生命周期
+
+读取真实字节 → stage → 得到 attachmentId → 在发送中引用 → 按 purpose 获取访问描述。仅在合同允许时 discard 未提交暂存。
+
+## 操作入口
+
+- [`stageAttachment`](/api-reference/attachments/stage)
+- [`discardAttachment`](/api-reference/attachments/discard)
+- [`getAttachmentAccess`](/api-reference/attachments/access)
+
+## 使用边界
+
+暂存成功不表示消息已发出。discard 不等于删除历史消息、云盘文件或取消 Turn；短期 URL 过期应重新申请，不能永久保存为公开地址。各语言上传 DTO 不同，不能把 JS Blob 机械复制到移动端。
+
+上传已经产生副作用而发送结果未知时，不能把整项操作当作无副作用失败；保留原附件和请求身份，先查询回执，避免整段重传。恢复规则见 [错误与恢复](/domain-model/12-errors-examples)。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

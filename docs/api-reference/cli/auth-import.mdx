@@ -1,0 +1,37 @@
+---
+title: "auth import"
+sidebarTitle: "auth import"
+description: "完整公开接口 · CLI"
+---
+
+`auth import` · CLI
+
+通过 stdin 导入凭据。当前只支持 POSIX 私有 0600 明文文件，Windows 不支持持久导入；这不是钥匙串，也不验证在线身份。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Go | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Java | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| CLI | `wuying auth import` | 已公开声明，需核对环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### CLI · auth
+
+```sh
+wuying auth import
+required --stdin — Read a credential JSON object from stdin
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/language-bindings) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

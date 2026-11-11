@@ -1,0 +1,36 @@
+使用 Agent 自动调用 CLI 时，先[安装配套 Skill](/guides/cli-skills)。配套包分别提供云资源管理与远程 Agent 任务两项 Skill。
+
+## 管理员与用户态
+
+CLI 支持两类权限：aliuid 维度的 AK/SK 管理员权限，以及无影客户端用户态权限。用户态支持 AuthCode 或 LoginToken，不能与 AK/SK 混用。
+
+管理员凭据通过宿主注入 `WUYING_ACCESS_KEY_ID` / `WUYING_ACCESS_KEY_SECRET`，或 `WUYING_CREDENTIALS` JSON 提供。显式 JSON 优先于独立环境变量，环境凭据优先于已保存的 profile；切换 `--profile` 不会覆盖环境凭据。AK/SK 不作为命令行参数传递。
+
+## 云桌面管理命令
+
+| 命令 | 用户态 | 管理员 |
+|---|---|---|
+| `desktops create` / `desktops wait` | 不支持 | 支持 |
+| `desktops start` / `desktops stop` / `desktops reboot` / `desktops reset` | 支持 | 支持 |
+| `desktops delete` | 不支持 | 支持 |
+| `auth code` | 不支持 | 为指定无影用户获取 AuthCode |
+
+每个命令通过 `--request-file` 或 `--stdin` 提供一个 JSON 对象，二选一，最大 64 KiB。字段与 SDK 请求一致，鉴权、签名及参数校验由根 Client 处理。
+
+已配置当前身份后，开机只需：
+
+```sh
+wuying desktops start --request-file target.json
+```
+
+target.json：
+
+```json
+{"regionId":"cn-hangzhou","desktopIds":["desktop-id"]}
+```
+
+将桌面 ID 替换为已确认的真实资源。其他操作的完整字段见 [Runtime](/domain-model/02-runtime-agent) 下的接口参考。用户态重置必须给出 imageId；管理员可省略。创建可用 `--wait` 等待创建就绪；`desktops wait` 也用于创建等待，不是重启或重置的通用等待命令。
+
+管理操作返回受理信息，不能据此认定资源已经完成变化。重置部分拒绝会返回非零退出码并保留逐桌面回执；写请求结果未知时退出码为 6，不自动重试。中断返回 130，也不代表云端操作已撤销。
+
+`auth code` 将一次性 AuthCode 输出到 stdout，应直接交给目标用户的认证流程，避免写入日志。管理员环境凭据需要在运行用户 profile 前移除。现有 `doctor` 在线检查验证用户及 IM 链路，不能用于证明管理员资源权限。

@@ -1,0 +1,28 @@
+---
+title: "Message"
+description: "Message 是面向查询和界面展示的消息投影，组织发送来源、内容块及状态。"
+---
+
+Message 是面向查询和界面展示的消息投影，组织发送来源、内容块及状态。
+
+## 模型与关联
+
+`Message` 按 messageId 对账，可关联 turnId，包含 sender、blocks、position 与 revision。`Block` 按 text / attachment / tool / interaction / unsupported 等实际种类渲染。
+
+一个 [Turn](/domain-model/06-turn-items) 可以产生多条消息。[MessagePresentation](/domain-model/message-presentation) 独立说明最终答案和过程；[Item](/domain-model/item) 说明消息内的内容项。
+
+## 生命周期
+
+本地提交 → SDK 受理 → 快照更新 → 消息终态 → 核对最终展示。观察返回整页快照时，按稳定消息 ID 更新，而非重复追加一页。
+
+## 操作入口
+
+- [`listMessages`](/api-reference/messages/list)
+- [`observeMessages`](/api-reference/messages/observe)
+- [`getMessageDetail`](/api-reference/messages/detail)
+
+## 使用边界
+
+Message completed 不等于整个会话完成，也不证明最终答案覆盖完整。撤回/删除以权威投影为准，不让旧快照恢复内容；未知 Block 显式兜底。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

@@ -1,0 +1,30 @@
+---
+title: "Resource"
+sidebarTitle: "会话资源选择（暂未支持）"
+description: "预留的会话资源目录与选择模型，当前生产集成返回 UNSUPPORTED。"
+---
+
+<Warning>本页是预留接口说明。当前通用 Resource 目录和会话绑定尚未支持生产集成，相关方法返回 UNSUPPORTED。</Warning>
+
+## 它表示什么
+
+Resource 原本用于描述“会话可以选择哪些资源”，类型包含 skill、mcp、attachment 等种类；ResourceSelection 记录某个会话选择的 resourceIds。类型已经定义，不表示已能通过通用接口选择或绑定这些资源。
+
+它不是云电脑 Runtime，也不是云盘 WyDrive。当前应用不要据此开放通用资源选择器。
+
+## 当前预留的接口
+
+| 方法 | 设计用途 | 当前状态 |
+|---|---|---|
+| [`listResources`](/api-reference/resources/list-resources) / [`observeResources`](/api-reference/resources/observe-resources) | 查看可选择的资源目录 | UNSUPPORTED |
+| [`getConversationResources`](/api-reference/resources/get-conversation-resources) / [`observeConversationResources`](/api-reference/resources/observe-conversation-resources) | 查看会话已选择资源 | UNSUPPORTED |
+| [`setConversationResources`](/api-reference/resources/set-conversation-resources) | 修改会话资源选择 | UNSUPPORTED |
+
+## 有对应独立接口的能力
+
+- [Attachment](/domain-model/attachment)：上传或访问会话附件。
+- [DraftAttachment](/domain-model/draft)：暂存、提交和丢弃附件草稿。
+- [Workspace](/domain-model/09-workspace-files)：查询或创建工作空间，读取会话工作区信息。
+- [Skill](/domain-model/11-cloud-capabilities)：查询、安装和启停技能。
+
+上述能力分别按具体接口与部署的实际支持情况使用；不能用它们的存在推断通用 ResourceSelection 已经可用。云盘与知识库见[存储能力](/domain-model/00-overview#存储能力)。

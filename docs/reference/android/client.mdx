@@ -1,0 +1,75 @@
+---
+title: "Client"
+description: "Android 原生包装的公开调用、事件、错误和高级引擎接口。"
+---
+
+包名为 `com.aliyun.wuying.sdk`。下面是公开接口的声明摘录，省略实现；业务方法通过 [Methods 常量](/reference/android/public)调用。[安装与初始化](/sdk-reference/android)说明如何取得真实引擎。
+
+## AndroidClient / Client
+
+```java
+// AndroidClient：默认向主 Looper 派发回调，工作线程初始化。
+public static Client connect(JSONObject configuration) throws SDKFailure;
+
+// Client：自定义引擎/回调 Executor 的高级构造。
+public Client(MobileEngine engine, Executor callbacks);
+public Request request(String method, JSONObject request,
+                       Listener listener) throws SDKFailure;
+public Request request(String method, JSONObject request, String mutationId,
+                       byte[] data, long timeoutMillis,
+                       Listener listener) throws SDKFailure;
+public void close() throws SDKFailure;
+
+// Client.Listener
+void onEvent(SDKEvent event);
+
+// Client.Request implements MobileEngine.LocalOperation, AutoCloseable
+public void cancel();
+public void close();
+```
+
+`request` 立即返回本地句柄；结果和快照通过回调交付。请求、可选 mutationId、附件字节与超时含义见[移动合同](/reference/mobile/contract)。`Request.cancel/close` 只停止本地交付；`Client.close` 关闭该实例及其请求。不要在 UI 线程同步等待回调。
+
+## SDKEvent
+
+```java
+public final String kind;
+public final Object data;
+public final SDKFailure error;
+public final boolean terminal;
+public static SDKEvent decode(String json) throws SDKFailure;
+```
+
+`data` 可能是 `JSONObject`、`JSONArray`、基本值或空；`error` 在非错误事件中可以为空。方法本身的结果形状由移动清单与对应 Go DTO 决定，不能把所有事件当作同一种快照。
+
+## SDKFailure
+
+```java
+// SDKFailure extends Exception
+public final String code, outcome, traceId;
+public final boolean retryable;
+public SDKFailure(String code, String outcome, boolean retryable, String traceId);
+```
+
+优先检查结构化字段。`outcome=unknown` 不证明写入失败；保留原请求身份并查询原回执，不生成新 ID 自动重发。错误恢复见[模型与错误](/domain-model/12-errors-examples)。
+
+## GoEngine / MobileEngine
+
+通常使用 `AndroidClient.connect`。需要宿主指定回调队列或注入测试引擎时，以下为高级契约；它们不增加资源权限。
+
+```java
+// GoEngine implements MobileEngine
+public GoEngine(JSONObject configuration) throws SDKFailure;
+
+// MobileEngine；GoEngine 实现以下方法。
+LocalOperation start(String method, String envelope, byte[] data,
+                     long timeoutMillis, Events events) throws SDKFailure;
+void close() throws SDKFailure;
+
+// MobileEngine.LocalOperation
+void cancel();
+// MobileEngine.Events
+void onEvent(String json);
+```
+
+`envelope` 是已经编码的移动 JSON 信封。普通应用使用 `Client.request` 自动编码；不从原生层另建业务状态或直连 Provider。`Methods` 的全部公开常量见[方法目录](/reference/android/public)。

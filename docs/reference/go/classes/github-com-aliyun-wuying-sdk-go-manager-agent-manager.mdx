@@ -1,0 +1,119 @@
+---
+title: "AgentManager"
+sidebarTitle: "AgentManager"
+description: "Go 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## DeleteWyDriveFile
+
+```go
+func (receiver *AgentManager) DeleteWyDriveFile(ctx context.Context, r m.DeleteWyDriveFileRequest) error
+```
+
+[查看操作或完整契约](/api-reference/files/delete-wy-drive-file)
+
+## DescribeWyDriveFiles
+
+```go
+func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+```
+
+[查看操作或完整契约](/api-reference/files/describe-wy-drive-files)
+
+## DescribeWyDrives
+
+```go
+func (receiver *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+```
+
+[查看操作或完整契约](/api-reference/files/describe-wy-drives)
+
+## DownloadKnowledgeFiles
+
+```go
+func (receiver *AgentManager) DownloadKnowledgeFiles(ctx context.Context, r m.DownloadKnowledgeFilesRequest) ([]m.DownloadKnowledgeFileResult, error)
+```
+
+[查看操作或完整契约](/api-reference/knowledge/download-knowledge-files)
+
+## GetAgentModelCatalog
+
+```go
+func (receiver *AgentManager) GetAgentModelCatalog(ctx context.Context, r m.ModelCatalogQuery) (m.Snapshot[m.AgentModelCatalog], error)
+```
+
+[查看操作或完整契约](/api-reference/agents/get-agent-model-catalog)
+
+## GetDownloadURL
+
+```go
+func (receiver *AgentManager) GetDownloadURL(ctx context.Context, r m.GetDownloadUrlRequest) (m.DownloadUrlInfo, error)
+```
+
+[查看操作或完整契约](/api-reference/files/get-download-url)
+
+## GetExpertDirectory
+
+```go
+func (receiver *AgentManager) GetExpertDirectory(ctx context.Context, r m.ExpertQuery) (m.Snapshot[m.ExpertDirectory], error)
+```
+
+[查看操作或完整契约](/api-reference/agents/get-expert-directory)
+
+## ListAgentKnowledgeSpaces
+
+```go
+func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+```
+
+[查看操作或完整契约](/api-reference/knowledge/list-agent-knowledge-spaces)
+
+## ListAgentModels
+
+```go
+func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+```
+
+[查看操作或完整契约](/api-reference/agents/models)
+
+## ListAgentProducts
+
+```go
+func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
+```
+
+[查看操作或完整契约](/api-reference/agents/list-agent-products)
+
+## ListAgents
+
+```go
+func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+```
+
+[查看操作或完整契约](/api-reference/agents/list)
+
+## ListExperts
+
+```go
+func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+```
+
+[查看操作或完整契约](/api-reference/agents/list-experts)
+
+## ListKnowledgeFiles
+
+```go
+func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+```
+
+[查看操作或完整契约](/api-reference/knowledge/list-knowledge-files)
+
+## ObserveAgents
+
+```go
+func (receiver *AgentManager) ObserveAgents(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/agents/observe-agents)

@@ -1,0 +1,64 @@
+---
+title: "更新记录"
+description: "查看文档变化、当前参考基线与升级入口。"
+---
+
+## 2026-11-11：CLI 配套客户 Skill
+
+- 随 CLI 提供云资源管理和远程 Agent 任务两项 Skill，包含对应 references。
+- 安装命令支持同时安装、更新两项 Skill，并检查客户自有目录和符号链接冲突。
+- 文档新增安装、使用与升级指南，并从同一源码归档生成 Skill 下载包。
+
+
+## 2026-11-11：CLI 管理员认证与云桌面管理
+
+- 更新基础提交至 ea48f87，保留 RuntimeManager 本地草稿。
+- CLI 新增 AK/SK 凭据模式、desktops create / wait / start / stop / reboot / reset / delete，以及 auth code。
+- API Reference 将命令关联到同一根 Client 业务操作；Android/iOS 清单未增加这些生命周期操作。
+
+
+## 2026-11-11 · Runtime 基础管理更新
+
+- 引用基础提交 f9f6325 及本地 RuntimeManager 草稿，保留当前四类能力划分。
+- Runtime 领域补充开机、关机、重启、重置和释放；实际公开入口为根 Client。
+- 说明用户态与 AK/SK 的权限、镜像参数和受理结果差异，补充 TS、Go、Java 核心示例。
+- 通用 ResourceSelection 明确标为预留接口，当前生产集成返回 UNSUPPORTED。
+
+## 2026-11-11 · RuntimeManager 首版草稿
+
+- 源码基线迁至 `codex/admin-aksk-client`，保留 AK/SK 管理员态与用户态身份隔离。
+- RuntimeManager 统一环境目录、能力及资源操作；公开列表只保留 listRuntimes。
+- 移除 CloudAgentManager、重复列表 listAgentInstances 及其专用 DTO；移动端同步为 113 个入口。
+- Runtime 使用一个领域介绍页；SDK 方法名按实际代码展示。
+- 当前为未提交源码与本地文档预览，不代表公开发布或新原生制品已经验收。
+
+## 2026-11-11 · 领域模型与目录
+
+- 拆分原先合写的领域介绍，按 Runtime、Conversation、Resource、Cloud 等父模块组织独立页面。
+- MessagePresentation、Config、Item、Attachment 等使用独立说明；API 页连接到对应领域。
+- 目录层级只组织阅读，不增加 SDK 工厂或改变对象所有权。
+
+## 2026-11-11 · 移动端参考文档
+
+- SDK Reference 下拉增加 Android 与 iOS，分别展示原生 Client、事件和错误接口。
+- 按七个 Manager 列出两端同源的 114 个移动方法常量，并关联领域模型操作。
+- 补充用户端认证、原生初始化代码、本地制品安装、线程与取消语义。
+- API 目录统一采用中文分组和操作名，真实签名保留原名；入门示例缩短为核心调用。
+- 这是文档补充，移动原生制品交付及设备验证范围单独说明。
+
+## 2026-11-10 · 文档更新
+
+- 明确无影 SDK 的统一集成入口定位，介绍资源、资源内操作系统与 Agent 三类能力方向。
+- 补充服务端与用户端授权认证、SDK Client 初始化和四种接入方式的示例。
+- 增加按领域模型组织的 API Reference，按单项操作查参数、返回和示例。
+- 接口目录扩展为当前交付的全量公开清单，增加语言差异、完整签名和覆盖检查。
+- SDK Reference 增加语言下拉，切换相应类/接口目录与原始契约。
+- 将导航分为 Docs、Guides、SDK Reference、API Reference、Changelog、FAQ。
+
+以上是文档变化，不代表本次发布了新的 SDK 功能或扩大现有接口权限。
+
+## 当前 SDK 参考基线
+
+当前参考基础提交 `ea48f8775d28753cefef13b937982dd44587aa51` 加本次未提交 RuntimeManager 源码改动。实际输入身份、逐语言覆盖和制品限制见[覆盖清单](/api-reference/coverage/index)；不能用基础提交或同名 npm/Maven 展示版本替代归档哈希核对。
+
+具体安装方式见[语言绑定](/domain-model/language-bindings)，升级步骤见[升级与迁移](/support/migration)。正式 SDK 发行变更以对应版本的交付记录为准。

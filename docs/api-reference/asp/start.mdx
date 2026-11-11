@@ -1,0 +1,67 @@
+---
+title: "startAspStream"
+sidebarTitle: "startAspStream"
+description: "完整公开接口 · ASP"
+---
+
+`startAspStream` · ASP
+
+当前仅对客 JS 提供 AspManager，依赖浏览器 DOM 与配套环境；Go/Java/CLI 无对等工厂。打开桌面不表示 Agent Turn 成功。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `AspManager.startAspStream` | 已公开声明，需核对环境能力 |
+| Go | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Java | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · AspManager
+
+```ts
+startAspStream(context: ExecutionContext, req: StartAspStreamRequest): Promise<void>;
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface ExecutionContext {
+    signal?: AbortSignal;
+    traceId?: string;
+    timeout?: number;
+}
+
+interface StartAspStreamRequest {
+    /** DOM 容器元素 ID（inline 模式必需） */
+    containerElementId?: string;
+    /** 云资源 ID（桌面ID或应用ID） */
+    resourceId: string;
+    /** 流化类型（desktop 或 application） */
+    streamType?: AspStreamType;
+    /** 区域 ID，默认 'cn-shanghai' */
+    regionId?: string;
+    /** 打开方式，默认 'inline' */
+    openType?: AspStreamOpenType;
+    /** 自定义 container.html 的 URL（可选，不提供则使用 SDK 内置模板） */
+    containerUrl?: string;
+    /** 宽度，默认 '100%'（仅 inline 模式） */
+    width?: string;
+    /** 高度，默认 '100%'（仅 inline 模式） */
+    height?: string;
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/asp) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

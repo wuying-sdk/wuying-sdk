@@ -1,0 +1,143 @@
+---
+title: "Client"
+sidebarTitle: "Client"
+description: "Go 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## BuildAgentManager
+
+```go
+func (receiver *Client) BuildAgentManager(ctx context.Context) (*manager.AgentManager, error)
+```
+
+[查看操作或完整契约](/api-reference/client/build-agent-manager)
+
+## BuildConversationManager
+
+```go
+func (receiver *Client) BuildConversationManager(ctx context.Context) (*manager.ConversationManager, error)
+```
+
+[查看操作或完整契约](/api-reference/client/build-conversation-manager)
+
+## BuildCreditManager
+
+```go
+func (receiver *Client) BuildCreditManager(ctx context.Context) (*manager.CreditManager, error)
+```
+
+[查看操作或完整契约](/api-reference/client/build-credit-manager)
+
+## BuildModelManager
+
+```go
+func (receiver *Client) BuildModelManager(ctx context.Context) (*manager.ModelManager, error)
+```
+
+[查看操作或完整契约](/api-reference/client/build-model-manager)
+
+## BuildResourceManager
+
+```go
+func (receiver *Client) BuildResourceManager(ctx context.Context) (*manager.ResourceManager, error)
+```
+
+[查看操作或完整契约](/api-reference/client/build-resource-manager)
+
+## BuildRuntimeManager
+
+```go
+func (receiver *Client) BuildRuntimeManager(ctx context.Context) (*manager.RuntimeManager, error)
+```
+
+[查看操作或完整契约](/api-reference/client/build-runtime-manager)
+
+## BuildSkillManager
+
+```go
+func (receiver *Client) BuildSkillManager(ctx context.Context) (*manager.SkillManager, error)
+```
+
+[查看操作或完整契约](/api-reference/client/build-skill-manager)
+
+## Close
+
+```go
+func (receiver *Client) Close() error
+```
+
+[查看操作或完整契约](/api-reference/client/close)
+
+## Create
+
+```go
+func (receiver *Client) Create(ctx context.Context, r *model.CreateDesktopsRequest, options ...model.DesktopCreateOptions) (*model.CreateDesktopsResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/client/create-desktops)
+
+## Delete
+
+```go
+func (receiver *Client) Delete(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/client/delete)
+
+## GetAuthCode
+
+```go
+func (receiver *Client) GetAuthCode(ctx context.Context, r *model.GetAuthCodeRequest) (*model.GetAuthCodeResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/client/get-auth-code)
+
+## OnStreamEvent
+
+```go
+func (receiver *Client) OnStreamEvent(ctx context.Context, handler agmessage.StreamHandler) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/client/on-stream-event)
+
+## Reboot
+
+```go
+func (receiver *Client) Reboot(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/client/reboot)
+
+## Reset
+
+```go
+func (receiver *Client) Reset(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/client/reset)
+
+## Start
+
+```go
+func (receiver *Client) Start(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/client/start)
+
+## Stop
+
+```go
+func (receiver *Client) Stop(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/client/stop)
+
+## Wait
+
+```go
+func (receiver *Client) Wait(ctx context.Context, r *model.WaitDesktopsRequest) (*model.WaitDesktopsResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/client/wait)

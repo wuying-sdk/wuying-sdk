@@ -1,0 +1,315 @@
+---
+title: "Wuying CLI v0.1"
+description: "CLI 的命令、选项、结构化输出、退出码和恢复边界。"
+---
+
+`wuying` lets humans and terminal Agents delegate natural-language tasks to an Agent
+on an authorized Wuying remote desktop. It uses the public `@aliyun/wuying-sdk` root
+entry. It does not provide direct screenshots, mouse control, keyboard injection,
+or a local shell executor.
+
+## Install from this repository
+
+This first release is distributed as a tarball supplied by the SDK delivery team;
+there is no public npm/download listing yet. Customers who receive
+`aliyun-wuying-cli-0.1.0.tgz` can install it with `npm install -g ./aliyun-wuying-cli-0.1.0.tgz`.
+The source-build instructions below are for maintainers with this repository.
+
+Node **22.18+ on the 22 line, or 24.11+** is required. The storage dependencies may
+require native build tools if no prebuilt binary exists for your platform.
+
+```sh
+cd wuying-sdk-cli
+npm install --prefix ../wuying-sdk-nodejs
+npm ci
+npm run build:sdk
+npm test
+npm link
+wuying doctor --offline
+```
+
+`build:sdk` builds the sibling SDK in a temporary copy, runs its CJS/ESM smoke
+checks, then updates only the CLI's installed SDK copy. It never rebuilds or
+overwrites the SDK worktree's existing `dist` files. Runtime code imports only
+`@aliyun/wuying-sdk`, not SDK source internals. `src/sdk-build.json` records the
+source revision, dirty-source flag, and bundled ESM digest.
+
+## Credentials
+
+For automation, set `WUYING_CREDENTIALS` to a JSON object containing
+`loginToken`, `sessionId`, `endUserId`, and optionally `clientId`/`loginRegionId`.
+Alternatively supply `WUYING_AUTH_CODE`, or the three variables
+`WUYING_LOGIN_TOKEN`, `WUYING_SESSION_ID`, `WUYING_END_USER_ID`.
+`WUYING_CLIENT_ID` and `WUYING_LOGIN_REGION_ID` are optional.
+Environment credentials take precedence and are never persisted by the CLI.
+An authCode is one-use; do not reuse it in successive processes after exchange.
+
+AK/SK administrator mode uses the same credential entry: `WUYING_CREDENTIALS`
+may contain `{"accessKeyID":"...","accessKeySecret":"..."}` (optional `clientId`),
+or set `WUYING_ACCESS_KEY_ID` and `WUYING_ACCESS_KEY_SECRET` together through your
+credential provider. AK/SK cannot be mixed with user login fields, including
+loginRegionId. Explicit `WUYING_CREDENTIALS` retains precedence over the separate
+environment variables. Keys are never accepted as command-line arguments.
+`auth import --stdin --profile admin` also accepts this JSON on POSIX, with the
+same private plaintext-file contract below; `auth status` reports only the mode
+(`aksk` or `user`), never the keys. Different profiles do not override environment
+credentials: unset administrator environment credentials before using a user profile.
+
+To retain a login locally on POSIX:
+
+```sh
+# Obtain credentials through your existing login flow; never paste them in chat.
+your-credential-provider | wuying auth import --stdin
+wuying auth status
+wuying doctor
+```
+
+`auth import` stores credentials in a **plaintext 0600 file inside private 0700
+directories**, not an OS keychain. The SDK remains the only credential refresher;
+the CLI persists its refreshed snapshots every second and at normal shutdown.
+An abrupt crash during rotation may require importing fresh credentials.
+Windows v0.1 supports environment credentials; persistent import is rejected
+because POSIX modes do not establish a Windows ACL. No automatic desktop-login
+file scraping, auth bypass, or external login browser is built into the CLI.
+`auth status` checks configuration only; `doctor` verifies authentication online.
+`auth logout` removes local saved credentials, not environment variables or
+remote sessions. It retains databases and request receipts.
+
+Data defaults to `~/.config/wuying-cli`; override with `WUYING_CLI_HOME` or
+`--data-dir`. Use `--profile <name>` to separate logins. Only one command per profile
+may hold SDK connections at once. A dead process's lock is reclaimed only after
+the OS confirms that PID no longer exists.
+
+## Select, create, run
+
+### Desktop provisioning and basic operations
+
+`desktops create/wait/start/stop/reboot/reset/delete` and `auth code` call the
+SDK's public root Client. Supply exactly one of `--request-file <path>` or
+`--stdin`; the JSON object is at most 64 KiB and uses the SDK's camelCase fields.
+The SDK owns permission checks, protocol selection, signing and resource waiting;
+the CLI does not implement POP calls or a second resource state store.
+
+| Command | User login | AK/SK administrator |
+|---|---|---|
+| `desktops create` / `desktops wait` / `auth code` | Unsupported | Supported |
+| `desktops start/stop/reboot/reset` | 1002 | 0930 |
+| `desktops delete` | Unsupported, no resource request | 0930 |
+
+Creation JSON: `{"regionId":"cn-hangzhou","officeSiteId":"office-id","bundleId":"bundle-id","endUserIds":["user-id"]}`.
+Target JSON: `{"regionId":"cn-hangzhou","desktopIds":["desktop-id"]}`.
+Auth-code JSON: `{"endUserId":"user-id"}`. Full fields and batch limits follow
+the [bundled SDK Client contract](/domain-model/02-runtime-agent).
+
+```sh
+# This example uses jq. Provider emits AK/SK JSON to stdin.
+your-credential-provider | wuying auth import --stdin --profile admin
+wuying auth status --profile admin
+# Save acceptance before waiting, so the resource IDs survive a failed wait.
+wuying desktops create --profile admin --request-file create.json > create-receipt.json
+jq -n --arg regionId cn-hangzhou --slurpfile receipt create-receipt.json \
+  '{regionId:$regionId,desktopIds:$receipt[0].data.desktopIds}' > target.json
+wuying desktops wait --profile admin --request-file target.json
+# Get a one-use authCode for the same assigned user:
+set -o pipefail
+wuying auth code --profile admin --request-file auth-user.json \
+  | jq '{authCode: .data.authCode}' \
+  | wuying auth import --stdin --profile user
+wuying runtimes list --profile user
+```
+
+Run the user-profile steps with administrator environment credentials unset.
+`auth code` intentionally writes the one-use credential to stdout; pipe it directly
+to its consumer rather than a log. The root SDK remains the only login exchanger
+and refresher. Administrator resource sessions do not initialize user databases,
+exchange login tokens, open IM, or start credential-refresh/persistence timers.
+User desktop operations also skip the IM preflight; they consume the SDK's existing
+user login credential. Existing Agent task commands still require user credentials;
+the online `doctor` checks that user/IM path, and does not verify AK/SK permissions.
+
+For the matching profile, invoke `wuying desktops start --request-file target.json`
+(likewise stop/reboot/reset/delete). `reset` accepts optional imageId for the
+administrator; user mode requires it. No ImageId or OperateType is filled in when
+omitted. Optional false values such as `osUpdate:false` remain false. Lifecycle
+commands return `status:accepted`, not proof of completion. A rejected reset item
+returns exit 5 / DESKTOP_REJECTED with the complete per-desktop acceptance receipt
+in `error.details`; some other desktops may already have been accepted.
+Creation alone supports `--wait`; separate `desktops wait` verifies creation only.
+Combined `create --wait` may fail after creation was accepted without returning
+its resource coordinates. Save a separate create receipt before waiting when
+recovery is required. Order-only creation may have no desktop IDs yet.
+These commands do not retry writes, split batches, or create task request journals.
+Timeouts/interruptions retain unknown outcomes; inspect saved request/resource IDs
+before another write. Configurable `WUYING_SALES_ENDPOINT` and
+`WUYING_APP_STREAM_ENDPOINT` are passed to the SDK for environment-specific routing.
+
+### Remote Agent tasks
+
+Keep the same profile/data directory when recovering an earlier task. The current
+SDK does not guarantee full historical backfill into a fresh installation/profile.
+A confirmed real test of `messages get` from a fresh profile returned
+`SYNC_NOT_READY` (exit 6) for a conversation created under another profile;
+the original profile successfully recovered the Turn and final answer. This is
+not proof that the remote conversation/message is absent. Do not resend the task
+to work around missing history. New conversations created through this CLI are
+supported by the verified execution path.
+
+```sh
+wuying runtimes list
+wuying agents list --runtime <runtimeId>
+wuying models list --runtime <runtimeId> --agent <agentId>
+wuying conversations create --runtime <runtimeId> --agent <agentId> \
+  --name "Remote task" --mutation-id <stable-create-id>
+
+wuying run --runtime <runtimeId> --conversation <conversationId> \
+  --input-file ./task.txt --client-command-id <stable-request-id> \
+  --no-input --output json --timeout 120000
+```
+
+For task text choose exactly one of `--text`, `--input-file`, or `--stdin`.
+`--attach <path>` is repeatable: at most 16 local files, each 1 byte..10 MiB.
+Task text is at most 1 MiB. A local path is never treated as a remote desktop path.
+Use the Runtime and Agent selected by the user; the CLI never picks the first one.
+Queries preserve the SDK's `projection`, pagination cursors and capabilities.
+A `partial`, `initializing`, or `stale` snapshot is not authoritative absence.
+
+`run` waits for the authoritative Turn terminal by default. `--no-wait` returns
+after acceptance. Completed remote tasks have `status: completed`; acceptance alone
+has `status: accepted`. Query commands use `status: succeeded`, meaning the query
+completed, not that a remote task succeeded.
+
+After a completed Turn, the CLI refreshes its message presentations through the
+SDK's public API: `data.answers` contains the remote Agent answer blocks and
+`data.resultCoverage` is `complete` or `partial`. A completed Turn with partial
+result coverage does not prove the full answer has synchronized. Retry a read,
+not the task. To retrieve a final message/process page explicitly:
+
+```sh
+wuying messages get --runtime <id> --conversation <id> --message <messageId>
+```
+
+```sh
+wuying turns status --runtime <id> --conversation <id> --turn <id>
+wuying turns wait --runtime <id> --conversation <id> --turn <id> --timeout 120000
+wuying messages list --runtime <id> --conversation <id> --limit 50
+wuying turns cancel --runtime <id> --conversation <id> --turn <id>
+```
+
+Timeout, Ctrl+C, and `--no-wait` end local waiting without cancelling the remote
+task. A cancellation acknowledgement can be `cancel_requested`; confirm the
+terminal with `turns wait/status`. Remote cancelled/interrupted Turns return 130.
+`run` saves the request intent before uploading/sending and the receipt after
+acceptance. Retrying the same ID/input resumes an accepted Turn without sending
+again; changed input conflicts. An intent without a receipt reports unknown and
+is not automatically resent. Receipts contain request hashes and IDs, not task
+text or duplicate task-state facts. They are partitioned by credential session;
+after re-login use saved Turn IDs to query the result rather than replaying a run.
+
+## Interactions
+
+Unattended commands never prompt or auto-approve. Exit 4 includes a pending
+permission/question and its `writeVersion`.
+
+```sh
+wuying interactions list --runtime <id> --conversation <id>
+wuying interactions refresh --runtime <id> --conversation <id>
+wuying interactions respond --runtime <id> --conversation <id> \
+  --interaction <id> --expected-version <writeVersion> --option <optionId>
+wuying interactions respond --runtime <id> --conversation <id> \
+  --interaction <id> --expected-version <writeVersion> --answer-file ./answer.json
+```
+
+Question JSON is `{ "answers": [{ "questionId": "...", "optionIds": ["..."],
+"text": "..." }] }`, or `{ "skip": true }` when skipping is supported. A `pending`
+response still needs synchronization; do not repeatedly answer it.
+After restarting, an interaction may have `DETAIL_NOT_SYNCHRONIZED` or no
+`writeVersion`. `interactions list` recovers details before returning cards;
+`interactions refresh` returns a recovery count and the cards from that same
+Client in `data.interactions`. `respond` also recovers its own Client's ephemeral
+details before submission, while preserving the supplied expected version.
+`recovered: 0` is not proof that an interaction is resolved. Never invent a
+version or option ID; recovery does not persist details into a second database.
+
+## Output and exit codes
+
+Default output is one JSON object. `--output jsonl` emits event objects followed
+by a terminal result/error; `--output text` emits pretty JSON for human reading.
+stdout contains results only; diagnostics use stderr. Streaming message objects
+are snapshots, replaced by message ID; the CLI does not append snapshots as tokens.
+An in-process run retains at most 1024 messages / 4 MiB; query history separately
+if that limit is exceeded. Resumed waits report the matching messages in the
+latest 100-message projection; use paginated history for a longer Turn.
+
+```json
+{"schemaVersion":1,"status":"accepted","outcome":"accepted","data":{"runtimeId":"...","conversationId":"...","turnId":"...","messageId":"...","clientMessageId":"..."}}
+```
+
+Query `data` contains the SDK snapshot (`data` and `projection`), for example
+`result.data.data` is the Runtime array. Errors include `code`, `outcome`, optional
+`traceId`, and safe recovery IDs; raw upstream error bodies are not printed.
+
+| Exit | Meaning |
+|---|---|
+| 0 | Command succeeded or request accepted; inspect status/Turn |
+| 2 | Invalid command/input |
+| 3 | Authentication/authorization failure |
+| 4 | Pending interaction requires a decision |
+| 5 | Execution, local storage, dependency, or other failure |
+| 6 | Timeout, unknown outcome, offline or synchronization not ready |
+| 130 | Local interruption or remote cancellation/interruption |
+
+`--timeout` is milliseconds, 1000..3600000. SDK ordinary calls are capped at
+120000 ms; the task wait can extend to one hour.
+
+## Connect Codex
+
+```sh
+wuying codex install
+# Or install only for one project:
+wuying codex install --scope project --project-dir /absolute/project
+```
+
+This installs both bundled Skills in `~/.agents/skills` or the chosen project's
+`.agents/skills`, including their supporting references and an absolute CLI fallback:
+
+| Skill | Use |
+|---|---|
+| `wuying-cloud-resources` | Create/manage desktops, interpret acceptance and reset receipts, obtain an AuthCode with administrator credentials |
+| `wuying-remote-desktop` | Select an authorized Runtime/Agent, delegate a task, recover results and handle pending interactions |
+
+For example, ask `$wuying-cloud-resources` to start explicitly identified desktops
+using your chosen profile, or `$wuying-remote-desktop` to run a task in a selected
+Runtime. A new chat may be needed for discovery. Installation does not configure
+credentials or grant resource permissions. It does not change permissions, models,
+config.toml or MCP settings.
+
+Both destinations are checked before updating either Skill. Re-running the command
+updates CLI-managed copies and preserves unrelated files; an unmanaged directory or
+linked managed file causes a conflict instead of being overwritten. The JSON result
+lists both installed Skill paths. To upgrade, install the matching new CLI package,
+then re-run the command. No credentials or machine paths are shipped in the Skill source.
+
+Other Skill-capable Agent hosts can load the complete directories under `skills/`
+using their own installation mechanism. Install the CLI in the Agent's execution
+environment and check its `--help`; only the Codex installer is automated here.
+
+See [official local Skill discovery](https://learn.chatgpt.com/docs/build-skills).
+
+## Release and verification
+
+```sh
+npm run pack:release
+# Copy the resulting aliyun-wuying-cli-0.1.0.tgz to the customer:
+npm install -g ./aliyun-wuying-cli-0.1.0.tgz
+```
+
+The SDK is bundled because the current SDK version is not available in the
+configured registry. Other npm dependencies (including native SQLite/canvas)
+must be downloadable at install time; this is not an offline installer.
+After the SDK has an official registry release, replace the local file dependency
+with the validated version while retaining tarball-install tests.
+
+`npm test` covers command contracts, recovery/no-resend, interaction behavior,
+profile isolation, redaction, Codex installation, cross-process disk persistence,
+and the actual SDK's business/IM storage against the persistent adapter.
+Read [CONTRACT.md](/integration/04-errors-and-operations) for ownership and compatibility details.

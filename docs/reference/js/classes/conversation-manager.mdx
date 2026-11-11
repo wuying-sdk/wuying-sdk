@@ -1,0 +1,1071 @@
+---
+title: "ConversationManager"
+sidebarTitle: "ConversationManager"
+description: "JavaScript / TypeScript 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## listGroupSyncStates
+
+```ts
+listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+```
+
+[查看操作或完整契约](/api-reference/sync/list-group-sync-states)
+
+## listGroups
+
+```ts
+listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+```
+
+[查看操作或完整契约](/api-reference/sync/list-groups)
+
+## listRecentGroups
+
+```ts
+listRecentGroups(ctx: Context, req: { limit: number; }): Promise<RecentGroupDirectoryEntry[]>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-recent-groups)
+
+## syncConversation
+
+```ts
+syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+```
+
+[查看操作或完整契约](/api-reference/sync/sync-conversation)
+
+## syncGroup
+
+```ts
+syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+```
+
+[查看操作或完整契约](/api-reference/sync/sync-group)
+
+## onGroupSyncState
+
+```ts
+onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/sync/on-group-sync-state)
+
+## observeLiveProcess
+
+```ts
+observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-live-process)
+
+## prepareConversationAttachmentTarget
+
+```ts
+prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/prepare-conversation-attachment-target)
+
+## createConversation
+
+```ts
+createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<{ coordinatorMemberId?: string | undefined; memberMappings?: { clientMemberKey: string; memberId: string; }[] | undefined; mappingState?: "unknown" | "complete" | undefined; conversationId: string; runtimeId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/create)
+
+## listConversationGroups
+
+```ts
+listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
+
+## observeConversationGroups
+
+```ts
+observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversation-groups)
+
+## listSidebarConversations
+
+```ts
+listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
+
+## observeSidebarConversations
+
+```ts
+observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-sidebar-conversations)
+
+## getConversationSummary
+
+```ts
+getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-conversation-summary)
+
+## observeConversationSummary
+
+```ts
+observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversation-summary)
+
+## getMessageFiles
+
+```ts
+getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/get-message-files)
+
+## getMessagePresentation
+
+```ts
+getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/presentation)
+
+## listActiveExecutions
+
+```ts
+listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+```
+
+[查看操作或完整契约](/api-reference/executions/list-active-executions)
+
+## observeActiveExecutions
+
+```ts
+observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-active-executions)
+
+## cancelExecution
+
+```ts
+cancelExecution(ctx: Context, req: ConversationRef & { executionId: string; expectedVersion: string; }): Promise<{ state: "cancelled" | "requested" | "already_finished"; }>;
+```
+
+[查看操作或完整契约](/api-reference/executions/cancel-execution)
+
+## getComposerCapabilities
+
+```ts
+getComposerCapabilities(ctx: Context, req: ConversationRef & { memberId?: string; }): Promise<Snapshot<ComposerCapabilities>>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/get-composer-capabilities)
+
+## getCommandReceipt
+
+```ts
+getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-command-receipt)
+
+## observeCommandReceipt
+
+```ts
+observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/observe-command-receipt)
+
+## steerTurn
+
+```ts
+steerTurn(ctx: Context, req: ConversationRef & { turnId: string; text: string; clientCommandId: string; }): Promise<{ state: "accepted"; turnId: string; messageId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/turns/steer-turn)
+
+## setConversationPinned
+
+```ts
+setConversationPinned(ctx: Context, req: ConversationRef & { pinned: boolean; }, options?: MutationOptions): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/set-conversation-pinned)
+
+## getConversationStorageContext
+
+```ts
+getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+```
+
+[查看操作或完整契约](/api-reference/workspaces/get-conversation-storage-context)
+
+## getConversationHeaderMetadata
+
+```ts
+getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-conversation-header-metadata)
+
+## listMemberCandidates
+
+```ts
+listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<{ add: Capability; multipleIdentities: Capability; configurable: { displayName: Capability; model: Capability; responsibility: Capability; }; agentId: string; runtimeId: string; }[]>>;
+```
+
+[查看操作或完整契约](/api-reference/members/list-member-candidates)
+
+## getMemberSnapshot
+
+```ts
+getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<MemberSnapshot>>;
+```
+
+[查看操作或完整契约](/api-reference/members/get-member-snapshot)
+
+## getMutation
+
+```ts
+getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-mutation)
+
+## observeMutation
+
+```ts
+observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/observe-mutation)
+
+## listConversations
+
+```ts
+listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list)
+
+## observeConversations
+
+```ts
+observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversations)
+
+## getConversation
+
+```ts
+getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/get)
+
+## renameConversation
+
+```ts
+renameConversation(ctx: Context, req: ConversationRef & { name: string; }, options?: MutationOptions): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/rename)
+
+## updateConversationConfig
+
+```ts
+updateConversationConfig(ctx: Context, req: ConversationRef & { config: Config; expectedVersion: string; }): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/update)
+
+## setConversationConfigOption
+
+```ts
+setConversationConfigOption(ctx: Context, req: ConversationRef & { optionId: "model" | "runtime.permissionPreset" | "runtime.thinkingLevel"; value: string; }): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/set-conversation-config-option)
+
+## getConversationConfig
+
+```ts
+getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig & ConversationRef>>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/get)
+
+## observeConversationConfig
+
+```ts
+observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/observe-conversation-config)
+
+## archiveConversation
+
+```ts
+archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/archive)
+
+## unarchiveConversation
+
+```ts
+unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/unarchive-conversation)
+
+## listMembers
+
+```ts
+listMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }): Promise<Snapshot<(Member & ConversationRef)[]>>;
+```
+
+[查看操作或完整契约](/api-reference/members/list)
+
+## observeMembers
+
+```ts
+observeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: Observer<Member[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/members/observe-members)
+
+## addMember
+
+```ts
+addMember(ctx: Context, req: ConversationRef & { agentId: string; displayName?: string; modelId?: string; responsibility?: ResponsibilityPatch; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/members/add)
+
+## updateMember
+
+```ts
+updateMember(ctx: Context, req: ConversationRef & { memberId: string; expectedVersion: string; displayName?: string; modelId?: string; responsibility?: ResponsibilityPatch; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/members/update)
+
+## removeMember
+
+```ts
+removeMember(ctx: Context, req: ConversationRef & { memberId: string; expectedVersion: string; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/members/remove)
+
+## sendMessage
+
+```ts
+sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
+```
+
+[查看操作或完整契约](/api-reference/messages/send)
+
+## sendMessageStream
+
+```ts
+sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+```
+
+[查看操作或完整契约](/api-reference/messages/stream)
+
+## sendMessageAndWait
+
+```ts
+sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
+```
+
+[查看操作或完整契约](/api-reference/messages/wait)
+
+## resolveConversationRead
+
+```ts
+resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+```
+
+[查看操作或完整契约](/api-reference/messages/resolve-conversation-read)
+
+## listConversationHistory
+
+```ts
+listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/list-conversation-history)
+
+## observeConversationHistory
+
+```ts
+observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/messages/observe-conversation-history)
+
+## listMessages
+
+```ts
+listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/list)
+
+## observeMessages
+
+```ts
+observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/messages/observe)
+
+## listExecutionActivity
+
+```ts
+listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+```
+
+[查看操作或完整契约](/api-reference/executions/list-execution-activity)
+
+## observeExecutionActivity
+
+```ts
+observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-execution-activity)
+
+## getMessageDetail
+
+```ts
+getMessageDetail(ctx: Context, req: ConversationRef & { messageId: string; itemCursor?: string; limit?: number; }): Promise<Snapshot<MessageDetail | undefined>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/detail)
+
+## getTurn
+
+```ts
+getTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<Snapshot<Turn | undefined>>;
+```
+
+[查看操作或完整契约](/api-reference/turns/get)
+
+## observeTurn
+
+```ts
+observeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/turns/observe-turn)
+
+## cancelTurn
+
+```ts
+cancelTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<{ state: "cancelled" | "requested" | "already_finished"; }>;
+```
+
+[查看操作或完整契约](/api-reference/turns/cancel)
+
+## refreshPendingInteractions
+
+```ts
+refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<{ recovered: number; conversationId: string; runtimeId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/refresh-pending-interactions)
+
+## listInteractions
+
+```ts
+listInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }): Promise<Snapshot<Interaction[]>>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/list)
+
+## observeInteractions
+
+```ts
+observeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: Observer<Interaction[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/observe-interactions)
+
+## respondPermission
+
+```ts
+respondPermission(ctx: Context, req: ConversationRef & { interactionId: string; optionId: string; expectedVersion: string; }): Promise<InteractionResponse>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/permission)
+
+## getQuestionResponseReceipt
+
+```ts
+getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-question-response-receipt)
+
+## respondQuestion
+
+```ts
+respondQuestion(ctx: Context, req: ConversationRef & { interactionId: string; expectedVersion: string; answer: { answers: { questionId: string; optionIds: string[]; text?: string; }[]; } | { skip: true; }; }, options?: MutationOptions): Promise<InteractionResponse>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/question)
+
+## constructor
+
+```ts
+new new (service: Service): ConversationManager;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-5b73ae15ebe839b2)
+
+## observeLiveProcess
+
+```ts
+observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-live-process)
+
+## prepareConversationAttachmentTarget
+
+```ts
+prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
+```
+
+[查看操作或完整契约](/api-reference/attachments/prepare-conversation-attachment-target)
+
+## getMessageFiles
+
+```ts
+getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/get-message-files)
+
+## getConversationStorageContext
+
+```ts
+getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+```
+
+[查看操作或完整契约](/api-reference/workspaces/get-conversation-storage-context)
+
+## listGroupSyncStates
+
+```ts
+listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+```
+
+[查看操作或完整契约](/api-reference/sync/list-group-sync-states)
+
+## listGroups
+
+```ts
+listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+```
+
+[查看操作或完整契约](/api-reference/sync/list-groups)
+
+## listRecentGroups
+
+```ts
+listRecentGroups(ctx: Context, req: { limit: number; }): Promise<RecentGroupDirectoryEntry[]>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-recent-groups)
+
+## syncConversation
+
+```ts
+syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+```
+
+[查看操作或完整契约](/api-reference/sync/sync-conversation)
+
+## syncGroup
+
+```ts
+syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+```
+
+[查看操作或完整契约](/api-reference/sync/sync-group)
+
+## onGroupSyncState
+
+```ts
+onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/sync/on-group-sync-state)
+
+## createConversation
+
+```ts
+createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/create)
+
+## listConversationGroups
+
+```ts
+listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
+
+## observeConversationGroups
+
+```ts
+observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversation-groups)
+
+## listSidebarConversations
+
+```ts
+listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
+
+## observeSidebarConversations
+
+```ts
+observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-sidebar-conversations)
+
+## getConversationSummary
+
+```ts
+getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-conversation-summary)
+
+## observeConversationSummary
+
+```ts
+observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversation-summary)
+
+## getMessagePresentation
+
+```ts
+getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/presentation)
+
+## listActiveExecutions
+
+```ts
+listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+```
+
+[查看操作或完整契约](/api-reference/executions/list-active-executions)
+
+## observeActiveExecutions
+
+```ts
+observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-active-executions)
+
+## cancelExecution
+
+```ts
+cancelExecution(ctx: Context, req: ConversationRef & { executionId: string; expectedVersion: string; }): Promise<{ state: "requested" | "cancelled" | "already_finished"; }>;
+```
+
+[查看操作或完整契约](/api-reference/executions/cancel-execution)
+
+## getComposerCapabilities
+
+```ts
+getComposerCapabilities(ctx: Context, req: ConversationRef & { memberId?: string; }): Promise<Snapshot<ComposerCapabilities>>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/get-composer-capabilities)
+
+## getCommandReceipt
+
+```ts
+getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-command-receipt)
+
+## observeCommandReceipt
+
+```ts
+observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/observe-command-receipt)
+
+## steerTurn
+
+```ts
+steerTurn(ctx: Context, req: ConversationRef & { turnId: string; text: string; clientCommandId: string; }): Promise<{ state: "accepted"; turnId: string; messageId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/turns/steer-turn)
+
+## setConversationPinned
+
+```ts
+setConversationPinned(ctx: Context, req: ConversationRef & { pinned: boolean; }, options?: MutationOptions): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/set-conversation-pinned)
+
+## getConversationHeaderMetadata
+
+```ts
+getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-conversation-header-metadata)
+
+## listMemberCandidates
+
+```ts
+listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<MemberCandidate[]>>;
+```
+
+[查看操作或完整契约](/api-reference/members/list-member-candidates)
+
+## getMemberSnapshot
+
+```ts
+getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<MemberSnapshot>>;
+```
+
+[查看操作或完整契约](/api-reference/members/get-member-snapshot)
+
+## getMutation
+
+```ts
+getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-mutation)
+
+## observeMutation
+
+```ts
+observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/observe-mutation)
+
+## listConversations
+
+```ts
+listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list)
+
+## getConversation
+
+```ts
+getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/get)
+
+## observeConversations
+
+```ts
+observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversations)
+
+## renameConversation
+
+```ts
+renameConversation(ctx: Context, req: ConversationRef & { name: string; }, options?: MutationOptions): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/rename)
+
+## updateConversationConfig
+
+```ts
+updateConversationConfig(ctx: Context, req: ConversationRef & { config: Config; expectedVersion: string; }): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/update)
+
+## setConversationConfigOption
+
+```ts
+setConversationConfigOption(ctx: Context, req: ConversationRef & { optionId: "model" | "runtime.permissionPreset" | "runtime.thinkingLevel"; value: string; }): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/set-conversation-config-option)
+
+## observeConversationConfig
+
+```ts
+observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/observe-conversation-config)
+
+## getConversationConfig
+
+```ts
+getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig>>;
+```
+
+[查看操作或完整契约](/api-reference/configuration/get)
+
+## archiveConversation
+
+```ts
+archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/archive)
+
+## unarchiveConversation
+
+```ts
+unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/unarchive-conversation)
+
+## listMembers
+
+```ts
+listMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }): Promise<Snapshot<Member[]>>;
+```
+
+[查看操作或完整契约](/api-reference/members/list)
+
+## observeMembers
+
+```ts
+observeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: Observer<Member[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/members/observe-members)
+
+## addMember
+
+```ts
+addMember(ctx: Context, req: ConversationRef & { agentId: string; displayName?: string; modelId?: string; responsibility?: ResponsibilityPatch; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/members/add)
+
+## updateMember
+
+```ts
+updateMember(ctx: Context, req: ConversationRef & { memberId: string; expectedVersion: string; displayName?: string; modelId?: string; responsibility?: ResponsibilityPatch; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/members/update)
+
+## removeMember
+
+```ts
+removeMember(ctx: Context, req: ConversationRef & { memberId: string; expectedVersion: string; }, options?: MutationOptions): Promise<ConversationRef & { memberId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/members/remove)
+
+## sendMessage
+
+```ts
+sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
+```
+
+[查看操作或完整契约](/api-reference/messages/send)
+
+## sendMessageStream
+
+```ts
+sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+```
+
+[查看操作或完整契约](/api-reference/messages/stream)
+
+## sendMessageAndWait
+
+```ts
+sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
+```
+
+[查看操作或完整契约](/api-reference/messages/wait)
+
+## resolveConversationRead
+
+```ts
+resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+```
+
+[查看操作或完整契约](/api-reference/messages/resolve-conversation-read)
+
+## listConversationHistory
+
+```ts
+listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/list-conversation-history)
+
+## observeConversationHistory
+
+```ts
+observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/messages/observe-conversation-history)
+
+## listMessages
+
+```ts
+listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/list)
+
+## getMessageDetail
+
+```ts
+getMessageDetail(ctx: Context, req: ConversationRef & { messageId: string; itemCursor?: string; limit?: number; }): Promise<Snapshot<MessageDetail | undefined>>;
+```
+
+[查看操作或完整契约](/api-reference/messages/detail)
+
+## observeMessages
+
+```ts
+observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/messages/observe)
+
+## listExecutionActivity
+
+```ts
+listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+```
+
+[查看操作或完整契约](/api-reference/executions/list-execution-activity)
+
+## observeExecutionActivity
+
+```ts
+observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-execution-activity)
+
+## observeTurn
+
+```ts
+observeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/turns/observe-turn)
+
+## getTurn
+
+```ts
+getTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<Snapshot<Turn | undefined>>;
+```
+
+[查看操作或完整契约](/api-reference/turns/get)
+
+## cancelTurn
+
+```ts
+cancelTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<{ state: "requested" | "cancelled" | "already_finished"; }>;
+```
+
+[查看操作或完整契约](/api-reference/turns/cancel)
+
+## observeInteractions
+
+```ts
+observeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: Observer<Interaction[]>): Promise<Subscription>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/observe-interactions)
+
+## refreshPendingInteractions
+
+```ts
+refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<ConversationRef & { recovered: number; }>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/refresh-pending-interactions)
+
+## listInteractions
+
+```ts
+listInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }): Promise<Snapshot<Interaction[]>>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/list)
+
+## respondPermission
+
+```ts
+respondPermission(ctx: Context, req: ConversationRef & { interactionId: string; optionId: string; expectedVersion: string; }): Promise<InteractionResponse>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/permission)
+
+## respondQuestion
+
+```ts
+respondQuestion(ctx: Context, req: ConversationRef & { interactionId: string; expectedVersion: string; answer: { answers: { questionId: string; optionIds: string[]; text?: string; }[]; } | { skip: true; }; }, options?: MutationOptions): Promise<InteractionResponse>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/question)
+
+## getQuestionResponseReceipt
+
+```ts
+getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-question-response-receipt)

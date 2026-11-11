@@ -1,0 +1,33 @@
+---
+title: "Coverage"
+sidebarTitle: "Coverage"
+description: "核对公开入口、语言差异与覆盖范围，避免把声明数量等同于运行能力。"
+---
+
+本次是 **RuntimeManager 首版未提交草稿**，基础提交为 `ea48f8775d28753cefef13b937982dd44587aa51`；完整输入以源码归档 SHA-256 `df5804b0344112fe8fa863cfc69a6b3fb5b9522aaea5e3e6cdce06e3cee14eb7` 标识，不能据基础 SHA 使用旧制品。
+
+| 语言 | 公开入口/成员条目 | 签名数（含重载） | 未文档化 |
+|---|---:|---:|---:|
+| [JavaScript / TypeScript](/reference/js/public) | 341 | 341 | 0 |
+| [Go](/reference/go/public) | 327 | 327 | 0 |
+| [Java](/reference/java/public) | 976 | 1015 | 0 |
+| [CLI](/reference/cli/public) | 38 | 38 | 0 |
+
+每个条目都有模型操作页或完整语言清单落点。覆盖声明不代表所有环境都具备运行能力；已知不支持和废弃分别标注，未实际执行的 API 不宣称在线验收。
+
+## 统计口径
+
+- 模型操作覆盖根 Client、各 Manager、流/订阅对象、服务端签名、语言专属高级入口和 CLI 叶命令。
+- 构造、工厂、配置、DTO/错误辅助与回调实现契约仍完整列在语言清单，避免把它们混作资源操作。
+- 不包括 internal 私有实现、非 public Java 编译类、测试/示例/生成工具，或尚未交付的规划接口。
+- Java 以当前 public 签名和源注解快照为准；Go 包含公开类型别名的可见方法；JS 包含 Manager 返回接口的继承方法。
+
+## 更新检查
+
+声明变化后重新快照并生成；覆盖检查要求所有已发现公开条目有文档落点，并校验生成内容。覆盖清单和模型页使用同一输入基线，完整语言参考保持原有地址。
+
+## Android 与 iOS 移动绑定
+
+两端各有 **113 个方法常量**，经统一 Client.request 调用，来自同一哈希校验的草稿归档内 Go mobile 清单；不与上表的构造、DTO、重载成员数量相加。全部方法映射到模型操作，公开包装接口另列。当前原生目录也来自本次草稿输入归档；AAR/XCFramework 仍需重新构建，来源与制品验证限制见[移动合同](/reference/mobile/contract)。
+
+[Android 完整目录](/reference/android/public) · [iOS 完整目录](/reference/ios/public)

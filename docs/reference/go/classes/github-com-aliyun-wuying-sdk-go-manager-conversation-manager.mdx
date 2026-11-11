@@ -1,0 +1,519 @@
+---
+title: "ConversationManager"
+sidebarTitle: "ConversationManager"
+description: "Go 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## AddMember
+
+```go
+func (receiver *ConversationManager) AddMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+[查看操作或完整契约](/api-reference/members/add)
+
+## ArchiveConversation
+
+```go
+func (receiver *ConversationManager) ArchiveConversation(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/archive)
+
+## CancelExecution
+
+```go
+func (receiver *ConversationManager) CancelExecution(ctx context.Context, r m.CancelExecutionRequest) (m.StateResult, error)
+```
+
+[查看操作或完整契约](/api-reference/executions/cancel-execution)
+
+## CancelTurn
+
+```go
+func (receiver *ConversationManager) CancelTurn(ctx context.Context, r m.TurnRef) (m.StateResult, error)
+```
+
+[查看操作或完整契约](/api-reference/turns/cancel)
+
+## CreateConversation
+
+```go
+func (receiver *ConversationManager) CreateConversation(ctx context.Context, r m.CreateRequest, options ...m.MutationOptions) (m.CreatedConversation, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/create)
+
+## GetCommandReceipt
+
+```go
+func (receiver *ConversationManager) GetCommandReceipt(ctx context.Context, r m.CommandReceiptRef) (m.Snapshot[m.CommandReceipt], error)
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-command-receipt)
+
+## GetComposerCapabilities
+
+```go
+func (receiver *ConversationManager) GetComposerCapabilities(ctx context.Context, r m.ComposerQuery) (m.Snapshot[m.ComposerCapabilities], error)
+```
+
+[查看操作或完整契约](/api-reference/configuration/get-composer-capabilities)
+
+## GetConversationConfig
+
+```go
+func (receiver *ConversationManager) GetConversationConfig(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.EffectiveConfig], error)
+```
+
+[查看操作或完整契约](/api-reference/configuration/get)
+
+## GetConversationHeaderMetadata
+
+```go
+func (receiver *ConversationManager) GetConversationHeaderMetadata(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ConversationHeaderMetadata], error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-conversation-header-metadata)
+
+## GetConversationStorageContext
+
+```go
+func (receiver *ConversationManager) GetConversationStorageContext(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, error)
+```
+
+[查看操作或完整契约](/api-reference/workspaces/get-conversation-storage-context)
+
+## GetConversationSummary
+
+```go
+func (receiver *ConversationManager) GetConversationSummary(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.Conversation], error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/get-conversation-summary)
+
+## GetConversation
+
+```go
+func (receiver *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/get)
+
+## GetMemberSnapshot
+
+```go
+func (receiver *ConversationManager) GetMemberSnapshot(ctx context.Context, r m.MemberSnapshotQuery) (m.Snapshot[m.MemberSnapshot], error)
+```
+
+[查看操作或完整契约](/api-reference/members/get-member-snapshot)
+
+## GetMessageDetail
+
+```go
+func (receiver *ConversationManager) GetMessageDetail(ctx context.Context, r m.MessageDetailQuery) (m.Snapshot[*m.MessageDetail], error)
+```
+
+[查看操作或完整契约](/api-reference/messages/detail)
+
+## GetMessageFiles
+
+```go
+func (receiver *ConversationManager) GetMessageFiles(ctx context.Context, r m.MessageFilesQuery) (m.Snapshot[m.MessageFilesResult], error)
+```
+
+[查看操作或完整契约](/api-reference/messages/get-message-files)
+
+## GetMessagePresentation
+
+```go
+func (receiver *ConversationManager) GetMessagePresentation(ctx context.Context, r m.PresentationQuery) (m.Snapshot[*m.MessagePresentation], error)
+```
+
+[查看操作或完整契约](/api-reference/messages/presentation)
+
+## GetMutation
+
+```go
+func (receiver *ConversationManager) GetMutation(ctx context.Context, r m.MutationRef) (m.Snapshot[m.MutationStatus], error)
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-mutation)
+
+## GetQuestionResponseReceipt
+
+```go
+func (receiver *ConversationManager) GetQuestionResponseReceipt(ctx context.Context, r m.QuestionResponseRef) (m.Snapshot[m.CommandReceipt], error)
+```
+
+[查看操作或完整契约](/api-reference/receipts/get-question-response-receipt)
+
+## GetTurn
+
+```go
+func (receiver *ConversationManager) GetTurn(ctx context.Context, r m.TurnRef) (m.Snapshot[*m.Turn], error)
+```
+
+[查看操作或完整契约](/api-reference/turns/get)
+
+## ListActiveExecutions
+
+```go
+func (receiver *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnapshot], error)
+```
+
+[查看操作或完整契约](/api-reference/executions/list-active-executions)
+
+## ListConversationGroups
+
+```go
+func (receiver *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.SidebarGroup]], error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
+
+## ListConversationHistory
+
+```go
+func (receiver *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+```
+
+[查看操作或完整契约](/api-reference/messages/list-conversation-history)
+
+## ListConversations
+
+```go
+func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/list)
+
+## ListExecutionActivity
+
+```go
+func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity], error)
+```
+
+[查看操作或完整契约](/api-reference/executions/list-execution-activity)
+
+## ListGroupSyncStates
+
+```go
+func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
+```
+
+[查看操作或完整契约](/api-reference/sync/list-group-sync-states)
+
+## ListGroups
+
+```go
+func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
+```
+
+[查看操作或完整契约](/api-reference/sync/list-groups)
+
+## ListInteractions
+
+```go
+func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+```
+
+[查看操作或完整契约](/api-reference/interactions/list)
+
+## ListMemberCandidates
+
+```go
+func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+```
+
+[查看操作或完整契约](/api-reference/members/list-member-candidates)
+
+## ListMembers
+
+```go
+func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+```
+
+[查看操作或完整契约](/api-reference/members/list)
+
+## ListMessages
+
+```go
+func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+```
+
+[查看操作或完整契约](/api-reference/messages/list)
+
+## ListSidebarConversations
+
+```go
+func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
+
+## ObserveActiveExecutions
+
+```go
+func (receiver *ConversationManager) ObserveActiveExecutions(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-active-executions)
+
+## ObserveCommandReceipt
+
+```go
+func (receiver *ConversationManager) ObserveCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.Observer[m.CommandReceipt]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/receipts/observe-command-receipt)
+
+## ObserveConversationConfig
+
+```go
+func (receiver *ConversationManager) ObserveConversationConfig(ctx context.Context, r m.ConversationRef, o m.Observer[m.EffectiveConfig]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/configuration/observe-conversation-config)
+
+## ObserveConversationGroups
+
+```go
+func (receiver *ConversationManager) ObserveConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.Observer[m.Page[m.SidebarGroup]]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversation-groups)
+
+## ObserveConversationHistory
+
+```go
+func (receiver *ConversationManager) ObserveConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.Observer[m.ConversationHistory]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/messages/observe-conversation-history)
+
+## ObserveConversations
+
+```go
+func (receiver *ConversationManager) ObserveConversations(ctx context.Context, r m.ConversationQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-conversations)
+
+## ObserveExecutionActivity
+
+```go
+func (receiver *ConversationManager) ObserveExecutionActivity(ctx context.Context, r m.ConversationRef, o m.Observer[[]m.ExecutionActivity]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-execution-activity)
+
+## ObserveInteractions
+
+```go
+func (receiver *ConversationManager) ObserveInteractions(ctx context.Context, r m.InteractionQuery, o m.Observer[[]m.Interaction]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/interactions/observe-interactions)
+
+## ObserveLiveProcess
+
+```go
+func (receiver *ConversationManager) ObserveLiveProcess(ctx context.Context, r m.ConversationRef, o m.Observer[m.LiveProcessSnapshot]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/executions/observe-live-process)
+
+## ObserveMembers
+
+```go
+func (receiver *ConversationManager) ObserveMembers(ctx context.Context, r m.MemberQuery, o m.Observer[[]m.Member]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/members/observe-members)
+
+## ObserveMessages
+
+```go
+func (receiver *ConversationManager) ObserveMessages(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/messages/observe)
+
+## ObserveMutation
+
+```go
+func (receiver *ConversationManager) ObserveMutation(ctx context.Context, r m.MutationRef, o m.Observer[m.MutationStatus]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/receipts/observe-mutation)
+
+## ObserveSidebarConversations
+
+```go
+func (receiver *ConversationManager) ObserveSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/observe-sidebar-conversations)
+
+## ObserveTurn
+
+```go
+func (receiver *ConversationManager) ObserveTurn(ctx context.Context, r m.TurnRef, o m.Observer[*m.Turn]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/turns/observe-turn)
+
+## OnGroupSyncState
+
+```go
+func (receiver *ConversationManager) OnGroupSyncState(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/sync/on-group-sync-state)
+
+## PrepareConversationAttachmentTarget
+
+```go
+func (receiver *ConversationManager) PrepareConversationAttachmentTarget(ctx context.Context, r m.ConversationRef) (m.ConversationAttachmentTarget, error)
+```
+
+[查看操作或完整契约](/api-reference/attachments/prepare-conversation-attachment-target)
+
+## RefreshPendingInteractions
+
+```go
+func (receiver *ConversationManager) RefreshPendingInteractions(ctx context.Context, r m.ConversationRef) (m.RecoveredInteractions, error)
+```
+
+[查看操作或完整契约](/api-reference/interactions/refresh-pending-interactions)
+
+## RemoveMember
+
+```go
+func (receiver *ConversationManager) RemoveMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+[查看操作或完整契约](/api-reference/members/remove)
+
+## RenameConversation
+
+```go
+func (receiver *ConversationManager) RenameConversation(ctx context.Context, r m.RenameRequest, options ...m.MutationOptions) (m.ConversationRef, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/rename)
+
+## ResolveConversationRead
+
+```go
+func (receiver *ConversationManager) ResolveConversationRead(ctx context.Context, r m.ConversationReadQuery) (m.ConversationReadBinding, error)
+```
+
+[查看操作或完整契约](/api-reference/messages/resolve-conversation-read)
+
+## RespondPermission
+
+```go
+func (receiver *ConversationManager) RespondPermission(ctx context.Context, r m.PermissionRequest) (m.InteractionResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/interactions/permission)
+
+## RespondQuestion
+
+```go
+func (receiver *ConversationManager) RespondQuestion(ctx context.Context, r m.QuestionRequest, options ...m.MutationOptions) (m.InteractionResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/interactions/question)
+
+## SendMessageAndWait
+
+```go
+func (receiver *ConversationManager) SendMessageAndWait(ctx context.Context, r m.SendRequest) (m.MessageCompletion, error)
+```
+
+[查看操作或完整契约](/api-reference/messages/wait)
+
+## SendMessageStream
+
+```go
+func (receiver *ConversationManager) SendMessageStream(ctx context.Context, r m.SendRequest) m.MessageStream
+```
+
+[查看操作或完整契约](/api-reference/messages/stream)
+
+## SendMessage
+
+```go
+func (receiver *ConversationManager) SendMessage(ctx context.Context, r m.SendRequest) (m.MessageAccepted, error)
+```
+
+[查看操作或完整契约](/api-reference/messages/send)
+
+## SetConversationConfigOption
+
+```go
+func (receiver *ConversationManager) SetConversationConfigOption(ctx context.Context, r m.ConfigOptionRequest) (m.ConversationRef, error)
+```
+
+[查看操作或完整契约](/api-reference/configuration/set-conversation-config-option)
+
+## SetConversationPinned
+
+```go
+func (receiver *ConversationManager) SetConversationPinned(ctx context.Context, r m.PinnedRequest, options ...m.MutationOptions) (m.ConversationRef, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/set-conversation-pinned)
+
+## SteerTurn
+
+```go
+func (receiver *ConversationManager) SteerTurn(ctx context.Context, r m.SteerRequest) (m.SteerResult, error)
+```
+
+[查看操作或完整契约](/api-reference/turns/steer-turn)
+
+## SyncConversation
+
+```go
+func (receiver *ConversationManager) SyncConversation(ctx context.Context, r m.ConversationRef) (m.GroupSyncState, error)
+```
+
+[查看操作或完整契约](/api-reference/sync/sync-conversation)
+
+## SyncGroup
+
+```go
+func (receiver *ConversationManager) SyncGroup(ctx context.Context, r m.GroupRef) (m.GroupSyncState, error)
+```
+
+[查看操作或完整契约](/api-reference/sync/sync-group)
+
+## UnarchiveConversation
+
+```go
+func (receiver *ConversationManager) UnarchiveConversation(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/unarchive-conversation)
+
+## UpdateConversationConfig
+
+```go
+func (receiver *ConversationManager) UpdateConversationConfig(ctx context.Context, r m.ConfigRequest) (m.ConversationRef, error)
+```
+
+[查看操作或完整契约](/api-reference/configuration/update)
+
+## UpdateMember
+
+```go
+func (receiver *ConversationManager) UpdateMember(ctx context.Context, r m.MemberRequest, options ...m.MutationOptions) (m.MemberResult, error)
+```
+
+[查看操作或完整契约](/api-reference/members/update)

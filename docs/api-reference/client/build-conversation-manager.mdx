@@ -1,0 +1,226 @@
+---
+title: "buildConversationManager"
+sidebarTitle: "buildConversationManager"
+description: "完整公开接口 · Client"
+---
+
+`buildConversationManager` · Client
+
+公开方法的参数和返回值如下。使用前核对当前语言、认证模式、目标环境与能力。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `Client.buildConversationManager` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go.Client.BuildConversationManager` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.WuyingClient.buildConversationManager` | 已公开声明，需核对环境能力 |
+| CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · Client
+
+```ts
+buildConversationManager(_context: Context): Promise<ConversationManager$1>;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go.Client
+
+```go
+func (receiver *Client) BuildConversationManager(ctx context.Context) (*manager.ConversationManager, error)
+```
+
+### Java · com.aliyun.wuying.sdk.WuyingClient
+
+```java
+public com.aliyun.wuying.sdk.manager.ConversationManager buildConversationManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface Context {
+    signal?: AbortSignal;
+    timeout?: number;
+    traceId?: string;
+}
+
+interface ConversationManager$1 {
+    /** Shared per authorization/root; 50ms notifications, no durable writes or execution control. */
+    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
+    getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
+    getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+    /** 仅列目录同步状态，不下载非热点群历史。 */
+    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+    /** 只读AG目录分页；不连接Runtime、不等待业务Ready、不下载历史。 */
+    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+    /** Bounded account activity index. This returns metadata only and opens no Runtime. */
+    listRecentGroups(ctx: Context, req: {
+        limit: number;
+    }): Promise<RecentGroupDirectoryEntry[]>;
+    /** 按业务会话定位当前机器的群；完整接收并应用本轮历史后返回。 */
+    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+    /** 显式选择分页返回的群，仍验证其属于指定Runtime。 */
+    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
+    listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+    observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+    listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+    observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    /** Metadata only; never activates or grants write authority to a cold conversation. */
+    getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
+    listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+    observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+    cancelExecution(ctx: Context, req: ConversationRef & {
+        executionId: string;
+        expectedVersion: string;
+    }): Promise<{
+        state: 'requested' | 'cancelled' | 'already_finished';
+    }>;
+    getComposerCapabilities(ctx: Context, req: ConversationRef & {
+        memberId?: string;
+    }): Promise<Snapshot<ComposerCapabilities>>;
+    getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    steerTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+        text: string;
+        clientCommandId: string;
+    }): Promise<{
+        state: 'accepted';
+        turnId: string;
+        messageId: string;
+    }>;
+    setConversationPinned(ctx: Context, req: ConversationRef & {
+        pinned: boolean;
+    }, options?: MutationOptions): Promise<ConversationRef>;
+    getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
+    listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<MemberCandidate[]>>;
+    getMemberSnapshot(ctx: Context, req: ConversationRef & {
+        consistency?: 'cache' | 'refresh';
+    }): Promise<Snapshot<MemberSnapshot>>;
+    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
+    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+    getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+    observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    renameConversation(ctx: Context, req: ConversationRef & {
+        name: string;
+    }, options?: MutationOptions): Promise<ConversationRef>;
+    updateConversationConfig(ctx: Context, req: ConversationRef & {
+        config: Config;
+        expectedVersion: string;
+    }): Promise<ConversationRef>;
+    /** Shell-aligned single-option command. No CAS or multi-option transaction. Read back state separately. */
+    setConversationConfigOption(ctx: Context, req: ConversationRef & {
+        optionId: 'model' | 'runtime.permissionPreset' | 'runtime.thinkingLevel';
+        value: string;
+    }): Promise<ConversationRef>;
+    observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+    getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig>>;
+    archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+    unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+    listMembers(ctx: Context, req: ConversationRef & {
+        includeRemoved?: boolean;
+    }): Promise<Snapshot<Member[]>>;
+    observeMembers(ctx: Context, req: ConversationRef & {
+        includeRemoved?: boolean;
+    }, observer: Observer<Member[]>): Promise<Subscription>;
+    addMember(ctx: Context, req: ConversationRef & {
+        agentId: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    updateMember(ctx: Context, req: ConversationRef & {
+        memberId: string;
+        expectedVersion: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    removeMember(ctx: Context, req: ConversationRef & {
+        memberId: string;
+        expectedVersion: string;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
+    sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+    sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
+    resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+    getMessageDetail(ctx: Context, req: ConversationRef & {
+        messageId: string;
+        itemCursor?: string;
+        limit?: number;
+    }): Promise<Snapshot<MessageDetail | undefined>>;
+    observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+    listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+    observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+    observeTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+    getTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }): Promise<Snapshot<Turn | undefined>>;
+    cancelTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }): Promise<{
+        state: 'requested' | 'cancelled' | 'already_finished';
+    }>;
+    observeInteractions(ctx: Context, req: ConversationRef & {
+        state?: 'pending' | 'all';
+    }, observer: Observer<Interaction[]>): Promise<Subscription>;
+    refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<ConversationRef & {
+        recovered: number;
+    }>;
+    listInteractions(ctx: Context, req: ConversationRef & {
+        state?: 'pending' | 'all';
+    }): Promise<Snapshot<Interaction[]>>;
+    /** expectedVersion fences the SDK snapshot; Gateway checks ownership and lifecycle, without a CAS field. */
+    respondPermission(ctx: Context, req: ConversationRef & {
+        interactionId: string;
+        optionId: string;
+        expectedVersion: string;
+    }): Promise<InteractionResponse>;
+    respondQuestion(ctx: Context, req: ConversationRef & {
+        interactionId: string;
+        expectedVersion: string;
+        answer: {
+            answers: {
+                questionId: string;
+                optionIds: string[];
+                text?: string;
+            }[];
+        } | {
+            skip: true;
+        };
+    }, options?: MutationOptions): Promise<InteractionResponse>;
+    /** Read only; never dispatches an answer. Available only for stable mutation attempts. */
+    getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/01-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

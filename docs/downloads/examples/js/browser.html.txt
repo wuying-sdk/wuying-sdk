@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="UTF-8"><title>JS SDK 只读接入示例</title>
+<p>由客户自己的安全登录流程注入 window.wuyingLogin（authCode 或三元组）、window.wuyingClientId。点击只查询授权运行环境数量，不发送消息。</p>
+<button id="read">查询运行环境</button><pre id="status"></pre>
+<script type="module">
+import {Client} from '../../sdks/js/browser/index.mjs';
+document.querySelector('#read').onclick=async()=>{
+  const status=document.querySelector('#status');let client;
+  try {
+    if(!window.wuyingLogin||!window.wuyingClientId)throw Error('LOGIN_REQUIRED');
+    client=Client.create(window.wuyingLogin,{clientId:window.wuyingClientId,logger:{info(){},warn(){},error(){},debug(){}}});
+    const ctx={timeout:60000};const runtimesAPI=await client.buildRuntimeManager(ctx);const result=await runtimesAPI.listRuntimes(ctx);
+    status.textContent=JSON.stringify({count:result.data.length,phase:result.projection.phase,coverage:result.projection.coverage});
+  }catch{status.textContent='查询失败：请核对凭据、授权和网络；不输出原始错误或令牌。';}finally{if(client)await client.close();}
+};
+</script></html>

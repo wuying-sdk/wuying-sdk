@@ -1,0 +1,48 @@
+---
+title: "CloudClient"
+sidebarTitle: "CloudClient"
+description: "Java 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## constructor
+
+```java
+public com.aliyun.wuying.sdk.CloudClient(com.aliyun.wuying.sdk.config.CloudClientOptions);
+```
+
+[查看操作或完整契约](/reference/java/public#entry-91d341b15d8b282d)
+
+## doRPC
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> doRPC(java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.String>, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> doRPC(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/cloud-api/do-rpc)
+
+## getAuthCode
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GetAuthCodeResponse> getAuthCode(com.aliyun.wuying.sdk.model.GetAuthCodeParams, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/auth/get-auth-code)
+
+## close
+
+```java
+public void close();
+```
+
+[查看操作或完整契约](/api-reference/cloud-api/close)
+
+## toString
+
+```java
+public java.lang.String toString();
+```
+
+[查看操作或完整契约](/reference/java/public#entry-e8c14b67cce1f916)

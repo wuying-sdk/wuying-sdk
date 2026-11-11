@@ -1,0 +1,19 @@
+---
+title: "读取下一页"
+description: "沿用同一查询条件，用返回的游标继续读取。"
+---
+
+列表方法如果返回 `Page`，其中 `items` 是当前页，`nextCursor` 是继续读取的位置；外层若是 Snapshot，实际路径是 `snapshot.data.items` 和 `snapshot.data.nextCursor`。
+
+```ts
+const conversations = await client.buildConversationManager(ctx);
+const first = await conversations.listMessages(ctx, { runtimeId, conversationId });
+const cursor = first.data.nextCursor;
+if (cursor) {
+  const next = await conversations.listMessages(ctx, { runtimeId, conversationId, cursor });
+}
+```
+
+`runtimeId`、`conversationId` 已由调用方选定。游标是不透明字符串，不能计算或改写，也不能跨会话、筛选条件或数据代际使用。收到 CURSOR_EXPIRED 时按当前接口合同从第一页重新读取。
+
+[完整类型与语言差异](/sdk-reference/index)

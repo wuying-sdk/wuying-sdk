@@ -1,0 +1,51 @@
+---
+title: "iOS SDK"
+sidebarTitle: "安装与初始化"
+description: "通过 Swift 包装和 Go 移动引擎初始化无影 Client，消费事件并管理请求。"
+icon: "apple"
+---
+
+iOS SDK 使用 Swift 包装与 Go 移动引擎，为 iOS 应用提供用户端集成入口。当前与 Android 共用七个 Manager 的 **113 个 JSON 方法入口**；查找实际支持的方法见[完整目录](/reference/ios/public)。
+
+## 安装
+
+当前采用本地 Swift Package，最低 iOS 13、Swift tools 5.8。取得配套交付的完整 `wuying-sdk-ios` 包，并保留 `Artifacts/WuyingMobile.xcframework`；在 Xcode 中添加该本地包，向应用 target 添加 `WuyingSDK` 产品。文档尚未指定远程 Swift Package 或 CocoaPods 地址。
+
+包内 `Package.swift` 检测到 XCFramework 后才挂载 `WuyingMobile` 二进制 target。仅有 Swift 源码可以运行部分宿主测试，不能初始化真实 `GoEngine`。当前原生构建目标为 arm64 真机、arm64 / x86_64 模拟器；按对应制品的版本、哈希和平台 slice 核对，不从源码清单推断所有制品已经包含新增方法。
+
+## 认证与授权
+
+这是**用户端集成**。使用后端签发的 `authCode`，或完整的 `loginToken`、`sessionId`、`endUserId` 登录态，两种模式择一；服务端 AK/SK 保留在受信任后端。后端完成真实用户映射和授权，SDK 初始化不增加用户权限。参见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 初始化 Client
+
+下面的核心语句需要含真实 XCFramework 的 `WuyingSDK` 模块。`authCode`、`clientId`、私有数据库绝对路径 `dataFile` 和 `(SDKEvent) -> Void` 回调 `onEvent` 由宿主提供；在**工作线程**调用；事件默认派发到主队列。
+
+```swift
+import Foundation
+import WuyingSDK
+
+let engine = try GoEngine(configuration: [
+    "authCode": authCode, "clientId": clientId, "dataPath": dataFile
+])
+let client = Client(engine: engine)
+let watch = try client.request(
+    method: Methods.runtimeObserveRuntimes, onEvent: onEvent)
+```
+
+如需指定登录地域，补充 `loginRegionId`，全部配置见[移动合同](/reference/mobile/contract)。已有登录态接入时，将 `authCode` 替换为三项 `loginToken`、`sessionId`、`endUserId`。目录可放在应用私有的 Application Support 中，由应用将账号安全映射为目录名；`dataPath` 是绝对数据库**文件**路径，同一文件只供一个活跃 Client 使用。
+
+## 读取事件与释放
+
+`SDKEvent.data` 为 `Any?`，按具体方法解码字典或数组，保留投影、版本及字符串形式的 Int64。检查 `kind`、`terminal` 和可选的 `SDKFailure`；`Client.request` 启动失败可同步抛错，异步错误通过事件返回，不自动重发写操作。
+
+```swift
+// 页面退出时停止观察。
+watch.cancel()
+// 账号退出时在工作线程关闭。
+try client.close()
+```
+
+取消只停止本地等待和交付，远端停止执行需要显式业务取消并核对终态。换账号先关闭旧实例，再使用新的账号私有数据库文件初始化。
+
+[Client 与事件接口](/reference/ios/client) · [全部 113 个方法](/reference/ios/public) · [移动端数据与生命周期](/reference/mobile/contract)

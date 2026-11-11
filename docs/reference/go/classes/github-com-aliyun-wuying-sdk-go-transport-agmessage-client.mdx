@@ -1,0 +1,487 @@
+---
+title: "Client"
+sidebarTitle: "Client"
+description: "Go 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## AddVirtualGroupMembers
+
+```go
+func (receiver *Client) AddVirtualGroupMembers(ctx context.Context, groupID string, memberRevision uint64, userIDs []string) (*MemberChangeResult, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/add-virtual-group-members)
+
+## AuditClosedHistory
+
+```go
+func (receiver *Client) AuditClosedHistory(ctx context.Context, groupID string, afterSeq uint64, limit int) (*AuditPage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/audit-closed-history)
+
+## ClientInstanceID
+
+```go
+func (receiver *Client) ClientInstanceID() string
+```
+
+[查看操作或完整契约](/api-reference/transport/client-instance-id)
+
+## CloseVirtualGroup
+
+```go
+func (receiver *Client) CloseVirtualGroup(ctx context.Context, groupID string, groupRevision uint64) (*VirtualGroup, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/close-virtual-group)
+
+## Close
+
+```go
+func (receiver *Client) Close() error
+```
+
+[查看操作或完整契约](/api-reference/transport/close)
+
+## Connect
+
+```go
+func (receiver *Client) Connect(ctx context.Context) error
+```
+
+[查看操作或完整契约](/api-reference/transport/connect)
+
+## CreateVirtualGroup
+
+```go
+func (receiver *Client) CreateVirtualGroup(ctx context.Context, req CreateVirtualGroupRequest) (*VirtualGroup, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/create-virtual-group)
+
+## GetDevicePresence
+
+```go
+func (receiver *Client) GetDevicePresence(ctx context.Context, userID string) (*DevicePresence, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/get-device-presence)
+
+## GetGroupSyncState
+
+```go
+func (receiver *Client) GetGroupSyncState(id string) (GroupSyncState, bool)
+```
+
+[查看操作或完整契约](/api-reference/transport/get-group-sync-state)
+
+## GetHistory
+
+```go
+func (receiver *Client) GetHistory(ctx context.Context, groupID string, afterSeq uint64, limit int) ([]DurableMessage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/get-history)
+
+## GetPublishState
+
+```go
+func (receiver *Client) GetPublishState(ctx context.Context, clientMessageID string) (PublishState, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/get-publish-state)
+
+## GetVirtualGroup
+
+```go
+func (receiver *Client) GetVirtualGroup(ctx context.Context, groupID, conversationID string) (*VirtualGroup, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/get-virtual-group)
+
+## GetVirtualGroupsV1
+
+```go
+func (receiver *Client) GetVirtualGroupsV1(ctx context.Context, groupIDs []string) (*VirtualGroupBatch, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/get-virtual-groups-v1)
+
+## InitialSyncProgress
+
+```go
+func (receiver *Client) InitialSyncProgress() InitialSyncProgress
+```
+
+[查看操作或完整契约](/api-reference/transport/initial-sync-progress)
+
+## LinkState
+
+```go
+func (receiver *Client) LinkState(link Link) LinkState
+```
+
+[查看操作或完整契约](/api-reference/transport/link-state)
+
+## ListGroupChangesV1
+
+```go
+func (receiver *Client) ListGroupChangesV1(ctx context.Context, cursor string, limit int) (*GroupChangePage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/list-group-changes-v1)
+
+## ListGroupSyncStates
+
+```go
+func (receiver *Client) ListGroupSyncStates() []GroupSyncState
+```
+
+[查看操作或完整契约](/api-reference/transport/list-group-sync-states)
+
+## ListVirtualGroupMembers
+
+```go
+func (receiver *Client) ListVirtualGroupMembers(ctx context.Context, groupID, cursor string, limit int) (*MemberPage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/list-virtual-group-members)
+
+## ListVirtualGroupsV1
+
+```go
+func (receiver *Client) ListVirtualGroupsV1(ctx context.Context, controllerUserID, controllerInstanceID, conversationID, cursor string, limit int) (*VirtualGroupPageV1, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/list-virtual-groups-v1)
+
+## ListVirtualGroups
+
+```go
+func (receiver *Client) ListVirtualGroups(ctx context.Context, cursor string, limit int) (*VirtualGroupPage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/list-virtual-groups)
+
+## LoadDurableMessage
+
+```go
+func (receiver *Client) LoadDurableMessage(ctx context.Context, groupID string, seq uint64) (*DurableMessage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/load-durable-message)
+
+## OnDevicePresence
+
+```go
+func (receiver *Client) OnDevicePresence(handler func(DevicePresence)) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-device-presence)
+
+## OnDurableMessage
+
+```go
+func (receiver *Client) OnDurableMessage(handler DurableHandler) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-durable-message)
+
+## OnError
+
+```go
+func (receiver *Client) OnError(fn func(error)) func()
+```
+
+[查看操作或完整契约](/api-reference/transport/on-error)
+
+## OnGroupSyncState
+
+```go
+func (receiver *Client) OnGroupSyncState(fn func(GroupSyncState)) func()
+```
+
+[查看操作或完整契约](/api-reference/transport/on-group-sync-state)
+
+## OnInitialSyncProgress
+
+```go
+func (receiver *Client) OnInitialSyncProgress(handler func(InitialSyncProgress)) func()
+```
+
+[查看操作或完整契约](/api-reference/transport/on-initial-sync-progress)
+
+## OnLinkState
+
+```go
+func (receiver *Client) OnLinkState(link Link, fn func(LinkState)) func()
+```
+
+[查看操作或完整契约](/api-reference/transport/on-link-state)
+
+## OnRelayBroadcastResponse
+
+```go
+func (receiver *Client) OnRelayBroadcastResponse(handler func(*RelayResponse)) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-relay-broadcast-response)
+
+## OnRelayError
+
+```go
+func (receiver *Client) OnRelayError(handler func(error)) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-relay-error)
+
+## OnRelayLateResponse
+
+```go
+func (receiver *Client) OnRelayLateResponse(handler func(*RelayResponse)) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-relay-late-response)
+
+## OnRelayMessage
+
+```go
+func (receiver *Client) OnRelayMessage(handler RelayMessageHandler) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-relay-message)
+
+## OnRelayRequest
+
+```go
+func (receiver *Client) OnRelayRequest(handler RelayRequestHandler) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-relay-request)
+
+## OnStreamEvent
+
+```go
+func (receiver *Client) OnStreamEvent(handler StreamHandler) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-stream-event)
+
+## OnTransientMessage
+
+```go
+func (receiver *Client) OnTransientMessage(handler TransientHandler) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/on-transient-message)
+
+## PublishDurable
+
+```go
+func (receiver *Client) PublishDurable(ctx context.Context, groupID, conversationID, clientMessageID string, data json.RawMessage) (PublishReceipt, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/publish-durable)
+
+## PublishStreamTransient
+
+```go
+func (receiver *Client) PublishStreamTransient(ctx context.Context, groupID, conversationID, clientMessageID string, send StreamSend, data json.RawMessage) (PublishReceipt, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/publish-stream-transient)
+
+## PublishTransient
+
+```go
+func (receiver *Client) PublishTransient(ctx context.Context, groupID, conversationID, clientMessageID string, data json.RawMessage, stream ...StreamSend) (PublishReceipt, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/publish-transient)
+
+## QueryDevicePresence
+
+```go
+func (receiver *Client) QueryDevicePresence(ctx context.Context, ids []string) ([]DevicePresence, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/query-device-presence)
+
+## ReadHistoryPage
+
+```go
+func (receiver *Client) ReadHistoryPage(ctx context.Context, group string, after uint64, limit int) (ReadHistoryPage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/read-history-page)
+
+## RefreshGroupDirectory
+
+```go
+func (receiver *Client) RefreshGroupDirectory(ctx context.Context) error
+```
+
+[查看操作或完整契约](/api-reference/transport/refresh-group-directory)
+
+## RelayBroadcastRequest
+
+```go
+func (receiver *Client) RelayBroadcastRequest(ctx context.Context, req RelayRequestOptions) (*RelayResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/relay-broadcast-request)
+
+## RelayCancel
+
+```go
+func (receiver *Client) RelayCancel(ctx context.Context, requestID string) (*RelayCancelResult, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/relay-cancel)
+
+## RelayGetHistory
+
+```go
+func (receiver *Client) RelayGetHistory(ctx context.Context, query RelayHistoryQuery) (*RelayHistoryPage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/relay-get-history)
+
+## RelayGetRequest
+
+```go
+func (receiver *Client) RelayGetRequest(ctx context.Context, requestID string) (*RelayRequestState, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/relay-get-request)
+
+## RelayRequest
+
+```go
+func (receiver *Client) RelayRequest(ctx context.Context, req RelayRequestOptions) (*RelayResponse, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/relay-request)
+
+## RelayRetry
+
+```go
+func (receiver *Client) RelayRetry(ctx context.Context, envelope RelayRetryEnvelope) (*RelayRetryResult, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/relay-retry)
+
+## RelaySend
+
+```go
+func (receiver *Client) RelaySend(ctx context.Context, req RelaySendOptions) (*RelayReceipt, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/relay-send)
+
+## RemoveVirtualGroupMembers
+
+```go
+func (receiver *Client) RemoveVirtualGroupMembers(ctx context.Context, groupID string, memberRevision uint64, userIDs []string) (*MemberChangeResult, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/remove-virtual-group-members)
+
+## RetryPublish
+
+```go
+func (receiver *Client) RetryPublish(ctx context.Context, handle *PublishRetry) (PublishReceipt, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/retry-publish)
+
+## SessionID
+
+```go
+func (receiver *Client) SessionID() string
+```
+
+[查看操作或完整契约](/api-reference/transport/session-id)
+
+## StreamHistory
+
+```go
+func (receiver *Client) StreamHistory(ctx context.Context, groupID, senderUserID, streamID string, afterSeq uint64, maxRecords int) (*StreamHistoryPage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/stream-history)
+
+## StreamList
+
+```go
+func (receiver *Client) StreamList(ctx context.Context, groupID, cursor string, limit int) (*StreamListPage, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/stream-list)
+
+## StreamState
+
+```go
+func (receiver *Client) StreamState(ctx context.Context, groupID, senderUserID, streamID string) (*StreamInfo, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/stream-state)
+
+## SyncGroup
+
+```go
+func (receiver *Client) SyncGroup(ctx context.Context, groupID string) error
+```
+
+[查看操作或完整契约](/api-reference/transport/sync-group)
+
+## Sync
+
+```go
+func (receiver *Client) Sync(ctx context.Context) error
+```
+
+[查看操作或完整契约](/api-reference/transport/sync)
+
+## UpdateDevices
+
+```go
+func (receiver *Client) UpdateDevices(ctx context.Context, ids []string) ([]DevicePresence, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/update-devices)
+
+## UpdateVirtualGroupProfile
+
+```go
+func (receiver *Client) UpdateVirtualGroupProfile(ctx context.Context, groupID string, profileRevision uint64, update ProfileUpdate) (*VirtualGroup, error)
+```
+
+[查看操作或完整契约](/api-reference/transport/update-virtual-group-profile)
+
+## UserID
+
+```go
+func (receiver *Client) UserID() string
+```
+
+[查看操作或完整契约](/api-reference/transport/user-id)
+
+## WaitGroupDirectory
+
+```go
+func (receiver *Client) WaitGroupDirectory(ctx context.Context) error
+```
+
+[查看操作或完整契约](/api-reference/transport/wait-group-directory)
+
+## WaitRelayReady
+
+```go
+func (receiver *Client) WaitRelayReady(ctx context.Context) error
+```
+
+[查看操作或完整契约](/api-reference/transport/wait-relay-ready)

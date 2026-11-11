@@ -1,0 +1,47 @@
+---
+title: "Conversation"
+description: "Conversation 的职责、关联模型与使用边界。"
+---
+
+## 领域职责
+
+Conversation 是用户可见的业务会话，组织消息、执行轮次、成员和配置。它不是 IM 承载群、Provider Session 或一条消息；这些底层身份不能直接替换 conversationId。
+
+## 关键模型与关联
+
+| 模型 | 关键字段/含义 | 关联 |
+|---|---|---|
+| ConversationRef | runtimeId + conversationId | 明确当前业务作用域 |
+| Conversation | name、mode、executionState、availability、archived、pinned、revision、capabilities | 可包含多 Member、多 Message、多 Turn |
+| CreateRequest | 单聊选择 agentId；群聊提供成员/协调配置 | 请求形状按 single/group 区分 |
+| CreatedConversation | 创建结果中的真实会话身份及成员映射等 | 后续请求原样使用，不从本地标题猜 ID |
+| EffectiveConfig | 配置的期望值与实际生效状态 | 独立说明见 Config 子模块 |
+| MutationOptions | 稳定 mutationId（仅适用支持的方法） | 未知结果时保留同一操作身份 |
+
+## 生命周期
+
+选环境/Agent → 创建或读取会话 → 分页/观察会话与消息 → 调整配置或成员 → 需要时归档/取消归档。归档、删除、关闭连接和取消执行不同；本语言没有公开的操作不能借 demo 私有接口补成同义操作。
+
+## 公开操作
+
+| 业务操作 | JS | Go | Java | CLI |
+|---|---|---|---|---|
+| 创建 | createConversation | CreateConversation | createConversation | conversations create |
+| 读取 | getConversation | GetConversation | getConversation | conversations get |
+| 列表 | listConversations | ListConversations | listConversations | conversations list |
+| 改名 | renameConversation | RenameConversation | renameConversation | 当前未提供改名命令 |
+| 归档/恢复 | archiveConversation / unarchiveConversation | ArchiveConversation / UnarchiveConversation | archiveConversation / unarchiveConversation | 当前未提供 |
+
+这些方法属于 ConversationManager；额外公开操作以本语言完整参考为准。没有 CLI 命令不代表其他语言没有 API。
+
+## 边界与示例
+
+分页 cursor 绑定原查询条件和投影代际。配置提交成功后仍须读回 desired/applied/application；不把本地选择直接标为已生效。完整创建及发送代码从 [语言绑定](/domain-model/language-bindings) 进入；群参与身份见 [Member](/domain-model/04-member-config)，恢复规则见 [错误与恢复](/domain-model/12-errors-examples)。
+
+
+## 子模块
+
+- [Member](/domain-model/04-member-config)：会话中的参与身份。
+- [Config](/domain-model/config)：期望配置与实际生效状态。
+- [Message](/domain-model/05-message)：消息及其独立展示视图。
+- [Turn](/domain-model/06-turn-items)：执行轮次、内容项、执行过程与交互。

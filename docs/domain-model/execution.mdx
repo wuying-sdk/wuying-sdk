@@ -1,0 +1,31 @@
+---
+title: "Execution"
+description: "执行视图定位会话中的活动执行和可公开过程，帮助界面显示进展或请求精确取消。"
+---
+
+执行视图定位会话中的活动执行和可公开过程，帮助界面显示进展或请求精确取消。
+
+## 模型与关联
+
+`ActiveExecution` 使用 executionId、ownerConversationId、turnId、可选 memberId、role、cancel capability 与 revision。`ExecutionActivity` 和 `LiveProcessSnapshot` 提供过程信息。
+
+[Turn](/domain-model/06-turn-items) 是权威轮次事实；[Item](/domain-model/item) 是内容项，[Interaction](/domain-model/07-interaction) 是等待用户处理的请求。
+
+## 生命周期
+
+读取或观察活动执行 → 识别真实 owner 与角色 → 消费过程快照 → 按能力取消指定执行 → 继续核对轮次与执行结果。
+
+## 操作入口
+
+- [`listActiveExecutions`](/api-reference/executions/list-active-executions)
+- [`observeActiveExecutions`](/api-reference/executions/observe-active-executions)
+- [`listExecutionActivity`](/api-reference/executions/list-execution-activity)
+- [`observeExecutionActivity`](/api-reference/executions/observe-execution-activity)
+- [`observeLiveProcess`](/api-reference/executions/observe-live-process)
+- [`cancelExecution`](/api-reference/executions/cancel-execution)
+
+## 使用边界
+
+实时过程只读，不用于重建 durable 消息或 Turn 状态。liveProgress 不是持久游标；本地等待取消也不等于远端执行取消。只有实际提供 cancel 能力的入口才能取消。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

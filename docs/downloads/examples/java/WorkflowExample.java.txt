@@ -1,0 +1,32 @@
+import com.aliyun.wuying.sdk.*;
+import com.aliyun.wuying.sdk.config.*;
+import com.aliyun.wuying.sdk.manager.*;
+import com.aliyun.wuying.sdk.model.*;
+import java.nio.file.*;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+public final class WorkflowExample {
+ private static String required(String k){String v=System.getenv(k);if(v==null||v.trim().isEmpty())throw new IllegalArgumentException("Missing host configuration");return v;}
+ public static void main(String[] args){
+  if(args.length!=1||!args[0].equals("--send")){System.out.println("Default: no network/writes. --send requires host credentials, WUYING_CLIENT_ID/DATA_PATH/RUNTIME_ID/AGENT_ID/CREATE_ID/COMMAND_ID/INPUT_FILE. Creates one conversation and sends one task; no automatic retry.");return;}
+  try{
+   ClientOptions.Builder login=ClientOptions.builder();String code=System.getenv("WUYING_AUTH_CODE");if(code!=null&&!code.trim().isEmpty())login.authCode(code);else login.loginToken(required("WUYING_LOGIN_TOKEN")).sessionId(required("WUYING_SESSION_ID")).endUserId(required("WUYING_END_USER_ID"));String region=System.getenv("WUYING_LOGIN_REGION_ID");if(region!=null)login.loginRegionId(region);
+   SdkConfig config=SdkConfig.builder().clientId(required("WUYING_CLIENT_ID")).dataPath(Paths.get(required("WUYING_DATA_PATH"))).build();
+   String runtime=required("WUYING_RUNTIME_ID"),agent=required("WUYING_AGENT_ID"),mutation=required("WUYING_CREATE_ID"),command=required("WUYING_COMMAND_ID");String text=new String(Files.readAllBytes(Paths.get(required("WUYING_INPUT_FILE"))),StandardCharsets.UTF_8);
+   System.out.println("createMutationId="+mutation+" commandId="+command);
+   try(WuyingClient client=new WuyingClient(login.build(),config);CallContext ctx=CallContext.withTimeout(Duration.ofMinutes(10))){
+    ConversationManager manager=client.buildConversationManager(ctx);CreateRequest create=new CreateRequest();create.runtimeId=runtime;create.agentId=agent;create.name="Customer SDK workflow";create.mode="single";MutationOptions options=new MutationOptions();options.mutationId=mutation;
+    CreatedConversation created=manager.createConversation(create,options,ctx).toCompletableFuture().get(65,TimeUnit.SECONDS);System.out.println("conversationId="+created.conversationId);
+    MessageQuery query=new MessageQuery();query.runtimeId=runtime;query.conversationId=created.conversationId;
+    try(Subscription subscription=manager.observeMessages(query,new com.aliyun.wuying.sdk.model.Observer<Page<Message>>(){
+     public void onSnapshot(Snapshot<Page<Message>> snapshot){System.out.println("snapshotPhase="+snapshot.projection.phase);}
+     public void onError(BusinessException error){System.err.println("Observation failed; reconcile the original operation before retrying.");}
+    },ctx)){
+     SendRequest send=new SendRequest();send.runtimeId=runtime;send.conversationId=created.conversationId;send.clientCommandId=command;send.text=text;
+     MessageCompletion completion=manager.sendMessageAndWait(send,ctx).toCompletableFuture().get(600,TimeUnit.SECONDS);System.out.println("turnId="+completion.accepted.turnId+" terminalState="+completion.turn.state);
+    }
+   }
+  }catch(Exception error){System.err.println("Workflow failed or outcome unknown; inspect original mutation/command/Turn. No raw error/credential is logged.");System.exit(1);}
+ }
+}

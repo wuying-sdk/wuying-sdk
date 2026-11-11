@@ -1,0 +1,32 @@
+---
+title: "按任务查用法"
+description: "按任务查找认证、会话、流式展示、附件、审批与恢复指南。"
+---
+
+[先看代码示例：查询环境、观察消息与完整 Demo →](/examples/index)
+
+通过 Agent 调用 CLI 时，先[安装配套 Skill](/guides/cli-skills)，再按任务选择云资源管理或远程 Agent 委派。
+
+每个任务先说明要达到的结果，再进入所属领域的公开操作与本语言示例。接口签名集中在 [SDK Reference](/sdk-reference/index)，对象关系集中在 [领域模型](/domain-model/00-overview)。
+
+| 我要完成的任务 | 操作指南 | 对应领域 |
+|---|---|---|
+| 建立身份、切换账号、释放连接 | [认证与生命周期](/integration/01-auth-and-lifecycle) | [Client](/domain-model/01-client) |
+| 选择执行环境与 Agent | [首次会话步骤 1](/getting-started/first-conversation) | [Runtime](/domain-model/02-runtime-agent) / [Agent](/domain-model/agent) |
+| 创建/复用会话、读取历史 | [会话和分页](/integration/02-conversations-and-streams) | [Conversation](/domain-model/03-conversation) |
+| 实时展示消息、避免重复卡片 | [快照与流式更新](/guides/streaming) | [Message](/domain-model/05-message) / [MessagePresentation](/domain-model/message-presentation) |
+| 等待任务、停止任务、处理断线 | [受理与终态](/integration/02-conversations-and-streams) | [Turn](/domain-model/06-turn-items) / [Item](/domain-model/item) |
+| 上传文件并随消息发送 | [附件与文件访问](/integration/03-attachments-and-interactions) | [Resource](/domain-model/08-resource-attachment) / [Attachment](/domain-model/attachment) |
+| 显示问题/审批并提交选择 | [处理交互](/guides/interactions) | [Interaction](/domain-model/07-interaction) |
+| 配置成员、模型和权限 | [Member](/domain-model/04-member-config) / [Config](/domain-model/config) | Member / Config |
+| 区分工作空间、云文件与产物 | [Workspace](/domain-model/09-workspace-files) / [WyDrive](/domain-model/wy-drive) / [MessageCloudFile](/domain-model/message-cloud-file) | Workspace / WyDrive / MessageCloudFile |
+| 查询技能、模型、积分或云桌面能力 | [能力地图](/domain-model/00-overview) | Skill/Model/Credit |
+| 升级、恢复、收集诊断信息 | [错误与运维](/integration/04-errors-and-operations) | [错误与恢复](/domain-model/12-errors-examples) |
+
+类型存在不表示所有 Runtime 已开放相应能力。例如通用 ResourceSelection 当前不应当作可用生产绑定入口。操作前读取真实能力；具体限制留在所属任务和参考中。
+
+## 共用接入方法
+
+- [读取查询结果](/domain-model/10-projection-events)与[判断数据是否可用](/domain-model/projection)：取出数据并判断是否完整。
+- [实时观察与停止监听](/domain-model/subscription)：随消息变化更新界面，退出时释放自己的订阅。
+- [超时后查询原结果](/domain-model/command-receipt)与[处理错误与恢复](/domain-model/12-errors-examples)：先核对原请求，避免重复提交。

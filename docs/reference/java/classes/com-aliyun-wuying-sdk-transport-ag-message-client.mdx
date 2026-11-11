@@ -1,0 +1,645 @@
+---
+title: "AgMessageClient"
+sidebarTitle: "AgMessageClient"
+description: "Java 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## constructor
+
+```java
+public com.aliyun.wuying.sdk.transport.AgMessageClient(com.aliyun.wuying.sdk.transport.AgMessageConfig, com.aliyun.wuying.sdk.transport.AgMessageClient$CredentialProvider, com.aliyun.wuying.sdk.transport.TransportStore);
+```
+
+[查看操作或完整契约](/reference/java/public#entry-496554312dce5c05)
+
+## connect
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> connect(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-connect)
+
+## waitReady
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> waitReady(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/wait-ready)
+
+## waitRelayReady
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> waitRelayReady(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-wait-relay-ready)
+
+## userId
+
+```java
+public java.lang.String userId();
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-user-id)
+
+## clientInstanceId
+
+```java
+public java.lang.String clientInstanceId();
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-client-instance-id)
+
+## linkState
+
+```java
+public java.util.Map<java.lang.String, java.lang.Object> linkState();
+public java.lang.String linkState(java.lang.String);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-link-state)
+
+## onStatus
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onStatus(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+```
+
+[查看操作或完整契约](/api-reference/transport/on-status)
+
+## onLinkState
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onLinkState(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-link-state)
+
+## onError
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onError(java.util.function.Consumer<com.aliyun.wuying.sdk.model.BusinessException>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-error)
+
+## onDurable
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onDurable(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
+```
+
+[查看操作或完整契约](/api-reference/transport/on-durable)
+
+## onTransient
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onTransient(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
+```
+
+[查看操作或完整契约](/api-reference/transport/on-transient)
+
+## onStreamEvent
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onStreamEvent(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
+public com.aliyun.wuying.sdk.model.Subscription onStreamEvent(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-stream-event)
+
+## onReceived
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onReceived(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+```
+
+[查看操作或完整契约](/api-reference/transport/on-received)
+
+## onColdGroupUpdate
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onColdGroupUpdate(java.util.function.Consumer<java.lang.String>);
+```
+
+[查看操作或完整契约](/api-reference/transport/on-cold-group-update)
+
+## onRelayRequest
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onRelayRequest(com.aliyun.wuying.sdk.transport.AgMessageClient$RequestHandler);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-relay-request)
+
+## onRelayMessage
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onRelayMessage(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-relay-message)
+
+## onRelayLateResponse
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onRelayLateResponse(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-relay-late-response)
+
+## createVirtualGroup
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> createVirtualGroup(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-create-virtual-group)
+
+## getVirtualGroup
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getVirtualGroup(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-get-virtual-group)
+
+## listVirtualGroups
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listVirtualGroups(java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-list-virtual-groups)
+
+## listRecentVirtualGroups
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listRecentVirtualGroups(int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/list-recent-virtual-groups)
+
+## addVirtualGroupMembers
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> addVirtualGroupMembers(java.lang.String, long, java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-add-virtual-group-members)
+
+## removeVirtualGroupMembers
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> removeVirtualGroupMembers(java.lang.String, long, java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-remove-virtual-group-members)
+
+## listVirtualGroupMembers
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listVirtualGroupMembers(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-list-virtual-group-members)
+
+## updateVirtualGroupProfile
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> updateVirtualGroupProfile(java.lang.String, long, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-update-virtual-group-profile)
+
+## closeVirtualGroup
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> closeVirtualGroup(java.lang.String, long, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-close-virtual-group)
+
+## auditClosedHistory
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> auditClosedHistory(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-audit-closed-history)
+
+## listGroupSyncStates
+
+```java
+public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-list-group-sync-states)
+
+## syncGroup
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncGroup(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-sync-group)
+
+## publish
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publish(java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/publish)
+
+## publishStream
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publishStream(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/publish-stream)
+
+## retryPublish
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> retryPublish(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-retry-publish)
+
+## getPublishState
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getPublishState(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-get-publish-state)
+
+## streamList
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> streamList(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-stream-list)
+
+## streamState
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> streamState(java.lang.String, java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-stream-state)
+
+## streamHistory
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> streamHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-stream-history)
+
+## readStreamHistoryPage
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StreamHistoryPage> readStreamHistoryPage(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/read-stream-history-page)
+
+## relayRequest
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayRequest(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-relay-request)
+
+## relaySend
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relaySend(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-relay-send)
+
+## relayRetry
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayRetry(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-relay-retry)
+
+## relayCancel
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayCancel(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-relay-cancel)
+
+## relayGetRequest
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayGetRequest(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-relay-get-request)
+
+## relayGetHistory
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayGetHistory(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-relay-get-history)
+
+## relayPresence
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayPresence(java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/relay-presence)
+
+## onGroupSyncState
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onGroupSyncState(java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-group-sync-state)
+
+## sessionId
+
+```java
+public java.lang.String sessionId();
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-session-id)
+
+## isVirtualGroupId · static
+
+```java
+public static boolean isVirtualGroupId(java.lang.String);
+```
+
+[查看操作或完整契约](/api-reference/transport/is-virtual-group-id)
+
+## isVirtualConversationId · static
+
+```java
+public static boolean isVirtualConversationId(java.lang.String);
+```
+
+[查看操作或完整契约](/api-reference/transport/is-virtual-conversation-id)
+
+## onDurableMessage
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onDurableMessage(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-durable-message)
+
+## onTransientMessage
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onTransientMessage(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-transient-message)
+
+## onRelayError
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onRelayError(java.util.function.Consumer<com.aliyun.wuying.sdk.model.BusinessException>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-relay-error)
+
+## initialSyncProgress
+
+```java
+public java.util.Map<java.lang.String, java.lang.Object> initialSyncProgress();
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-initial-sync-progress)
+
+## onInitialSyncProgress
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onInitialSyncProgress(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-initial-sync-progress)
+
+## listDirectoryPage
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listDirectoryPage(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/list-directory-page)
+
+## listDirectoryGroups
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listDirectoryGroups(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/list-directory-groups)
+
+## getDirectoryGroups
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getDirectoryGroups(java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/get-directory-groups)
+
+## listDirectoryChanges
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listDirectoryChanges(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/list-directory-changes)
+
+## listGroupChanges
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listGroupChanges(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/list-group-changes)
+
+## retryPendingDurableBatches
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> retryPendingDurableBatches(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/retry-pending-durable-batches)
+
+## publishDurable
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publishDurable(java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-publish-durable)
+
+## publishTransient
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publishTransient(java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-publish-transient)
+
+## publishStreamTransient
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publishStreamTransient(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-publish-stream-transient)
+
+## getHistory
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getHistory(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-get-history)
+
+## loadDurableMessage
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> loadDurableMessage(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-load-durable-message)
+
+## getGroupSyncState
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> getGroupSyncState(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-get-group-sync-state)
+
+## waitForGroupDirectory
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> waitForGroupDirectory(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/wait-for-group-directory)
+
+## listGroups
+
+```java
+public java.util.concurrent.CompletionStage<java.util.List<java.util.Map<java.lang.String, java.lang.Object>>> listGroups(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<java.util.List<java.util.Map<java.lang.String, java.lang.Object>>> listGroups(boolean, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/list-groups)
+
+## getGroup
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getGroup(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/get-group)
+
+## resolveConversationGroup
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> resolveConversationGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> resolveConversationGroup(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/resolve-conversation-group)
+
+## readHistoryPage
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> readHistoryPage(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> readHistoryPage(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-read-history-page)
+
+## refreshGroupDirectory
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> refreshGroupDirectory(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-refresh-group-directory)
+
+## sync
+
+```java
+public java.util.concurrent.CompletionStage<java.lang.Void> sync(com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-sync)
+
+## relayBroadcastRequest
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayBroadcastRequest(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-relay-broadcast-request)
+
+## onRelayBroadcastResponse
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onRelayBroadcastResponse(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-relay-broadcast-response)
+
+## getDevicePresence
+
+```java
+public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getDevicePresence(java.lang.String, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-get-device-presence)
+
+## updateDevices
+
+```java
+public java.util.concurrent.CompletionStage<java.util.List<java.util.Map<java.lang.String, java.lang.Object>>> updateDevices(java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-update-devices)
+
+## onDevicePresence
+
+```java
+public com.aliyun.wuying.sdk.model.Subscription onDevicePresence(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-on-device-presence)
+
+## close
+
+```java
+public void close();
+```
+
+[查看操作或完整契约](/api-reference/transport/ag-message-client-close)

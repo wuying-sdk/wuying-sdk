@@ -1,0 +1,143 @@
+---
+title: "ResourceManager"
+sidebarTitle: "ResourceManager"
+description: "Go 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## AttachImGroupFile
+
+```go
+func (receiver *ResourceManager) AttachImGroupFile(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+```
+
+[查看操作或完整契约](/api-reference/attachments/attach-im-group-file)
+
+## CommitDraftAttachments
+
+```go
+func (receiver *ResourceManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
+```
+
+[查看操作或完整契约](/api-reference/drafts/commit-draft-attachments)
+
+## CreateWorkspace
+
+```go
+func (receiver *ResourceManager) CreateWorkspace(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
+```
+
+[查看操作或完整契约](/api-reference/workspaces/create)
+
+## DiscardAttachment
+
+```go
+func (receiver *ResourceManager) DiscardAttachment(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
+```
+
+[查看操作或完整契约](/api-reference/attachments/discard)
+
+## DiscardDraftAttachments
+
+```go
+func (receiver *ResourceManager) DiscardDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
+```
+
+[查看操作或完整契约](/api-reference/drafts/discard-draft-attachments)
+
+## GetAttachmentAccess
+
+```go
+func (receiver *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
+```
+
+[查看操作或完整契约](/api-reference/attachments/access)
+
+## GetConversationResources
+
+```go
+func (receiver *ResourceManager) GetConversationResources(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ResourceSelection], error)
+```
+
+[查看操作或完整契约](/api-reference/resources/get-conversation-resources)
+
+## GetDraftAttachmentPreview
+
+```go
+func (receiver *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
+```
+
+[查看操作或完整契约](/api-reference/drafts/get-draft-attachment-preview)
+
+## GetImGroupAttachmentOperation
+
+```go
+func (receiver *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+```
+
+[查看操作或完整契约](/api-reference/attachments/get-im-group-attachment-operation)
+
+## ListDraftAttachments
+
+```go
+func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef) (m.Snapshot[m.DraftSnapshot], error)
+```
+
+[查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
+
+## ListResources
+
+```go
+func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
+```
+
+[查看操作或完整契约](/api-reference/resources/list-resources)
+
+## ListWorkspaces
+
+```go
+func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery) (m.Snapshot[m.WorkspacePage], error)
+```
+
+[查看操作或完整契约](/api-reference/workspaces/list)
+
+## ObserveConversationResources
+
+```go
+func (receiver *ResourceManager) ObserveConversationResources(ctx context.Context, r m.ConversationRef, o m.Observer[m.ResourceSelection]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/resources/observe-conversation-resources)
+
+## ObserveResources
+
+```go
+func (receiver *ResourceManager) ObserveResources(ctx context.Context, r m.ResourceQuery, o m.Observer[[]m.Resource]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/resources/observe-resources)
+
+## SetConversationResources
+
+```go
+func (receiver *ResourceManager) SetConversationResources(ctx context.Context, r m.ResourceRequest) (m.ResourceSelection, error)
+```
+
+[查看操作或完整契约](/api-reference/resources/set-conversation-resources)
+
+## StageAttachment
+
+```go
+func (receiver *ResourceManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
+```
+
+[查看操作或完整契约](/api-reference/attachments/stage)
+
+## StageDraftAttachment
+
+```go
+func (receiver *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
+```
+
+[查看操作或完整契约](/api-reference/drafts/stage-draft-attachment)

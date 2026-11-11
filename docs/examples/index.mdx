@@ -1,0 +1,59 @@
+---
+title: "代码示例"
+description: "从选择运行环境、发送任务和观察消息开始，再运行同版本的完整 Demo。"
+---
+
+以下 TypeScript 核心片段使用已初始化的同账号 Client、ctx 及用户选定的 runtimeId。浏览器使用原生 IndexedDB；Node 按 [JS 安装指南](/sdk-reference/js)先配置持久化。调用方管理 Context 超时、错误处理和 Client 关闭。
+
+## 1. 查询执行环境与智能体
+
+先显示 Runtime 目录，用户选定实际 `runtimeId` 后再加载其 Agent。保留投影状态，由界面判断目录是否可用，不自动选第一项。
+
+```ts TypeScript
+const runtimeManager = await client.buildRuntimeManager(ctx);
+const runtimes = await runtimeManager.listRuntimes(ctx);
+const agents = await client.buildAgentManager(ctx);
+const availableAgents = await agents.listAgents(ctx, { runtimeId });
+```
+
+**预期结果：** 返回目录数组及其 `projection`。投影未就绪或已过期时，空数组不足以证明用户没有权限。选定真实 Runtime/Agent 后运行[第一个任务](/getting-started/first-conversation)。
+
+## 2. 观察会话消息
+
+把每次回调作为一份分页快照交给界面，按 Message ID 对账；不要把整页消息重复追加。下面取得订阅句柄，页面离开时调用 `unsubscribe()`。`client`、`ctx`、真实 runtimeId / conversationId 已准备好；`render` 和 `showObservationError` 由界面提供。
+
+```ts TypeScript
+const conversations = await client.buildConversationManager(ctx);
+const subscription = await conversations.observeMessages(ctx, {
+  runtimeId, conversationId,
+}, {
+  onSnapshot: render,
+  onError: showObservationError,
+});
+
+// 页面离开时
+subscription.unsubscribe();
+```
+
+**预期结果：** 回调包含 `snapshot.data.items` 和 `snapshot.projection`。这里与上面目录数组的 `snapshot.data` 不同。当前 JS 发送流交付 Message/Turn 快照，不能假设它会推送逐 Token 的 `text.delta`。
+
+在发送之前建立观察，Context 覆盖整个订阅生命周期；所有退出路径先退订，再由应用关闭 Client。断线后重新观察同一会话；发送结果未知时按原请求身份查询，恢复流程见[实时展示](/guides/streaming)。
+
+## 3. 运行完整 Demo
+
+这些是同版本交付包中的真实示例源码，包含初始化、配置读取、执行与释放。**下方是源码阅读入口**；运行时需要完整交付包中的 SDK、依赖与原有目录结构。
+
+| 场景 | 源码 | 安装与运行 |
+|---|---|---|
+| Go：查询目录 | [main.go](/downloads/examples/go/main.go.txt) | [Go 指南](/sdk-reference/go) |
+| Go：建会、发送与等待终态 | [go-workflow/main.go](/downloads/examples/go-workflow/main.go.txt) | [Go 指南](/sdk-reference/go) |
+| Java：只读查询 / 完整任务 | [ReadOnlyExample](/downloads/examples/java/ReadOnlyExample.java.txt) · [WorkflowExample](/downloads/examples/java/WorkflowExample.java.txt) | [Java 指南](/sdk-reference/java) |
+| 浏览器 JS：初始化与只读查询 | [browser.html](/downloads/examples/js/browser.html.txt) | [JS 指南](/sdk-reference/js) |
+| Node：只读查询 / 完整任务 | [read-only.mjs](/downloads/examples/js/read-only.mjs.txt) · [workflow.mjs](/downloads/examples/js/workflow.mjs.txt) | [Node 持久化配置](/sdk-reference/js#node-持久化) |
+| CLI：创建会话、发送与检查结果 | [首次任务命令](/getting-started/first-conversation) | [CLI 指南](/sdk-reference/cli) |
+
+Go、Java 和 Node 的完整 workflow 默认显示帮助；按语言指南准备环境后，显式传 `--send` 才会真实创建会话并发送。它们不会自动重试未知结果。
+
+## 下一步
+
+[携带附件](/integration/03-attachments-and-interactions) · [处理审批和问答](/guides/interactions) · [核对 API 签名](/sdk-reference/index) · [排查错误](/support/troubleshooting)

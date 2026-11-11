@@ -1,0 +1,44 @@
+---
+title: "常见问题"
+description: "快速查找认证、Client、语言运行环境、执行状态与接口支持的答案。"
+---
+
+## Wuying SDK 只用于 Agent 吗？
+
+SDK 定位是无影对外集成能力的统一入口，面向资源操作、资源内操作系统操作与 Agent 集成。AI 云电脑是当前重点；整体演进方向与当前已交付能力分别说明，见 [SDK 简介](/index)。
+
+## 管理员和客户端用户态有什么区别？
+
+目前有两类权限：管理员使用 aliuid 维度的 AK/SK 权限；客户端用户态使用无影用户体系中当前用户的权限，支持 AuthCode 和 LoginToken 两种认证方式。服务端使用用户凭据代用户调用仍属于用户态。AK/SK 留在受信任后端。具体入口和语言差异见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## Client ID 可以代替身份凭据吗？
+
+Client ID 是接入方标识，不能代替 AK/SK、用户票据或资源授权。先取得平台提供的获授权配置，再按 [SDK Client](/getting-started/initialize-client)初始化。
+
+## 创建 Client 成功，为什么仍然查询失败？
+
+构造成功不代表在线认证与资源权限已通过。建立 Manager 并执行只读查询，检查当前身份、网络与投影状态。空目录在投影尚未就绪时，也不能直接判定没有权限。
+
+## Node 可以直接使用浏览器的初始化示例吗？
+
+浏览器有原生 IndexedDB，Node 需要先安装并配置交付示例所用的真实持久化 shim 与补丁。Go / Java 的 DataPath 是文件，Node 示例使用目录，不能混用。见 [Node 配置](/sdk-reference/js#node-持久化)。
+
+## SDK Reference 与 API Reference 有什么区别？
+
+[SDK Reference](/sdk-reference/index) 按语言查安装、签名、DTO 和 CLI 命令；[API Reference](/api-reference/index) 按领域模型查操作。当前领域操作通过 SDK 的公开方法调用。
+
+## accepted 表示任务完成了吗？
+
+它只表示消息已受理。执行结束需核对 Turn 终态，展示最终答案还需核对内容覆盖。参阅[发送消息](/api-reference/messages/send)与[读取最终展示](/api-reference/messages/presentation)。
+
+## 超时后可以换一个请求 ID 重发吗？
+
+结果未知时按原请求或 Turn 身份查询和恢复，避免重复提交。关闭本地等待不等于取消远端任务；取消需走[对应操作](/api-reference/turns/cancel)。
+
+## 有类型声明的方法就一定可以调用吗？
+
+还取决于当前语言版本、身份授权与环境能力。例如[通用资源绑定](/api-reference/resources/selection)当前仍不支持生产集成。按真实能力呈现操作，不能用内部接口绕过。
+
+## 去哪里排查问题？
+
+先查看[排障与支持](/support/troubleshooting)，提供包哈希、语言版本、发生阶段和必要的脱敏关联 ID。不要公开凭据、SDK 数据库或业务正文。

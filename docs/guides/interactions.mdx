@@ -1,0 +1,26 @@
+---
+title: "显示审批和问答并提交用户选择"
+description: "展示真实审批与问题，只提交用户明确选择的响应。"
+---
+
+目标：展示真实待处理项的完整内容，只向原交互提交用户明确选择的响应。前置条件是合法 ConversationRef、对应 Interaction 的最新身份和版本。
+
+## 获取并展示
+
+使用 ConversationManager 的 listInteractions/observeInteractions；刷新已有待处理项可用 refreshPendingInteractions。权限和问题属于同一个 Interaction 领域，但数据与响应不同。
+
+- kind=permission：读取当前公共 Interaction 返回的 title、interaction.options 和关联身份。必须用真实 optionId；显示文案不是提交值。固定公共 SDK 不承诺返回 demo 私有的命令/cwd/风险 displayDetails 或 metadata/context；只有同版本其他公开读取明确返回详情时才展示。
+- kind=question：读取 interaction.questions，逐题按 questionId 及单选/多选/文本约束收集答案。
+- 不要把本地 SDK 关联 ID 包装成业务详情；没有题目或选项时保留缺口并刷新，不猜默认允许；缺失的命令等详情也不能由 SDK ID 或私有字段伪造。
+
+Go/Java 的判别/DTO 形状按其公开类型读取，不能逐字复制 JS 字段路径。精确方法见 [SDK Reference](/sdk-reference/index)。
+
+## 提交与核对
+
+用户选择 → 保存当前 interactionId/writeVersion 与响应 → permission 调 respondPermission，question 调 respondQuestion → 核对 applied/pending 及最终状态。过期、跨端已处理或冲突时先刷新当前项，而不是重复提交。没有自动批准或自动重答步骤。
+
+CLI 安装后通过 interactions list 读取真实内容，再使用 interactions respond 的 --option 或 --answer-file（不能同时使用）；--expected-version 使用该项返回的版本。详见 [语言绑定](/domain-model/language-bindings)。
+
+## 遇到未知结果
+
+保留原交互/请求身份并核对 owner 的事实。普通错误中的 not_started 可能是默认值，不足以证明没有副作用；不要仅依据该值重答。见 [Interaction 生命周期](/domain-model/07-interaction) 和 [排障](/support/troubleshooting)。

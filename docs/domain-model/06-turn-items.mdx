@@ -1,0 +1,31 @@
+---
+title: "Turn"
+description: "Turn 表示一次执行轮次，是远端执行终态与取消结果的确认单位。"
+---
+
+Turn 表示一次执行轮次，是远端执行终态与取消结果的确认单位。
+
+## 模型与关联
+
+`MessageAccepted` 只表示请求已受理，返回真实 Message / Turn 关联；`Turn` 携带状态、messageIds 与版本。一个 Turn 可产生多条消息和多个内容项。
+
+子模块 [Item](/domain-model/item) 说明内容项，[Execution](/domain-model/execution) 说明执行入口和过程，[Interaction](/domain-model/07-interaction) 说明审批与问答。
+
+## 生命周期
+
+保存请求身份 → 提交并取得 accepted → 持续消费业务更新 → 处理交互 → 核对权威终态 → 查询最终展示。
+
+## 操作入口
+
+- [`sendMessage`](/api-reference/messages/send)
+- [`sendMessageStream`](/api-reference/messages/stream)
+- [`sendMessageAndWait`](/api-reference/messages/wait)
+- [`getTurn`](/api-reference/turns/get)
+- [`observeTurn`](/api-reference/turns/observe-turn)
+- [`cancelTurn`](/api-reference/turns/cancel)
+
+## 使用边界
+
+文本流结束或工具完成不等于 Turn completed。取消受理只表示已经请求；本地超时、退订或关闭 Client 不自动取消远端。MessageCompletion 成功返回也可能是 cancelled / interrupted，需检查真实 state。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

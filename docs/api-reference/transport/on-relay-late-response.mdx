@@ -1,0 +1,36 @@
+---
+title: "OnRelayLateResponse"
+sidebarTitle: "OnRelayLateResponse"
+description: "完整公开接口 · Transport"
+---
+
+`OnRelayLateResponse` · Transport
+
+公开方法的参数和返回值如下。使用前核对当前语言、认证模式、目标环境与能力。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Go | `github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnRelayLateResponse` | 已公开声明，需核对环境能力 |
+| Java | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+
+这是语言专属或高级宿主入口。按对应语言的身份、配置与生命周期合同接入；普通应用从根 Client 和 Manager 开始，不借此绕过资源授权。
+
+## 完整公开签名
+
+### Go · github.com/aliyun/wuying-sdk-go/transport/agmessage.Client
+
+```go
+func (receiver *Client) OnRelayLateResponse(handler func(*RelayResponse)) (func(), error)
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/10-projection-events) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

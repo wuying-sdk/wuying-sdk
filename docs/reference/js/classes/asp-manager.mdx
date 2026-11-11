@@ -1,0 +1,71 @@
+---
+title: "AspManager"
+sidebarTitle: "AspManager"
+description: "JavaScript / TypeScript 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## getAspStreamSession
+
+```ts
+getAspStreamSession(): AspStreamSession | null;
+```
+
+[查看操作或完整契约](/api-reference/asp/get-asp-stream-session)
+
+## startAspStream
+
+```ts
+startAspStream(context: ExecutionContext, req: StartAspStreamRequest): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/asp/start)
+
+## stopAspStream
+
+```ts
+stopAspStream(): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/asp/stop-asp-stream)
+
+## buildAspManager · static
+
+```ts
+buildAspManager(context: ExecutionContext, container: Container, ...opts: CallOption[]): Promise<AspManager | null>;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-354709a7a674c373)
+
+## constructor
+
+```ts
+new new (aspService: IAspService, container: Container): AspManager;
+```
+
+[查看操作或完整契约](/reference/js/public#entry-34f680af4f9a33bc)
+
+## getAspStreamSession
+
+```ts
+getAspStreamSession(): AspStreamSession | null;
+```
+
+[查看操作或完整契约](/api-reference/asp/get-asp-stream-session)
+
+## startAspStream
+
+```ts
+startAspStream(context: ExecutionContext, req: StartAspStreamRequest): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/asp/start)
+
+## stopAspStream
+
+```ts
+stopAspStream(): Promise<void>;
+```
+
+[查看操作或完整契约](/api-reference/asp/stop-asp-stream)

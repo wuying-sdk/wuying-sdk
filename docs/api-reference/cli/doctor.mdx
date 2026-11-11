@@ -1,0 +1,37 @@
+---
+title: "doctor"
+sidebarTitle: "doctor"
+description: "完整公开接口 · CLI"
+---
+
+`doctor` · CLI
+
+公开方法的参数和返回值如下。使用前核对当前语言、认证模式、目标环境与能力。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Go | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Java | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| CLI | `wuying doctor` | 已公开声明，需核对环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### CLI · doctor
+
+```sh
+wuying doctor
+optional --offline — Check SDK loading and persistent storage without network requests
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/language-bindings) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

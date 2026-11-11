@@ -1,0 +1,31 @@
+---
+title: "Skill"
+description: "Skill 描述云技能目录、安装状态、启停及对 Agent 的授权结果。"
+---
+
+Skill 描述云技能目录、安装状态、启停及对 Agent 的授权结果。
+
+## 模型与关联
+
+技能类型与安装结果由 SkillManager 的当前公开 DTO 返回。
+
+技能目录与会话能力不是同一事实；会话当前可用入口按 [Config](/domain-model/config) 和 composer capabilities 核对。
+
+## 生命周期
+
+查询分类与已安装项 → 核对权限和支持能力 → 选择安装、卸载或启停 → 查询真实结果；异步任务受理与完成分别确认。
+
+## 操作入口
+
+- [`listCategories`](/api-reference/skills/list-categories)
+- [`listInstalledSkills`](/api-reference/skills/installed)
+- [`setSkillEnabled`](/api-reference/skills/set-skill-enabled)
+- [`listAgentAuthedSkills`](/api-reference/skills/list-agent-authed-skills)
+- [`entInstallSkills`](/api-reference/skills/ent-install-skills)
+- [`entUninstallSkills`](/api-reference/skills/ent-uninstall-skills)
+
+## 使用边界
+
+云技能管理不等于宿主 MCP / ResourceSelection 选择器已经实现。只使用根 Client 的本语言公开 Manager，不导入内部服务；各语言制品与上游开放范围分别核对。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

@@ -1,0 +1,18 @@
+---
+title: "查看会话同步进度"
+description: "区分本地数据同步进度和 Agent 任务执行状态。"
+---
+
+群组承载的会话数据尚未同步完成时，可以通过 GroupSyncState 查看单组同步进度。它回答“消息数据同步到哪里了”，不回答“Agent 的任务完成了吗”。
+
+| 信息 | 用途 |
+|---|---|
+| `state` | 显示该组实际同步状态，例如 failed 或 revoked |
+| 目标、已接收、已应用序号 | 定位数据是否仍在传输或应用 |
+| `membershipGeneration` | 区分成员关系变化前后的同步代际 |
+
+通过 `listGroups`、`listGroupSyncStates` 查询，按能力使用 `syncGroup`、`syncConversation` 或 `onGroupSyncState`。这些是进阶同步接口，普通消息展示优先使用 observeMessages。
+
+一组同步完成不表示所有会话都已同步，也不表示 Turn 完成。不要把承载组的 groupId 代替业务 conversationId；序号按真实字符串保留。
+
+[完整类型与语言差异](/sdk-reference/index)

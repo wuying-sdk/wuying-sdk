@@ -1,0 +1,115 @@
+---
+title: "listAgentModels"
+sidebarTitle: "listAgentModels"
+description: "完整公开接口 · Agent"
+---
+
+`listAgentModels` · Agent
+
+使用同一 Runtime 下的真实 agentId；此目录不同于独立云 ModelConfig。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `AgentManager.listAgentModels` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.AgentManager.ListAgentModels` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.AgentManager.listAgentModels` | 已公开声明，需核对环境能力 |
+| CLI | `wuying models list` | 已公开声明，需核对环境能力 |
+| Android | [`Methods.agentListAgentModels`](/reference/android/models/agent#listagentmodels) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.agentListAgentModels`](/reference/ios/models/agent#listagentmodels) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · AgentManager
+
+```ts
+listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<(ModelSummary & AgentRef)[]>>;
+```
+
+### JavaScript / TypeScript · AgentManager
+
+```ts
+listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<ModelSummary[]>>;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go/manager.AgentManager
+
+```go
+func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+```
+
+### Java · com.aliyun.wuying.sdk.manager.AgentManager
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.ModelSummary>>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+### CLI · models
+
+```sh
+wuying models list
+required --runtime <id> — Explicit authorized Runtime ID
+required --agent <id> — Agent ID
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface Context {
+    signal?: AbortSignal;
+    timeout?: number;
+    traceId?: string;
+}
+
+interface AgentRef extends RuntimeRef {
+    agentId: string;
+}
+
+interface RuntimeRef {
+    runtimeId: string;
+}
+
+interface Snapshot<T> {
+    data: T;
+    projection: Projection;
+}
+
+interface ModelSummary extends ModelCapabilities {
+    modelId: string;
+    name: string;
+    available: boolean;
+    revision: Int64;
+    providerName?: string;
+    isDefault?: boolean;
+}
+
+interface ModelCapabilities {
+    groupName?: string;
+    sortOrder?: number;
+    description?: string;
+    features?: Record<string, boolean>;
+    thinking?: {
+        supported: boolean;
+        required?: boolean;
+        defaultValue?: string;
+        options: {
+            value: string;
+            label: string;
+        }[];
+    };
+    inputModalities?: string[];
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/agent) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

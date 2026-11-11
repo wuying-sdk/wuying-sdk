@@ -1,0 +1,63 @@
+<CodeGroup>
+
+```ts TypeScript
+const conversations = await client.buildConversationManager(ctx);
+const created = await conversations.createConversation(ctx, {
+  runtimeId, agentId, mode: 'single', name: '我的会话',
+});
+const result = await conversations.sendMessageAndWait(ctx, {
+  runtimeId, conversationId: created.conversationId,
+  text: '你好，请介绍一下你能做什么。', clientCommandId,
+});
+```
+
+```go Go
+manager, err := client.BuildConversationManager(ctx)
+if err != nil {
+	return err
+}
+created, err := manager.CreateConversation(ctx, model.CreateRequest{
+	RuntimeRef: model.RuntimeRef{RuntimeID: runtimeID},
+	AgentID: agentID, Mode: "single", Name: "我的会话",
+})
+if err != nil {
+	return err
+}
+result, err := manager.SendMessageAndWait(ctx, model.SendRequest{
+	ConversationRef: created.ConversationRef,
+	Text: "你好，请介绍一下你能做什么。", ClientCommandID: commandID,
+})
+if err != nil {
+	return err
+}
+```
+
+```java Java
+ConversationManager manager = client.buildConversationManager(ctx);
+CreateRequest create = new CreateRequest();
+create.runtimeId = runtimeId;
+create.agentId = agentId;
+create.mode = "single";
+create.name = "我的会话";
+
+CompletionStage<MessageCompletion> result = manager
+    .createConversation(create, ctx)
+    .thenCompose(created -> {
+        SendRequest send = new SendRequest();
+        send.runtimeId = runtimeId;
+        send.conversationId = created.conversationId;
+        send.text = "你好，请介绍一下你能做什么。";
+        send.clientCommandId = commandId;
+        return manager.sendMessageAndWait(send, ctx);
+    });
+```
+
+```sh CLI
+wuying conversations create \
+  --runtime RUNTIME_ID --agent AGENT_ID --name "我的会话"
+
+wuying run --runtime RUNTIME_ID --conversation CONVERSATION_ID \
+  --input-file ./task.txt --client-command-id STABLE_COMMAND_ID
+```
+
+</CodeGroup>

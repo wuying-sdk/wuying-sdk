@@ -1,0 +1,27 @@
+---
+title: "Credit"
+description: "Credit 提供当前身份下的云套餐、用量和相关趋势查询。"
+---
+
+Credit 提供当前身份下的云套餐、用量和相关趋势查询。
+
+## 模型与关联
+
+CreditManager 返回套餐关联实例、用量信息及其公开明细；字段与包装按本语言真实 DTO 读取。
+
+[Runtime](/domain-model/02-runtime-agent) 管理云实例；[Turn](/domain-model/06-turn-items) 描述业务执行终态，二者不能由用量结果反推。
+
+## 生命周期
+
+确定当前身份和查询范围 → 查询套餐或用量 → 按真实时间范围与返回项展示。
+
+## 操作入口
+
+- [`describeCreditPackageAgents`](/api-reference/credits/describe-credit-package-agents)
+- [`describeCreditUsageInfo`](/api-reference/credits/usage)
+
+## 使用边界
+
+用量可查询不授予创建资源或执行 Agent 的权限。套餐、积分与具体计费含义以当前产品接口返回为准，不根据名称推断价格或费用。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

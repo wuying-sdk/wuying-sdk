@@ -1,0 +1,19 @@
+// Install the supplied SDK tgz and indexeddbshim in this example directory.
+import {Client} from '@aliyun/wuying-sdk';
+import setGlobalVars from 'indexeddbshim';
+import {mkdirSync} from 'node:fs';
+import path from 'node:path';
+if(process.argv[2]!=='--live-read'){console.log('Use --live-read with host-supplied credentials, WUYING_CLIENT_ID and WUYING_DATA_PATH. Reads runtime count only.');process.exit(0);}
+const required=key=>{if(!process.env[key])throw Error('MISSING_CONFIGURATION');return process.env[key];};
+let client;
+try {
+ const directory=path.resolve(required('WUYING_DATA_PATH'));mkdirSync(directory,{recursive:true,mode:0o700});
+ const namespace={shimNS:true};setGlobalVars(namespace,{checkOrigin:false,databaseBasePath:directory+path.sep,sysDatabaseBasePath:directory+path.sep,addNonIDBGlobals:false,sqlBusyTimeout:5000});
+ namespace.shimIndexedDB.__useShim();
+ for(const name of ['indexedDB','IDBFactory','IDBKeyRange','IDBRequest','IDBOpenDBRequest','IDBDatabase','IDBObjectStore','IDBIndex','IDBTransaction','IDBCursor','IDBCursorWithValue','IDBVersionChangeEvent'])if(namespace[name])Object.defineProperty(globalThis,name,{value:namespace[name],configurable:true});
+ const options=process.env.WUYING_AUTH_CODE?{authCode:process.env.WUYING_AUTH_CODE}:{loginToken:required('WUYING_LOGIN_TOKEN'),sessionId:required('WUYING_SESSION_ID'),endUserId:required('WUYING_END_USER_ID')};
+ if(process.env.WUYING_LOGIN_REGION_ID)options.loginRegionId=process.env.WUYING_LOGIN_REGION_ID;
+ client=Client.create(options,{clientId:required('WUYING_CLIENT_ID'),logger:{info(){},warn(){},error(){},debug(){}}});
+ const ctx={timeout:60000},runtimesAPI=await client.buildRuntimeManager(ctx),result=await runtimesAPI.listRuntimes(ctx);
+ console.log(JSON.stringify({count:result.data.length,phase:result.projection.phase,coverage:result.projection.coverage}));
+}catch{console.error('SDK read failed; verify host configuration, authorization and network. No raw error or credential is logged.');process.exitCode=1;}finally{await client?.close();}

@@ -1,0 +1,78 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	wuying "github.com/aliyun/wuying-sdk-go"
+	"github.com/aliyun/wuying-sdk-go/config"
+	"github.com/aliyun/wuying-sdk-go/model"
+	"io"
+	"os"
+	"time"
+)
+
+func run() error {
+	settings := map[string]string{}
+	for _, key := range []string{"WUYING_CLIENT_ID", "WUYING_DATA_PATH", "WUYING_RUNTIME_ID", "WUYING_AGENT_ID", "WUYING_CREATE_ID", "WUYING_COMMAND_ID", "WUYING_INPUT_FILE"} {
+		settings[key] = os.Getenv(key)
+		if settings[key] == "" {
+			return fmt.Errorf("missing %s", key)
+		}
+	}
+	input, err := os.ReadFile(settings["WUYING_INPUT_FILE"])
+	if err != nil {
+		return err
+	}
+
+	client, err := wuying.NewClient(wuying.ClientOptions{AuthCode: os.Getenv("WUYING_AUTH_CODE"), LoginToken: os.Getenv("WUYING_LOGIN_TOKEN"), SessionID: os.Getenv("WUYING_SESSION_ID"), EndUserID: os.Getenv("WUYING_END_USER_ID"), LoginRegionID: os.Getenv("WUYING_LOGIN_REGION_ID")}, &config.UserConfig{ClientID: settings["WUYING_CLIENT_ID"], DataPath: settings["WUYING_DATA_PATH"], Logger: config.DiscardLogger})
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+	defer cancel()
+	manager, err := client.BuildConversationManager(ctx)
+	if err != nil {
+		return err
+	}
+	runtime, agent, mutation, command := settings["WUYING_RUNTIME_ID"], settings["WUYING_AGENT_ID"], settings["WUYING_CREATE_ID"], settings["WUYING_COMMAND_ID"]
+	fmt.Printf("createMutationId=%s commandId=%s\n", mutation, command)
+	created, err := manager.CreateConversation(ctx, model.CreateRequest{RuntimeRef: model.RuntimeRef{RuntimeID: runtime}, AgentID: agent, Name: "Customer SDK workflow", Mode: "single"}, model.MutationOptions{MutationID: mutation})
+	if err != nil {
+		return err
+	}
+	fmt.Printf("conversationId=%s\n", created.ConversationID)
+	stream := manager.SendMessageStream(ctx, model.SendRequest{ConversationRef: created.ConversationRef, Text: string(input), ClientCommandID: command})
+	defer stream.Close()
+	accepted, err := stream.Accepted(ctx)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("turnId=%s\n", accepted.TurnID)
+	for {
+		update, err := stream.Next(ctx)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
+		fmt.Printf("updateKind=%s\n", update.Kind)
+	}
+	turn, err := stream.Result(ctx)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("terminalState=%s\n", turn.State)
+	return nil
+}
+func main() {
+	if len(os.Args) != 2 || os.Args[1] != "--send" {
+		fmt.Println("Default: no network or writes. --send requires host credentials, CLIENT_ID/DATA_PATH, RUNTIME_ID/AGENT_ID, CREATE_ID/COMMAND_ID, INPUT_FILE (WUYING_ prefix). Creates one conversation and sends one task; never automatically retries.")
+		return
+	}
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, "Workflow failed or outcome unknown; inspect original mutation/command/Turn before retrying.")
+		os.Exit(1)
+	}
+}

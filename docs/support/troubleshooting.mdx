@@ -1,0 +1,28 @@
+---
+title: "排障与支持"
+description: "从身份、运行环境、同步覆盖和稳定请求身份定位问题。"
+---
+
+先记录当前包 manifest/源码 SHA、语言版本、OS/CPU，再判断问题发生在哪一阶段。不同 npm/Maven 版本号相同的本地构建仍可能不是同一制品。
+
+| 现象 | 先检查 | 安全的下一步 |
+|---|---|---|
+| Java 找不到类 | SDK jar 与 lib/* 是否同时在 classpath；Windows 分号/POSIX 冒号 | 重新按本语言指南编译/运行 --help |
+| Node IndexedDB 或 SQLite 初始化失败 | 是否先装示例依赖并执行 patch-idb；是否跨平台复制 node_modules | 在目标机重装依赖，使用私有可写数据目录 |
+| Go module 找不到 | replace 是否指向实际 SDK module，而非 demo Host | 按本地源码安装方式修正；未发布的 tag 不能 go get |
+| 登录后环境为空 | 认证身份、Client ID、查询投影与授权范围 | 投影 partial/stale 时先等就绪，不能直接认定无环境 |
+| Agent 只有 ID 没名称/图标 | 同 Runtime 的 Agent 目录是否完整、身份是否匹配 | 保留未知/加载状态，不根据前缀强行认领主 Agent |
+| 一条消息出现重复卡片 | 是否把消息快照当增量 append，或重试生成新 commandId | 按稳定 ID 对账；核对真实轮次，保留原请求身份 |
+| 已处理但看不到最终答案/产物 | Turn 状态与展示/文件覆盖范围是否各自完整 | 精确读取 MessagePresentation/文件访问能力，不解析任意本地路径为产物 |
+| 问答/审批冲突或版本过期 | 是否已跨端处理、expectedVersion 是否当前、归属是否正确 | 刷新该 Interaction；不移除版本/owner 检查 |
+| 发送或审批等待超时 | 是否已取得 accepted/原请求身份 | 查询原 Turn/Interaction；不换 ID 自动重试 |
+| PROFILE_BUSY/库占用 | 是否多进程共用同一 SDK 数据位置 | 先正常关闭持有者，不删锁并行写同一库 |
+| 返回 UNSUPPORTED | 当前 SDK、语言和远端 capability 是否实际提供 | 关闭该调用路径，保留明确提示，不调用内部私有方法绕过 |
+
+## 提供支持信息
+
+提供包哈希、SDK 源码 SHA、语言/系统版本、发生阶段、时间和必要的 runtimeId/conversationId/turnId/interactionId（按客户权限脱敏）。不要公开 AuthCode、AK/SK、token、SDK 数据库、Prompt、工具参数、附件或完整业务 stdout。
+
+一般接入问题可通过 [GitHub 项目入口](https://github.com/wuying-sdk/wuying-sdk) 联系维护方。私密安全报告渠道尚待确认，请沿当前交付渠道联系维护团队，不在公开 Issue 提交漏洞细节。
+
+[错误与恢复语义](/domain-model/12-errors-examples) · [运维/升级指南](/integration/04-errors-and-operations) · [API 参考](/sdk-reference/index)

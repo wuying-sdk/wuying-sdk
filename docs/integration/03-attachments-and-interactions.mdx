@@ -1,0 +1,45 @@
+---
+title: "附件、审批、问答、工作空间与产物"
+description: "附件、审批、问答、工作空间与产物：职责、模型关联、生命周期、公开操作与使用边界。"
+---
+
+## 附件的生命周期
+
+选择文件 → 校验本地可读和产品大小/类型限制 → ResourceManager.stageAttachment → 收到 attachmentId → 在同一 Conversation 的 SendRequest.attachmentIds 中引用 → 观察真实消息与远端执行。尚未提交的附件需要丢弃时用 discardAttachment，不直接修改 SDK 存储。
+
+| 步骤 | 验收点 |
+|---|---|
+| stage | 用真实文件字节及名称；不是只发送本地路径字符串 |
+| 引用 | attachmentId 必须属于正确 runtimeId/conversationId 与当前授权 |
+| 失败 | 上传已产生副作用而消息未受理时，不把整项操作误报成无副作用失败 |
+| 访问 | getAttachmentAccess 按 preview/download 目的获取短期 URL；过期重新申请，不长期缓存令牌 URL |
+| 取消 | 区分本地取消、丢弃暂存附件和取消远端 Turn |
+
+JS 的 stage 文件为 Blob；Go / Java 使用各自的 StageAttachmentRequest，实际字段由本语言 API 参考给出，不机械套用 JS File。CLI 的 --attach 会先执行暂存，再发送 attachmentIds；原始 CLI 文档列出本版本的数量/大小上限，不能推断为所有 SDK 的统一产品上限。
+
+## 审批和问答的正确接线
+
+1. 使用 observeInteractions 观察待处理项，恢复后必要时 refreshPendingInteractions。
+2. 按真实 Interaction.kind 展示 permission / question，不从工具名称猜类型。
+3. 保留当前 interactionId、writeVersion、owner 与选项 ID；按公开详情展示参数、权限/风险、作用范围等可用信息。
+4. 用户明确选择后，permission 调 respondPermission，question 调 respondQuestion。
+5. expectedVersion 来自当前写版本，optionId 是真实选项 ID，不能用“允许一次”等翻译字符串代替。
+6. 只有确认已应用的回执才能显示提交成功；后续继续观察 owner 状态。
+
+问答的单选、多选、自由输入、题目 ID 和其他输入结构由当前 Interaction schema 决定。不要把所有答案固定为一个字符串数组，也不要把整份 Java/Go对象的 toString 当作答案 JSON。
+
+冲突/过期先刷新并核对；unknown 不自动重答；仅有写前预检或 owner 明确的未提交/无副作用证明，才能把拒绝视为未执行；普通 SDK 错误里的 not_started 可能是默认值，应先按稳定 ID 核对。即使已证明未提交，也须重新核对权限与当前写版本后才可明确重试。CLI 在新进程提交时会重新恢复本地必要上下文；不能假设前一个进程的 refresh 给新进程建立了完整提交状态。
+
+## 工作空间与文件
+
+公开 SDK 中 listWorkspaces/createWorkspace 等目录对象与“任意远程文件系统访问”不同。云文件空间 / 知识库 HTTP API、会话附件、消息产物、Gateway 文件树，各有不同来源、授权和能力，不能拿一个目录 ID/URL 冒充另一个。
+
+本包交付的是公开 SDK。AgentShell demo 的文件树、预览、产物保存可能依赖其固定 SDK 兼容扩展；不得把 demo 的私有方法名直接写入客户接入代码。先查看本语言实际 API 参考和当前 Capability：只有公开方法及远端明确提供时才开放入口；不支持时如实返回 UNSUPPORTED，不隐藏失败或伪造空列表。
+
+## 产物的展示与访问
+
+最终消息展示中有真实附件/文件摘要时，根据公开返回的来源、名称、能力和短期访问方式渲染。不要扫描任意 Markdown 本地路径就生成可下载产物，也不要认为 Agent 回复“已生成”就证明字节可访问。下载时核对真实访问结果；失效、已删除、无权限要显示对应状态，不伪造成功。
+
+## 建议验收顺序
+
+先用无敏感信息的小文本和图片，确认暂存、发送、Agent读取与访问；再测试失败/取消/过期。审批先测无副作用动作的允许一次与拒绝；会话/永久许可仅在测试负责人授权范围内执行。最后测问答多题、跨端已回答后的刷新、产物失效与工作空间权限拒绝。默认离线示例不执行以上真实动作。

@@ -1,0 +1,18 @@
+---
+title: "升级与迁移"
+description: "保留无影领域模型，按实际公开入口、同版本声明和存储合同完成升级。"
+---
+
+Client、Runtime / Agent、Conversation、Message、Turn 与 Interaction 的领域划分不变。语言绑定的公开入口和支持能力，以实际安装的同版本包、类型和 API 参考为准。
+
+## 升级前
+
+- 固定 SDK 源码基线与制品哈希，核对对应 Go 公共包、Java Javadoc、JS 声明或 CLI 帮助。
+- 先在隔离测试账号和独立数据位置验证新版本，正常关闭旧进程后切换。
+- 核对存储升级与回滚合同；旧程序不一定能读取新版本数据库，不以默认删库消除未知写入。
+
+## 公开入口
+
+JS 使用 `@aliyun/wuying-sdk` 根 Client；历史 Session、SingleAgent 或旧 IM / 私有子路径不因升级包重新成为公开入口。Go / Java 的参数顺序、上下文与生命周期也应按本语言指南迁移，不机械翻译 JS 对象。
+
+完整恢复规则见[错误与恢复](/domain-model/12-errors-examples)。涉及某一交付版本的迁移材料，以维护团队随包提供的对应版本文件为准。

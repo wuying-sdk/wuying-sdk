@@ -1,0 +1,30 @@
+---
+title: "Member"
+description: "Member 表示一个 Conversation 内的参与身份，描述谁在该会话中以什么角色参与。"
+---
+
+Member 表示一个 Conversation 内的参与身份，描述谁在该会话中以什么角色参与。
+
+## 模型与关联
+
+`Member` 关联 memberId、Actor、角色、状态及写版本。`Actor` 区分 user / agent / system / unresolved；`Sender` 描述消息来源。
+
+[Agent](/domain-model/agent) 是运行入口，同一个 Agent 可参与不同会话。`MemberConfigurationView` 描述成员级模型与职责覆盖；全会话配置另见 [Config](/domain-model/config)。
+
+## 生命周期
+
+查询成员 → 显示真实角色和状态 → 用户选择变更 → 带当前写版本提交 → 读回或观察应用结果。
+
+## 操作入口
+
+- [`listMembers`](/api-reference/members/list)
+- [`observeMembers`](/api-reference/members/observe-members)
+- [`addMember`](/api-reference/members/add)
+- [`updateMember`](/api-reference/members/update)
+- [`removeMember`](/api-reference/members/remove)
+
+## 使用边界
+
+移除、静音与挂起不同；迟到快照不能自动恢复已移除成员。mentions / targetMemberId 使用真实 Member 身份，不能填 Agent 名称。未知来源保持 unresolved，不冒充当前用户。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

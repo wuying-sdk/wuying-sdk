@@ -1,0 +1,1007 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Wuying SDK",
+  "description": "无影对外集成能力的统一入口，面向资源管理、资源内操作系统操作与 Agent 集成。",
+  "colors": {
+    "primary": "#EA580C",
+    "light": "#FB923C",
+    "dark": "#C2410C"
+  },
+  "favicon": "/assets/favicon.svg",
+  "logo": {
+    "light": "/assets/logo-light.svg",
+    "dark": "/assets/logo-dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/wuying-sdk/wuying-sdk"
+      }
+    ]
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Docs",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "开始使用",
+            "pages": [
+              "index",
+              "integration/01-auth-and-lifecycle",
+              "getting-started/initialize-client",
+              {
+                "group": "快速开始",
+                "pages": [
+                  "getting-started/overview",
+                  "getting-started/first-conversation"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "领域模型",
+            "pages": [
+              "domain-model/00-overview",
+              "domain-model/01-client",
+              {
+                "group": "云资源",
+                "pages": [
+                  "domain-model/02-runtime-agent",
+                  "domain-model/asp",
+                  "domain-model/port-service"
+                ]
+              },
+              {
+                "group": "AI 能力",
+                "pages": [
+                  "domain-model/agent",
+                  {
+                    "group": "会话",
+                    "pages": [
+                      "domain-model/03-conversation",
+                      "domain-model/04-member-config",
+                      "domain-model/config",
+                      {
+                        "group": "消息",
+                        "pages": [
+                          "domain-model/05-message",
+                          "domain-model/message-presentation"
+                        ]
+                      },
+                      {
+                        "group": "执行轮次",
+                        "pages": [
+                          "domain-model/06-turn-items",
+                          "domain-model/item",
+                          "domain-model/execution",
+                          "domain-model/07-interaction"
+                        ]
+                      }
+                    ]
+                  },
+                  "domain-model/11-cloud-capabilities",
+                  "domain-model/model",
+                  {
+                    "group": "资源",
+                    "pages": [
+                      "domain-model/08-resource-attachment",
+                      {
+                        "group": "附件",
+                        "pages": [
+                          "domain-model/attachment",
+                          "domain-model/draft"
+                        ]
+                      },
+                      "domain-model/09-workspace-files",
+                      "domain-model/message-cloud-file"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "存储能力",
+                "pages": [
+                  {
+                    "group": "云盘",
+                    "pages": [
+                      "domain-model/wy-drive",
+                      "domain-model/wy-drive-file"
+                    ]
+                  },
+                  {
+                    "group": "知识库",
+                    "pages": [
+                      "domain-model/knowledge-space",
+                      "domain-model/knowledge-file"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "计量",
+                "pages": [
+                  "domain-model/credit"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Guides",
+        "icon": "lightbulb",
+        "groups": [
+          {
+            "group": "任务指南",
+            "pages": [
+              "guides/index",
+              "guides/cli-skills",
+              "integration/02-conversations-and-streams",
+              "guides/streaming",
+              "integration/03-attachments-and-interactions",
+              "guides/interactions",
+              "integration/04-errors-and-operations"
+            ]
+          },
+          {
+            "group": "读取结果与实时更新",
+            "pages": [
+              "domain-model/10-projection-events",
+              "domain-model/projection",
+              "domain-model/page",
+              "domain-model/subscription",
+              "domain-model/stream-chunk",
+              "domain-model/group-sync-state"
+            ]
+          },
+          {
+            "group": "失败与恢复",
+            "pages": [
+              "domain-model/mutation",
+              "domain-model/command-receipt",
+              "domain-model/12-errors-examples"
+            ]
+          },
+          {
+            "group": "示例",
+            "pages": [
+              "examples/index"
+            ]
+          },
+          {
+            "group": "验证与排障",
+            "pages": [
+              "support/validation",
+              "support/troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "SDK Reference",
+        "icon": "brackets-curly",
+        "dropdowns": [
+          {
+            "dropdown": "SDK (JavaScript / TypeScript)",
+            "icon": "js",
+            "groups": [
+              {
+                "group": "开始",
+                "pages": [
+                  "sdk-reference/index",
+                  "sdk-reference/js",
+                  "domain-model/language-bindings"
+                ]
+              },
+              {
+                "group": "接口与类型",
+                "pages": [
+                  "reference/js/classes/agent-manager",
+                  "reference/js/classes/asp-manager",
+                  "reference/js/classes/client",
+                  "reference/js/classes/cloud-client",
+                  "reference/js/classes/conversation-manager",
+                  "reference/js/classes/credit-manager",
+                  "reference/js/classes/functions",
+                  "reference/js/classes/message-stream",
+                  "reference/js/classes/model-manager",
+                  "reference/js/classes/resource-manager",
+                  "reference/js/classes/runtime-manager",
+                  "reference/js/classes/skill-manager",
+                  "reference/js/classes/subscription"
+                ]
+              },
+              {
+                "group": "完整契约",
+                "pages": [
+                  "reference/js/public",
+                  "reference/js/api",
+                  "reference/js/types"
+                ]
+              }
+            ]
+          },
+          {
+            "dropdown": "SDK (Go)",
+            "icon": "golang",
+            "groups": [
+              {
+                "group": "开始",
+                "pages": [
+                  "sdk-reference/go"
+                ]
+              },
+              {
+                "group": "接口与类型",
+                "pages": [
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-client",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-agent-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-conversation-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-credit-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-model-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-resource-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-runtime-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-skill-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile-client",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile-operation",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-model-message-stream",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-model-subscription",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-transport-agmessage-client"
+                ]
+              },
+              {
+                "group": "完整契约",
+                "pages": [
+                  "reference/go/public",
+                  "reference/go/api"
+                ]
+              }
+            ]
+          },
+          {
+            "dropdown": "SDK (Java)",
+            "icon": "java",
+            "groups": [
+              {
+                "group": "开始",
+                "pages": [
+                  "sdk-reference/java"
+                ]
+              },
+              {
+                "group": "接口与类型",
+                "pages": [
+                  "reference/java/classes/com-aliyun-wuying-sdk-auth-api",
+                  "reference/java/classes/com-aliyun-wuying-sdk-cloud-client",
+                  "reference/java/classes/com-aliyun-wuying-sdk-wuying-client",
+                  "reference/java/classes/com-aliyun-wuying-sdk-admin-admin-im-client",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-agent-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-conversation-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-credit-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-model-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-resource-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-runtime-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-skill-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-model-message-stream",
+                  "reference/java/classes/com-aliyun-wuying-sdk-model-subscription",
+                  "reference/java/classes/com-aliyun-wuying-sdk-transport-ag-message-client",
+                  "reference/java/classes/com-aliyun-wuying-sdk-transport-sqlite-transport-store"
+                ]
+              },
+              {
+                "group": "完整契约",
+                "pages": [
+                  "reference/java/public",
+                  "reference/java/api"
+                ]
+              }
+            ]
+          },
+          {
+            "dropdown": "SDK (Android)",
+            "icon": "android",
+            "groups": [
+              {
+                "group": "开始",
+                "pages": [
+                  "sdk-reference/android",
+                  "reference/android/client"
+                ]
+              },
+              {
+                "group": "模型与方法",
+                "pages": [
+                  "reference/android/models/agent",
+                  "reference/android/models/conversation",
+                  "reference/android/models/credit",
+                  "reference/android/models/model",
+                  "reference/android/models/resource",
+                  "reference/android/models/runtime",
+                  "reference/android/models/skill"
+                ]
+              },
+              {
+                "group": "完整契约",
+                "pages": [
+                  "reference/android/public",
+                  "reference/mobile/contract"
+                ]
+              }
+            ]
+          },
+          {
+            "dropdown": "SDK (iOS)",
+            "icon": "apple",
+            "groups": [
+              {
+                "group": "开始",
+                "pages": [
+                  "sdk-reference/ios",
+                  "reference/ios/client"
+                ]
+              },
+              {
+                "group": "模型与方法",
+                "pages": [
+                  "reference/ios/models/agent",
+                  "reference/ios/models/conversation",
+                  "reference/ios/models/credit",
+                  "reference/ios/models/model",
+                  "reference/ios/models/resource",
+                  "reference/ios/models/runtime",
+                  "reference/ios/models/skill"
+                ]
+              },
+              {
+                "group": "完整契约",
+                "pages": [
+                  "reference/ios/public"
+                ]
+              }
+            ]
+          },
+          {
+            "dropdown": "CLI",
+            "icon": "terminal",
+            "groups": [
+              {
+                "group": "开始",
+                "pages": [
+                  "sdk-reference/cli",
+                  "guides/cli-skills"
+                ]
+              },
+              {
+                "group": "命令",
+                "pages": [
+                  "reference/cli/classes/agents",
+                  "reference/cli/classes/auth",
+                  "reference/cli/classes/codex",
+                  "reference/cli/classes/conversations",
+                  "reference/cli/classes/desktops",
+                  "reference/cli/classes/doctor",
+                  "reference/cli/classes/interactions",
+                  "reference/cli/classes/messages",
+                  "reference/cli/classes/models",
+                  "reference/cli/classes/run",
+                  "reference/cli/classes/runtimes",
+                  "reference/cli/classes/turns"
+                ]
+              },
+              {
+                "group": "完整契约",
+                "pages": [
+                  "reference/cli/public",
+                  "reference/cli/commands"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "icon": "code",
+        "groups": [
+          {
+            "group": "开始",
+            "pages": [
+              "api-reference/index",
+              "api-reference/coverage/index"
+            ]
+          },
+          {
+            "group": "公共入口",
+            "pages": [
+              {
+                "group": "Client",
+                "pages": [
+                  "api-reference/client/create",
+                  "api-reference/client/build-agent-manager",
+                  "api-reference/client/build-conversation-manager",
+                  "api-reference/client/build-credit-manager",
+                  "api-reference/client/build-model-manager",
+                  "api-reference/client/build-resource-manager",
+                  "api-reference/client/build-runtime-manager",
+                  "api-reference/client/build-skill-manager",
+                  "api-reference/client/close",
+                  "api-reference/client/get-auth-code",
+                  "api-reference/client/get-imcredentials",
+                  "api-reference/client/logout",
+                  "api-reference/client/on-stream-event",
+                  "api-reference/client/refresh-login",
+                  "api-reference/client/update-login-credentials"
+                ]
+              },
+              {
+                "group": "Admin",
+                "pages": [
+                  "api-reference/admin/close",
+                  "api-reference/admin/export-history",
+                  "api-reference/admin/get-group",
+                  "api-reference/admin/list-authorized-users",
+                  "api-reference/admin/list-groups",
+                  "api-reference/admin/publish-durable",
+                  "api-reference/admin/subscribe-group",
+                  "api-reference/admin/unsubscribe-group"
+                ]
+              },
+              {
+                "group": "Auth",
+                "pages": [
+                  "api-reference/auth/get-auth-code"
+                ]
+              },
+              {
+                "group": "CloudClient",
+                "pages": [
+                  "api-reference/cloud-api/close",
+                  "api-reference/cloud-api/do-rpc"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "云资源",
+            "pages": [
+              {
+                "group": "Runtime",
+                "pages": [
+                  "api-reference/client/create-desktops",
+                  "api-reference/client/delete",
+                  "api-reference/client/reboot",
+                  "api-reference/client/reset",
+                  "api-reference/client/start",
+                  "api-reference/client/stop",
+                  "api-reference/client/wait",
+                  "api-reference/runtimes/approve-fota-update",
+                  "api-reference/runtimes/capabilities",
+                  "api-reference/runtimes/list",
+                  "api-reference/runtimes/observe",
+                  "api-reference/runtimes/update-agent-instance"
+                ]
+              },
+              {
+                "group": "ASP",
+                "pages": [
+                  "api-reference/asp/get-asp-stream-session",
+                  "api-reference/asp/start",
+                  "api-reference/asp/stop-asp-stream"
+                ]
+              },
+              {
+                "group": "端口服务",
+                "pages": [
+                  "api-reference/runtimes/generate-scene-url"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "AI 能力",
+            "pages": [
+              {
+                "group": "Agent",
+                "pages": [
+                  "api-reference/agents/get-agent-model-catalog",
+                  "api-reference/agents/get-expert-directory",
+                  "api-reference/agents/list",
+                  "api-reference/agents/list-agent-products",
+                  "api-reference/agents/list-experts",
+                  "api-reference/agents/models",
+                  "api-reference/agents/observe-agents"
+                ]
+              },
+              {
+                "group": "Conversation",
+                "pages": [
+                  "api-reference/conversations/archive",
+                  "api-reference/conversations/create",
+                  "api-reference/conversations/get",
+                  "api-reference/conversations/get-authorized-group",
+                  "api-reference/conversations/get-conversation-header-metadata",
+                  "api-reference/conversations/get-conversation-summary",
+                  "api-reference/conversations/list",
+                  "api-reference/conversations/list-authorized-groups",
+                  "api-reference/conversations/list-authorized-users",
+                  "api-reference/conversations/list-conversation-groups",
+                  "api-reference/conversations/list-recent-groups",
+                  "api-reference/conversations/list-sidebar-conversations",
+                  "api-reference/conversations/observe-conversation",
+                  "api-reference/conversations/observe-conversation-groups",
+                  "api-reference/conversations/observe-conversation-summary",
+                  "api-reference/conversations/observe-conversations",
+                  "api-reference/conversations/observe-sidebar-conversations",
+                  "api-reference/conversations/rename",
+                  "api-reference/conversations/set-conversation-pinned",
+                  "api-reference/conversations/subscribe-group",
+                  "api-reference/conversations/unarchive-conversation",
+                  "api-reference/conversations/unsubscribe-group"
+                ]
+              },
+              {
+                "group": "Member",
+                "pages": [
+                  "api-reference/members/add",
+                  "api-reference/members/get-member-snapshot",
+                  "api-reference/members/list",
+                  "api-reference/members/list-member-candidates",
+                  "api-reference/members/observe-members",
+                  "api-reference/members/remove",
+                  "api-reference/members/update"
+                ]
+              },
+              {
+                "group": "Config",
+                "pages": [
+                  "api-reference/configuration/get",
+                  "api-reference/configuration/get-composer-capabilities",
+                  "api-reference/configuration/observe-conversation-config",
+                  "api-reference/configuration/set-conversation-config-option",
+                  "api-reference/configuration/update"
+                ]
+              },
+              {
+                "group": "Message",
+                "pages": [
+                  "api-reference/messages/detail",
+                  "api-reference/messages/export-group-history",
+                  "api-reference/messages/get-message-files",
+                  "api-reference/messages/list",
+                  "api-reference/messages/list-conversation-history",
+                  "api-reference/messages/observe",
+                  "api-reference/messages/observe-conversation-history",
+                  "api-reference/messages/presentation",
+                  "api-reference/messages/publish-group-message",
+                  "api-reference/messages/resolve-conversation-read",
+                  "api-reference/messages/send",
+                  "api-reference/messages/stream",
+                  "api-reference/messages/wait"
+                ]
+              },
+              {
+                "group": "Turn",
+                "pages": [
+                  "api-reference/turns/cancel",
+                  "api-reference/turns/get",
+                  "api-reference/turns/observe-turn",
+                  "api-reference/turns/steer-turn"
+                ]
+              },
+              {
+                "group": "Execution",
+                "pages": [
+                  "api-reference/executions/cancel-execution",
+                  "api-reference/executions/list-active-executions",
+                  "api-reference/executions/list-execution-activity",
+                  "api-reference/executions/observe-active-executions",
+                  "api-reference/executions/observe-execution-activity",
+                  "api-reference/executions/observe-live-process"
+                ]
+              },
+              {
+                "group": "Interaction",
+                "pages": [
+                  "api-reference/interactions/list",
+                  "api-reference/interactions/observe-interactions",
+                  "api-reference/interactions/permission",
+                  "api-reference/interactions/question",
+                  "api-reference/interactions/refresh-pending-interactions",
+                  "api-reference/receipts/get-question-response-receipt"
+                ]
+              },
+              {
+                "group": "Skill",
+                "pages": [
+                  "api-reference/skills/ent-install-skills",
+                  "api-reference/skills/ent-uninstall-skills",
+                  "api-reference/skills/installed",
+                  "api-reference/skills/list-agent-authed-skills",
+                  "api-reference/skills/list-categories",
+                  "api-reference/skills/set-skill-enabled"
+                ]
+              },
+              {
+                "group": "Model",
+                "pages": [
+                  "api-reference/models/get",
+                  "api-reference/models/set-channel-group-model"
+                ]
+              },
+              {
+                "group": "Resource",
+                "pages": [
+                  "api-reference/resources/selection",
+                  "api-reference/resources/get-conversation-resources",
+                  "api-reference/resources/list-resources",
+                  "api-reference/resources/observe-conversation-resources",
+                  "api-reference/resources/observe-resources",
+                  "api-reference/resources/set-conversation-resources"
+                ]
+              },
+              {
+                "group": "Attachment",
+                "pages": [
+                  "api-reference/attachments/access",
+                  "api-reference/attachments/attach-im-group-file",
+                  "api-reference/attachments/discard",
+                  "api-reference/attachments/get-im-group-attachment-operation",
+                  "api-reference/attachments/prepare-conversation-attachment-target",
+                  "api-reference/attachments/stage"
+                ]
+              },
+              {
+                "group": "DraftAttachment",
+                "pages": [
+                  "api-reference/drafts/commit-draft-attachments",
+                  "api-reference/drafts/discard-draft-attachments",
+                  "api-reference/drafts/get-draft-attachment-preview",
+                  "api-reference/drafts/list-draft-attachments",
+                  "api-reference/drafts/stage-draft-attachment"
+                ]
+              },
+              {
+                "group": "Workspace",
+                "pages": [
+                  "api-reference/workspaces/create",
+                  "api-reference/workspaces/get-conversation-storage-context",
+                  "api-reference/workspaces/list"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "存储能力",
+            "pages": [
+              {
+                "group": "WyDrive",
+                "pages": [
+                  "api-reference/files/describe-wy-drives"
+                ]
+              },
+              {
+                "group": "WyDriveFile",
+                "pages": [
+                  "api-reference/files/delete-wy-drive-file",
+                  "api-reference/files/describe-wy-drive-files",
+                  "api-reference/files/get-download-url"
+                ]
+              },
+              {
+                "group": "KnowledgeSpace",
+                "pages": [
+                  "api-reference/knowledge/list-agent-knowledge-spaces"
+                ]
+              },
+              {
+                "group": "KnowledgeFile",
+                "pages": [
+                  "api-reference/knowledge/download-knowledge-files",
+                  "api-reference/knowledge/list-knowledge-files"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "计量",
+            "pages": [
+              {
+                "group": "Credit",
+                "pages": [
+                  "api-reference/credits/describe-credit-package-agents",
+                  "api-reference/credits/usage",
+                  "api-reference/runtimes/describe-credit-package-agents",
+                  "api-reference/runtimes/describe-credit-usage-info"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "集成辅助接口",
+            "pages": [
+              {
+                "group": "CLI",
+                "pages": [
+                  "api-reference/cli/auth-import",
+                  "api-reference/cli/auth-logout",
+                  "api-reference/cli/auth-status",
+                  "api-reference/cli/codex-install",
+                  "api-reference/cli/doctor",
+                  "api-reference/cli/interactions-respond",
+                  "api-reference/cli/run",
+                  "api-reference/cli/turns-wait"
+                ]
+              },
+              {
+                "group": "Mobile",
+                "pages": [
+                  "api-reference/mobile/cancel",
+                  "api-reference/mobile/close",
+                  "api-reference/mobile/is-done",
+                  "api-reference/mobile/new-client",
+                  "api-reference/mobile/start",
+                  "api-reference/mobile/start-error",
+                  "api-reference/mobile/start-with-data"
+                ]
+              },
+              {
+                "group": "超时后查询原结果",
+                "pages": [
+                  "api-reference/receipts/get-command-receipt",
+                  "api-reference/receipts/observe-command-receipt"
+                ]
+              },
+              {
+                "group": "跟踪一次写入结果",
+                "pages": [
+                  "api-reference/receipts/get-mutation",
+                  "api-reference/receipts/observe-mutation"
+                ]
+              },
+              {
+                "group": "处理发送流中的更新",
+                "pages": [
+                  "api-reference/streams/accepted",
+                  "api-reference/streams/cancel",
+                  "api-reference/streams/close",
+                  "api-reference/streams/next",
+                  "api-reference/streams/result"
+                ]
+              },
+              {
+                "group": "实时观察与停止监听",
+                "pages": [
+                  "api-reference/subscriptions/close",
+                  "api-reference/subscriptions/unsubscribe"
+                ]
+              },
+              {
+                "group": "查看会话同步进度",
+                "pages": [
+                  "api-reference/sync/list-group-sync-states",
+                  "api-reference/sync/list-groups",
+                  "api-reference/sync/on-group-sync-state",
+                  "api-reference/sync/sync-conversation",
+                  "api-reference/sync/sync-group"
+                ]
+              },
+              {
+                "group": "Transport",
+                "pages": [
+                  "api-reference/transport/add-virtual-group-members",
+                  "api-reference/transport/ag-message-client-add-virtual-group-members",
+                  "api-reference/transport/ag-message-client-audit-closed-history",
+                  "api-reference/transport/ag-message-client-client-instance-id",
+                  "api-reference/transport/ag-message-client-close",
+                  "api-reference/transport/ag-message-client-close-virtual-group",
+                  "api-reference/transport/ag-message-client-connect",
+                  "api-reference/transport/ag-message-client-create-virtual-group",
+                  "api-reference/transport/ag-message-client-get-device-presence",
+                  "api-reference/transport/ag-message-client-get-group-sync-state",
+                  "api-reference/transport/ag-message-client-get-history",
+                  "api-reference/transport/ag-message-client-get-publish-state",
+                  "api-reference/transport/ag-message-client-get-virtual-group",
+                  "api-reference/transport/ag-message-client-initial-sync-progress",
+                  "api-reference/transport/ag-message-client-link-state",
+                  "api-reference/transport/ag-message-client-list-group-sync-states",
+                  "api-reference/transport/ag-message-client-list-virtual-group-members",
+                  "api-reference/transport/ag-message-client-list-virtual-groups",
+                  "api-reference/transport/ag-message-client-load-durable-message",
+                  "api-reference/transport/ag-message-client-on-device-presence",
+                  "api-reference/transport/ag-message-client-on-durable-message",
+                  "api-reference/transport/ag-message-client-on-error",
+                  "api-reference/transport/ag-message-client-on-group-sync-state",
+                  "api-reference/transport/ag-message-client-on-initial-sync-progress",
+                  "api-reference/transport/ag-message-client-on-link-state",
+                  "api-reference/transport/ag-message-client-on-relay-broadcast-response",
+                  "api-reference/transport/ag-message-client-on-relay-error",
+                  "api-reference/transport/ag-message-client-on-relay-late-response",
+                  "api-reference/transport/ag-message-client-on-relay-message",
+                  "api-reference/transport/ag-message-client-on-relay-request",
+                  "api-reference/transport/ag-message-client-on-stream-event",
+                  "api-reference/transport/ag-message-client-on-transient-message",
+                  "api-reference/transport/ag-message-client-publish-durable",
+                  "api-reference/transport/ag-message-client-publish-stream-transient",
+                  "api-reference/transport/ag-message-client-publish-transient",
+                  "api-reference/transport/ag-message-client-read-history-page",
+                  "api-reference/transport/ag-message-client-refresh-group-directory",
+                  "api-reference/transport/ag-message-client-relay-broadcast-request",
+                  "api-reference/transport/ag-message-client-relay-cancel",
+                  "api-reference/transport/ag-message-client-relay-get-history",
+                  "api-reference/transport/ag-message-client-relay-get-request",
+                  "api-reference/transport/ag-message-client-relay-request",
+                  "api-reference/transport/ag-message-client-relay-retry",
+                  "api-reference/transport/ag-message-client-relay-send",
+                  "api-reference/transport/ag-message-client-remove-virtual-group-members",
+                  "api-reference/transport/ag-message-client-retry-publish",
+                  "api-reference/transport/ag-message-client-session-id",
+                  "api-reference/transport/ag-message-client-stream-history",
+                  "api-reference/transport/ag-message-client-stream-list",
+                  "api-reference/transport/ag-message-client-stream-state",
+                  "api-reference/transport/ag-message-client-sync",
+                  "api-reference/transport/ag-message-client-sync-group",
+                  "api-reference/transport/ag-message-client-update-devices",
+                  "api-reference/transport/ag-message-client-update-virtual-group-profile",
+                  "api-reference/transport/ag-message-client-user-id",
+                  "api-reference/transport/ag-message-client-wait-relay-ready",
+                  "api-reference/transport/audit-closed-history",
+                  "api-reference/transport/client-instance-id",
+                  "api-reference/transport/close",
+                  "api-reference/transport/close-virtual-group",
+                  "api-reference/transport/connect",
+                  "api-reference/transport/create-virtual-group",
+                  "api-reference/transport/get-device-presence",
+                  "api-reference/transport/get-directory-groups",
+                  "api-reference/transport/get-group",
+                  "api-reference/transport/get-group-sync-state",
+                  "api-reference/transport/get-history",
+                  "api-reference/transport/get-publish-state",
+                  "api-reference/transport/get-virtual-group",
+                  "api-reference/transport/get-virtual-groups-v1",
+                  "api-reference/transport/initial-sync-progress",
+                  "api-reference/transport/is-virtual-conversation-id",
+                  "api-reference/transport/is-virtual-group-id",
+                  "api-reference/transport/link-state",
+                  "api-reference/transport/list-directory-changes",
+                  "api-reference/transport/list-directory-groups",
+                  "api-reference/transport/list-directory-page",
+                  "api-reference/transport/list-group-changes",
+                  "api-reference/transport/list-group-changes-v1",
+                  "api-reference/transport/list-group-sync-states",
+                  "api-reference/transport/list-groups",
+                  "api-reference/transport/list-recent-virtual-groups",
+                  "api-reference/transport/list-virtual-group-members",
+                  "api-reference/transport/list-virtual-groups",
+                  "api-reference/transport/list-virtual-groups-v1",
+                  "api-reference/transport/load-durable-message",
+                  "api-reference/transport/on-cold-group-update",
+                  "api-reference/transport/on-device-presence",
+                  "api-reference/transport/on-durable",
+                  "api-reference/transport/on-durable-message",
+                  "api-reference/transport/on-error",
+                  "api-reference/transport/on-group-sync-state",
+                  "api-reference/transport/on-initial-sync-progress",
+                  "api-reference/transport/on-link-state",
+                  "api-reference/transport/on-received",
+                  "api-reference/transport/on-relay-broadcast-response",
+                  "api-reference/transport/on-relay-error",
+                  "api-reference/transport/on-relay-late-response",
+                  "api-reference/transport/on-relay-message",
+                  "api-reference/transport/on-relay-request",
+                  "api-reference/transport/on-status",
+                  "api-reference/transport/on-stream-event",
+                  "api-reference/transport/on-transient",
+                  "api-reference/transport/on-transient-message",
+                  "api-reference/transport/publish",
+                  "api-reference/transport/publish-durable",
+                  "api-reference/transport/publish-stream",
+                  "api-reference/transport/publish-stream-transient",
+                  "api-reference/transport/publish-transient",
+                  "api-reference/transport/query-device-presence",
+                  "api-reference/transport/read-history-page",
+                  "api-reference/transport/read-stream-history-page",
+                  "api-reference/transport/refresh-group-directory",
+                  "api-reference/transport/relay-broadcast-request",
+                  "api-reference/transport/relay-cancel",
+                  "api-reference/transport/relay-get-history",
+                  "api-reference/transport/relay-get-request",
+                  "api-reference/transport/relay-presence",
+                  "api-reference/transport/relay-request",
+                  "api-reference/transport/relay-retry",
+                  "api-reference/transport/relay-send",
+                  "api-reference/transport/remove-virtual-group-members",
+                  "api-reference/transport/resolve-conversation-group",
+                  "api-reference/transport/retry-pending-durable-batches",
+                  "api-reference/transport/retry-publish",
+                  "api-reference/transport/session-id",
+                  "api-reference/transport/sqlite-transport-store-close",
+                  "api-reference/transport/stream-history",
+                  "api-reference/transport/stream-list",
+                  "api-reference/transport/stream-state",
+                  "api-reference/transport/sync",
+                  "api-reference/transport/sync-group",
+                  "api-reference/transport/transaction",
+                  "api-reference/transport/update-devices",
+                  "api-reference/transport/update-virtual-group-profile",
+                  "api-reference/transport/user-id",
+                  "api-reference/transport/wait-for-group-directory",
+                  "api-reference/transport/wait-group-directory",
+                  "api-reference/transport/wait-ready",
+                  "api-reference/transport/wait-relay-ready"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "icon": "clock-rotate-left",
+        "groups": [
+          {
+            "group": "更新记录",
+            "pages": [
+              "changelog/index",
+              "support/migration"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "FAQ",
+        "icon": "circle-question",
+        "groups": [
+          {
+            "group": "常见问题",
+            "pages": [
+              "faq/index"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "redirects": [
+    {
+      "source": "/quickstart",
+      "destination": "/getting-started/first-conversation"
+    },
+    {
+      "source": "/authentication",
+      "destination": "/integration/01-auth-and-lifecycle"
+    },
+    {
+      "source": "/concepts",
+      "destination": "/domain-model/00-overview"
+    },
+    {
+      "source": "/guides/conversations",
+      "destination": "/integration/02-conversations-and-streams"
+    },
+    {
+      "source": "/guides/skills",
+      "destination": "/domain-model/11-cloud-capabilities"
+    },
+    {
+      "source": "/reference/typescript",
+      "destination": "/reference/js/api"
+    },
+    {
+      "source": "/reference/runtimes",
+      "destination": "/sdk-reference/js"
+    },
+    {
+      "source": "/troubleshooting",
+      "destination": "/support/troubleshooting"
+    },
+    {
+      "source": "/domain-model/cloud",
+      "destination": "/domain-model/00-overview"
+    }
+  ]
+}
