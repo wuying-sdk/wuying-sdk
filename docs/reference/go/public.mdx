@@ -495,7 +495,7 @@ func NewResourceManager(s *business.Service) *ResourceManager
 类别：类型、配置、构造、回调或辅助入口。
 
 ```go
-func NewRuntimeManager(sc *container.ServiceContainer, service *business.Service) *RuntimeManager
+func NewRuntimeManager(sc *container.ServiceContainer, service *business.Service, commands *runtimecommand.Service, check func() error) *RuntimeManager
 ```
 
 <a id="entry-b6374ae0fbe172be" />
@@ -1568,6 +1568,16 @@ func (receiver *RuntimeManager) GetHostCapabilities(ctx context.Context, r model
 func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
 ```
 
+<a id="entry-f524474c4b0b8024" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.ObserveCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
+
+```go
+func (receiver *RuntimeManager) ObserveCommand(ctx context.Context, r *model.ObserveCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
+```
+
 <a id="entry-89fb844b0cbc6e62" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.ObserveRuntimes
@@ -1576,6 +1586,16 @@ func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) (model.Snapsho
 
 ```go
 func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.RuntimeSummary]) (model.Subscription, error)
+```
+
+<a id="entry-e715942c3b7bab5f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.RunCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
+
+```go
+func (receiver *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
 ```
 
 <a id="entry-175da63d708e0fd7" />
@@ -2056,6 +2076,26 @@ func (receiver *RateLimitError) Error() string
 
 ```go
 func (receiver *RateLimitError) GetCode() int
+```
+
+<a id="entry-60091eb16f243e2a" />
+
+### github.com/aliyun/wuying-sdk-go/model.RuntimeCommandSubscription.Receipt
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Receipt() RuntimeCommandReceipt
+```
+
+<a id="entry-8f3692d5183c5b41" />
+
+### github.com/aliyun/wuying-sdk-go/model.RuntimeCommandSubscription.Unsubscribe
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+Unsubscribe()
 ```
 
 <a id="entry-63b8ff888896499b" />

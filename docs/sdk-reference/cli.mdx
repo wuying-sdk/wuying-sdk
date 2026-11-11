@@ -11,7 +11,7 @@ import CliAdministration from '/snippets/cli-administration.mdx';
 
 业务模型、关系与生命周期先读 [领域文档](/index)；本页保留该语言的安装、配置和代码接线。
 
-当前草稿基线：2026-11-11，源码 `ea48f8775d28753cefef13b937982dd44587aa51`，`@aliyun/wuying-cli@0.1.0`，内置本次 RuntimeManager 草稿构建的公共 JS SDK。制品是 `sdks/cli/aliyun-wuying-cli-0.1.0.tgz`。这是客户端工具，不是任意本机 shell 执行器。
+当前草稿基线：2026-11-11，源码 `4b855bcac053d9e766daf38da35ccff7875cb0e5`，`@aliyun/wuying-cli@0.1.0`，内置本次 RuntimeManager 草稿构建的公共 JS SDK。制品是 `sdks/cli/aliyun-wuying-cli-0.1.0.tgz`。这是客户端工具，不是任意本机 shell 执行器。
 
 ## 安装与离线自检
 
@@ -38,7 +38,7 @@ node ./wuying-tools/node_modules/@aliyun/wuying-cli/bin/wuying.mjs --data-dir ./
 | 可选地域 | `WUYING_LOGIN_REGION_ID` |
 | JSON 凭据（替代上面组合） | `WUYING_CREDENTIALS`：authCode 或 loginToken/sessionId/endUserId，加 clientId、可选 loginRegionId |
 
-明确选一种，不同时混用；环境凭据优先于已保存 profile。Client ID 需获平台授权。CLI 不接受用户名密码参数，也不会读取 AgentShell 的登录文件。
+明确选一种，不同时混用；环境凭据优先于已保存 profile。Client ID 需获平台授权。组织账号密码通过 auth login --stdin 或宿主环境注入，不接受命令行密码参数，也不会读取 AgentShell 的登录文件；初始化示例见 [SDK Client](/getting-started/initialize-client)。
 
 macOS/Linux 可通过宿主保密输出管道向 `wuying auth import --stdin` 提交 JSON。文件按 POSIX 0700/0600 存储，**未加密、不是系统钥匙串**；短效 AuthCode 保存后仍会到期/被消费。Windows 当前禁止凭据文件写入，请只用宿主注入的环境凭据。`auth status` 只说明配置存在，不验证在线登录；`auth logout` 删除本地材料，不撤销远端 token，也不会清除父进程环境。
 

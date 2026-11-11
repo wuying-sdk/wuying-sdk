@@ -2,7 +2,7 @@
 
 ## 管理员与用户态
 
-CLI 支持两类权限：aliuid 维度的 AK/SK 管理员权限，以及无影客户端用户态权限。用户态支持 AuthCode 或 LoginToken，不能与 AK/SK 混用。
+CLI 支持两类权限：aliuid 维度的 AK/SK 管理员权限，以及无影客户端用户态权限。用户态支持 AuthCode、LoginToken 或组织账号密码，不能与 AK/SK 混用。
 
 管理员凭据通过宿主注入 `WUYING_ACCESS_KEY_ID` / `WUYING_ACCESS_KEY_SECRET`，或 `WUYING_CREDENTIALS` JSON 提供。显式 JSON 优先于独立环境变量，环境凭据优先于已保存的 profile；切换 `--profile` 不会覆盖环境凭据。AK/SK 不作为命令行参数传递。
 
@@ -13,6 +13,7 @@ CLI 支持两类权限：aliuid 维度的 AK/SK 管理员权限，以及无影�
 | `desktops create` / `desktops wait` | 不支持 | 支持 |
 | `desktops start` / `desktops stop` / `desktops reboot` / `desktops reset` | 支持 | 支持 |
 | `desktops delete` | 不支持 | 支持 |
+| `runtimes run-command` / `runtimes observe-command` | 不支持 | 执行命令并观察结果 |
 | `auth code` | 不支持 | 为指定无影用户获取 AuthCode |
 
 每个命令通过 `--request-file` 或 `--stdin` 提供一个 JSON 对象，二选一，最大 64 KiB。字段与 SDK 请求一致，鉴权、签名及参数校验由根 Client 处理。
@@ -34,3 +35,5 @@ target.json：
 管理操作返回受理信息，不能据此认定资源已经完成变化。重置部分拒绝会返回非零退出码并保留逐桌面回执；写请求结果未知时退出码为 6，不自动重试。中断返回 130，也不代表云端操作已撤销。
 
 `auth code` 将一次性 AuthCode 输出到 stdout，应直接交给目标用户的认证流程，避免写入日志。管理员环境凭据需要在运行用户 profile 前移除。现有 `doctor` 在线检查验证用户及 IM 链路，不能用于证明管理员资源权限。
+
+组织账号密码通过 `auth login --stdin` 完成登录，成功后只保存 LoginToken 组合；`auth import` 不接收密码。MFA/SSO/改密挑战当前返回 LOGIN_CHALLENGE_REQUIRED，不自动重试。命令事件和恢复步骤见 [Runtime 系统命令](/domain-model/02-runtime-agent#执行系统命令)。

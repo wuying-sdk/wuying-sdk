@@ -9,7 +9,7 @@ SDK 定位是无影对外集成能力的统一入口，面向资源操作、资�
 
 ## 管理员和客户端用户态有什么区别？
 
-目前有两类权限：管理员使用 aliuid 维度的 AK/SK 权限；客户端用户态使用无影用户体系中当前用户的权限，支持 AuthCode 和 LoginToken 两种认证方式。服务端使用用户凭据代用户调用仍属于用户态。AK/SK 留在受信任后端。具体入口和语言差异见[授权与认证](/integration/01-auth-and-lifecycle)。
+目前有两类权限：管理员使用 aliuid 维度的 AK/SK 权限；客户端用户态使用无影用户体系中当前用户的权限，支持 AuthCode、LoginToken 和组织账号密码三种认证方式（组织密码当前限 JS / Go / Java / CLI）。服务端使用用户凭据代用户调用仍属于用户态。AK/SK 留在受信任后端。具体入口和语言差异见[授权与认证](/integration/01-auth-and-lifecycle)。
 
 ## Client ID 可以代替身份凭据吗？
 

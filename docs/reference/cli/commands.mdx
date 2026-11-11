@@ -3,6 +3,27 @@ title: "Wuying CLI v0.1"
 description: "CLI 的命令、选项、结构化输出、退出码和恢复边界。"
 ---
 
+Organization password login uses the same user Client:
+
+```sh
+# Supply secret JSON over stdin from a secret manager or protected input source.
+secret-provider | wuying auth login --stdin
+```
+
+Input is `{ "organizationId": "ORG12345", "username": "user", "password": "..." }`, with optional
+`clientId` and `loginRegionId`. The organization ID is a LoginIdentifier, not an office network ID.
+The command exchanges credentials online and saves only the resulting LoginToken tuple in the
+existing private 0600 profile file. Passwords never enter that file or command output. `auth import`
+rejects password persistence. Failure preserves the old profile. MFA/SSO/change-password stages
+return `LOGIN_CHALLENGE_REQUIRED` (exit 4); interactive continuation is not implemented.
+
+For an ephemeral user Client, set `WUYING_CREDENTIALS` to that JSON, or supply all three
+`WUYING_ORGANIZATION_ID`, `WUYING_USERNAME`, `WUYING_PASSWORD`. These cannot be mixed with AK/SK,
+AuthCode or an imported login tuple. Later user commands use the SDK's existing login/refresh owner.
+Passwords are submitted once per Client lifetime; an explicit retry creates a new Client. Use the
+same clientId when importing/exchanging and consuming a login tuple. Endpoint overrides for this
+mode must use HTTPS. See the [unified login contract](/domain-model/02-runtime-agent#组织-id用户名和密码登录).
+
 `wuying` lets humans and terminal Agents delegate natural-language tasks to an Agent
 on an authorized Wuying remote desktop. It uses the public `@aliyun/wuying-sdk` root
 entry. It does not provide direct screenshots, mouse control, keyboard injection,
@@ -143,7 +164,40 @@ Timeouts/interruptions retain unknown outcomes; inspect saved request/resource I
 before another write. Configurable `WUYING_SALES_ENDPOINT` and
 `WUYING_APP_STREAM_ENDPOINT` are passed to the SDK for environment-specific routing.
 
-### Remote Agent tasks
+### Runtime command execution and events
+
+`runtimes run-command` executes an administrator command through RuntimeManager;
+`runtimes observe-command` resumes only result observation using a saved invokeId.
+This release supports **AK/SK 0930 only**. User/1002 entry points return UNSUPPORTED;
+they do not execute a command or fall back to an administrator API.
+
+```sh
+# command.json: {"regionId":"cn-hangzhou","desktopIds":["desktop-id"],
+#   "type":"RunPowerShellScript","commandContent":"Write-Output hello"}
+wuying runtimes run-command --profile admin --request-file command.json \
+  --timeout 600000 --output jsonl
+# observation.json: {"regionId":"cn-hangzhou","desktopIds":["desktop-id"],"invokeId":"saved-id"}
+wuying runtimes observe-command --profile admin --request-file observation.json \
+  --timeout 600000 --output jsonl
+```
+
+Both accept exactly one JSON file or `--stdin`, at most 64 KiB. The public SDK
+validates command fields and batch limits. Execution never retries automatically.
+The SDK queries DescribeInvocations and returns accepted/desktop/completed events;
+JSONL wraps them as `{status:"event",type:"runtime-command",data:...}`. Desktop
+output is a replacement snapshot with an explicit truncation flag, not a token delta.
+The final result is completed/exit 0 only when every target succeeds. Any failed
+target returns RUNTIME_COMMAND_FAILED/exit 5 with per-desktop results in error.details.
+Query failures/timeouts preserve the receipt in error.details for read-only recovery;
+inspect the accepted JSONL event promptly to retain the receipt across process crashes.
+Ctrl+C, deadline, and subscription close do not call StopInvocation or cancel the
+remote script. Do not repeat run-command to recover an unknown outcome.
+Input script and returned output are not added to SDK diagnostic logs. JSONL/stdout
+intentionally contain execution results; consumers control their storage.
+The [bundled Runtime command contract](/domain-model/02-runtime-agent#runtime-命令执行与结果事件)
+defines fields, int64 exit-code strings, polling/deadline bounds and output limits.
+
+### Remote Agent tasks (natural language)
 
 Keep the same profile/data directory when recovering an earlier task. The current
 SDK does not guarantee full historical backfill into a fresh installation/profile.

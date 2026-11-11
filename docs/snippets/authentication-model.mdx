@@ -5,14 +5,16 @@ Wuying SDK 目前按调用身份区分两类权限：**管理员权限**和**无
 | 权限分类 | 身份与权限范围 | 认证方式 |
 |---|---|---|
 | 管理员 | aliuid 维度的管理员身份，按对应 AK/SK 已获授权的范围操作资源 | 使用 AccessKey ID / Secret（AK/SK）签名 |
-| 无影客户端用户态 | 无影用户体系中的当前用户，只能访问该用户获授权的资源与能力 | AuthCode 或 LoginToken，选择其中一种 |
+| 无影客户端用户态 | 无影用户体系中的当前用户，只能访问该用户获授权的资源与能力 | AuthCode、LoginToken 或组织账号密码，选择其中一种 |
 
 管理员与用户态的区别取决于调用身份。服务端使用用户凭据代用户调用时，仍属于用户态权限，不构成第三类权限。
 
-### 用户态的两种认证方式
+### 用户态的三种认证方式
 
 - **AuthCode**：通过已授权的认证后端为当前无影用户获取授权码，再初始化用户态 Client。
 - **LoginToken**：使用当前无影用户已有的有效登录态。SDK 初始化需同时提供 `loginToken`、`sessionId`、`endUserId`，按需提供 `loginRegionId`；其中 LoginToken 对应 SDK 参数名 `loginToken`。
+
+- **组织账号密码**：JS / Go / Java 根 Client 接收 `organizationId`、`username`、`password`，由 SDK 换取 LoginToken 并管理续期。组织 ID 是登录标识，不是办公网络 ID。CLI 使用 `auth login --stdin`；Android / iOS 当前移动配置清单未开放此方式。
 
 **认证**确认当前身份；**授权**决定该身份可以访问哪些资源、执行哪些操作。取得 AuthCode 或 LoginToken 不会扩大用户权限，构造 Client 成功也不代表资源授权已通过。`clientId` 是应用接入标识，不能替代 AK/SK、用户身份或资源授权。
 
@@ -27,7 +29,7 @@ Wuying SDK 目前按调用身份区分两类权限：**管理员权限**和**无
 
 ## 服务端：初始化签名 Client 并申请用户票据
 
-下面展示 **Node.js、Go、Java 服务端**的核心调用。AK/SK 来自受信任服务端配置，`authorizedEndUserId` 已由业务后端核验并映射。管理员 Client 用于签名云管理请求，不能构建用户态 RuntimeManager；用户票据交给独立的用户态 Client。
+下面展示 **Node.js、Go、Java 服务端**的核心调用。AK/SK 来自受信任服务端配置，`authorizedEndUserId` 已由业务后端核验并映射。管理员 Client 用于签名云管理请求，可通过 RuntimeManager 执行管理员命令；用户目录等操作仍需独立用户态 Client；用户票据交给独立的用户态 Client。
 
 <CodeGroup>
 
@@ -95,4 +97,4 @@ CLI 管理员凭据由宿主注入 `WUYING_ACCESS_KEY_ID` / `WUYING_ACCESS_KEY_S
 
 ## 初始化用户态 Client
 
-已取得新鲜 AuthCode，或已有有效的 LoginToken 登录态后，进入[初始化 Client](/getting-started/initialize-client)，选择语言并完成一次只读验证。下面继续说明本版本用户态 Client 的配置、生命周期和存储要求。
+已取得新鲜 AuthCode，已有有效的 LoginToken 登录态，或准备组织账号密码后，进入[初始化 Client](/getting-started/initialize-client)，选择语言并完成一次只读验证。下面继续说明本版本用户态 Client 的配置、生命周期和存储要求。

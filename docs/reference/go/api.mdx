@@ -3,7 +3,7 @@ title: "Go 公共 API 参考"
 description: "同版本 Go 根入口、config、manager 与 model 公共包的完整签名。"
 ---
 
-由本次 RuntimeManager 源码草稿执行 go doc -all 生成，基础提交 ea48f8775d28753cefef13b937982dd44587aa51，不是该提交原始制品。
+由本次 RuntimeManager 源码草稿执行 go doc -all 生成，基础提交 4b855bcac053d9e766daf38da35ccff7875cb0e5，不是该提交原始制品。
 
 ## .
 
@@ -44,8 +44,8 @@ func (c *Client) BuildModelManager(ctx context.Context) (*manager.ModelManager, 
 func (c *Client) BuildResourceManager(ctx context.Context) (*manager.ResourceManager, error)
 
 func (c *Client) BuildRuntimeManager(ctx context.Context) (*manager.RuntimeManager, error)
-    BuildRuntimeManager exposes runtime discovery and cloud-instance management
-    for this Client.
+    BuildRuntimeManager permits a reserved user-mode entry; execution remains
+    administrator-only.
 
 func (c *Client) BuildSkillManager(ctx context.Context) (*manager.SkillManager, error)
 
@@ -77,6 +77,9 @@ func (c *Client) Wait(ctx context.Context, r *model.WaitDesktopsRequest) (*model
     bounded DescribeDesktops reads.
 
 type ClientOptions struct {
+	OrganizationID  string
+	Username        string
+	Password        string
 	AccessKeyID     string
 	AccessKeySecret string
 	AuthCode        string
@@ -634,7 +637,7 @@ type RuntimeManager struct {
 	// Has unexported fields.
 }
 
-func NewRuntimeManager(sc *container.ServiceContainer, service *business.Service) *RuntimeManager
+func NewRuntimeManager(sc *container.ServiceContainer, service *business.Service, commands *runtimecommand.Service, check func() error) *RuntimeManager
 
 func (m *RuntimeManager) ApproveFotaUpdate(ctx context.Context, req *ApproveFotaUpdateRequest, opts ...CallOption) error
     describeDesktopsInternal queries the list of desktops with optional FOTA
@@ -680,7 +683,11 @@ func (a *RuntimeManager) GetHostCapabilities(ctx context.Context, r model.Runtim
 
 func (a *RuntimeManager) ListRuntimes(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
 
+func (m *RuntimeManager) ObserveCommand(ctx context.Context, r *model.ObserveCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
+
 func (a *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.RuntimeSummary]) (model.Subscription, error)
+
+func (m *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
 
 func (m *RuntimeManager) UpdateAgentInstance(ctx context.Context, req *UpdateAgentInstanceRequest, opts ...CallOption) error
     UpdateAgentInstance updates the metadata of an existing agent instance.
@@ -1095,6 +1102,22 @@ type CloudBusinessError struct {
     BusinessError represents a business logic error from the API.
 
 func (e *CloudBusinessError) Error() string
+
+type CommandDesktopResult struct {
+	DesktopID          string `json:"desktopId"`
+	Status             string `json:"status"`
+	Terminal           bool   `json:"terminal"`
+	Success            bool   `json:"success"`
+	Output             string `json:"output"`
+	OutputTruncated    bool   `json:"outputTruncated"`
+	Dropped            int64  `json:"dropped"`
+	ExitCode           string `json:"exitCode,omitempty"`
+	ErrorCode          string `json:"errorCode,omitempty"`
+	ErrorInfo          string `json:"errorInfo,omitempty"`
+	ErrorInfoTruncated bool   `json:"errorInfoTruncated,omitempty"`
+}
+    Output is a replacement snapshot, not an appendable delta. ExitCode is a
+    decimal int64 string.
 
 type CommandReceipt struct {
 	CommandReceiptRef
@@ -2245,6 +2268,13 @@ func (e *NetworkError) Error() string
 
 func (e *NetworkError) Unwrap() error
 
+type ObserveCommandRequest struct {
+	RegionID       string   `json:"regionId"`
+	DesktopIDs     []string `json:"desktopIds"`
+	InvokeID       string   `json:"invokeId"`
+	PollIntervalMs int64    `json:"pollIntervalMs,omitempty"`
+}
+
 type Observer[T any] struct {
 	OnSnapshot func(Snapshot[T])
 	OnError    func(error)
@@ -2490,11 +2520,49 @@ type ResponsibilityPatch struct {
 	Text string `json:"text,omitempty"`
 }
 
+type RunCommandRequest struct {
+	RegionID        string   `json:"regionId"`
+	DesktopIDs      []string `json:"desktopIds"`
+	Type            string   `json:"type"`
+	CommandContent  string   `json:"commandContent"`
+	ContentEncoding string   `json:"contentEncoding,omitempty"`
+	TimeoutSeconds  int64    `json:"timeoutSeconds,omitempty"`
+	EndUserID       string   `json:"endUserId,omitempty"`
+	CommandRole     string   `json:"commandRole,omitempty"`
+	PollIntervalMs  int64    `json:"pollIntervalMs,omitempty"`
+}
+
 type RuntimeCapabilities struct {
 	AgentQuery         Capability `json:"agentQuery"`
 	ConversationCreate Capability `json:"conversationCreate"`
 	ResourceQuery      Capability `json:"resourceQuery"`
 }
+
+type RuntimeCommandEvent struct {
+	Kind         string                 `json:"kind"`
+	Receipt      RuntimeCommandReceipt  `json:"receipt"`
+	Result       *CommandDesktopResult  `json:"result,omitempty"`
+	Results      []CommandDesktopResult `json:"results,omitempty"`
+	AllSucceeded bool                   `json:"allSucceeded,omitempty"`
+}
+
+type RuntimeCommandObserver struct {
+	OnEvent func(RuntimeCommandEvent)
+	OnError func(error)
+}
+
+type RuntimeCommandReceipt struct {
+	RegionID   string   `json:"regionId"`
+	DesktopIDs []string `json:"desktopIds"`
+	InvokeID   string   `json:"invokeId"`
+	RequestID  string   `json:"requestId"`
+}
+
+type RuntimeCommandSubscription interface {
+	Subscription
+	Receipt() RuntimeCommandReceipt
+}
+    Unsubscribe stops local observation only, never the remote command.
 
 type RuntimeRef struct {
 	RuntimeID string `json:"runtimeId"`

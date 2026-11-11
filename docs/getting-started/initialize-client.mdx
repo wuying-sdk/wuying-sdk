@@ -34,7 +34,7 @@ Android / iOS 在工作线程初始化和关闭；默认回调分别交付到主
 
 ## 3. 已有登录态时，使用完整组合
 
-如果宿主已有当前用户的有效登录态，可以使用 `loginToken + sessionId + endUserId`，按需附带 `loginRegionId`，替代 AuthCode。**两条路径选择一种**，不同时填入两套凭据。
+如果宿主已有当前用户的有效登录态，可以使用 `loginToken + sessionId + endUserId`，按需附带 `loginRegionId`，替代 AuthCode。**AuthCode、登录态和组织账号密码三条路径选择一种**，不同时填入两套凭据。
 
 ```ts TypeScript
 import { Client } from '@aliyun/wuying-sdk';
@@ -54,7 +54,40 @@ const client = Client.create({
 
 这些字段属于同一用户、同一登录上下文；不能拼接不同账号的票据，不能拿用户名显示文案或桌面 ID 代替。原始凭据只经宿主的安全链路注入，不输出到日志或公开示例。
 
-## 4. 验证在线身份与授权
+## 4. 使用组织账号密码登录
+
+JS / Go / Java 可由根 Client 接收当前无影用户的组织 ID、用户名和密码。以下变量由宿主安全注入；`organizationId` 是登录标识，不是 `officeSiteId`。先按上文配置 clientId 和私有数据位置。
+
+<CodeGroup>
+
+```ts TypeScript
+const client = Client.create({ organizationId, username, password }, { clientId });
+```
+
+```go Go
+client, err := wuying.NewClient(wuying.ClientOptions{
+    OrganizationID: organizationID, Username: username, Password: password,
+}, &config.UserConfig{ClientID: clientID, DataPath: dataFile})
+```
+
+```java Java
+WuyingClient client = new WuyingClient(
+    ClientOptions.builder().passwordAuthentication(organizationId, username, password).build(),
+    SdkConfig.builder().clientId(clientId).dataPath(dataFile).build()
+);
+```
+
+```sh CLI
+secret-provider | wuying auth login --stdin
+```
+
+</CodeGroup>
+
+CLI 中 `secret-provider` 代表宿主自己的秘密注入命令，其 stdout 提供包含 organizationId、username、password 的 JSON；它不是随 CLI 提供的命令。`auth login` 成功后只保存 LoginToken 登录组合，不保存密码；`auth import` 拒绝密码。也可用 `WUYING_CREDENTIALS` JSON 或完整的 `WUYING_ORGANIZATION_ID`、`WUYING_USERNAME`、`WUYING_PASSWORD` 环境组合进行本次调用，不持久化密码。
+
+SDK 负责换票和续期，密码每个 Client 生命周期只提交一次，不自动重试。MFA、SSO、改密等挑战返回 `LOGIN_CHALLENGE_REQUIRED`（CLI 退出 4），当前版本不承接挑战流程；登录失败不覆盖 CLI 原有凭据。密码模式的登录端点仅接受 HTTPS。登录与后续调用使用同一获授权 clientId。Android / iOS 当前移动配置清单仍只支持 AuthCode 或 LoginToken。
+
+## 5. 验证在线身份与授权
 
 构造成功说明拿到了本地 Client 对象，不能证明在线认证或资源授权已通过。使用创建出的 Client，建立目录 Manager 并执行只读查询：
 
@@ -65,7 +98,7 @@ const snapshot = await runtimes.listRuntimes(ctx);
 
 预期取得当前身份下的目录快照及投影状态；查询成功不代表获得全部资源权限，投影未就绪时空数组也不足以证明没有权限。Go、Java 和 Node 的完整初始化与只读验证源码见[代码示例](/examples/index)；Android / iOS 通过 `Client.request` 与 `Methods.runtimeObserveRuntimes` 观察目录，见[移动端契约](/reference/mobile/contract)。
 
-## 5. 结束或更换身份
+## 6. 结束或更换身份
 
 应用持有并复用当前登录上下文的 Client，页面只释放自己的订阅；退出账号时退订后关闭 Client：JS `await client.close()`，Go `client.Close()`，Java `client.close()` 或 try-with-resources，Android `client.close()`，iOS `try client.close()`；移动端关闭放在工作线程。更换身份必须关闭旧 Client 并使用隔离数据位置；关闭本地连接不等于注销云端登录态或取消远端任务。
 

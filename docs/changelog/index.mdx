@@ -3,6 +3,13 @@ title: "更新记录"
 description: "查看文档变化、当前参考基线与升级入口。"
 ---
 
+## 2026-11-11：组织账号登录与 Runtime 命令
+
+- 基础提交更新至 4b855bc，保留 RuntimeManager 首版调整与配套 Skill。
+- JS / Go / Java 新增组织账号密码登录，CLI 新增 auth login --stdin；权限分类仍为管理员与用户态两类。
+- RuntimeManager 新增管理员 runCommand / observeCommand，文档说明逐桌面事件、输出快照、终态和断线恢复。
+- CLI Skill 同步命令执行与只读恢复；Android / iOS 未声明这些新入口。
+
 ## 2026-11-11：CLI 配套客户 Skill
 
 - 随 CLI 提供云资源管理和远程 Agent 任务两项 Skill，包含对应 references。
@@ -59,6 +66,6 @@ description: "查看文档变化、当前参考基线与升级入口。"
 
 ## 当前 SDK 参考基线
 
-当前参考基础提交 `ea48f8775d28753cefef13b937982dd44587aa51` 加本次未提交 RuntimeManager 源码改动。实际输入身份、逐语言覆盖和制品限制见[覆盖清单](/api-reference/coverage/index)；不能用基础提交或同名 npm/Maven 展示版本替代归档哈希核对。
+当前参考基础提交 `4b855bcac053d9e766daf38da35ccff7875cb0e5` 加本次未提交 RuntimeManager 源码改动。实际输入身份、逐语言覆盖和制品限制见[覆盖清单](/api-reference/coverage/index)；不能用基础提交或同名 npm/Maven 展示版本替代归档哈希核对。
 
 具体安装方式见[语言绑定](/domain-model/language-bindings)，升级步骤见[升级与迁移](/support/migration)。正式 SDK 发行变更以对应版本的交付记录为准。

@@ -483,6 +483,8 @@
                   "api-reference/runtimes/capabilities",
                   "api-reference/runtimes/list",
                   "api-reference/runtimes/observe",
+                  "api-reference/runtimes/observe-command",
+                  "api-reference/runtimes/run-command",
                   "api-reference/runtimes/update-agent-instance"
                 ]
               },
@@ -728,6 +730,7 @@
                 "group": "CLI",
                 "pages": [
                   "api-reference/cli/auth-import",
+                  "api-reference/cli/auth-login",
                   "api-reference/cli/auth-logout",
                   "api-reference/cli/auth-status",
                   "api-reference/cli/codex-install",

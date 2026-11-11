@@ -1,6 +1,6 @@
 ---
 title: "授权与认证"
-description: "区分 aliuid 维度的管理员 AK/SK 权限与无影客户端用户态权限；用户态支持 AuthCode 和 LoginToken 两种认证方式。"
+description: "区分 aliuid 维度的管理员 AK/SK 权限与无影客户端用户态权限；用户态支持 AuthCode、LoginToken 和组织账号密码三种认证方式。"
 sidebarTitle: "授权与认证"
 icon: "key"
 ---
@@ -16,14 +16,14 @@ import AuthenticationModel from '/snippets/authentication-model.mdx';
 | 配置 | 提供方 | 验证方式 |
 |---|---|---|
 | 接入方 Client ID | 平台授权管理员 | 用客户已授权身份查询 Runtime；默认 sdk-client 并非通用授权 |
-| AuthCode 或 LoginToken 登录态 | 客户自己的认证后端 | SDK 建立 Manager 后查询授权环境；仅构造 Client 不等于在线认证通过 |
+| AuthCode、LoginToken 或组织账号密码 | 客户自己的认证后端/安全输入 | SDK 建立 Manager 后查询授权环境；仅构造 Client 不等于在线认证通过 |
 | loginRegionId（如需要） | 认证系统 | 保持与票据地域一致；不将环境 ID 当地域 |
 | 独占的数据位置 | 客户宿主 | 用户私有、可写、容量足够；Go/Java 是库文件，Node shim 是目录 |
 | 已允许访问的网络 | 企业网络管理员 | SDK 的服务端点 / WebSocket 可达；不以临时放开鉴权代替排障 |
 
 只选一种凭据方式。AuthCode 短效且可能一次性消费，应在创建 Client 前获取；多条独立 CLI 命令不要反复消费同一个旧票。LoginToken 方式使用 SDK 参数 loginToken，并必须同时提供 sessionId、endUserId，字段不能用账户显示名或桌面 ID 替换。SDK 负责令牌交换、续期和连接；宿主不能同时维护另一套刷新器。
 
-管理员权限使用 aliuid 维度的 AK/SK；当前 JS / Go / Java 根 Client 提供 AK/SK 模式，AK/SK 保留在受信任服务端。无影客户端用户态使用 AuthCode 或 LoginToken；具体初始化参数按本语言接口使用。demo 的组织/用户名/密码登录属于 demo Host，不是需要客户照搬的 SDK 登录接口。认证完成后，宿主通过安全内存/配置注入材料；不要写 URL、代码仓库、日志或浏览器 localStorage。
+管理员权限使用 aliuid 维度的 AK/SK；当前 JS / Go / Java 根 Client 提供 AK/SK 模式，AK/SK 保留在受信任服务端。无影客户端用户态使用 AuthCode、LoginToken 或组织账号密码；具体初始化参数按本语言接口使用。组织账号密码登录已在当前 JS / Go / Java 根 Client 开放，初始化、挑战边界与 CLI stdin 用法见[SDK Client](/getting-started/initialize-client)；移动端配置未开放此方式。认证完成后，宿主通过安全内存/配置注入材料；不要写 URL、代码仓库、日志或浏览器 localStorage。
 
 ## 正确的生命周期
 

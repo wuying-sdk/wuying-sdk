@@ -30,7 +30,7 @@ SDK 按四类能力提供集成入口：
 | 场景 | 使用什么身份 | 从哪里开始 |
 |---|---|---|
 | 服务端调用云 API | AK/SK 签名，按相应云 API 的 RAM 授权调用 | [服务端认证与签名 Client](/integration/01-auth-and-lifecycle#服务端初始化签名-client-并申请用户票据) |
-| 用户端接入，或后端代表用户调用 | AuthCode 或完整用户登录态，按当前用户的授权范围操作 | [用户态 Client 初始化](/getting-started/initialize-client) |
+| 用户端接入，或后端代表用户调用 | AuthCode、完整 LoginToken 登录态或组织账号密码（JS / Go / Java / CLI），按当前用户的授权范围操作 | [用户态 Client 初始化](/getting-started/initialize-client) |
 
 认证确认调用身份，授权决定能操作哪些资源。AK/SK 留在受信任后端；用户端从自己的认证后端取得用户票据。接入方 `clientId` 不能替代身份凭据或资源权限。完整流程见[授权与认证](/integration/01-auth-and-lifecycle)。
 
@@ -42,7 +42,7 @@ SDK 按四类能力提供集成入口：
 
 Android / iOS 需先安装配套原生制品，在工作线程初始化，并使用应用私有、按账号隔离的数据库文件；安装入口：[Android](/sdk-reference/android) / [iOS](/sdk-reference/ios)。
 
-构造成功不等于在线认证通过；接下来执行[只读验证](/getting-started/initialize-client#4-验证在线身份与授权)，再[创建会话并发送第一个任务](/getting-started/first-conversation)。调用方处理错误，退出登录时关闭 Client。
+构造成功不等于在线认证通过；接下来执行[只读验证](/getting-started/initialize-client#5-验证在线身份与授权)，再[创建会话并发送第一个任务](/getting-started/first-conversation)。调用方处理错误，退出登录时关闭 Client。
 
 <Note>
 上面的示例使用用户票据；服务端签名 Client 的初始化见[认证指南](/integration/01-auth-and-lifecycle)。已有登录态的初始化示例与各语言字段对应关系见[初始化 Client](/getting-started/initialize-client)。

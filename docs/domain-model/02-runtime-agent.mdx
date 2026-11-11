@@ -14,8 +14,9 @@ Runtime 是无影的执行环境模型。SDK 提供环境目录、云桌面基�
 | 开机、关机、重启 | 根 Client 的 `start` / `stop` / `reboot` | 用户态或 AK/SK 管理员态 |
 | 重置系统 | 根 Client 的 `reset` | 两种身份均支持，镜像参数规则不同 |
 | 释放云桌面 | 根 Client 的 `delete` | 仅 AK/SK 管理员态 |
+| 执行系统命令、观察命令结果 | RuntimeManager 的 `runCommand` / `observeCommand` | 仅 AK/SK 管理员态 |
 
-以上属于 Runtime 领域，但当前生命周期方法直接挂在根 Client 上。不能把它们写成 RuntimeManager.start，也不能用管理员 Client 构建用户态 RuntimeManager。各操作仍由云端检查真实权限。
+以上属于 Runtime 领域，但当前生命周期方法直接挂在根 Client 上。不能把它们写成 RuntimeManager.start。同一 RuntimeManager 工厂按根 Client 身份提供操作：管理员命令不会开启用户目录或 IM 链路。各操作仍由云端检查真实权限。
 
 ## 环境目录与能力
 
@@ -85,6 +86,41 @@ wuying desktops start --request-file target.json
 基础管理返回 requestId；重置还返回逐桌面受理结果。这些都不保证资源已进入最终状态。超时或断线后保留原请求标识，先核对资源状态，不自动再次提交。
 
 用户态基础操作可携带 `clientToken`；未传时 SDK 为本次调用生成一个。AK/SK 管理员态不接受此字段。共享请求 DTO 中的可选字段不表示所有操作都接受它们，不适用字段会在请求前拒绝。
+
+## 执行系统命令
+
+通过管理员 Client 的 RuntimeManager 向明确选择的云桌面执行系统命令。它使用云端命令接口，和向 Agent 发送自然语言任务是两个入口；用户态当前返回 `UNSUPPORTED`，不自动改用管理员身份。
+
+```ts TypeScript
+const runtime = await admin.buildRuntimeManager(ctx);
+const subscription = await runtime.runCommand({ timeout: 600_000 }, {
+  regionId, desktopIds: [desktopId],
+  type: 'RunPowerShellScript', commandContent: 'Write-Output "hello"',
+}, { onEvent: handleEvent, onError: handleError });
+```
+
+示例针对支持 PowerShell 的桌面；脚本类型与镜像支持由云端校验，SDK 不猜测系统类型。`handleEvent` 和 `handleError` 由宿主实现，保持 Client 与订阅存活到观察结束。
+
+| 事件 kind | 应如何处理 |
+|---|---|
+| accepted | 立即保存 receipt 中的 regionId、desktopIds、invokeId 和 requestId；受理不等于成功 |
+| desktop | 用 result 替换该桌面的状态与输出；这是完整快照，不能当作 delta 追加。outputTruncated 或 dropped 表示输出不完整 |
+| completed | 检查 allSucceeded 及每个桌面的 results；完成不表示所有脚本成功 |
+
+SDK 自动查询云端执行记录并发出上述事件，当前不是服务端主动 Push。只有桌面状态 Success 且退出码为字符串 `"0"` 才算成功；未知状态或缺失结果继续等待。
+
+断线或观察超时后，用保存的 receipt 在新 Client 中调用 `observeCommand`，它只恢复读取，不重新提交命令。提交结果未知且未取得 invokeId 时，先通过已授权的云端记录核对，不能重复执行来猜测结果。退订或关闭 Client 只停止本地观察，不停止已受理的远端命令。
+
+CLI 的对应入口：
+
+```sh
+wuying runtimes run-command --request-file command.json --timeout 600000 --output jsonl
+wuying runtimes observe-command --request-file receipt.json --timeout 600000 --output jsonl
+```
+
+command.json 包含示例中的 regionId、desktopIds、type、commandContent；receipt.json 包含原结果的 regionId、desktopIds、invokeId。JSONL 的 `status: event`、`type: runtime-command` 包装 SDK 事件。CLI 全部成功退出 0，任一脚本失败退出 5（结果在 error.details）；观察失败保留恢复坐标并返回 unknown；超时等未知结果退出 6，认证或授权拒绝退出 3；中断退出 130，不表示远端取消。
+
+完整字段、预算和语言签名见 [`runCommand`](/api-reference/runtimes/run-command) 与 [`observeCommand`](/api-reference/runtimes/observe-command)。Android / iOS 当前移动清单没有这两个入口。
 
 ## 配置与服务访问
 

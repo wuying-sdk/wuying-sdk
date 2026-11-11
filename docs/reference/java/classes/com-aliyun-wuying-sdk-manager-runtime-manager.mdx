@@ -10,6 +10,7 @@ description: "Java 公开成员及重载。"
 
 ```java
 public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
+public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService, com.aliyun.wuying.sdk.internal.RuntimeCommands, java.lang.Runnable);
 ```
 
 [查看操作或完整契约](/reference/java/public#entry-3792455a7160b31f)
@@ -77,3 +78,19 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/capabilities)
+
+## runCommand
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/run-command)
+
+## observeCommand
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> observeCommand(com.aliyun.wuying.sdk.model.ObserveCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+```
+
+[查看操作或完整契约](/api-reference/runtimes/observe-command)

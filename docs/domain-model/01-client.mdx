@@ -11,7 +11,7 @@ Client 是当前身份下访问 SDK 的根入口，统一取得业务 Manager、
 
 | 模型 | 关键含义 | 调用方负责 |
 |---|---|---|
-| ClientOptions | AuthCode 或完整 loginToken/sessionId/endUserId，按需提供登录地域 | 从宿主认证系统安全注入，不在 Web 放置 AK/SK |
+| ClientOptions | 管理员 AK/SK；用户态 AuthCode、完整 loginToken/sessionId/endUserId 或组织账号密码（三选一），按需提供登录地域 | 从宿主认证系统安全注入，不在 Web 放置 AK/SK |
 | 配置对象 | 授权 Client ID、数据位置、日志及 SDK 配置 | 为账号/环境选择独占的可写数据位置 |
 | Context / CallContext / context.Context | 调用期限、取消和可选追踪元数据 | 不把本地等待结束解释成远端已取消 |
 | Subscription | 本地观察句柄 | 页面退出退订；不关闭其他组件共享的 Client |
@@ -41,7 +41,7 @@ JS 普通请求与长流分别遵循其 Context 的合法范围，不能把长�
 
 ## 边界与示例
 
-Node 需要真实持久 IndexedDB 能力（本包示例使用指定 shim），浏览器需要其原生能力。用户密码登录页属于 demo Host，不是公共 SDK 的统一密码接口。安装/只读示例见 [语言绑定](/domain-model/language-bindings)，通用细节见 [认证与生命周期](/integration/01-auth-and-lifecycle)。
+Node 需要真实持久 IndexedDB 能力（本包示例使用指定 shim），浏览器需要其原生能力。JS / Go / Java 根 Client 已支持组织账号密码登录；它仍是无影用户态，不授予管理员权限。MFA、SSO 或改密挑战返回 LOGIN_CHALLENGE_REQUIRED，当前 SDK 不承接后续挑战。Android / iOS 移动配置未开放密码登录。安装/只读示例见 [语言绑定](/domain-model/language-bindings)，通用细节见 [认证与生命周期](/integration/01-auth-and-lifecycle)。
 
 
 ## 关联模块

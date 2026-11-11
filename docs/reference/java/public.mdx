@@ -522,6 +522,16 @@ public com.aliyun.wuying.sdk.WuyingClient(com.aliyun.wuying.sdk.config.ClientOpt
 public com.aliyun.wuying.sdk.WuyingClient(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.config.SdkConfig);
 ```
 
+<a id="entry-3a330b3a4fee4791" />
+
+### com.aliyun.wuying.sdk.WuyingClient.buildRuntimeManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-runtime-manager)。
+
+```java
+public com.aliyun.wuying.sdk.manager.RuntimeManager buildRuntimeManager(com.aliyun.wuying.sdk.CallContext);
+```
+
 <a id="entry-b905cc971568ea30" />
 
 ### com.aliyun.wuying.sdk.WuyingClient.start
@@ -682,16 +692,6 @@ public com.aliyun.wuying.sdk.manager.ModelManager buildModelManager(com.aliyun.w
 
 ```java
 public com.aliyun.wuying.sdk.manager.CreditManager buildCreditManager(com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-3a330b3a4fee4791" />
-
-### com.aliyun.wuying.sdk.WuyingClient.buildRuntimeManager
-
-类别：模型操作。[按模型查看操作](/api-reference/client/build-runtime-manager)。
-
-```java
-public com.aliyun.wuying.sdk.manager.RuntimeManager buildRuntimeManager(com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-149081fdeb803372" />
@@ -3365,6 +3365,36 @@ public com.aliyun.wuying.sdk.config.AdminImConfig build();
 public static com.aliyun.wuying.sdk.config.ClientOptions$Builder builder();
 ```
 
+<a id="entry-3e74122eef50bb74" />
+
+### com.aliyun.wuying.sdk.config.ClientOptions.getOrganizationId
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public java.lang.String getOrganizationId();
+```
+
+<a id="entry-58de1afc0638aa03" />
+
+### com.aliyun.wuying.sdk.config.ClientOptions.getUsername
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public java.lang.String getUsername();
+```
+
+<a id="entry-7e917944a2efa4f0" />
+
+### com.aliyun.wuying.sdk.config.ClientOptions.getPassword
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public java.lang.String getPassword();
+```
+
 <a id="entry-530cbc7e8f5af6a8" />
 
 ### com.aliyun.wuying.sdk.config.ClientOptions.getAuthCode
@@ -3483,6 +3513,16 @@ public java.lang.String toString();
 
 ```java
 public com.aliyun.wuying.sdk.config.ClientOptions$Builder();
+```
+
+<a id="entry-165491738881536a" />
+
+### com.aliyun.wuying.sdk.config.ClientOptions$Builder.passwordAuthentication
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.config.ClientOptions$Builder passwordAuthentication(java.lang.String, java.lang.String, java.lang.String);
 ```
 
 <a id="entry-116737d3657951ff" />
@@ -5376,6 +5416,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupA
 
 ```java
 public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
+public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService, com.aliyun.wuying.sdk.internal.RuntimeCommands, java.lang.Runnable);
 ```
 
 <a id="entry-e65c8d12c331d17e" />
@@ -5456,6 +5497,26 @@ public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuyin
 
 ```java
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.HostCapabilities>> getHostCapabilities(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-2b1519de08a6a8ef" />
+
+### com.aliyun.wuying.sdk.manager.RuntimeManager.runCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-66a8937585b214f3" />
+
+### com.aliyun.wuying.sdk.manager.RuntimeManager.observeCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> observeCommand(com.aliyun.wuying.sdk.model.ObserveCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-9f1262588d69a41b" />
@@ -5958,6 +6019,16 @@ public com.aliyun.wuying.sdk.model.ClientConfig$InitialSyncValue();
 
 ```java
 public com.aliyun.wuying.sdk.model.ClientConfig$StreamingValue();
+```
+
+<a id="entry-3b4733fb8bbf6f6f" />
+
+### com.aliyun.wuying.sdk.model.CommandDesktopResult.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.CommandDesktopResult();
 ```
 
 <a id="entry-536a20455ec49b52" />
@@ -7790,6 +7861,16 @@ public com.aliyun.wuying.sdk.model.MutationRef();
 public com.aliyun.wuying.sdk.model.MutationStatus();
 ```
 
+<a id="entry-2bf475ab90ab956c" />
+
+### com.aliyun.wuying.sdk.model.ObserveCommandRequest.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.ObserveCommandRequest();
+```
+
 <a id="entry-d466bb3f165734cb" />
 
 ### com.aliyun.wuying.sdk.model.Observer.onSnapshot
@@ -8110,6 +8191,16 @@ public com.aliyun.wuying.sdk.model.ResourceSelection();
 public com.aliyun.wuying.sdk.model.ResponsibilityPatch();
 ```
 
+<a id="entry-7d37d342660e99b3" />
+
+### com.aliyun.wuying.sdk.model.RunCommandRequest.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.RunCommandRequest();
+```
+
 <a id="entry-9bcd3ed6fadb1adf" />
 
 ### com.aliyun.wuying.sdk.model.RuntimeCapabilities.constructor
@@ -8118,6 +8209,76 @@ public com.aliyun.wuying.sdk.model.ResponsibilityPatch();
 
 ```java
 public com.aliyun.wuying.sdk.model.RuntimeCapabilities();
+```
+
+<a id="entry-05c5929329734d52" />
+
+### com.aliyun.wuying.sdk.model.RuntimeCommandEvent.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.RuntimeCommandEvent();
+```
+
+<a id="entry-063e44d4db55f94f" />
+
+### com.aliyun.wuying.sdk.model.RuntimeCommandObserver.onEvent
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public abstract void onEvent(com.aliyun.wuying.sdk.model.RuntimeCommandEvent);
+```
+
+<a id="entry-60a751c7301018f6" />
+
+### com.aliyun.wuying.sdk.model.RuntimeCommandObserver.onError
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public abstract void onError(com.aliyun.wuying.sdk.model.BusinessException);
+```
+
+<a id="entry-aac56713b163afd3" />
+
+### com.aliyun.wuying.sdk.model.RuntimeCommandReceipt.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.RuntimeCommandReceipt();
+```
+
+<a id="entry-036235b088648dbc" />
+
+### com.aliyun.wuying.sdk.model.RuntimeCommandSubscription.getReceipt
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public abstract com.aliyun.wuying.sdk.model.RuntimeCommandReceipt getReceipt();
+```
+
+<a id="entry-dd5debbbb527b2bc" />
+
+### com.aliyun.wuying.sdk.model.RuntimeCommandSubscription.unsubscribe
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public abstract void unsubscribe();
+```
+
+<a id="entry-076d0c396fde0280" />
+
+### com.aliyun.wuying.sdk.model.RuntimeCommandSubscription.close
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public default void close();
 ```
 
 <a id="entry-c48ea843a70813e4" />

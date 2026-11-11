@@ -70,10 +70,26 @@ generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: C
 
 [查看操作或完整契约](/api-reference/runtimes/generate-scene-url)
 
+## runCommand
+
+```ts
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+```
+
+[查看操作或完整契约](/api-reference/runtimes/run-command)
+
+## observeCommand
+
+```ts
+observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+```
+
+[查看操作或完整契约](/api-reference/runtimes/observe-command)
+
 ## constructor
 
 ```ts
-new new (container: ServiceContainer | undefined, checkOpen: () => void, runtimeService?: (() => Service) | undefined): RuntimeManager;
+new new (container: ServiceContainer | undefined, checkOpen: () => void, runtimeService?: (() => Service) | undefined, commands?: RuntimeCommands | undefined): RuntimeManager;
 ```
 
 [查看操作或完整契约](/reference/js/public#entry-572e0000989d8b4e)
@@ -141,3 +157,19 @@ generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: C
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/generate-scene-url)
+
+## runCommand
+
+```ts
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+```
+
+[查看操作或完整契约](/api-reference/runtimes/run-command)
+
+## observeCommand
+
+```ts
+observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+```
+
+[查看操作或完整契约](/api-reference/runtimes/observe-command)

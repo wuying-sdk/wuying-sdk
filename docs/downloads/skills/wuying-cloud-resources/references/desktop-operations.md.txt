@@ -65,3 +65,28 @@ There is no new lifecycle-status listing command in this CLI. Do not use `runtim
 IM status or `desktops wait` as a generic power-state query. When an operation's final
 state is unknown, report the receipt and use the customer's authorized resource status
 source rather than inventing a CLI poller.
+
+## System commands
+
+Administrator mode only; user mode returns UNSUPPORTED. Specify 1–50 real desktop IDs,
+regionId, type and commandContent. Example for a PowerShell-capable desktop:
+
+```json
+{"regionId":"cn-hangzhou","desktopIds":["desktop-id"],"type":"RunPowerShellScript","commandContent":"Write-Output hello"}
+```
+
+```sh
+wuying runtimes run-command --profile <admin-profile> --request-file <command.json> --timeout 600000 --output jsonl
+wuying runtimes observe-command --profile <admin-profile> --request-file <receipt.json> --timeout 600000 --output jsonl
+```
+
+receipt.json contains only regionId, desktopIds and invokeId from the saved receipt,
+not the whole JSONL envelope. Event envelopes have status=event, type=runtime-command;
+data.kind is accepted, desktop or completed. Save data.receipt on acceptance. Desktop
+output is a replacement snapshot, not a delta; outputTruncated or dropped means it
+is incomplete. Success requires each desktop's Success status and exitCode="0".
+Completed contains results and allSucceeded. CLI exit 0 requires all success; any
+script failure exits 5 with results in error.details. Observation failures preserve unknown outcome and recovery coordinates. Timeout/unknown errors exit 6; authentication or authorization errors exit 3; query again without resending.
+If submission outcome is unknown without invokeId, reconcile authorized cloud records.
+Interrupt exit 130 does not cancel remote execution. Do not log scripts or outputs
+as diagnostics; show only the result requested by the user.

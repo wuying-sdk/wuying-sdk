@@ -76,6 +76,17 @@ wuying auth import
 required --stdin — Read a credential JSON object from stdin
 ```
 
+<a id="entry-46c84bf18bc9fdbf" />
+
+### auth.auth login
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/auth-login)。
+
+```sh
+wuying auth login
+required --stdin — Read organizationId, username and password JSON; save only the resulting login tuple
+```
+
 <a id="entry-7a423a6514b8c30e" />
 
 ### auth.auth logout
@@ -430,6 +441,30 @@ wuying runtimes
 ```sh
 wuying runtimes list
 
+```
+
+<a id="entry-100fc8994e4fa292" />
+
+### runtimes.runtimes observe-command
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
+
+```sh
+wuying runtimes observe-command
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-2277ba4de770765d" />
+
+### runtimes.runtimes run-command
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
+
+```sh
+wuying runtimes run-command
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
 ```
 
 <a id="entry-ce85ac68437ecca9" />

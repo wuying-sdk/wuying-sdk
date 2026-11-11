@@ -3,7 +3,7 @@ title: "Java 公共 API 参考"
 description: "同版本 Java SDK jar 的公开签名；参数说明另见随包离线 Javadoc。"
 ---
 
-由本次 JDK 8/11 验证产物 javap -public 生成。基础提交 ea48f8775d28753cefef13b937982dd44587aa51 加 RuntimeManager 工作区草稿；不是旧提交原始 jar。
+由本次 JDK 8/11 验证产物 javap -public 生成。基础提交 4b855bcac053d9e766daf38da35ccff7875cb0e5 加 RuntimeManager 工作区草稿；不是旧提交原始 jar。
 
 ```java
 Compiled from "Administration.java"
@@ -101,6 +101,7 @@ public final class com.aliyun.wuying.sdk.Errors {
 }
 Compiled from "WuyingClient.java"
 public final class com.aliyun.wuying.sdk.WuyingClient implements java.lang.AutoCloseable {
+  public com.aliyun.wuying.sdk.manager.RuntimeManager buildRuntimeManager(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> start(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> stop(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> reboot(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
@@ -121,7 +122,6 @@ public final class com.aliyun.wuying.sdk.WuyingClient implements java.lang.AutoC
   public com.aliyun.wuying.sdk.manager.SkillManager buildSkillManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.ModelManager buildModelManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.CreditManager buildCreditManager(com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.manager.RuntimeManager buildRuntimeManager(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMCredentials> getIMCredentials(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> refreshLogin(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> updateLoginCredentials(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.CallContext);
@@ -681,6 +681,9 @@ public final class com.aliyun.wuying.sdk.config.AdminImConfig$Builder {
 Compiled from "ClientOptions.java"
 public final class com.aliyun.wuying.sdk.config.ClientOptions {
   public static com.aliyun.wuying.sdk.config.ClientOptions$Builder builder();
+  public java.lang.String getOrganizationId();
+  public java.lang.String getUsername();
+  public java.lang.String getPassword();
   public java.lang.String getAuthCode();
   public java.lang.String getLoginToken();
   public java.lang.String getSessionId();
@@ -699,6 +702,7 @@ class com.aliyun.wuying.sdk.config.ClientOptions$1 {
 Compiled from "ClientOptions.java"
 public final class com.aliyun.wuying.sdk.config.ClientOptions$Builder {
   public com.aliyun.wuying.sdk.config.ClientOptions$Builder();
+  public com.aliyun.wuying.sdk.config.ClientOptions$Builder passwordAuthentication(java.lang.String, java.lang.String, java.lang.String);
   public com.aliyun.wuying.sdk.config.ClientOptions$Builder accessKey(java.lang.String, java.lang.String);
   public com.aliyun.wuying.sdk.config.ClientOptions$Builder authCode(java.lang.String);
   public com.aliyun.wuying.sdk.config.ClientOptions$Builder loginToken(java.lang.String);
@@ -985,6 +989,7 @@ public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.ali
 Compiled from "RuntimeManager.java"
 public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliyun.wuying.sdk.manager.BaseManager {
   public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
+  public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService, com.aliyun.wuying.sdk.internal.RuntimeCommands, java.lang.Runnable);
   public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUsageInfo> describeCreditUsageInfo(com.aliyun.wuying.sdk.model.DescribeCreditUsageInfoRequest, com.aliyun.wuying.sdk.CallContext);
@@ -993,6 +998,8 @@ public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliy
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.HostCapabilities>> getHostCapabilities(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> observeCommand(com.aliyun.wuying.sdk.model.ObserveCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "SkillManager.java"
 public final class com.aliyun.wuying.sdk.manager.SkillManager extends com.aliyun.wuying.sdk.manager.BaseManager {
@@ -1290,6 +1297,21 @@ public class com.aliyun.wuying.sdk.model.ClientConfig$StreamingValue {
   public java.lang.Boolean enabled;
   public java.lang.Object onEvent;
   public com.aliyun.wuying.sdk.model.ClientConfig$StreamingValue();
+}
+Compiled from "CommandDesktopResult.java"
+public final class com.aliyun.wuying.sdk.model.CommandDesktopResult {
+  public java.lang.String desktopId;
+  public java.lang.String status;
+  public java.lang.String output;
+  public java.lang.String exitCode;
+  public java.lang.String errorCode;
+  public java.lang.String errorInfo;
+  public boolean terminal;
+  public boolean success;
+  public boolean outputTruncated;
+  public boolean errorInfoTruncated;
+  public long dropped;
+  public com.aliyun.wuying.sdk.model.CommandDesktopResult();
 }
 Compiled from "CommandReceipt.java"
 public class com.aliyun.wuying.sdk.model.CommandReceipt extends com.aliyun.wuying.sdk.model.CommandReceiptRef {
@@ -2757,6 +2779,14 @@ public class com.aliyun.wuying.sdk.model.MutationStatus extends com.aliyun.wuyin
   public java.lang.Boolean retryable;
   public com.aliyun.wuying.sdk.model.MutationStatus();
 }
+Compiled from "ObserveCommandRequest.java"
+public final class com.aliyun.wuying.sdk.model.ObserveCommandRequest {
+  public java.lang.String regionId;
+  public java.lang.String invokeId;
+  public java.util.List<java.lang.String> desktopIds;
+  public java.lang.Long pollIntervalMs;
+  public com.aliyun.wuying.sdk.model.ObserveCommandRequest();
+}
 Compiled from "Observer.java"
 public interface com.aliyun.wuying.sdk.model.Observer<T> {
   public abstract void onSnapshot(com.aliyun.wuying.sdk.model.Snapshot<T>);
@@ -2982,12 +3012,51 @@ public class com.aliyun.wuying.sdk.model.ResponsibilityPatch {
   public java.lang.String text;
   public com.aliyun.wuying.sdk.model.ResponsibilityPatch();
 }
+Compiled from "RunCommandRequest.java"
+public final class com.aliyun.wuying.sdk.model.RunCommandRequest {
+  public java.lang.String regionId;
+  public java.lang.String type;
+  public java.lang.String commandContent;
+  public java.lang.String contentEncoding;
+  public java.lang.String endUserId;
+  public java.lang.String commandRole;
+  public java.util.List<java.lang.String> desktopIds;
+  public java.lang.Long timeoutSeconds;
+  public java.lang.Long pollIntervalMs;
+  public com.aliyun.wuying.sdk.model.RunCommandRequest();
+}
 Compiled from "RuntimeCapabilities.java"
 public class com.aliyun.wuying.sdk.model.RuntimeCapabilities {
   public com.aliyun.wuying.sdk.model.Capability agentQuery;
   public com.aliyun.wuying.sdk.model.Capability conversationCreate;
   public com.aliyun.wuying.sdk.model.Capability resourceQuery;
   public com.aliyun.wuying.sdk.model.RuntimeCapabilities();
+}
+Compiled from "RuntimeCommandEvent.java"
+public final class com.aliyun.wuying.sdk.model.RuntimeCommandEvent {
+  public java.lang.String kind;
+  public com.aliyun.wuying.sdk.model.RuntimeCommandReceipt receipt;
+  public com.aliyun.wuying.sdk.model.CommandDesktopResult result;
+  public java.util.List<com.aliyun.wuying.sdk.model.CommandDesktopResult> results;
+  public boolean allSucceeded;
+  public com.aliyun.wuying.sdk.model.RuntimeCommandEvent();
+}
+Compiled from "RuntimeCommandObserver.java"
+public interface com.aliyun.wuying.sdk.model.RuntimeCommandObserver {
+  public abstract void onEvent(com.aliyun.wuying.sdk.model.RuntimeCommandEvent);
+  public abstract void onError(com.aliyun.wuying.sdk.model.BusinessException);
+}
+Compiled from "RuntimeCommandReceipt.java"
+public final class com.aliyun.wuying.sdk.model.RuntimeCommandReceipt {
+  public java.lang.String regionId;
+  public java.lang.String invokeId;
+  public java.lang.String requestId;
+  public java.util.List<java.lang.String> desktopIds;
+  public com.aliyun.wuying.sdk.model.RuntimeCommandReceipt();
+}
+Compiled from "RuntimeCommandSubscription.java"
+public interface com.aliyun.wuying.sdk.model.RuntimeCommandSubscription extends com.aliyun.wuying.sdk.model.Subscription {
+  public abstract com.aliyun.wuying.sdk.model.RuntimeCommandReceipt getReceipt();
 }
 Compiled from "RuntimeRef.java"
 public class com.aliyun.wuying.sdk.model.RuntimeRef {

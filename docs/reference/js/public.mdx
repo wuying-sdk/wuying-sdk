@@ -1988,6 +1988,36 @@ getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string;
 new new (service: Service): ResourceManager;
 ```
 
+<a id="entry-da559000610436c3" />
+
+### RuntimeCommandObserver.onEvent
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+onEvent(event: RuntimeCommandEvent): void;
+```
+
+<a id="entry-3c93c31ec880c98b" />
+
+### RuntimeCommandObserver.onError
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+onError(error: BusinessError$1): void;
+```
+
+<a id="entry-ffd13d64efa7b1be" />
+
+### RuntimeCommandSubscription.unsubscribe
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+unsubscribe(): void;
+```
+
 <a id="entry-524d2522dabd84d4" />
 
 ### RuntimeManager.listRuntimes
@@ -2068,6 +2098,26 @@ approveFotaUpdate(ctx: ExecutionContext, req: ApproveFotaUpdateRequest, ...opts:
 generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: CallOption[]): Promise<GenerateSceneUrlResponse | null>;
 ```
 
+<a id="entry-728aba75a7c5c2ed" />
+
+### RuntimeManager.runCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
+
+```ts
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+```
+
+<a id="entry-dbe2dbe38021ccd0" />
+
+### RuntimeManager.observeCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
+
+```ts
+observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+```
+
 <a id="entry-572e0000989d8b4e" />
 
 ### RuntimeManager.constructor
@@ -2075,7 +2125,7 @@ generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: C
 类别：类型、配置、构造、回调或辅助入口。
 
 ```ts
-new new (container: ServiceContainer | undefined, checkOpen: () => void, runtimeService?: (() => Service) | undefined): RuntimeManager;
+new new (container: ServiceContainer | undefined, checkOpen: () => void, runtimeService?: (() => Service) | undefined, commands?: RuntimeCommands | undefined): RuntimeManager;
 ```
 
 <a id="entry-f45de22669d36167" />
@@ -2316,6 +2366,26 @@ approveFotaUpdate(ctx: ExecutionContext, req: ApproveFotaUpdateRequest, ...opts:
 
 ```ts
 generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: CallOption[]): Promise<GenerateSceneUrlResponse | null>;
+```
+
+<a id="entry-3541dc756808151a" />
+
+### RuntimeManager.runCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
+
+```ts
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+```
+
+<a id="entry-dce51e32eb29cb7b" />
+
+### RuntimeManager.observeCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
+
+```ts
+observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
 ```
 
 <a id="entry-86f92a55d2fdb8e2" />

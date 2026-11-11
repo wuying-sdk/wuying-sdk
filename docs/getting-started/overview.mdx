@@ -22,7 +22,7 @@ description: "选择 Go、Java、JS 或 CLI，准备身份、运行环境与独�
 
 ## 调用前准备
 
-1. 由应用宿主取得有效 AuthCode，或完整 loginToken/sessionId/endUserId 登录材料，并提供获授权 Client ID。四种 SDK 的业务入口不等于桌面端用户名密码登录界面。
+1. 由应用宿主取得有效 AuthCode、完整 loginToken/sessionId/endUserId 登录材料，或组织账号密码（JS / Go / Java / CLI），并提供获授权 Client ID。Android / iOS 当前移动配置只支持 AuthCode 或 LoginToken。
 2. 为当前账号准备私有数据位置：Go/Java 使用数据库文件；Node 的 IndexedDB shim 与 CLI 使用私有目录。账号切换不得复用另一账号的数据。
 3. 使用同版本公开查询选出 Runtime 和 Agent，保留返回的真实 ID 与可用性信息。先确认投影就绪，再判断目录是否为空。
 4. 在目标 OS/CPU 上安装依赖并先跑默认帮助/只读检查。Windows/Linux/macOS 的支持范围与实际验证范围分别记录。

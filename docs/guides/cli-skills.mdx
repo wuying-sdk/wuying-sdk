@@ -34,7 +34,7 @@ wuying codex install --scope project --project-dir /absolute/project
 
 ## 开始使用
 
-通过客户自己的环境或认证流程配置管理员/用户态凭据，见[授权与认证](/integration/01-auth-and-lifecycle)。不要把 AK/SK、AuthCode 或 LoginToken 粘贴到对话中。
+通过客户自己的环境或认证流程配置管理员/用户态凭据，见[授权与认证](/integration/01-auth-and-lifecycle)。不要把 AK/SK、AuthCode、LoginToken 或密码粘贴到对话中。
 
 明确要操作的身份、地域和资源后，可这样提问：
 
@@ -49,6 +49,12 @@ wuying codex install --scope project --project-dir /absolute/project
 ```
 
 `--profile` 不会覆盖环境凭据；切换到用户 profile 前，应由宿主移除管理员环境凭据。资源受理不等于操作完成，远程任务受理也不等于 Turn 已完成；两个 Skill 分别说明各自的结果判断和恢复方式。
+
+## 执行系统命令与恢复
+
+云资源 Skill 还覆盖管理员 `runtimes run-command` 与 `runtimes observe-command`。明确目标桌面、脚本和身份后调用，保存 accepted 回执；输出按桌面替换，检查 allSucceeded。观察失败用原 invokeId 恢复只读核对，不重复提交脚本。它与自然语言 `wuying run` 的远程 Agent 任务分开使用。
+
+组织账号密码使用宿主秘密注入与 `auth login --stdin`，不让 Agent 从对话收集或回显密码。具体认证与本地凭据行为见[初始化指南](/getting-started/initialize-client)。
 
 ## 更新与其他 Agent 宿主
 
