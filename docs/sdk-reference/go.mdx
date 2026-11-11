@@ -26,7 +26,7 @@ replace 指向实际源码目录，不是 demo Host。首次构建需要可下�
 
 ## 最小只读程序
 
-可运行源码：[examples/go/main.go](/downloads/examples/go/main.go.txt)。以下是核心调用：
+可运行源码：[examples/go/main.go](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/go/main.go.txt)。以下是核心调用：
 
 ```go
 ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
@@ -68,7 +68,7 @@ Client 是对外根入口；通过 `BuildAgentManager` 和 `BuildConversationMan
 
 ## 完整业务示例与 API 参考
 
-[Go workflow 源码](/downloads/examples/go-workflow/main.go.txt) 提供新建会话 → 获取受理 → 消费流 → 核对 Turn 的完整流程。它默认只显示帮助；显式 `go run . --send` 才执行真实写入。除前述认证与数据库配置，还需宿主提供 `WUYING_RUNTIME_ID`、`WUYING_AGENT_ID`、`WUYING_CREATE_ID`、`WUYING_COMMAND_ID`、`WUYING_INPUT_FILE`。先通过只读查询人工选择环境/Agent；任务文件使用 UTF-8，示例不输出正文。前两个操作 ID 必须为本次业务稳定保存，结果未知时先按原 ID 对账，不能更换 ID 重发。
+[Go workflow 源码](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/go-workflow/main.go.txt) 提供新建会话 → 获取受理 → 消费流 → 核对 Turn 的完整流程。它默认只显示帮助；显式 `go run . --send` 才执行真实写入。除前述认证与数据库配置，还需宿主提供 `WUYING_RUNTIME_ID`、`WUYING_AGENT_ID`、`WUYING_CREATE_ID`、`WUYING_COMMAND_ID`、`WUYING_INPUT_FILE`。先通过只读查询人工选择环境/Agent；任务文件使用 UTF-8，示例不输出正文。前两个操作 ID 必须为本次业务稳定保存，结果未知时先按原 ID 对账，不能更换 ID 重发。
 
 在 `examples/go-workflow` 运行 `go build .` / `go run . --help` 可只验证编译和入口，无业务请求。示例创建单 Agent 会话，示范流式消费；现有会话可复用公开 ConversationRef，不需要每轮重建会话。
 

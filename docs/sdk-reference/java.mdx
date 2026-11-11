@@ -25,7 +25,7 @@ description: "Java SDK 客户集成指南：职责、模型关联、生命周期
 node scripts/qa.mjs sdk-smoke --language=java
 ```
 
-如未配置 JAVA_HOME，加 `"--java-home=实际 JDK 路径"`。该命令调用 javac 编译 [ReadOnlyExample.java](/downloads/examples/java/ReadOnlyExample.java.txt)，并以 `--help` 运行，不登录。
+如未配置 JAVA_HOME，加 `"--java-home=实际 JDK 路径"`。该命令调用 javac 编译 [ReadOnlyExample.java](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/java/ReadOnlyExample.java.txt)，并以 `--help` 运行，不登录。
 
 手动命令（在包根目录；先创建 `classes` 目录）：
 
@@ -80,7 +80,7 @@ SDK 管理持久副本和连接；每账号/环境使用独立数据库，应用
 
 ## 完整业务示例与 API 参考
 
-[WorkflowExample.java](/downloads/examples/java/WorkflowExample.java.txt) 实现创建会话 → 订阅消息 → 发送并等待 → 核对 Turn → try-with-resources 退订和关闭。默认 `--help` 不发请求，只有 `--send` 执行真实写入。宿主还需注入 `WUYING_RUNTIME_ID`、`WUYING_AGENT_ID`、`WUYING_CREATE_ID`、`WUYING_COMMAND_ID`、`WUYING_INPUT_FILE`；输入文件是 UTF-8，输出仅关联 ID / 状态。稳定 ID 在发出前由业务保存，超时后不换 ID 自动重发。
+[WorkflowExample.java](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/java/WorkflowExample.java.txt) 实现创建会话 → 订阅消息 → 发送并等待 → 核对 Turn → try-with-resources 退订和关闭。默认 `--help` 不发请求，只有 `--send` 执行真实写入。宿主还需注入 `WUYING_RUNTIME_ID`、`WUYING_AGENT_ID`、`WUYING_CREATE_ID`、`WUYING_COMMAND_ID`、`WUYING_INPUT_FILE`；输入文件是 UTF-8，输出仅关联 ID / 状态。稳定 ID 在发出前由业务保存，超时后不换 ID 自动重发。
 
 使用前面的 classpath 命令将源文件名/主类换为 WorkflowExample；编译后先以 --help 运行。示例中的消息快照回调只展示 phase，真实 UI 应按 Message ID 更新快照，不能反复追加。示例需要执行至终态才返回；需要尽早保存 accepted 的产品应使用 MessageStream 的 accepted/result，并处理两个异步结果。
 

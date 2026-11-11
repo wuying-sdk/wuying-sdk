@@ -19,7 +19,7 @@ description: "JS / TypeScript SDK 客户集成指南：职责、模型关联、�
 npm install /absolute/path/to/kit/sdks/js/aliyun-wuying-sdk-1.0.0.tgz
 ```
 
-Windows 使用带引号的本地路径。包同时包含 CommonJS、ESM 和 TypeScript 声明；通过 `import {Client} from '@aliyun/wuying-sdk'` 或 `require('@aliyun/wuying-sdk')` 进入公开根 Client。`sdks/js/runtime` 是相同构建的可检查输出，不含 Node 的持久化 shim。浏览器 ESM 在 `sdks/js/browser/index.mjs`；用 HTTP 静态服务托管，不用 file://。已提供 [browser.html](/downloads/examples/js/browser.html.txt) 只读集成模板，须由客户宿主在运行时注入授权材料。
+Windows 使用带引号的本地路径。包同时包含 CommonJS、ESM 和 TypeScript 声明；通过 `import {Client} from '@aliyun/wuying-sdk'` 或 `require('@aliyun/wuying-sdk')` 进入公开根 Client。`sdks/js/runtime` 是相同构建的可检查输出，不含 Node 的持久化 shim。浏览器 ESM 在 `sdks/js/browser/index.mjs`；用 HTTP 静态服务托管，不用 file://。已提供 [browser.html](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/js/browser.html.txt) 只读集成模板，须由客户宿主在运行时注入授权材料。
 
 SDK package 标注 Node &gt;=18；本交付 Node 示例 / CLI / QA 统一验收 Node 22 LTS（22.18+）或 24.11+，不要把较低引擎下限当成本示例已验证。现代浏览器需要 IndexedDB、WebSocket、fetch，受企业网络 / CSP / 代理策略影响。
 
@@ -87,9 +87,9 @@ try {
 
 ## 完整业务示例与发布输出
 
-本版按既有 Node 发布流程保留 CJS、Node ESM、浏览器 ESM、Source Map、完整类型声明、公开 API 与迁移文档，而不仅是一页快速上手。正式参考入口为 [API V3](/reference/js/api)、[当前声明文件](/downloads/reference/js/index.d.ts.txt)、[新版交互](/domain-model/07-interaction) 和 [退役迁移](/support/migration)。历史说明与当前声明冲突时，以本包声明和实际能力为准。
+本版按既有 Node 发布流程保留 CJS、Node ESM、浏览器 ESM、Source Map、完整类型声明、公开 API 与迁移文档，而不仅是一页快速上手。正式参考入口为 [API V3](/reference/js/api)、[当前声明文件](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/reference/js/index.d.ts.txt)、[新版交互](/domain-model/07-interaction) 和 [退役迁移](/support/migration)。历史说明与当前声明冲突时，以本包声明和实际能力为准。
 
-[conversation-workflow.mts](/downloads/examples/js/conversation-workflow.mts.txt) 是既有 Node 发布脚本使用的根 API 组合示例，接收调用者选择，订阅先于发送，并在所有结果下退订。该历史组合函数不示范完整幂等恢复；需要稳定 mutationId/clientCommandId 时使用下面的新可运行 workflow。本次另外提供 [workflow.mjs](/downloads/examples/js/workflow.mjs.txt) 可运行 Node 版本：在 examples/js 安装依赖后，默认 `node workflow.mjs --help` 不访问业务；显式 `--send` 才创建并发送。
+[conversation-workflow.mts](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/js/conversation-workflow.mts.txt) 是既有 Node 发布脚本使用的根 API 组合示例，接收调用者选择，订阅先于发送，并在所有结果下退订。该历史组合函数不示范完整幂等恢复；需要稳定 mutationId/clientCommandId 时使用下面的新可运行 workflow。本次另外提供 [workflow.mjs](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/js/workflow.mjs.txt) 可运行 Node 版本：在 examples/js 安装依赖后，默认 `node workflow.mjs --help` 不访问业务；显式 `--send` 才创建并发送。
 
 除认证/数据目录外，宿主需注入 `WUYING_RUNTIME_ID`、`WUYING_AGENT_ID`、`WUYING_CREATE_ID`、`WUYING_COMMAND_ID`、`WUYING_INPUT_FILE`。人工选择查询返回的环境/Agent；输入文件为 UTF-8，示例只记录 ID/计数/阶段，业务可以将消息快照交给自己的渲染函数。每次 snapshot 按稳定 ID 替换，不当作 token delta。
 

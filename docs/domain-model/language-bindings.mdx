@@ -9,7 +9,7 @@ description: "语言绑定与示例：职责、模型关联、生命周期、公
 
 - [安装、配置与快速上手](/sdk-reference/go)
 - [准确签名 / DTO / 命令参考](/reference/go/api)
-- [领域组合示例或命令流程](/downloads/examples/go-workflow/main.go.txt)
+- [领域组合示例或命令流程](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/go-workflow/main.go.txt)
 
 根入口为 NewClient。context.Context 在前；公开 DTO 通常位于 model，用户配置位于 config。返回值与 error 分开检查，观察后 Unsubscribe，结束 Close。DataPath 为独占库文件。
 
@@ -17,15 +17,15 @@ description: "语言绑定与示例：职责、模型关联、生命周期、公
 
 - [安装、配置与快速上手](/sdk-reference/java)
 - [准确签名 / DTO / 命令参考](/reference/java/api)
-- [领域组合示例或命令流程](/downloads/examples/java/WorkflowExample.java.txt)
+- [领域组合示例或命令流程](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/java/WorkflowExample.java.txt)
 
 根入口为 WuyingClient。普通业务请求 DTO 在前、CallContext 在后；以具体重载为准。异步结果为 CompletionStage，观察使用 Observer/Subscription；利用 try-with-resources 关闭。DataPath 为库文件。
 
 ## JS / TypeScript
 
 - [安装、配置与快速上手](/sdk-reference/js)
-- [准确签名 / DTO / 命令参考](/downloads/reference/js/index.d.ts.txt)
-- [领域组合示例或命令流程](/downloads/examples/js/workflow.mjs.txt)
+- [准确签名 / DTO / 命令参考](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/reference/js/index.d.ts.txt)
+- [领域组合示例或命令流程](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/js/workflow.mjs.txt)
 
 从 @aliyun/wuying-sdk 根导入 Client；Client.create 同步返回。业务 Context 通常在前；按方法返回类型区分 Snapshot&lt;T[]&gt;（读 data）、Snapshot&lt;Page&lt;T&gt;&gt;（读 data.items/nextCursor）和直接 DTO。JS Int64 为字符串。Node 需先准备持久 IndexedDB，安装后保留 shim 补丁。
 
