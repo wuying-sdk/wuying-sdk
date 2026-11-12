@@ -1,0 +1,28 @@
+---
+title: "asp"
+sidebarTitle: "asp"
+description: "CLI 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+
+## asp
+
+```sh
+wuying asp
+
+```
+
+[查看操作或完整契约](/reference/cli/public#entry-3a59f308d78a549a)
+
+## asp open
+
+```sh
+wuying asp open
+required --desktop <id> — Explicit authorized desktop ID
+required --region <id> — Desktop region
+optional --viewer-fd <fd> — Send a one-use viewer handoff only to inherited pipe 3, without opening a system browser
+optional --embed-origin <origin> — Explicit local application origin allowed to embed the viewer; requires --viewer-fd 3
+```
+
+[查看操作或完整契约](/api-reference/asp/asp-open)

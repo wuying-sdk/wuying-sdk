@@ -167,6 +167,14 @@
             ]
           },
           {
+            "group": "工具与集成",
+            "pages": [
+              "guides/administrator-oauth",
+              "guides/asp-desktop",
+              "guides/deepseek-harness"
+            ]
+          },
+          {
             "group": "示例",
             "pages": [
               "examples/index"
@@ -380,6 +388,7 @@
                 "group": "命令",
                 "pages": [
                   "reference/cli/classes/agents",
+                  "reference/cli/classes/asp",
                   "reference/cli/classes/auth",
                   "reference/cli/classes/codex",
                   "reference/cli/classes/conversations",
@@ -491,6 +500,7 @@
               {
                 "group": "ASP",
                 "pages": [
+                  "api-reference/asp/asp-open",
                   "api-reference/asp/get-asp-stream-session",
                   "api-reference/asp/start",
                   "api-reference/asp/stop-asp-stream"
@@ -732,6 +742,7 @@
                   "api-reference/cli/auth-import",
                   "api-reference/cli/auth-login",
                   "api-reference/cli/auth-logout",
+                  "api-reference/cli/auth-oauth",
                   "api-reference/cli/auth-status",
                   "api-reference/cli/codex-install",
                   "api-reference/cli/doctor",

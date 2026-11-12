@@ -42,3 +42,7 @@ Client ID 是接入方标识，不能代替 AK/SK、用户票据或资源授权�
 ## 去哪里排查问题？
 
 先查看[排障与支持](/support/troubleshooting)，提供包哈希、语言版本、发生阶段和必要的脱敏关联 ID。不要公开凭据、SDK 数据库或业务正文。
+
+## OAuth 能用于用户桌面流化或 Agent 任务吗？
+
+不能。OAuth 在当前 CLI / Node 中取得管理员签名凭据，仍由 RAM 决定资源权限；ASP 和 Agent 会话使用无影用户态。分别见 [OAuth](/guides/administrator-oauth) 和 [ASP](/guides/asp-desktop)。

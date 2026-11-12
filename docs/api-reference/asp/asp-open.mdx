@@ -1,0 +1,40 @@
+---
+title: "asp open"
+sidebarTitle: "asp open"
+description: "完整公开接口 · ASP"
+---
+
+`asp open` · ASP
+
+用户态在浏览器打开指定 ASP 桌面，默认1小时；60秒内领取一次性交接，保持 CLI 运行。管理员凭据不支持；无需 Agent/IM 预检。断开只释放本地画面，不关机或取消任务。私有 GUI 管道及嵌入前提见 [ASP 操作指南](/guides/asp-desktop)。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Go | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Java | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| CLI | `wuying asp open` | 已公开声明，需核对环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### CLI · asp
+
+```sh
+wuying asp open
+required --desktop <id> — Explicit authorized desktop ID
+required --region <id> — Desktop region
+optional --viewer-fd <fd> — Send a one-use viewer handoff only to inherited pipe 3, without opening a system browser
+optional --embed-origin <origin> — Explicit local application origin allowed to embed the viewer; requires --viewer-fd 3
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/asp) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

@@ -10,7 +10,7 @@ description: "安装随 CLI 交付的云资源管理与远程 Agent Skill，让 
 | Skill | 适用任务 | 源码阅读 |
 |---|---|---|
 | `wuying-cloud-resources` | 创建、启动、停止、重启、重置及释放云桌面，等待创建就绪，执行并观察系统命令，获取用户 AuthCode | [SKILL.md](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/skills/wuying-cloud-resources/SKILL.md.txt) |
-| `wuying-remote-desktop` | 选择已授权 Runtime 与 Agent、发起任务、读取结果、处理审批与问答 | [SKILL.md](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/skills/wuying-remote-desktop/SKILL.md.txt) |
+| `wuying-remote-desktop` | 浏览器 ASP、管理员 OAuth / 资源操作与脚本，或委派 Agent 任务；由 Skill 路由到对应流程 | [SKILL.md](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/skills/wuying-remote-desktop/SKILL.md.txt) |
 
 仓库位置为 `wuying-sdk-cli/skills/`，CLI 安装包包含这两个完整目录及其 references。可[下载同版本 Skill 包](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/skills/wuying-cli-skills.zip)检查或按宿主要求安装；Skill 包不包含 CLI 可执行文件和凭据。
 
@@ -55,6 +55,10 @@ wuying codex install --scope project --project-dir /absolute/project
 云资源 Skill 还覆盖管理员 `runtimes run-command` 与 `runtimes observe-command`。明确目标桌面、脚本和身份后调用，保存 accepted 回执；输出按桌面替换，检查 allSucceeded。观察失败用原 invokeId 恢复只读核对，不重复提交脚本。它与自然语言 `wuying run` 的远程 Agent 任务分开使用。
 
 组织账号密码使用宿主秘密注入与 `auth login --stdin`，不让 Agent 从对话收集或回显密码。具体认证与本地凭据行为见[初始化指南](/getting-started/initialize-client)。
+
+## ASP 与 OAuth
+
+remote-desktop Skill 新增 `references/cloud-operations.md`，与两个 Skill 一同安装和下载。它覆盖 [ASP 桌面](/guides/asp-desktop)、[管理员 OAuth](/guides/administrator-oauth)和资源操作；这些流程不要求 Agent/IM 预检。Agent 自然语言任务保留用户态发现流程。
 
 ## 更新与其他 Agent 宿主
 

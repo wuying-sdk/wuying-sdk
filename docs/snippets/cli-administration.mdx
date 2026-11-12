@@ -6,6 +6,10 @@ CLI 支持两类权限：aliuid 维度的 AK/SK 管理员权限，以及无影�
 
 管理员凭据通过宿主注入 `WUYING_ACCESS_KEY_ID` / `WUYING_ACCESS_KEY_SECRET`，或 `WUYING_CREDENTIALS` JSON 提供。显式 JSON 优先于独立环境变量，环境凭据优先于已保存的 profile；切换 `--profile` 不会覆盖环境凭据。AK/SK 不作为命令行参数传递。
 
+管理员也可通过 `auth oauth --profile admin --aliyun-profile <name>` 登录；复用已有官方 profile 时用 `--reuse`。它仍属于管理员权限，不是用户态 LoginToken，详见[OAuth 指南](/guides/administrator-oauth)。
+
+用户态可通过 `asp open --desktop <desktopId> --region <regionId>` 打开浏览器交互桌面，详见[ASP 指南](/guides/asp-desktop)。
+
 ## 云桌面管理命令
 
 | 命令 | 用户态 | 管理员 |

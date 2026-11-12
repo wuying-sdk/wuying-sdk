@@ -1,0 +1,69 @@
+---
+title: "DeepSeek Harness 集成"
+description: "在 DeepSeek Harness 中登录无影账号、委派 Agent 任务并打开侧栏云桌面。"
+---
+
+SDK 源码包的 `integrations/deepseek-harness/` 提供无影云电脑插件 **0.3.1**，当前适配 **Windows、DeepSeek Harness 0.2.2-rc.1、Node.js 24.11 或以上**。插件复用同仓 CLI 与 Node SDK；安装 CLI 本身不会注册 DSH 工具。当前 GitHub 文档仓库不包含完整 SDK / 插件发行物，应使用本版本 SDK 源码交付包构建。
+
+## 安装前准备
+
+由部署方按目标 DSH 环境构建插件包。在 SDK 源码仓库根目录执行：
+
+```sh
+npm install --prefix wuying-sdk-nodejs
+npm install --prefix wuying-sdk-cli --install-links
+npm run build:sdk --prefix wuying-sdk-cli
+cd integrations/deepseek-harness
+node build.mjs
+npm ci
+node patch-idb.mjs
+npm test
+npm pack --ignore-scripts
+```
+
+首次 build 使用相邻 SDK 的构建依赖，生成 vendor 后再安装本目录依赖。生成的 worker、客户端和 SDK vendor 是构建产物，不由客户手工复制 SDK 实现。
+
+将 tgz 解压到目标 Windows 宿主的插件位置，按实际环境修改包内 `cordis.patch.yml`：nodePath、cliPath、dataDir、sourceRuntimeId、runtimeAllowlist。路径使用 DSH Host 的绝对路径，cliPath 指向包内 `wuying-current.mjs`；runtimeAllowlist 默认空，部署方显式加入允许的目标 Runtime，不能使用虚构 ID。
+
+```text
+dsh plugin --profile desktop add link:C:/path/to/dsh-wuying-cloud-desktops --ignore-scripts
+```
+
+在解压包目录安装运行依赖并执行 `node patch-idb.mjs`。若生命周期脚本被跳过，按宿主部署策略完成 SQLite 原生依赖安装，使用实际 DSH Node 版本验证。不要再次把同包作为绝对路径条目插入 profile patch，避免重复注册。升级代码后重启 DSH 一次。
+
+## 登录和使用
+
+在 DSH「插件」页面的「已安装插件」中打开「无影云电脑」，通过「无影账号」专用表单输入组织 ID、用户名和密码。支持重新登录、取消、退出，或明确导入已有 CLI 环境用户登录态。密码不放入聊天、模型参数或 YAML；额外验证码、SSO 等挑战当前停止，不自动重复提交密码。
+
+账号页显示本地保存状态，不代表持续在线；工具调用时由 SDK 校验。登录、退出和凭据刷新在正常启动后立即生效，失败的重新登录保留原授权。
+
+| 工具 | 用途 |
+|---|---|
+| wuying_desktops_list | 查询当前用户的授权 Runtime 目录 |
+| wuying_agents_list | 查询明确选择、在允许列表内的目标 Agent |
+| wuying_conversation_create | 创建会话，保留 mutationId |
+| wuying_task_start | 提交任务，保留 commandId 和受理回执 |
+| wuying_task_status / wuying_task_wait | 查询或限时等待原 Turn |
+| wuying_task_cancel | 仅在用户要求时请求取消指定 Turn，再核对终态 |
+
+可以直接描述任务：
+
+```text
+使用无影云电脑插件，在我指定的目标 Runtime 和 Agent 上只读取主机名与 Windows 版本，等待 completed 后返回结果和 Conversation/Turn ID。
+```
+
+明确选择目标和 Agent；发现目录不自动选择第一项，执行目标必须在部署允许列表中，也不能等于 sourceRuntimeId。accepted 仅是受理，成功需核对权威 Turn completed 和实际结果。历史未就绪时读原请求，不重复创建任务；本地等待结束不停止远端任务。待审批/问答由用户处理，插件不自动批准。
+
+## 侧栏云桌面
+
+右侧「云电脑流化」接收真实 desktopId 和 regionId，通过独立 CLI profile 打开 [ASP 桌面](/guides/asp-desktop)。账号切换或退出关闭本插件的本地播放器；断开不会关机或取消远程任务。管理员 AK/SK / OAuth 不能用于此流化登录。
+
+播放器交接地址通过私有管道传入 UI 内存，不经过模型工具或布局存储；插件只为其明确的本地 origin 启用嵌入。
+
+## 凭据和结果边界
+
+DSH credentials 服务是插件登录组合的持久化 owner；当前默认是本地文件，需保护 DSH home 和 Windows ACL，不当作加密钥匙串。SDK 负责在线认证与刷新，CLI 负责 profile 锁和请求回执，插件不另建任务/会话数据库。账号切换后的迟到刷新不能覆盖新身份，退出后不回退到环境或 CLI profile。
+
+退出会结束本地 worker/播放器并等待已有凭据提交结算，再移除记录；不承诺云端令牌吊销，也不撤销已受理任务。worker 输出有界，错误返回保留可核对 ID，不回显密码、票据或上游正文。
+
+当前适配版本和源码测试不代表其他 DSH/操作系统已验收。入库前原型有 Windows 现场记录，本次源码重建包仍需目标 Windows 上完成安装、真实登录及视频验收；本地合成测试不替代这些现场结果。

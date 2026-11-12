@@ -4,7 +4,7 @@ Wuying SDK 目前按调用身份区分两类权限：**管理员权限**和**无
 
 | 权限分类 | 身份与权限范围 | 认证方式 |
 |---|---|---|
-| 管理员 | aliuid 维度的管理员身份，按对应 AK/SK 已获授权的范围操作资源 | 使用 AccessKey ID / Secret（AK/SK）签名 |
+| 管理员 | aliuid 维度的管理员身份，按对应 AK/SK 已获授权的范围操作资源 | 使用 AK/SK 签名；Node / CLI 也可通过 OAuth / 可续期 Provider 取得临时签名凭据 |
 | 无影客户端用户态 | 无影用户体系中的当前用户，只能访问该用户获授权的资源与能力 | AuthCode、LoginToken 或组织账号密码，选择其中一种 |
 
 管理员与用户态的区别取决于调用身份。服务端使用用户凭据代用户调用时，仍属于用户态权限，不构成第三类权限。
@@ -84,7 +84,7 @@ GetAuthCodeResponse ticket = admin.getAuthCode(request, ctx)
 
 CLI 管理员凭据由宿主注入 `WUYING_ACCESS_KEY_ID` / `WUYING_ACCESS_KEY_SECRET`，或使用 `WUYING_CREDENTIALS` JSON。显式 JSON 优先于独立环境变量，环境优先于 profile；管理员凭据与用户凭据不能混用。切换 profile 不会覆盖当前环境中的凭据，详见 [CLI 指南](/sdk-reference/cli)。
 
-本版本 `CloudClientOptions` 未提供通用的临时凭据 `securityToken` / Credential Provider 参数，不能仅填临时 AK/SK 就宣称支持 STS 凭据链。采用 RAM 角色或 STS 时，先按相应云 API SDK 的实际支持配置服务端调用，再将用户票据交给用户态 Client。
+当前 Node 根 Client 支持 `securityToken` 及独占的 `credentialProvider`，CLI 支持管理员 OAuth profile；Go / Java 仍是静态 AK/SK 入口，旧 CloudClient 不能据此推断相同能力。完整配置、续期所有权和退出边界见[管理员 OAuth 与临时凭据](/guides/administrator-oauth)。
 
 ## 高级传输入口
 

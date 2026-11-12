@@ -57,6 +57,56 @@ source revision, dirty-source flag, and bundled ESM digest.
 
 ## Credentials
 
+### Alibaba Cloud OAuth administrator login
+
+Use an interactive local terminal (Alibaba Cloud CLI &gt;= 3.3.0 on PATH):
+
+```sh
+wuying auth oauth --profile admin --aliyun-profile wuying-admin
+# Or reuse an OAuth profile already configured by aliyun:
+wuying auth oauth --profile admin --aliyun-profile wuying-admin --reuse
+wuying auth status --profile admin
+wuying desktops start --profile admin --request-file target.json
+```
+
+The first command delegates browser sign-in/consent to `aliyun configure --mode OAuth`.
+Its interactive prompts go to the terminal; Wuying stdout contains only the final JSON.
+RAM users/roles need the official-cli OAuth application and assigned identities; see
+[Alibaba Cloud OAuth setup](https://help.aliyun.com/zh/cli/oauth-credentials).
+It does not grant permissions beyond the authorized RAM identity.
+`--no-input` requires `--reuse`; headless callers can configure the official CLI separately.
+
+Only `{"aliyunOAuthProfile":"wuying-admin","clientId":"sdk-client"}` is saved in the
+Wuying profile. This JSON can also be imported using `auth import --stdin`, or supplied
+through `WUYING_CREDENTIALS` / `WUYING_ALIYUN_OAUTH_PROFILE` without persistence.
+The explicit OAuth reference is exclusive with all other credential modes. Environment
+precedence still applies, so clear conflicting WUYING_* credentials when using saved profiles.
+
+The pinned official Node credentials SDK owns OAuth/STS renewal in `~/.aliyun/config.json`.
+The CLI installer applies a guarded response-field compatibility fix for credentials 2.4.7
+so both the live service's PascalCase STS response and camelCase responses work.
+Wuying does not copy its refresh/access tokens. That config must be a user-owned regular
+private file (0600 on POSIX). Because the official provider rewrites the whole config,
+the CLI serializes all its OAuth consumers, including different profiles/data directories.
+Do not concurrently run other Alibaba Cloud tools that modify or refresh this official
+config; external tools do not participate in this lock.
+OAuth requires NODE_DEBUG and NODE_DEBUG_NATIVE to be unset; Node core HTTP diagnostics
+can disclose credentials and cannot safely be disabled after process startup. The dependency's
+httpx debug logging is excluded even when DEBUG=* is set.
+Provider failures, non-OAuth profiles, expired STS or failed rotation persistence stop requests.
+Cancellation prevents a delayed resource request; cleanup retains the lock until an
+already-started official provider refresh finishes (its network timeout still applies).
+
+OAuth authenticates administrator operations: create/wait/start/stop/reboot/reset/delete,
+auth code and administrator Runtime scripts. It does not produce a Wuying user LoginToken
+or directly enable ASP/Agent tasks. `auth oauth` verifies credential resolution, not ECD RAM
+permissions; those are checked by the requested cloud API. `auth logout` removes only the
+Wuying reference. To remove the official tokens, use
+`aliyun configure delete --profile wuying-admin`; RAM consent remains separate.
+OAuth integration is currently in the CLI and Node SDK; Go/Java keep their existing AK/SK entry.
+
+### User and static key credentials
+
 For automation, set `WUYING_CREDENTIALS` to a JSON object containing
 `loginToken`, `sessionId`, `endUserId`, and optionally `clientId`/`loginRegionId`.
 Alternatively supply `WUYING_AUTH_CODE`, or the three variables
@@ -73,7 +123,7 @@ loginRegionId. Explicit `WUYING_CREDENTIALS` retains precedence over the separat
 environment variables. Keys are never accepted as command-line arguments.
 `auth import --stdin --profile admin` also accepts this JSON on POSIX, with the
 same private plaintext-file contract below; `auth status` reports only the mode
-(`aksk` or `user`), never the keys. Different profiles do not override environment
+(`oauth`, `aksk` or `user`), never the keys. Different profiles do not override environment
 credentials: unset administrator environment credentials before using a user profile.
 
 To retain a login locally on POSIX:
@@ -91,7 +141,8 @@ the CLI persists its refreshed snapshots every second and at normal shutdown.
 An abrupt crash during rotation may require importing fresh credentials.
 Windows v0.1 supports environment credentials; persistent import is rejected
 because POSIX modes do not establish a Windows ACL. No automatic desktop-login
-file scraping, auth bypass, or external login browser is built into the CLI.
+file scraping or auth bypass is built into the CLI. Browser login is available for
+Alibaba Cloud administrator OAuth as described above.
 `auth status` checks configuration only; `doctor` verifies authentication online.
 `auth logout` removes local saved credentials, not environment variables or
 remote sessions. It retains databases and request receipts.
@@ -102,6 +153,63 @@ may hold SDK connections at once. A dead process's lock is reclaimed only after
 the OS confirms that PID no longer exists.
 
 ## Select, create, run
+
+### ASP interactive desktop in a browser
+
+Use an existing user login (organization/password, imported LoginToken tuple, or authCode):
+
+~~~sh
+wuying asp open --profile user --desktop <desktopId> --region cn-shanghai --output jsonl
+~~~
+
+The command launches the system browser and uses the SDK's public AspManager to render
+the selected desktop, including WebSDK's interactive keyboard/mouse UI. This opens an
+ASP desktop connection; it does not create an Agent conversation or run a script.
+AK/SK profiles are rejected: obtain/import user credentials first. It does not use IM
+discovery or an online doctor preflight. The desktop must already exist and be accessible.
+
+Keep the CLI running while using the browser. Its default ASP lifetime is one hour;
+explicit --timeout overrides it (1000..3600000 ms). Other commands retain their existing
+timeout defaults. The browser must claim the one-time handoff within 60 seconds.
+The profile lock is held for this foreground session, so another command using that
+profile reports PROFILE_BUSY. Parallel work requires a separately authenticated profile.
+Reloading the viewer does not reuse the handoff; close and open a new session.
+
+The CLI first completes its existing user login and closes that Node Client. A loopback
+server passes only the final user tuple to the browser's Client, which becomes the sole
+refresh/ASP owner. For persistent profiles, updated tuple snapshots are saved through
+the same CLI credential file; ephemeral environment credentials are never persisted.
+No AK/SK or password is passed to the browser. The browser handoff uses a random local
+capability in a URL fragment, removed from history immediately; it is not printed.
+The server binds only 127.0.0.1, checks Host/Origin and authorization, serves no credential
+in static HTML/JavaScript, and marks responses no-store. It exposes no cloud RPC proxy.
+Legacy WebSDK uses origin-local applicationItem/connectType/regionId connection caches.
+The viewer removes these compatibility keys at startup and after normal cleanup;
+a renderer crash can leave browser cache data until the viewer is opened at that origin
+again or the browser's site data is cleared. Other browser settings are preserved.
+
+The browser's Disconnect button or closing the page ends the local session. Ctrl+C or
+deadline closes the host and the browser's lifetime connection, causing AspManager stop
+and Client close. Disconnecting does not stop/delete the cloud desktop or cancel an Agent
+task. The command's final status:closed means this viewer lifetime ended. Connected state
+is reported from AspManager's session status, not merely from opening a browser.
+JSONL asp-session events contain local session ID, resourceId, regionId and status only.
+Rendering/media stays in the browser; the CLI does not expose screenshot or synthetic
+input APIs. Use a supported browser/WebRTC environment; live streaming still depends
+on the actual desktop and Wuying service.
+
+For an authenticated local GUI adapter, `asp open --viewer-fd 3` suppresses system
+browser launch and writes `{schemaVersion:1,type:"asp-viewer",sessionId,url}` once
+to inherited pipe 3. Spawn with an extra private pipe and keep the process alive;
+stdout/JSONL still contains only bounded lifecycle metadata. Never print the
+handoff URL or pass it through model tools or persisted GUI layout parameters.
+Optional `--embed-origin dsh-app://app` (or an exact HTTP(S) loopback origin) allows
+that application to frame the static viewer. It requires pipe 3 and preserves
+all API Origin/Bearer checks. Disconnect or close the private child process to
+release this viewer only; cloud desktop power and Agent tasks are unchanged.
+If the renderer crashes or the lifetime socket is lost, the CLI releases hosting with an
+unknown outcome rather than claiming a clean disconnect. Abrupt exits or interrupted
+credential rotation can require fresh login; local streaming history is not persisted.
 
 ### Desktop provisioning and basic operations
 
@@ -346,6 +454,8 @@ then re-run the command. No credentials or machine paths are shipped in the Skil
 Other Skill-capable Agent hosts can load the complete directories under `skills/`
 using their own installation mechanism. Install the CLI in the Agent's execution
 environment and check its `--help`; only the Codex installer is automated here.
+
+The remote-desktop Skill also includes its cloud-operations reference for browser ASP, OAuth, desktop management and administrator scripts. Resource commands skip the Agent/IM discovery preflight. Both Skills are installed together, including all referenced instruction files.
 
 See [official local Skill discovery](https://learn.chatgpt.com/docs/build-skills).
 

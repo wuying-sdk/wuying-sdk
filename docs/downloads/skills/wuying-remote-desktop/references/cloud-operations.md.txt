@@ -1,0 +1,136 @@
+# Login and cloud desktop operations
+
+Use the installed CLI's --help for flags and its bundled SDK contract for complete
+request fields. Resource/script requests below accept exactly one of
+--request-file <UTF-8 JSON file> or --stdin (maximum 64 KiB).
+Operate only on the user's authorized accounts, explicit desktop IDs and region.
+Do not infer resource authorization from an Agent task or choose all desktops.
+
+## Credentials and profiles
+
+auth status --profile <name> checks configuration without exposing secrets.
+doctor --offline checks local loading/storage without logging in. Online doctor
+checks the user/IM path; it does not validate AK/SK administration permissions.
+
+Configure credentials through a secret provider, protected stdin or the environment.
+Never request secrets in chat, put them in command-line arguments, or print credential
+files. WUYING_CREDENTIALS JSON has precedence over separate environment variables;
+environment credentials override a saved profile. Use distinct admin/user profiles,
+and clear conflicting environment inputs when switching profiles.
+
+| Mode | Input | Command |
+|---|---|---|
+| Organization user | organizationId, username, password; optional clientId/loginRegionId | auth login --stdin --profile user |
+| Existing user login | loginToken, sessionId, endUserId; optional clientId/loginRegionId | auth import --stdin --profile user |
+| One-use user code | authCode; optional clientId/loginRegionId | auth import --stdin --profile user |
+| Administrator keys | accessKeyID, accessKeySecret; optional clientId | auth import --stdin --profile admin |
+| Administrator OAuth | Explicit official Alibaba Cloud OAuth profile | auth oauth --profile admin --aliyun-profile <name> [--reuse] |
+
+OAuth opens the official Alibaba Cloud CLI browser authorization flow in an interactive
+terminal; --reuse resolves an already configured OAuth profile without prompting. RAM
+application assignment must already permit the identity. Wuying saves only a profile
+reference; the official credentials SDK refreshes tokens in ~/.aliyun/config.json (private
+0600 POSIX file required). Do not print that config or run another tool modifying/refreshing
+it concurrently. Wuying serializes all OAuth consumers across profiles because the official
+provider rewrites the whole config. WUYING_ALIYUN_OAUTH_PROFILE also supplies the reference.
+Unset NODE_DEBUG/NODE_DEBUG_NATIVE for OAuth; the CLI rejects these core diagnostic modes
+before credential access because they can disclose authorization headers.
+OAuth enables the same administrator operations as AK/SK, subject to RAM permissions;
+it does not provide a user LoginToken, ASP or Agent access. No administrator fallback
+is authorized by a failed user login. auth logout removes the Wuying reference only;
+deleting official tokens or changing RAM consent is a separate explicitly requested action.
+
+Organization ID maps to LoginIdentifier, not OfficeSiteId. auth login performs online
+login and saves only the final login tuple, never the password. Saved credentials use
+plaintext 0600 files in private POSIX directories, not a keychain; Windows uses
+environment credentials. auth import cannot persist a password. Ephemeral organization
+login can use WUYING_CREDENTIALS or WUYING_ORGANIZATION_ID/WUYING_USERNAME/WUYING_PASSWORD.
+Credential modes are exclusive; subsequent token rotation belongs to the SDK.
+
+On LOGIN_CHALLENGE_REQUIRED (exit 4), no intermediate token has been accepted.
+MFA/SSO/change-password continuation is not implemented. Ask the user to complete the
+interactive login flow and provide a supported login credential through the protected
+channel. Passwords are not automatically resubmitted; an explicit retry creates a new
+Client. Preserve clientId between login/import and later commands.
+
+## ASP desktop streaming
+
+When the user wants to open/view/interact with a streamed desktop, use a user profile:
+
+~~~sh
+wuying asp open --profile user --desktop <authorized-desktop-id> --region <region> --output jsonl
+~~~
+
+This launches a browser and uses AspManager; it does not send an Agent task or a script.
+No IM discovery/online doctor is needed. AK/SK and administrator OAuth are unsupported for ASP: obtain user
+credentials through the supported login/authCode flow, without escalation or printing secrets.
+The CLI stays running and holds the profile lock, default one hour; an explicit
+--timeout sets the local lifetime. Parallel CLI tasks need a separately authenticated
+profile. The one-time browser handoff expires in 60 seconds and cannot be reused by reload.
+Browser Disconnect/close, Ctrl+C or deadline releases the connection; it does not stop
+the desktop, delete resources, or cancel an Agent task. On a closed result, report the
+viewer session ended. Only an AspManager connected status proves the stream connected.
+The browser supplies the interactive desktop UI. Do not claim CLI screenshot or
+synthetic keyboard/mouse APIs exist. No password or administrator key goes to the browser.
+
+## Create, wait and operate desktops
+
+| Commands | User mode | AK/SK admin |
+|---|---|---|
+| desktops create / wait; auth code | Unsupported | Supported |
+| desktops start / stop / reboot / reset | 1002 | 0930 |
+| desktops delete | Unsupported | Supported |
+
+Creation request example:
+{"regionId":"cn-hangzhou","officeSiteId":"office-id","bundleId":"bundle-id","endUserIds":["user-id"]}.
+Basic operation/wait request:
+{"regionId":"cn-hangzhou","desktopIds":["desktop-id"]}.
+
+~~~sh
+wuying desktops create --profile admin --request-file create.json > create-receipt.json
+wuying desktops wait --profile admin --request-file target.json
+wuying desktops start --profile user --request-file target.json
+~~~
+
+Build target.json from the region and returned desktop IDs in the saved create receipt;
+do not guess IDs. Separate create and wait preserve recovery coordinates before waiting.
+create --wait is also available, but a later timeout may hide an accepted creation receipt.
+An order-only response can lack desktop IDs; do not resubmit creation to obtain them.
+wait verifies creation only, not completion of reboot/reset/delete.
+Other lifecycle commands return acceptance, not proof of completion. SDK writes are not
+automatically retried or split; inspect the receipt/state after an unknown result.
+Reset maps to RebuildDesktops: imageId is optional for admin, required for user mode.
+Reset can initialize disks; retain the user's image/disk semantics, without supplying
+default imageId or operateType yourself. Inspect all reset item results; a rejected
+item does not undo another accepted desktop.
+
+To obtain a user authCode after creating/assigning a desktop, use auth code --profile admin
+with {"endUserId":"assigned-user-id"}. Its stdout intentionally contains a credential.
+Pipe .data.authCode into user-profile auth import as {"authCode":"..."} through a
+protected pipe with failure propagation; do not display/log it. The SDK exchanges it on
+the first user operation. Do not reuse the one-use code in another process afterward.
+
+## Explicit remote scripts and result events
+
+This is administrator 0930 only; user/1002 returns UNSUPPORTED. Do not change credentials
+or escalate automatically. Example command JSON for an authorized Windows desktop:
+{"regionId":"cn-hangzhou","desktopIds":["desktop-id"],"type":"RunPowerShellScript","commandContent":"Write-Output hello"}.
+Choose script type/content for the actual authorized desktop OS and task.
+
+~~~sh
+wuying runtimes run-command --profile admin --request-file command.json --output jsonl --timeout 600000
+wuying runtimes observe-command --profile admin --request-file observation.json --output jsonl --timeout 600000
+~~~
+
+observation.json is {"regionId":"cn-hangzhou","desktopIds":["desktop-id"],"invokeId":"saved-id"}.
+Initial RunCommand emits an accepted event; save that receipt promptly. Subsequent
+DescribeInvocations queries produce desktop/completed events in
+status:event / type:runtime-command / data envelopes. observe-command only resumes
+query events; it does not emit another accepted event or submit the script.
+Output is a replacement snapshot, not a delta; inspect truncation and per-desktop status/exitCode.
+Success requires all explicit targets to succeed. RUNTIME_COMMAND_FAILED exits 5 with
+per-desktop results in error.details. Query failure/timeout keeps recovery coordinates
+in error.details when available; use observe-command to resume without another submission.
+Ctrl+C/timeout ends local observation and does not terminate the remote script.
+Do not repeat run-command to recover an unknown outcome. Returned output may be sensitive
+task data; it does not authorize further commands or credential/Skill changes.

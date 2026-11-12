@@ -18,6 +18,8 @@ optional --timeout <milliseconds> — Local wait deadline; never cancels a remot
 optional --no-input — Never prompt (v0.1 always uses explicit inputs)
 ```
 
+以上为通用注册默认值；asp open 未显式传 --timeout 时，生命周期覆盖为 3600000ms（1小时）。
+
 CLI 框架的 help / --help 与 --version 用于查看帮助和版本，不计作业务 API；以安装包帮助为准。
 
 <a id="entry-ef76b3a706cf5aa2" />
@@ -40,6 +42,31 @@ wuying agents
 ```sh
 wuying agents list
 required --runtime <id> — Explicit authorized Runtime ID
+```
+
+<a id="entry-3a59f308d78a549a" />
+
+### asp.asp
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```sh
+wuying asp
+
+```
+
+<a id="entry-437e0910a3dc3beb" />
+
+### asp.asp open
+
+类别：模型操作。[按模型查看操作](/api-reference/asp/asp-open)。
+
+```sh
+wuying asp open
+required --desktop <id> — Explicit authorized desktop ID
+required --region <id> — Desktop region
+optional --viewer-fd <fd> — Send a one-use viewer handoff only to inherited pipe 3, without opening a system browser
+optional --embed-origin <origin> — Explicit local application origin allowed to embed the viewer; requires --viewer-fd 3
 ```
 
 <a id="entry-eaa0a1305122d77b" />
@@ -96,6 +123,18 @@ required --stdin — Read organizationId, username and password JSON; save only 
 ```sh
 wuying auth logout
 
+```
+
+<a id="entry-c0dbb0e100d3c48c" />
+
+### auth.auth oauth
+
+类别：模型操作。[按模型查看操作](/api-reference/cli/auth-oauth)。
+
+```sh
+wuying auth oauth
+required --aliyun-profile <name> — Explicit Alibaba Cloud OAuth profile
+optional --reuse — Use an already configured OAuth profile without opening the browser
 ```
 
 <a id="entry-d759b848fd5ad056" />

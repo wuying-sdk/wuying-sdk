@@ -1,15 +1,26 @@
 ---
 name: wuying-remote-desktop
-description: Delegate natural-language tasks to an Agent on an authorized Wuying remote desktop through the wuying CLI, inspect results, resume waiting, or answer an authorized pending interaction. Use for Wuying cloud desktop Agent tasks, not local terminal work or direct screenshot/mouse/keyboard control.
+description: Use the wuying CLI to open interactive streamed desktops in a browser, manage authorized Wuying cloud desktops, run administrator scripts and observe results, or delegate tasks to remote Agents. Not for local shell tasks, SDK development, or programmatic screenshot/mouse/keyboard control.
 ---
 
 Use the installed `wuying` command. If it is unavailable on PATH, read
 [the local installation reference](references/installation.md) for the absolute executable prefix.
 Run `wuying --help` or a subcommand's `--help` when its arguments are unclear.
-All commands default to JSON and never prompt. Preserve `schemaVersion`, `projection`,
+Commands default to JSON; `auth oauth` delegates interactive browser sign-in to the
+official Alibaba Cloud CLI (`--reuse` avoids prompts). Preserve `schemaVersion`, `projection`,
 runtime/conversation/turn IDs, request IDs, and error `outcome` when interpreting results.
 
-## Connect and select
+## Choose the operation
+
+- For ASP desktop streaming in a browser, login, desktop create/wait/start/stop/reboot/reset/delete, or an explicit remote
+  script, read [cloud operations](references/cloud-operations.md). These commands do
+  not need Agent discovery or an IM health check. Administrator scripts currently
+  require AK/SK or administrator OAuth; user-mode command execution is reserved.
+- For a natural-language Agent task, use the user-mode workflow below. The run
+  command delegates to an Agent; runtimes run-command executes an explicit remote
+  script. Use the mode the user requested and the authorized profile and targets.
+
+## Connect and select (Agent tasks only)
 
 Run `wuying doctor` and `wuying runtimes list`. On `UNAUTHENTICATED`, ask the user
 to configure credentials through stdin or the local environment; do not ask them to
@@ -60,6 +71,10 @@ Ctrl+C and timeouts stop local waiting; use `turns cancel` only when the user re
 stopping the remote task. A `cancel_requested` result still requires terminal confirmation.
 
 ## Pending interaction
+
+LOGIN_CHALLENGE_REQUIRED also exits 4, but is a login-stage challenge, not an Agent
+interaction. Follow the cloud-operations login instructions; do not call interactions
+respond or repeatedly resubmit a password.
 
 Exit code 4 (`INTERACTION_REQUIRED`) includes the current interaction. Inspect its kind,
 option IDs/questions, and `writeVersion`. If details are not synchronized or the
