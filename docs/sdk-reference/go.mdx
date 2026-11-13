@@ -56,11 +56,11 @@ if err != nil { return err }
 
 Client 是对外根入口；通过 `BuildAgentManager` 和 `BuildConversationManager` 获取业务 Manager。按查询返回的真实 ID 选择环境与 Agent，再使用 Manager 的公开会话 / 消息 / Turn / Interaction 方法。请求和结果类型在源码 module 的公开包中；推荐先阅读 `sdks/go/examples/web-workflow/main.go` 与 `sdks/go/examples/unified/main.go`，再按自己的业务流程裁剪。不要复制 demo bridge 的私有方法作为 API。
 
-传入 `context.Context` 管理本地调用期限；不要把本地 deadline 当成远端已取消的证据。消息观察返回的是快照，保留服务端 ID 和投影 metadata。写入需要保留请求 / mutation 身份；网络不确定时先对账，切勿重新创建一份请求。错误对象可能携带敏感信息，产品只展示脱敏错误类别，必要时记录真实关联 ID。
+传入 `context.Context` 管理本地调用期限；不要把本地 deadline 当成远端已取消的证据。消息订阅返回的是快照，保留服务端 ID 和投影 metadata。写入需要保留请求 / mutation 身份；网络不确定时先对账，切勿重新创建一份请求。错误对象可能携带敏感信息，产品只展示脱敏错误类别，必要时记录真实关联 ID。
 
 ## 生命周期和持久化
 
-每个账号、环境使用独立 `DataPath`；这里是文件路径，不是目录路径。父目录仅当前用户可读写；不要两进程共享打开同一库。应用停止时取消观察、释放订阅并关闭 Client。SDK 拥有副本与连接，宿主不要直接读写其内部库、复制会话映射或自行补造 complete。
+每个账号、环境使用独立 `DataPath`；这里是文件路径，不是目录路径。父目录仅当前用户可读写；不要两进程共享打开同一库。应用停止时取消订阅、释放订阅并关闭 Client。SDK 拥有副本与连接，宿主不要直接读写其内部库、复制会话映射或自行补造 complete。
 
 ## 验证与交付核对
 
@@ -78,7 +78,7 @@ Client 是对外根入口；通过 `BuildAgentManager` 和 `BuildConversationMan
 | 选环境/Agent | RuntimeManager.ListRuntimes / AgentManager.ListAgents | RuntimeRef；列表查询返回 Page，保留可用的同步状态 |
 | 建会 | CreateConversation | CreateRequest + 可选 MutationOptions，返回 CreatedConversation |
 | 分页历史 | ListMessages | MessageQuery，Page.Items / NextCursor |
-| 观察历史 | ObserveMessages | model.Observer，结束 Unsubscribe |
+| 订阅历史 | SubscribeMessages | model.SubscriptionListener，结束 Unsubscribe |
 | 提交/流式/等待 | SendMessage / SendMessageStream / SendMessageAndWait | SendRequest，受理与终态分开 |
 | 附件 | ResourceManager.StageAttachment / GetAttachmentAccess | 对应请求 DTO，不套用 JS File |
 | 审批/问答 | RespondPermission / RespondQuestion | 当前 Interaction ID、ExpectedVersion 及真实选项/答案 |

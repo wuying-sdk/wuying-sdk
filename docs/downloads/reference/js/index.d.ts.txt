@@ -553,8 +553,8 @@ interface View {
     resourceCatalogReady: boolean;
     interactionProjectionReady: boolean;
     runtimes: Runtime[];
-    agents: AgentSummary[];
-    models: (ModelSummary & AgentRef)[];
+    agents: Agent[];
+    models: (Model & AgentRef)[];
     conversations: Conversation[];
     activities: ExecutionActivity[];
     presentations: MessagePresentation[];
@@ -716,7 +716,7 @@ interface Integration {
     /** 只读AG目录分页；不得视为Runtime授权或触发历史下载。 */
     groupDirectory?: {
         list(runtimeId: string | undefined, query: GroupDirectoryQuery, signal: AbortSignal): Promise<GroupDirectoryPage>;
-        recent?(limit: number, signal: AbortSignal): Promise<RecentGroupDirectoryEntry[]>;
+        recent?(limit: number, signal: AbortSignal): Promise<RecentGroup[]>;
     };
     read?(scope: Scope, kind: ReadKind, params: Record<string, unknown>, signal: AbortSignal): Promise<unknown>;
     conversationHistory?: {
@@ -1001,15 +1001,15 @@ declare class Service {
     private readonly processRecovery;
     resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
     listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
-    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    subscribeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: SubscriptionListener<ConversationHistory>): Promise<Subscription>;
     /** 先准备Runtime处理器，不等待全局Ready，避免首次应用与业务接入互相等待。 */
     listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
     syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
     syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
     /** 目录分页只依赖鉴权与AG链路，不连接Runtime、不等待业务Ready、不下载群历史。 */
     listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
-    listRecentGroups(ctx: Context, limit: number): Promise<RecentGroupDirectoryEntry[]>;
-    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    listRecentGroups(ctx: Context, limit: number): Promise<RecentGroup[]>;
+    subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     readonly life: Lifetime;
     readonly replica: Replica;
     readonly operations: Operations;
@@ -1026,35 +1026,35 @@ declare class Service {
     get scopedReadiness(): boolean;
     private domainProjection;
     catalogQuery<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, models?: boolean): Promise<Snapshot<T>>;
-    catalogObserve<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    catalogObserve<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, observer: SubscriptionListener<T>): Promise<Subscription>;
     /** Explicit lightweight selectors; preserve connection and projection lifecycle. */
     summaryQuery<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T): Promise<Snapshot<T>>;
-    summaryObserve<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    summaryObserve<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T, observer: SubscriptionListener<T>): Promise<Subscription>;
     private summaryIdentity;
     private summarySnapshot;
     private summaryValue;
     summaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', owner?: symbol): Promise<Snapshot<Page<T>>>;
     conversationSummary(ctx: Context, req: ConversationRef, owner?: symbol): Promise<Snapshot<Conversation>>;
-    observeSummaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', observer: Observer<Page<T>>): Promise<Subscription>;
-    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    subscribeSummaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', observer: SubscriptionListener<Page<T>>): Promise<Subscription>;
+    subscribeConversationSummary(ctx: Context, req: ConversationRef, observer: SubscriptionListener<Conversation>): Promise<Subscription>;
     /** Reads all cached sources owned by the authenticated account; never connects other devices. */
     accountQuery<T>(ctx: Context, req: {
         runtimeId?: string;
     }, select: (view: View, projection: Projection) => T): Promise<Snapshot<T>>;
-    observeAccount<T>(ctx: Context, req: {
+    subscribeAccount<T>(ctx: Context, req: {
         runtimeId?: string;
-    }, select: (view: View, projection: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    }, select: (view: View, projection: Projection) => T, observer: SubscriptionListener<T>): Promise<Subscription>;
     runtimes(ctx: Context): Promise<Snapshot<Runtime[]>>;
-    observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
+    subscribeRuntimes(ctx: Context, observer: SubscriptionListener<Runtime[]>): Promise<Subscription>;
     observe<T>(ctx: Context, req: RuntimeRef & {
         conversationId?: string;
-    }, select: (v: View, p: Projection) => T, observer: Observer<T>, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Subscription>;
+    }, select: (v: View, p: Projection) => T, observer: SubscriptionListener<T>, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Subscription>;
     command<T>(ctx: Context, req: RuntimeRef, kind: CommandKind, allowed: string[], required: string[], decode: (data: unknown) => T, options?: MutationOptions): Promise<T>;
     imGroupAttachment<T>(ctx: Context, req: ConversationRef, action: 'prepare' | 'attach' | 'query', params: Record<string, unknown>, decode: (v: unknown) => T): Promise<T>;
     get supportsRemoteRead(): boolean;
     /** One process cache per exact authorization/root; ordinary Query remains the
      * owner of canonical message and Turn facts. No periodic detail polling. */
-    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
     /** A scoped one-shot read, with no fabricated replica completeness claim. */
     storageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
     remoteRead<T>(ctx: Context, req: RuntimeRef & {
@@ -1062,9 +1062,9 @@ declare class Service {
     }, kind: ReadKind, params: Record<string, unknown>, decode: (value: unknown) => T, priority?: number, admit?: () => boolean): Promise<Snapshot<T>>;
     getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
     getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
-    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
     getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
     close(): Promise<void>;
 }
 
@@ -1130,11 +1130,11 @@ declare class ResourceManager$1 implements ResourceManager {
     }): Promise<Workspace>;
     private resources;
     private readListResources;
-    observeResources(ctx: Context, req: RuntimeRef & {
+    subscribeResources(ctx: Context, req: RuntimeRef & {
         kind?: Resource['kind'];
-    }, observer: Observer<Resource[]>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
     getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
-    observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+    subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
     setConversationResources(ctx: Context, req: ConversationRef & {
         resourceIds: string[];
         expectedVersion: string;
@@ -1172,7 +1172,7 @@ declare class ResourceManager$1 implements ResourceManager {
 declare class ConversationManager$1 implements ConversationManager {
     private service;
     private readonly listPagination;
-    listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
+    listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroup>>;
     listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<GroupSyncState>>;
     listActiveExecutions(ctx: Context, request: (ConversationRef) & ListOptions): Promise<{
         projection: Projection;
@@ -1230,7 +1230,7 @@ declare class ConversationManager$1 implements ConversationManager {
         nextCursor: string | null;
     }>;
     listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{
-        items: GroupDirectoryEntry[];
+        items: Group[];
         nextCursor: string | null;
     }>;
     private readListGroupSyncStates;
@@ -1238,9 +1238,9 @@ declare class ConversationManager$1 implements ConversationManager {
     private readRecentGroups;
     syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
     syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     constructor(service: Service);
-    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
     createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<{
         coordinatorMemberId?: string | undefined;
@@ -1253,15 +1253,14 @@ declare class ConversationManager$1 implements ConversationManager {
         runtimeId: string;
     }>;
     private readListConversationGroups;
-    observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+    subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
     private readListSidebarConversations;
-    observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
-    getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
-    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    subscribeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
+    subscribeConversation(ctx: Context, req: ConversationRef, observer: SubscriptionListener<Conversation>): Promise<Subscription>;
     getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
     getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
     private readListActiveExecutions;
-    observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+    subscribeActiveExecutions(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ActiveExecutionSnapshot>): Promise<Subscription>;
     cancelExecution(ctx: Context, req: ConversationRef & {
         executionId: string;
         expectedVersion: string;
@@ -1272,7 +1271,7 @@ declare class ConversationManager$1 implements ConversationManager {
         memberId?: string;
     }): Promise<Snapshot<ComposerCapabilities>>;
     getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
-    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
     steerTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
         text: string;
@@ -1292,11 +1291,11 @@ declare class ConversationManager$1 implements ConversationManager {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<MemberSnapshot>>;
     getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
-    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
     private conversations;
     private readListConversations;
-    observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
-    getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+    subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
+    getConversation(ctx: Context, request: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
     renameConversation(ctx: Context, req: ConversationRef & {
         name: string;
     }, options?: MutationOptions): Promise<ConversationRef>;
@@ -1309,13 +1308,13 @@ declare class ConversationManager$1 implements ConversationManager {
         value: string;
     }): Promise<ConversationRef>;
     getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig & ConversationRef>>;
-    observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+    subscribeConversationConfig(ctx: Context, req: ConversationRef, observer: SubscriptionListener<EffectiveConfig>): Promise<Subscription>;
     archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
     unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
     private readListMembers;
-    observeMembers(ctx: Context, req: ConversationRef & {
+    subscribeMembers(ctx: Context, req: ConversationRef & {
         includeRemoved?: boolean;
-    }, observer: Observer<Member[]>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Member[]>): Promise<Subscription>;
     addMember(ctx: Context, req: ConversationRef & {
         agentId: string;
         displayName?: string;
@@ -1346,11 +1345,11 @@ declare class ConversationManager$1 implements ConversationManager {
     private messages;
     resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
     private readListConversationHistory;
-    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    subscribeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: SubscriptionListener<ConversationHistory>): Promise<Subscription>;
     private readListMessages;
-    observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+    subscribeMessages(ctx: Context, req: MessageQuery, observer: SubscriptionListener<Page<Message>>): Promise<Subscription>;
     private readListExecutionActivity;
-    observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+    subscribeExecutionActivity(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ExecutionActivity[]>): Promise<Subscription>;
     getMessageDetail(ctx: Context, req: ConversationRef & {
         messageId: string;
         itemCursor?: string;
@@ -1359,9 +1358,9 @@ declare class ConversationManager$1 implements ConversationManager {
     getTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
     }): Promise<Snapshot<Turn | undefined>>;
-    observeTurn(ctx: Context, req: ConversationRef & {
+    subscribeTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
-    }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Turn | undefined>): Promise<Subscription>;
     cancelTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
     }): Promise<{
@@ -1374,9 +1373,9 @@ declare class ConversationManager$1 implements ConversationManager {
         runtimeId: string;
     }>;
     private readListInteractions;
-    observeInteractions(ctx: Context, req: ConversationRef & {
+    subscribeInteractions(ctx: Context, req: ConversationRef & {
         state?: 'pending' | 'all';
-    }, observer: Observer<Interaction[]>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Interaction[]>): Promise<Subscription>;
     respondPermission(ctx: Context, req: ConversationRef & {
         interactionId: string;
         optionId: string;
@@ -1806,7 +1805,8 @@ interface AgentFotaUpdate {
      */
     currentFotaVersion: string;
 }
-interface Agent {
+
+interface RuntimeInstance {
     onlineStatus?: AgentOnlineStatus;
     id: string;
     name: string;
@@ -2211,7 +2211,7 @@ declare class AgentRoutes {
      * @returns Agent 列表和总数
      */
     getAgentList(ctx: ExecutionContext, _pageNum: number, _pageSize: number, agentPlatform?: string): Promise<{
-        agents: Agent[];
+        agents: RuntimeInstance[];
         totalCount: number;
     }>;
     /**
@@ -2224,7 +2224,7 @@ declare class AgentRoutes {
      * @param agentId - Agent 唯一标识
      * @returns Agent 信息（当前抛出 errNotImplemented）
      */
-    getAgentStatus(ctx: ExecutionContext, agentId: string): Promise<Agent>;
+    getAgentStatus(ctx: ExecutionContext, agentId: string): Promise<RuntimeInstance>;
     /**
      * 更新 Agent 实例的元数据
      * 对应 Go 版本: agent_routes.go:UpdateAgentInstance()
@@ -2632,10 +2632,10 @@ interface Container {
 }
 interface AgentService {
     getAgentList(context: ExecutionContext, pageNum: number, pageSize: number, agentPlatform?: string): Promise<{
-        agents: Agent[];
+        agents: RuntimeInstance[];
         totalCount: number;
     }>;
-    getAgentStatus(context: ExecutionContext, agentId: string): Promise<Agent>;
+    getAgentStatus(context: ExecutionContext, agentId: string): Promise<RuntimeInstance>;
     updateAgentInstance(context: ExecutionContext, agentInstanceId: string, name: string, avatarUrl: string, description: string, simplePersonaType: string, simpleModelType: string): Promise<void>;
 }
 interface SkillRouter {
@@ -2787,10 +2787,10 @@ declare class AgentManager$1 implements AgentManager {
     private service;
     private cloud?;
     private readonly listPagination;
-    listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & {
+    listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<Agent> & {
         projection: Projection;
     }>;
-    listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<ModelSummary & AgentRef> & {
+    listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<Model & AgentRef> & {
         projection: Projection;
     }>;
     listExperts(ctx: Context, request: (RuntimeRef & {
@@ -2826,7 +2826,7 @@ declare class AgentManager$1 implements AgentManager {
     listKnowledgeFiles(...args: Parameters<CloudResources['listKnowledgeFiles']>): Promise<Page<KnowledgeFile>>;
     downloadKnowledgeFiles(...args: Parameters<CloudResources['downloadKnowledgeFiles']>): Promise<DownloadKnowledgeFileResult[]>;
     private readListAgents;
-    observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+    subscribeAgents(ctx: Context, req: RuntimeRef, observer: SubscriptionListener<Agent[]>): Promise<Subscription>;
     private readListAgentModels;
     private readListAgentProducts;
     private readListExperts;
@@ -3199,6 +3199,9 @@ interface Snapshot<T> {
     projection: Projection;
 }
 /** Shared by every public list query. Defaults to 50; valid limit is 1..100. */
+interface ReadOptions {
+    consistency?: 'cache' | 'refresh';
+}
 interface ListOptions {
     limit?: number;
     cursor?: string;
@@ -3208,7 +3211,7 @@ interface Page<T> {
     nextCursor: string | null;
     projection?: Projection;
 }
-interface Observer<T> {
+interface SubscriptionListener<T> {
     onSnapshot(value: Snapshot<T>): void;
     onError(error: BusinessError$2): void;
 }
@@ -3228,7 +3231,7 @@ interface Runtime extends RuntimeRef {
         resourceQuery: Capability;
     };
 }
-interface AgentSummary extends AgentRef {
+interface Agent extends AgentRef {
     name: string;
     enabled: boolean;
     availability: 'available' | 'unavailable' | 'unknown';
@@ -3245,7 +3248,7 @@ interface AgentSummary extends AgentRef {
     presentation?: AgentPresentation;
     revision: Int64;
 }
-interface ModelSummary extends ModelCapabilities {
+interface Model extends ModelCapabilities {
     modelId: string;
     name: string;
     available: boolean;
@@ -3634,7 +3637,7 @@ interface InteractionResponse {
 }
 interface AgentManager extends Pick<CloudResources, 'describeWyDrives' | 'describeWyDriveFiles' | 'getDownloadUrl' | 'deleteWyDriveFile' | 'listAgentKnowledgeSpaces' | 'listKnowledgeFiles' | 'downloadKnowledgeFiles'> {
     listAgents: AgentManager$1['listAgents'];
-    observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+    subscribeAgents(ctx: Context, req: RuntimeRef, observer: SubscriptionListener<Agent[]>): Promise<Subscription>;
     listAgentModels: AgentManager$1['listAgentModels'];
     listAgentProducts: AgentManager$1['listAgentProducts'];
     getExpertDirectory(ctx: Context, req: RuntimeRef & {
@@ -3703,7 +3706,7 @@ interface MutationStatus<T = unknown> extends MutationRef {
     traceId?: string;
 }
 interface AgentModelCatalog {
-    models: ModelSummary[];
+    models: Model[];
     defaultModelId?: string;
 }
 interface MemberSnapshot {
@@ -3713,7 +3716,7 @@ interface MemberSnapshot {
 }
 interface ConversationManager {
     /** Shared per authorization/root; 50ms notifications, no durable writes or execution control. */
-    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
     getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
     getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
@@ -3727,18 +3730,17 @@ interface ConversationManager {
     syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
     /** 显式选择分页返回的群，仍验证其属于指定Runtime。 */
     syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
     listConversationGroups: ConversationManager$1['listConversationGroups'];
-    observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+    subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
     listSidebarConversations: ConversationManager$1['listSidebarConversations'];
-    observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    subscribeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
     /** Metadata only; never activates or grants write authority to a cold conversation. */
-    getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
-    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    subscribeConversation(ctx: Context, req: ConversationRef, observer: SubscriptionListener<Conversation>): Promise<Subscription>;
     getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
     listActiveExecutions: ConversationManager$1['listActiveExecutions'];
-    observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+    subscribeActiveExecutions(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ActiveExecutionSnapshot>): Promise<Subscription>;
     cancelExecution(ctx: Context, req: ConversationRef & {
         executionId: string;
         expectedVersion: string;
@@ -3749,7 +3751,7 @@ interface ConversationManager {
         memberId?: string;
     }): Promise<Snapshot<ComposerCapabilities>>;
     getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
-    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
     steerTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
         text: string;
@@ -3768,10 +3770,10 @@ interface ConversationManager {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<MemberSnapshot>>;
     getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
     listConversations: ConversationManager$1['listConversations'];
-    getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
-    observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    getConversation(ctx: Context, req: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
+    subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
     renameConversation(ctx: Context, req: ConversationRef & {
         name: string;
     }, options?: MutationOptions): Promise<ConversationRef>;
@@ -3784,14 +3786,14 @@ interface ConversationManager {
         optionId: 'model' | 'runtime.permissionPreset' | 'runtime.thinkingLevel';
         value: string;
     }): Promise<ConversationRef>;
-    observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+    subscribeConversationConfig(ctx: Context, req: ConversationRef, observer: SubscriptionListener<EffectiveConfig>): Promise<Subscription>;
     getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig>>;
     archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
     unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
     listMembers: ConversationManager$1['listMembers'];
-    observeMembers(ctx: Context, req: ConversationRef & {
+    subscribeMembers(ctx: Context, req: ConversationRef & {
         includeRemoved?: boolean;
-    }, observer: Observer<Member[]>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Member[]>): Promise<Subscription>;
     addMember(ctx: Context, req: ConversationRef & {
         agentId: string;
         displayName?: string;
@@ -3820,19 +3822,19 @@ interface ConversationManager {
     sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
     resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
     listConversationHistory: ConversationManager$1['listConversationHistory'];
-    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    subscribeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: SubscriptionListener<ConversationHistory>): Promise<Subscription>;
     listMessages: ConversationManager$1['listMessages'];
     getMessageDetail(ctx: Context, req: ConversationRef & {
         messageId: string;
         itemCursor?: string;
         limit?: number;
     }): Promise<Snapshot<MessageDetail | undefined>>;
-    observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+    subscribeMessages(ctx: Context, req: MessageQuery, observer: SubscriptionListener<Page<Message>>): Promise<Subscription>;
     listExecutionActivity: ConversationManager$1['listExecutionActivity'];
-    observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
-    observeTurn(ctx: Context, req: ConversationRef & {
+    subscribeExecutionActivity(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ExecutionActivity[]>): Promise<Subscription>;
+    subscribeTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
-    }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Turn | undefined>): Promise<Subscription>;
     getTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
     }): Promise<Snapshot<Turn | undefined>>;
@@ -3841,9 +3843,9 @@ interface ConversationManager {
     }): Promise<{
         state: 'requested' | 'cancelled' | 'already_finished';
     }>;
-    observeInteractions(ctx: Context, req: ConversationRef & {
+    subscribeInteractions(ctx: Context, req: ConversationRef & {
         state?: 'pending' | 'all';
-    }, observer: Observer<Interaction[]>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Interaction[]>): Promise<Subscription>;
     refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<ConversationRef & {
         recovered: number;
     }>;
@@ -3878,7 +3880,7 @@ interface GroupDirectoryQuery {
     limit?: number;
     conversationId?: string;
 }
-interface GroupDirectoryEntry {
+interface Group {
     /** 仅在已授权Runtime目录中能唯一关联时提供；缺失时不能猜测AG。 */
     runtimeId?: string;
     groupId: string;
@@ -3892,11 +3894,11 @@ interface GroupDirectoryEntry {
     membershipGeneration: number;
     joinedAtMs?: number;
 }
-interface RecentGroupDirectoryEntry extends GroupDirectoryEntry {
+interface RecentGroup extends Group {
     activityAtMs: number;
 }
 interface GroupDirectoryPage {
-    groups: GroupDirectoryEntry[];
+    groups: Group[];
     nextCursor: string | null;
     hasMore: boolean;
 }
@@ -3943,10 +3945,10 @@ interface ResourceManager {
         name: string;
     }): Promise<Workspace>;
     listResources: ResourceManager$1['listResources'];
-    observeResources(ctx: Context, req: RuntimeRef & {
+    subscribeResources(ctx: Context, req: RuntimeRef & {
         kind?: Resource['kind'];
-    }, observer: Observer<Resource[]>): Promise<Subscription>;
-    observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
+    subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
     getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
     setConversationResources(ctx: Context, req: ConversationRef & {
         resourceIds: string[];
@@ -4101,7 +4103,7 @@ interface RunCommandRequest {
     commandRole?: string;
     pollIntervalMs?: number;
 }
-interface ObserveCommandRequest {
+interface SubscribeCommandRequest {
     regionId: string;
     desktopIds: string[];
     invokeId: string;
@@ -4141,7 +4143,7 @@ type RuntimeCommandEvent = {
     results: CommandDesktopResult[];
     allSucceeded: boolean;
 };
-interface RuntimeCommandObserver {
+interface RuntimeCommandListener {
     onEvent(event: RuntimeCommandEvent): void;
     onError(error: BusinessError$1): void;
 }
@@ -4160,8 +4162,8 @@ declare class RuntimeCommands {
     private closed;
     constructor(rpc: RPC);
     private check;
-    run(ctx: ExecutionContext, r: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
-    observe(ctx: ExecutionContext, r: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+    run(ctx: ExecutionContext, r: RunCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
+    observe(ctx: ExecutionContext, r: SubscribeCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
     private watch;
     close(): void;
 }
@@ -4322,15 +4324,15 @@ declare class RuntimeManager {
     private directory;
     private cloud;
     private readListRuntimes;
-    observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
+    subscribeRuntimes(ctx: Context, observer: SubscriptionListener<Runtime[]>): Promise<Subscription>;
     getHostCapabilities(ctx: Context, req: RuntimeRef): Promise<Snapshot<HostCapabilities>>;
     private readDescribeCreditPackageAgents;
     describeCreditUsageInfo(ctx: ExecutionContext, req?: DescribeCreditUsageInfoRequest): Promise<CreditUsageInfo>;
     updateAgentInstance(ctx: ExecutionContext, req: UpdateAgentInstanceRequest, ...opts: CallOption[]): Promise<void>;
     approveFotaUpdate(ctx: ExecutionContext, req: ApproveFotaUpdateRequest, ...opts: CallOption[]): Promise<void>;
     generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: CallOption[]): Promise<GenerateSceneUrlResponse | null>;
-    runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
-    observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+    runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
+    subscribeCommand(ctx: ExecutionContext, request: SubscribeCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 }
 
 /**
@@ -4886,7 +4888,7 @@ declare class Client {
     /** 单一出口：配置回调 + onStreamEvent 订阅者，逐个隔离异常，晚订阅也能收到事件。 */
     private streamingIntegrationConfig;
     /** 额外原始流事件出口（可选、只读）：不改任何既有命令语义；未启用 streaming 时直接失败。 */
-    onStreamEvent(handler: (event: StreamEvent) => void): () => void;
+    subscribeStreamEvents(handler: (event: StreamEvent) => void): Subscription;
     static create(options: ClientOptions, userConfig?: UserConfig): Client;
     private registerModelOperations;
     static resetInstance(): void;
@@ -4955,4 +4957,4 @@ declare class APIError extends SDKError {
 }
 declare function isRetryable(error: unknown): boolean;
 
-export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type AgentSummary, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientConfig, type ClientOptions, BusinessError as CloudBusinessError, CloudClient, type CloudClientOptions, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type GroupDirectoryEntry, type GroupDirectoryPage, type GroupDirectoryQuery, type GroupRef, type GroupSyncState, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type ModelSummary, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type ObserveCommandRequest, type Observer, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type Resource, ResourceManager$1 as ResourceManager, type ResourceSelection, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandObserver, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type StreamDeliveryPacket, type StreamEvent, type StreamLifecycleStatus, type Subscription, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, getAuthCode, isRetryable, mergeToInternal };
+export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientConfig, type ClientOptions, BusinessError as CloudBusinessError, CloudClient, type CloudClientOptions, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type Group, type GroupDirectoryPage, type GroupDirectoryQuery, type GroupRef, type GroupSyncState, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, type Resource, ResourceManager$1 as ResourceManager, type ResourceSelection, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type StreamDeliveryPacket, type StreamEvent, type StreamLifecycleStatus, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, getAuthCode, isRetryable, mergeToInternal };

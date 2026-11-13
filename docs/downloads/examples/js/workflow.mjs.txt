@@ -19,6 +19,6 @@ try {
  console.log(JSON.stringify({mutationId,clientCommandId}));
  const created=await conversations.createConversation(ctx,{runtimeId,agentId,mode:'single',name:'Customer SDK workflow'},{mutationId});
  const ref={runtimeId,conversationId:created.conversationId};console.log(JSON.stringify(ref));
- const subscription=await conversations.observeMessages(ctx,ref,{onSnapshot(snapshot){console.log(JSON.stringify({phase:snapshot.projection.phase,count:snapshot.data.items.length}));},onError(){console.error('Observation failed; reconcile original IDs.');}});
+ const subscription=await conversations.subscribeMessages(ctx,ref,{onSnapshot(snapshot){console.log(JSON.stringify({phase:snapshot.projection.phase,count:snapshot.data.items.length}));},onError(){console.error('Observation failed; reconcile original IDs.');}});
  try{const completion=await conversations.sendMessageAndWait(streamContext,{...ref,text,clientCommandId});console.log(JSON.stringify({turnId:completion.accepted.turnId,state:completion.turn.state}));}finally{subscription.unsubscribe();}
 }catch{console.error('Workflow failed or outcome unknown; reconcile original mutation/command/Turn before retry. No raw error/credential is logged.');process.exitCode=1;}finally{await client?.close();}

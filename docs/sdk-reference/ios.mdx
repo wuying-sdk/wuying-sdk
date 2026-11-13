@@ -5,7 +5,7 @@ description: "通过 Swift 包装和 Go 移动引擎初始化无影 Client，消
 icon: "apple"
 ---
 
-iOS SDK 使用 Swift 包装与 Go 移动引擎，为 iOS 应用提供用户端集成入口。当前与 Android 共用七个 Manager 的 **113 个 JSON 方法入口**；查找实际支持的方法见[完整目录](/reference/ios/public)。
+iOS SDK 使用 Swift 包装与 Go 移动引擎，为 iOS 应用提供用户端集成入口。当前与 Android 共用七个 Manager 的 **112 个 JSON 方法入口**；查找实际支持的方法见[完整目录](/reference/ios/public)。
 
 ## 安装
 
@@ -30,7 +30,7 @@ let engine = try GoEngine(configuration: [
 ])
 let client = Client(engine: engine)
 let watch = try client.request(
-    method: Methods.runtimeObserveRuntimes, onEvent: onEvent)
+    method: Methods.runtimeSubscribeRuntimes, onEvent: onEvent)
 ```
 
 如需指定登录地域，补充 `loginRegionId`，全部配置见[移动合同](/reference/mobile/contract)。已有登录态接入时，将 `authCode` 替换为三项 `loginToken`、`sessionId`、`endUserId`。目录可放在应用私有的 Application Support 中，由应用将账号安全映射为目录名；`dataPath` 是绝对数据库**文件**路径，同一文件只供一个活跃 Client 使用。
@@ -40,7 +40,7 @@ let watch = try client.request(
 `SDKEvent.data` 为 `Any?`，按具体方法解码字典或数组，保留投影、版本及字符串形式的 Int64。检查 `kind`、`terminal` 和可选的 `SDKFailure`；`Client.request` 启动失败可同步抛错，异步错误通过事件返回，不自动重发写操作。
 
 ```swift
-// 页面退出时停止观察。
+// 页面退出时停止订阅。
 watch.cancel()
 // 账号退出时在工作线程关闭。
 try client.close()
@@ -48,4 +48,4 @@ try client.close()
 
 取消只停止本地等待和交付，远端停止执行需要显式业务取消并核对终态。换账号先关闭旧实例，再使用新的账号私有数据库文件初始化。
 
-[Client 与事件接口](/reference/ios/client) · [全部 113 个方法](/reference/ios/public) · [移动端数据与生命周期](/reference/mobile/contract)
+[Client 与事件接口](/reference/ios/client) · [全部 112 个方法](/reference/ios/public) · [移动端数据与生命周期](/reference/mobile/contract)

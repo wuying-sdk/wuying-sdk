@@ -11,7 +11,7 @@ description: "区分本地数据同步进度和 Agent 任务执行状态。"
 | 目标、已接收、已应用序号 | 定位数据是否仍在传输或应用 |
 | `membershipGeneration` | 区分成员关系变化前后的同步代际 |
 
-通过 `listGroups`、`listGroupSyncStates` 查询，按能力使用 `syncGroup`、`syncConversation` 或 `onGroupSyncState`。这些是进阶同步接口，普通消息展示优先使用 observeMessages。
+通过 `listGroups`、`listGroupSyncStates` 查询，按能力使用 `syncGroup`、`syncConversation` 或 `subscribeGroupSyncStates`。这些是进阶同步接口，普通消息展示优先使用 subscribeMessages。
 
 一组同步完成不表示所有会话都已同步，也不表示 Turn 完成。不要把承载组的 groupId 代替业务 conversationId；序号按真实字符串保留。
 

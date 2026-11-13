@@ -443,8 +443,8 @@
                   "api-reference/client/get-auth-code",
                   "api-reference/client/get-imcredentials",
                   "api-reference/client/logout",
-                  "api-reference/client/on-stream-event",
                   "api-reference/client/refresh-login",
+                  "api-reference/client/subscribe-stream-events",
                   "api-reference/client/update-login-credentials"
                 ]
               },
@@ -492,7 +492,7 @@
                   "api-reference/runtimes/approve-fota-update",
                   "api-reference/runtimes/capabilities",
                   "api-reference/runtimes/list",
-                  "api-reference/runtimes/observe",
+                  "api-reference/runtimes/subscribe",
                   "api-reference/runtimes/update-agent-instance"
                 ]
               },
@@ -508,8 +508,8 @@
               {
                 "group": "远程脚本",
                 "pages": [
-                  "api-reference/runtimes/observe-command",
-                  "api-reference/runtimes/run-command"
+                  "api-reference/runtimes/run-command",
+                  "api-reference/runtimes/subscribe-command"
                 ]
               },
               {
@@ -532,7 +532,7 @@
                   "api-reference/agents/list-agent-products",
                   "api-reference/agents/list-experts",
                   "api-reference/agents/models",
-                  "api-reference/agents/observe-agents"
+                  "api-reference/agents/subscribe-agents"
                 ]
               },
               {
@@ -543,21 +543,19 @@
                   "api-reference/conversations/get",
                   "api-reference/conversations/get-authorized-group",
                   "api-reference/conversations/get-conversation-header-metadata",
-                  "api-reference/conversations/get-conversation-summary",
                   "api-reference/conversations/list",
                   "api-reference/conversations/list-authorized-groups",
                   "api-reference/conversations/list-authorized-users",
                   "api-reference/conversations/list-conversation-groups",
                   "api-reference/conversations/list-recent-groups",
                   "api-reference/conversations/list-sidebar-conversations",
-                  "api-reference/conversations/observe-conversation",
-                  "api-reference/conversations/observe-conversation-groups",
-                  "api-reference/conversations/observe-conversation-summary",
-                  "api-reference/conversations/observe-conversations",
-                  "api-reference/conversations/observe-sidebar-conversations",
                   "api-reference/conversations/rename",
                   "api-reference/conversations/set-conversation-pinned",
+                  "api-reference/conversations/subscribe-conversation",
+                  "api-reference/conversations/subscribe-conversation-groups",
+                  "api-reference/conversations/subscribe-conversations",
                   "api-reference/conversations/subscribe-group",
+                  "api-reference/conversations/subscribe-sidebar-conversations",
                   "api-reference/conversations/unarchive-conversation",
                   "api-reference/conversations/unsubscribe-group"
                 ]
@@ -569,8 +567,8 @@
                   "api-reference/members/get-member-snapshot",
                   "api-reference/members/list",
                   "api-reference/members/list-member-candidates",
-                  "api-reference/members/observe-members",
                   "api-reference/members/remove",
+                  "api-reference/members/subscribe-members",
                   "api-reference/members/update"
                 ]
               },
@@ -579,8 +577,8 @@
                 "pages": [
                   "api-reference/configuration/get",
                   "api-reference/configuration/get-composer-capabilities",
-                  "api-reference/configuration/observe-conversation-config",
                   "api-reference/configuration/set-conversation-config-option",
+                  "api-reference/configuration/subscribe-conversation-config",
                   "api-reference/configuration/update"
                 ]
               },
@@ -592,13 +590,13 @@
                   "api-reference/messages/get-message-files",
                   "api-reference/messages/list",
                   "api-reference/messages/list-conversation-history",
-                  "api-reference/messages/observe",
-                  "api-reference/messages/observe-conversation-history",
                   "api-reference/messages/presentation",
                   "api-reference/messages/publish-group-message",
                   "api-reference/messages/resolve-conversation-read",
                   "api-reference/messages/send",
                   "api-reference/messages/stream",
+                  "api-reference/messages/subscribe",
+                  "api-reference/messages/subscribe-conversation-history",
                   "api-reference/messages/wait"
                 ]
               },
@@ -607,8 +605,8 @@
                 "pages": [
                   "api-reference/turns/cancel",
                   "api-reference/turns/get",
-                  "api-reference/turns/observe-turn",
-                  "api-reference/turns/steer-turn"
+                  "api-reference/turns/steer-turn",
+                  "api-reference/turns/subscribe-turn"
                 ]
               },
               {
@@ -617,19 +615,19 @@
                   "api-reference/executions/cancel-execution",
                   "api-reference/executions/list-active-executions",
                   "api-reference/executions/list-execution-activity",
-                  "api-reference/executions/observe-active-executions",
-                  "api-reference/executions/observe-execution-activity",
-                  "api-reference/executions/observe-live-process"
+                  "api-reference/executions/subscribe-active-executions",
+                  "api-reference/executions/subscribe-execution-activity",
+                  "api-reference/executions/subscribe-live-process"
                 ]
               },
               {
                 "group": "Interaction",
                 "pages": [
                   "api-reference/interactions/list",
-                  "api-reference/interactions/observe-interactions",
                   "api-reference/interactions/permission",
                   "api-reference/interactions/question",
                   "api-reference/interactions/refresh-pending-interactions",
+                  "api-reference/interactions/subscribe-interactions",
                   "api-reference/receipts/get-question-response-receipt"
                 ]
               },
@@ -657,9 +655,9 @@
                   "api-reference/resources/selection",
                   "api-reference/resources/get-conversation-resources",
                   "api-reference/resources/list-resources",
-                  "api-reference/resources/observe-conversation-resources",
-                  "api-reference/resources/observe-resources",
-                  "api-reference/resources/set-conversation-resources"
+                  "api-reference/resources/set-conversation-resources",
+                  "api-reference/resources/subscribe-conversation-resources",
+                  "api-reference/resources/subscribe-resources"
                 ]
               },
               {
@@ -773,14 +771,14 @@
                 "group": "超时后查询原结果",
                 "pages": [
                   "api-reference/receipts/get-command-receipt",
-                  "api-reference/receipts/observe-command-receipt"
+                  "api-reference/receipts/subscribe-command-receipt"
                 ]
               },
               {
                 "group": "跟踪一次写入结果",
                 "pages": [
                   "api-reference/receipts/get-mutation",
-                  "api-reference/receipts/observe-mutation"
+                  "api-reference/receipts/subscribe-mutation"
                 ]
               },
               {
@@ -794,7 +792,7 @@
                 ]
               },
               {
-                "group": "实时观察与停止监听",
+                "group": "订阅数据变化",
                 "pages": [
                   "api-reference/subscriptions/close",
                   "api-reference/subscriptions/unsubscribe"
@@ -805,7 +803,7 @@
                 "pages": [
                   "api-reference/sync/list-group-sync-states",
                   "api-reference/sync/list-groups",
-                  "api-reference/sync/on-group-sync-state",
+                  "api-reference/sync/subscribe-group-sync-states",
                   "api-reference/sync/sync-conversation",
                   "api-reference/sync/sync-group"
                 ]
@@ -835,7 +833,6 @@
                   "api-reference/transport/ag-message-client-on-device-presence",
                   "api-reference/transport/ag-message-client-on-durable-message",
                   "api-reference/transport/ag-message-client-on-error",
-                  "api-reference/transport/ag-message-client-on-group-sync-state",
                   "api-reference/transport/ag-message-client-on-initial-sync-progress",
                   "api-reference/transport/ag-message-client-on-link-state",
                   "api-reference/transport/ag-message-client-on-relay-broadcast-response",
@@ -843,7 +840,6 @@
                   "api-reference/transport/ag-message-client-on-relay-late-response",
                   "api-reference/transport/ag-message-client-on-relay-message",
                   "api-reference/transport/ag-message-client-on-relay-request",
-                  "api-reference/transport/ag-message-client-on-stream-event",
                   "api-reference/transport/ag-message-client-on-transient-message",
                   "api-reference/transport/ag-message-client-publish-durable",
                   "api-reference/transport/ag-message-client-publish-stream-transient",
@@ -863,6 +859,8 @@
                   "api-reference/transport/ag-message-client-stream-history",
                   "api-reference/transport/ag-message-client-stream-list",
                   "api-reference/transport/ag-message-client-stream-state",
+                  "api-reference/transport/ag-message-client-subscribe-group-sync-states",
+                  "api-reference/transport/ag-message-client-subscribe-stream-events",
                   "api-reference/transport/ag-message-client-sync",
                   "api-reference/transport/ag-message-client-sync-group",
                   "api-reference/transport/ag-message-client-update-devices",
@@ -904,7 +902,6 @@
                   "api-reference/transport/on-durable",
                   "api-reference/transport/on-durable-message",
                   "api-reference/transport/on-error",
-                  "api-reference/transport/on-group-sync-state",
                   "api-reference/transport/on-initial-sync-progress",
                   "api-reference/transport/on-link-state",
                   "api-reference/transport/on-received",
@@ -914,7 +911,6 @@
                   "api-reference/transport/on-relay-message",
                   "api-reference/transport/on-relay-request",
                   "api-reference/transport/on-status",
-                  "api-reference/transport/on-stream-event",
                   "api-reference/transport/on-transient",
                   "api-reference/transport/on-transient-message",
                   "api-reference/transport/publish",
@@ -943,6 +939,8 @@
                   "api-reference/transport/stream-history",
                   "api-reference/transport/stream-list",
                   "api-reference/transport/stream-state",
+                  "api-reference/transport/subscribe-group-sync-states",
+                  "api-reference/transport/subscribe-stream-events",
                   "api-reference/transport/sync",
                   "api-reference/transport/sync-group",
                   "api-reference/transport/transaction",

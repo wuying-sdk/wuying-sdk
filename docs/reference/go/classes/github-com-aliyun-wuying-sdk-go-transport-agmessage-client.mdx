@@ -198,14 +198,6 @@ func (receiver *Client) OnError(fn func(error)) func()
 
 [查看操作或完整契约](/api-reference/transport/on-error)
 
-## OnGroupSyncState
-
-```go
-func (receiver *Client) OnGroupSyncState(fn func(GroupSyncState)) func()
-```
-
-[查看操作或完整契约](/api-reference/transport/on-group-sync-state)
-
 ## OnInitialSyncProgress
 
 ```go
@@ -261,14 +253,6 @@ func (receiver *Client) OnRelayRequest(handler RelayRequestHandler) (func(), err
 ```
 
 [查看操作或完整契约](/api-reference/transport/on-relay-request)
-
-## OnStreamEvent
-
-```go
-func (receiver *Client) OnStreamEvent(handler StreamHandler) (func(), error)
-```
-
-[查看操作或完整契约](/api-reference/transport/on-stream-event)
 
 ## OnTransientMessage
 
@@ -429,6 +413,22 @@ func (receiver *Client) StreamState(ctx context.Context, groupID, senderUserID, 
 ```
 
 [查看操作或完整契约](/api-reference/transport/stream-state)
+
+## SubscribeGroupSyncStates
+
+```go
+func (receiver *Client) SubscribeGroupSyncStates(fn func(GroupSyncState)) func()
+```
+
+[查看操作或完整契约](/api-reference/transport/subscribe-group-sync-states)
+
+## SubscribeStreamEvents
+
+```go
+func (receiver *Client) SubscribeStreamEvents(handler StreamHandler) (func(), error)
+```
+
+[查看操作或完整契约](/api-reference/transport/subscribe-stream-events)
 
 ## SyncGroup
 

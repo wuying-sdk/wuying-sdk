@@ -1,12 +1,12 @@
 ---
-title: "OnStreamEvent"
-sidebarTitle: "OnStreamEvent"
+title: "SubscribeStreamEvents"
+sidebarTitle: "SubscribeStreamEvents"
 description: "完整公开接口 · Transport"
 ---
 
-`OnStreamEvent` · Transport
+`SubscribeStreamEvents` · Transport
 
-OnStreamEvent registers the single opaque stream outlet and returns its
+SubscribeStreamEvents registers the single opaque stream outlet and returns its
 unsubscribe function. The original transient handler still receives the
 same deliveries; this outlet exists so a business layer can consume raw
 stream packets without handing them to an AG body parser. A second
@@ -18,7 +18,7 @@ registration fails explicitly.
 | 语言 | 公开入口 | 状态 |
 |---|---|---|
 | JavaScript / TypeScript | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
-| Go | `github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnStreamEvent` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.SubscribeStreamEvents` | 已公开声明，需核对环境能力 |
 | Java | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
 | CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
 
@@ -29,12 +29,12 @@ registration fails explicitly.
 ### Go · github.com/aliyun/wuying-sdk-go/transport/agmessage.Client
 
 ```go
-func (receiver *Client) OnStreamEvent(handler StreamHandler) (func(), error)
+func (receiver *Client) SubscribeStreamEvents(handler StreamHandler) (func(), error)
 ```
 
 ## 结果、错误与生命周期
 
-以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+以本语言签名中的实际返回包装为准。快照保留投影；订阅结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 

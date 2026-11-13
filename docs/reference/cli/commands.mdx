@@ -275,7 +275,7 @@ before another write. Configurable `WUYING_SALES_ENDPOINT` and
 ### Runtime command execution and events
 
 `runtimes run-command` executes an administrator command through RuntimeManager;
-`runtimes observe-command` resumes only result observation using a saved invokeId.
+`runtimes subscribe-command` resumes only result observation using a saved invokeId.
 This release supports **AK/SK 0930 only**. User/1002 entry points return UNSUPPORTED;
 they do not execute a command or fall back to an administrator API.
 
@@ -285,7 +285,7 @@ they do not execute a command or fall back to an administrator API.
 wuying runtimes run-command --profile admin --request-file command.json \
   --timeout 600000 --output jsonl
 # observation.json: {"regionId":"cn-hangzhou","desktopIds":["desktop-id"],"invokeId":"saved-id"}
-wuying runtimes observe-command --profile admin --request-file observation.json \
+wuying runtimes subscribe-command --profile admin --request-file observation.json \
   --timeout 600000 --output jsonl
 ```
 
@@ -406,7 +406,7 @@ latest 100-message projection; use paginated history for a longer Turn.
 {"schemaVersion":1,"status":"accepted","outcome":"accepted","data":{"runtimeId":"...","conversationId":"...","turnId":"...","messageId":"...","clientMessageId":"..."}}
 ```
 
-For list commands, the JSON result's `data` is a page: `data.items` and `data.nextCursor`. Observer events and selected detail queries retain their declared SDK snapshots. Errors include `code`, `outcome`, optional
+For list commands, the JSON result's `data` is a page: `data.items` and `data.nextCursor`. SubscriptionListener events and selected detail queries retain their declared SDK snapshots. Errors include `code`, `outcome`, optional
 `traceId`, and safe recovery IDs; raw upstream error bodies are not printed.
 
 | Exit | Meaning |
@@ -478,3 +478,5 @@ and the actual SDK's business/IM storage against the persistent adapter.
 Read [CONTRACT.md](/integration/04-errors-and-operations) for ownership and compatibility details.
 
 列表查询统一使用 `limit` / `cursor`，返回 `items` / `nextCursor`，默认每页 50 项，最多 100 项。详见[列表分页](https://wuying-sdk.mintlify.app/domain-model/page)。
+
+会话读取统一使用 `conversations get --runtime <id> --conversation <id>`；默认 cache，可通过 `--consistency refresh` 刷新。订阅统一使用 SDK 的 `subscribe*` 或脚本结果命令 `runtimes subscribe-command`；返回 Subscription，通过 unsubscribe() 停止本地订阅。

@@ -26,19 +26,19 @@ description: "完整公开接口 · Group"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: GroupDirectoryEntry[]; nextCursor: string | null; }>;
+listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: Group[]; nextCursor: string | null; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
+func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.Group], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSummary>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Group>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -65,7 +65,7 @@ interface ListOptions {
     cursor?: string;
 }
 
-interface GroupDirectoryEntry {
+interface Group {
     /** 仅在已授权Runtime目录中能唯一关联时提供；缺失时不能猜测AG。 */
     runtimeId?: string;
     groupId: string;
@@ -83,7 +83,7 @@ interface GroupDirectoryEntry {
 
 ## 结果、错误与生命周期
 
-以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+以本语言签名中的实际返回包装为准。快照保留投影；订阅结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 

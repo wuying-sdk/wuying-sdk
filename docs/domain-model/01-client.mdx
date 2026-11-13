@@ -14,13 +14,13 @@ Client 是当前身份下访问 SDK 的根入口，统一取得业务 Manager、
 | ClientOptions | 管理员 AK/SK；用户态 AuthCode、完整 loginToken/sessionId/endUserId 或组织账号密码（三选一），按需提供登录地域 | 从宿主认证系统安全注入，不在 Web 放置 AK/SK |
 | 配置对象 | 授权 Client ID、数据位置、日志及 SDK 配置 | 为账号/环境选择独占的可写数据位置 |
 | Context / CallContext / context.Context | 调用期限、取消和可选追踪元数据 | 不把本地等待结束解释成远端已取消 |
-| Subscription | 本地观察句柄 | 页面退出退订；不关闭其他组件共享的 Client |
+| Subscription | 本地订阅句柄 | 页面退出退订；不关闭其他组件共享的 Client |
 
 表中是领域含义，不是可跨语言逐字复制的 JSON。JS 的 Client.create 同步返回 Client，准备/查询可能异步失败；Java 使用 WuyingClient，Go 使用 NewClient；CLI 由每条命令管理连接和 profile。
 
 ## 生命周期
 
-宿主登录 → 创建根 Client → 查询并观察业务 → 页面退出释放所属订阅 → 账号退出关闭 Client。更换身份应按本语言合同建立新的 Client 和隔离存储，不并发打开同一持久库，也不直接修改 SDK 内部库。
+宿主登录 → 创建根 Client → 查询并订阅业务 → 页面退出释放所属订阅 → 账号退出关闭 Client。更换身份应按本语言合同建立新的 Client 和隔离存储，不并发打开同一持久库，也不直接修改 SDK 内部库。
 
 AuthCode 可能短效/一次性消费。SDK 管理其认证、续期和连接；客户端不另建 token 刷新器。CLI auth status 只检查配置，在线身份使用 doctor 核对；POSIX 凭据文件与 Windows 环境注入的差异见 [认证指南](/integration/01-auth-and-lifecycle)。
 
@@ -37,7 +37,7 @@ AuthCode 可能短效/一次性消费。SDK 管理其认证、续期和连接；
 
 ## 调用期限
 
-JS 普通请求与长流分别遵循其 Context 的合法范围，不能把长流的超时直接复用于建会或普通查询。Go/Java 使用各自的 context/deadline；精确范围和关闭语义查看本语言参考。取消观察、关闭 Client、取消 Turn 是不同操作。
+JS 普通请求与长流分别遵循其 Context 的合法范围，不能把长流的超时直接复用于建会或普通查询。Go/Java 使用各自的 context/deadline；精确范围和关闭语义查看本语言参考。取消订阅、关闭 Client、取消 Turn 是不同操作。
 
 ## 边界与示例
 
@@ -46,4 +46,4 @@ Node 需要真实持久 IndexedDB 能力（本包示例使用指定 shim），�
 
 ## 关联模块
 
-[Runtime](/domain-model/02-runtime-agent) 提供授权目录作用域；[Subscription](/domain-model/subscription) 管理页面自己的观察生命周期。
+[Runtime](/domain-model/02-runtime-agent) 提供授权目录作用域；[Subscription](/domain-model/subscription) 管理页面自己的订阅生命周期。

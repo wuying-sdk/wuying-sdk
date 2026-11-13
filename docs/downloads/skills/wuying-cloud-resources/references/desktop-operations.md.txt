@@ -77,7 +77,7 @@ regionId, type and commandContent. Example for a PowerShell-capable desktop:
 
 ```sh
 wuying runtimes run-command --profile <admin-profile> --request-file <command.json> --timeout 600000 --output jsonl
-wuying runtimes observe-command --profile <admin-profile> --request-file <receipt.json> --timeout 600000 --output jsonl
+wuying runtimes subscribe-command --profile <admin-profile> --request-file <receipt.json> --timeout 600000 --output jsonl
 ```
 
 receipt.json contains only regionId, desktopIds and invokeId from the saved receipt,

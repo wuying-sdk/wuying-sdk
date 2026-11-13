@@ -52,7 +52,7 @@ interface Context {
 
 interface ConversationManager {
     /** Shared per authorization/root; 50ms notifications, no durable writes or execution control. */
-    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
     getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
     getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
@@ -66,18 +66,17 @@ interface ConversationManager {
     syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
     /** 显式选择分页返回的群，仍验证其属于指定Runtime。 */
     syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
     listConversationGroups: ConversationManager$1['listConversationGroups'];
-    observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+    subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
     listSidebarConversations: ConversationManager$1['listSidebarConversations'];
-    observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    subscribeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
     /** Metadata only; never activates or grants write authority to a cold conversation. */
-    getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
-    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    subscribeConversation(ctx: Context, req: ConversationRef, observer: SubscriptionListener<Conversation>): Promise<Subscription>;
     getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
     listActiveExecutions: ConversationManager$1['listActiveExecutions'];
-    observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+    subscribeActiveExecutions(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ActiveExecutionSnapshot>): Promise<Subscription>;
     cancelExecution(ctx: Context, req: ConversationRef & {
         executionId: string;
         expectedVersion: string;
@@ -88,7 +87,7 @@ interface ConversationManager {
         memberId?: string;
     }): Promise<Snapshot<ComposerCapabilities>>;
     getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
-    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
     steerTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
         text: string;
@@ -107,10 +106,10 @@ interface ConversationManager {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<MemberSnapshot>>;
     getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
     listConversations: ConversationManager$1['listConversations'];
-    getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
-    observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    getConversation(ctx: Context, req: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
+    subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
     renameConversation(ctx: Context, req: ConversationRef & {
         name: string;
     }, options?: MutationOptions): Promise<ConversationRef>;
@@ -123,14 +122,14 @@ interface ConversationManager {
         optionId: 'model' | 'runtime.permissionPreset' | 'runtime.thinkingLevel';
         value: string;
     }): Promise<ConversationRef>;
-    observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+    subscribeConversationConfig(ctx: Context, req: ConversationRef, observer: SubscriptionListener<EffectiveConfig>): Promise<Subscription>;
     getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig>>;
     archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
     unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
     listMembers: ConversationManager$1['listMembers'];
-    observeMembers(ctx: Context, req: ConversationRef & {
+    subscribeMembers(ctx: Context, req: ConversationRef & {
         includeRemoved?: boolean;
-    }, observer: Observer<Member[]>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Member[]>): Promise<Subscription>;
     addMember(ctx: Context, req: ConversationRef & {
         agentId: string;
         displayName?: string;
@@ -159,19 +158,19 @@ interface ConversationManager {
     sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
     resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
     listConversationHistory: ConversationManager$1['listConversationHistory'];
-    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    subscribeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: SubscriptionListener<ConversationHistory>): Promise<Subscription>;
     listMessages: ConversationManager$1['listMessages'];
     getMessageDetail(ctx: Context, req: ConversationRef & {
         messageId: string;
         itemCursor?: string;
         limit?: number;
     }): Promise<Snapshot<MessageDetail | undefined>>;
-    observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+    subscribeMessages(ctx: Context, req: MessageQuery, observer: SubscriptionListener<Page<Message>>): Promise<Subscription>;
     listExecutionActivity: ConversationManager$1['listExecutionActivity'];
-    observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
-    observeTurn(ctx: Context, req: ConversationRef & {
+    subscribeExecutionActivity(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ExecutionActivity[]>): Promise<Subscription>;
+    subscribeTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
-    }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Turn | undefined>): Promise<Subscription>;
     getTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
     }): Promise<Snapshot<Turn | undefined>>;
@@ -180,9 +179,9 @@ interface ConversationManager {
     }): Promise<{
         state: 'requested' | 'cancelled' | 'already_finished';
     }>;
-    observeInteractions(ctx: Context, req: ConversationRef & {
+    subscribeInteractions(ctx: Context, req: ConversationRef & {
         state?: 'pending' | 'all';
-    }, observer: Observer<Interaction[]>): Promise<Subscription>;
+    }, observer: SubscriptionListener<Interaction[]>): Promise<Subscription>;
     refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<ConversationRef & {
         recovered: number;
     }>;
@@ -213,7 +212,7 @@ interface ConversationManager {
 
 ## 结果、错误与生命周期
 
-以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+以本语言签名中的实际返回包装为准。快照保留投影；订阅结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 

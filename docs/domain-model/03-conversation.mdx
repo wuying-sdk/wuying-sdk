@@ -20,7 +20,7 @@ Conversation 是用户可见的业务会话，组织消息、执行轮次、成�
 
 ## 生命周期
 
-选环境/Agent → 创建或读取会话 → 分页/观察会话与消息 → 调整配置或成员 → 需要时归档/取消归档。归档、删除、关闭连接和取消执行不同；本语言没有公开的操作不能借 demo 私有接口补成同义操作。
+选环境/Agent → 创建或读取会话 → 分页/订阅会话与消息 → 调整配置或成员 → 需要时归档/取消归档。归档、删除、关闭连接和取消执行不同；本语言没有公开的操作不能借 demo 私有接口补成同义操作。
 
 ## 公开操作
 
@@ -45,3 +45,15 @@ Conversation 是用户可见的业务会话，组织消息、执行轮次、成�
 - [Config](/domain-model/config)：期望配置与实际生效状态。
 - [Message](/domain-model/05-message)：消息及其独立展示视图。
 - [Turn](/domain-model/06-turn-items)：执行轮次、内容项、执行过程与交互。
+
+## 读取与刷新
+
+`getConversation` 读取会话，默认使用当前缓存。需要重新核对服务端信息时，显式选择刷新：
+
+```ts
+const result = await conversations.getConversation(ctx, {
+  runtimeId, conversationId, consistency: 'refresh',
+});
+```
+
+Go 在可选 `ReadOptions` 中设置 `Consistency: "refresh"`；Java 使用 `ReadOptions.consistency = "refresh"` 重载；Android/iOS 在 request 中设置 consistency。实时变化通过 `subscribeConversation` 或当前语言已提供的会话列表订阅接入，具体能力以对应签名为准。

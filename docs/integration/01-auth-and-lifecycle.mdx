@@ -31,10 +31,10 @@ import AuthenticationModel from '/snippets/authentication-model.mdx';
 2. 建立根 Client，准备需要的 Manager；对准备操作设置本地超时。
 3. 查询 Runtime 与 Agent，并由用户/业务明确选择授权对象，不自动选第一个。
 4. 一个业务宿主共享其 Client；页面或组件分别拥有自己的订阅句柄。
-5. 切换页面只退订该页面的观察；退出账号才释放全部观察并关闭根 Client。
+5. 切换页面只退订该页面的订阅；退出账号才释放全部订阅并关闭根 Client。
 6. 更换身份使用新 Client 与隔离的数据位置。不要用另一个身份复用同一 Client，也不要并发打开同一库。
 
-Go 的调用期限由 context.Context 传递，Java 用 CallContext，JS 用 Context.timeout/signal，CLI 用 --timeout。它们取消本地等待，不表示已取消远端任务；远端取消需调用取消 Turn 并观察终态。
+Go 的调用期限由 context.Context 传递，Java 用 CallContext，JS 用 Context.timeout/signal，CLI 用 --timeout。它们取消本地等待，不表示已取消远端任务；远端取消需调用取消 Turn 并订阅终态。
 
 ## Node 与浏览器的区别
 

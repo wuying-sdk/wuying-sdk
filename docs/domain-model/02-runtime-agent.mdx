@@ -9,19 +9,19 @@ Runtime 是无影的执行环境模型。SDK 提供环境目录、云桌面基�
 
 | 要完成的事 | 当前公开入口 | 身份要求 |
 |---|---|---|
-| 查询和观察环境目录、读取宿主能力 | `client.buildRuntimeManager`；Go 为 `BuildRuntimeManager` | 用户态 |
+| 查询和订阅环境目录、读取宿主能力 | `client.buildRuntimeManager`；Go 为 `BuildRuntimeManager` | 用户态 |
 | 创建云桌面、等待创建完成 | 根 Client 的 `create` / `wait` | AK/SK 管理员态 |
 | 开机、关机、重启 | 根 Client 的 `start` / `stop` / `reboot` | 用户态或 AK/SK 管理员态 |
 | 重置系统 | 根 Client 的 `reset` | 两种身份均支持，镜像参数规则不同 |
 | 释放云桌面 | 根 Client 的 `delete` | 仅 AK/SK 管理员态 |
-| 执行系统命令、观察命令结果 | RuntimeManager 的 `runCommand` / `observeCommand` | 管理员；Node / CLI 也支持 OAuth |
+| 执行系统命令、订阅命令结果 | RuntimeManager 的 `runCommand` / `subscribeCommand` | 管理员；Node / CLI 也支持 OAuth |
 
 以上属于 Runtime 领域，但当前生命周期方法直接挂在根 Client 上。不能把它们写成 RuntimeManager.start。同一 RuntimeManager 工厂按根 Client 身份提供操作：管理员命令不会开启用户目录或 IM 链路。各操作仍由云端检查真实权限。
 
 ## 环境目录与能力
 
 - [`listRuntimes`](/api-reference/runtimes/list)
-- [`observeRuntimes`](/api-reference/runtimes/observe)
+- [`subscribeRuntimes`](/api-reference/runtimes/subscribe)
 - [`getHostCapabilities`](/api-reference/runtimes/capabilities)
 
 ```ts
@@ -29,7 +29,7 @@ const runtimeManager = await client.buildRuntimeManager(ctx);
 const { items: runtimes } = await runtimeManager.listRuntimes(ctx);
 ```
 
-`listRuntimes` 返回 `items` 和 `nextCursor`，当前页中的每项都是 `Runtime`。认证或目录加载失败会报错，不当作空页；更多资源通过 [分页](/domain-model/page) 继续查询。`observeRuntimes` 仍观察同一目录并携带同步状态，不自动选择第一项，也不把 IM 在线状态当成云桌面电源状态。
+`listRuntimes` 返回 `items` 和 `nextCursor`，当前页中的每项都是 `Runtime`。认证或目录加载失败会报错，不当作空页；更多资源通过 [分页](/domain-model/page) 继续查询。`subscribeRuntimes` 仍订阅同一目录并携带同步状态，不自动选择第一项，也不把 IM 在线状态当成云桌面电源状态。
 
 ## 云桌面基础管理
 
@@ -89,7 +89,7 @@ wuying desktops start --request-file target.json
 
 ## 远程脚本
 
-通过同一 RuntimeManager 的 `runCommand` 执行系统脚本，使用 `observeCommand` 恢复结果观察。最小代码、逐桌面事件及执行身份边界见[远程脚本](/domain-model/remote-script)。
+通过同一 RuntimeManager 的 `runCommand` 执行系统脚本，使用 `subscribeCommand` 恢复结果订阅。最小代码、逐桌面事件及执行身份边界见[远程脚本](/domain-model/remote-script)。
 
 ## 配置与服务访问
 
@@ -105,4 +105,4 @@ wuying desktops start --request-file target.json
 
 Runtime 展示环境名称、状态与能力；RuntimeRef.runtimeId 作为会话查询的环境作用域。基础管理使用真实 desktopIds 和 regionId；实例、资源与计费标识不自动互转。
 
-Client 统一管理身份与生命周期。观察结束释放本地订阅；停止观察或关闭 Client 不撤销云端已经接手的操作。
+Client 统一管理身份与生命周期。订阅结束释放本地订阅；停止订阅或关闭 Client 不撤销云端已经接手的操作。

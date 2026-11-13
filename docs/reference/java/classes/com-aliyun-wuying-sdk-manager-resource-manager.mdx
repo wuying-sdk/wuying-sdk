@@ -23,13 +23,13 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 
 [查看操作或完整契约](/api-reference/resources/list-resources)
 
-## observeResources
+## subscribeResources
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Resource>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Resource>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-[查看操作或完整契约](/api-reference/resources/observe-resources)
+[查看操作或完整契约](/api-reference/resources/subscribe-resources)
 
 ## getConversationResources
 
@@ -39,13 +39,13 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 
 [查看操作或完整契约](/api-reference/resources/get-conversation-resources)
 
-## observeConversationResources
+## subscribeConversationResources
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ResourceSelection>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.ResourceSelection>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-[查看操作或完整契约](/api-reference/resources/observe-conversation-resources)
+[查看操作或完整契约](/api-reference/resources/subscribe-conversation-resources)
 
 ## setConversationResources
 

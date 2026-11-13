@@ -102,22 +102,6 @@ func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.Workspa
 
 [查看操作或完整契约](/api-reference/workspaces/list)
 
-## ObserveConversationResources
-
-```go
-func (receiver *ResourceManager) ObserveConversationResources(ctx context.Context, r m.ConversationRef, o m.Observer[m.ResourceSelection]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/resources/observe-conversation-resources)
-
-## ObserveResources
-
-```go
-func (receiver *ResourceManager) ObserveResources(ctx context.Context, r m.ResourceQuery, o m.Observer[[]m.Resource]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/resources/observe-resources)
-
 ## SetConversationResources
 
 ```go
@@ -141,3 +125,19 @@ func (receiver *ResourceManager) StageDraftAttachment(ctx context.Context, r m.S
 ```
 
 [查看操作或完整契约](/api-reference/drafts/stage-draft-attachment)
+
+## SubscribeConversationResources
+
+```go
+func (receiver *ResourceManager) SubscribeConversationResources(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ResourceSelection]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/resources/subscribe-conversation-resources)
+
+## SubscribeResources
+
+```go
+func (receiver *ResourceManager) SubscribeResources(ctx context.Context, r m.ResourceQuery, o m.SubscriptionListener[[]m.Resource]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/resources/subscribe-resources)

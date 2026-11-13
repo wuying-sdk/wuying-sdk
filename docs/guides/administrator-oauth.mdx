@@ -24,7 +24,7 @@ wuying auth status --profile admin
 
 使用 `--no-input` 时必须同时指定 `--reuse`。无影不提供自己的设备码或回调地址输入参数；无浏览器的宿主先按官方 CLI 支持的方式准备 profile，再复用它。OAuth 凭据不得与其他管理员/用户凭据混用；环境凭据优先于保存的 profile，切换前移除冲突的环境输入。
 
-`auth oauth` 成功只证明能解析凭据，不证明已经获得云桌面操作权限。已授权管理员可继续调用 `desktops`、`auth code`、`runtimes run-command` 和 `observe-command`，实际操作由云端校验。
+`auth oauth` 成功只证明能解析凭据，不证明已经获得云桌面操作权限。已授权管理员可继续调用 `desktops`、`auth code`、`runtimes run-command` 和 `subscribe-command`，实际操作由云端校验。
 
 ## 凭据保存与退出
 

@@ -13,15 +13,15 @@ description: "执行视图定位会话中的活动执行和可公开过程，帮
 
 ## 生命周期
 
-读取或观察活动执行 → 识别真实 owner 与角色 → 消费过程快照 → 按能力取消指定执行 → 继续核对轮次与执行结果。
+读取或订阅活动执行 → 识别真实 owner 与角色 → 消费过程快照 → 按能力取消指定执行 → 继续核对轮次与执行结果。
 
 ## 操作入口
 
 - [`listActiveExecutions`](/api-reference/executions/list-active-executions)
-- [`observeActiveExecutions`](/api-reference/executions/observe-active-executions)
+- [`subscribeActiveExecutions`](/api-reference/executions/subscribe-active-executions)
 - [`listExecutionActivity`](/api-reference/executions/list-execution-activity)
-- [`observeExecutionActivity`](/api-reference/executions/observe-execution-activity)
-- [`observeLiveProcess`](/api-reference/executions/observe-live-process)
+- [`subscribeExecutionActivity`](/api-reference/executions/subscribe-execution-activity)
+- [`subscribeLiveProcess`](/api-reference/executions/subscribe-live-process)
 - [`cancelExecution`](/api-reference/executions/cancel-execution)
 
 ## 使用边界

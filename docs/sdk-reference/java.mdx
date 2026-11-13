@@ -58,7 +58,7 @@ try (WuyingClient client = new WuyingClient(options, config);
     RuntimeManager runtimesAPI = client.buildRuntimeManager(context);
     int count = runtimesAPI.listRuntimes(context)
         .toCompletableFuture().get(65, TimeUnit.SECONDS).size();
-    // 列表查询统一返回 items / nextCursor；观察和详情按各自声明保留同步状态。
+    // 列表查询统一返回 items / nextCursor；订阅和详情按各自声明保留同步状态。
 }
 ```
 
@@ -68,7 +68,7 @@ try (WuyingClient client = new WuyingClient(options, config);
 
 ## 业务、异步与资源释放
 
-通过根 Client 建立 `AgentManager` / `ConversationManager`，按授权查询取得真实 Runtime 与 Agent 身份后创建会话。操作返回 CompletionStage 时应在业务线程异步等待，避免阻塞 UI 线程；每次调用使用有界 CallContext。观察消息 / 审批时释放相应订阅，最后关闭 Client。不要在每个收到的消息事件中再创建一个 Client。
+通过根 Client 建立 `AgentManager` / `ConversationManager`，按授权查询取得真实 Runtime 与 Agent 身份后创建会话。操作返回 CompletionStage 时应在业务线程异步等待，避免阻塞 UI 线程；每次调用使用有界 CallContext。订阅消息 / 审批时释放相应订阅，最后关闭 Client。不要在每个收到的消息事件中再创建一个 Client。
 
 公开 API 的详细参数在 `sdk-javadoc.jar` 和 `sdk-sources.jar`，附带原始 POM 可核对依赖。消息是投影快照，不能重复追加为多条卡片。消息写入或审批结果未知时按原 ID 对账；本地 future 超时不证明远端未执行。审批只能提交当前 Interaction 的真实 option ID 与写版本，不用界面显示文案替代。
 
@@ -90,7 +90,7 @@ SDK 管理持久副本和连接；每账号/环境使用独立数据库，应用
 | Manager | buildRuntimeManager / buildAgentManager / buildConversationManager / buildResourceManager | CallContext 显式传入 |
 | 环境 | listRuntimes(ctx) / listAgents(request, ctx) | 列表查询返回 Page，使用 items / nextCursor |
 | 建会 | createConversation(request, options, ctx) | CreateRequest，MutationOptions.mutationId |
-| 消息 | listMessages / observeMessages | 请求在前，ctx 在后；Observer 接收 Snapshot |
+| 消息 | listMessages / subscribeMessages | 请求在前，ctx 在后；SubscriptionListener 接收 Snapshot |
 | 发送 | sendMessageStream / sendMessageAndWait | SendRequest.clientCommandId，MessageCompletion.accepted/turn |
 | 交互 | respondPermission / respondQuestion | typed 请求，不能发送对象 toString |
 | 释放 | Subscription.close / WuyingClient.close | 本地取消不等于远端 Turn 取消 |

@@ -724,14 +724,14 @@ public java.util.concurrent.CompletionStage<java.lang.Void> refreshLogin(com.ali
 public java.util.concurrent.CompletionStage<java.lang.Void> updateLoginCredentials(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-398886a8855074b7" />
+<a id="entry-a1b7300ebc934464" />
 
-### com.aliyun.wuying.sdk.WuyingClient.onStreamEvent
+### com.aliyun.wuying.sdk.WuyingClient.subscribeStreamEvents
 
-类别：模型操作。[按模型查看操作](/api-reference/client/on-stream-event)。
+类别：模型操作。[按模型查看操作](/api-reference/client/subscribe-stream-events)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription onStreamEvent(com.aliyun.wuying.sdk.CallContext, java.util.function.Consumer<com.aliyun.wuying.sdk.model.StreamEvent>);
+public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(com.aliyun.wuying.sdk.CallContext, java.util.function.Consumer<com.aliyun.wuying.sdk.model.StreamEvent>);
 ```
 
 <a id="entry-d19125e3906b8527" />
@@ -4282,8 +4282,8 @@ public com.aliyun.wuying.sdk.manager.AgentManager(com.aliyun.wuying.sdk.internal
 类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Agent>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Agent>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-6e9dd79270a0bb40" />
@@ -4293,18 +4293,18 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Model>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Model>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-7701ae9c261d7035" />
+<a id="entry-8bd9688c5395b06b" />
 
-### com.aliyun.wuying.sdk.manager.AgentManager.observeAgents
+### com.aliyun.wuying.sdk.manager.AgentManager.subscribeAgents
 
-类别：模型操作。[按模型查看操作](/api-reference/agents/observe-agents)。
+类别：模型操作。[按模型查看操作](/api-reference/agents/subscribe-agents)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.AgentSummary>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Agent>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-9e45169f4f7c4c6d" />
@@ -4472,6 +4472,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 
 ```java
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ReadOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-51050bfbe5e20534" />
@@ -4645,74 +4646,74 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ExecutionActivity>> listExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-fec57ca93bbe58d1" />
+<a id="entry-29c51232af44db44" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeConversations
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeConversations
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversations)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversations)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-12d288fd283f573a" />
+<a id="entry-baa3e5a0535a163b" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeConversation
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeConversation
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversation)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Conversation>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Conversation>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-16595ed649ef7977" />
+<a id="entry-c833737033c36876" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeConversationConfig
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeConversationConfig
 
-类别：模型操作。[按模型查看操作](/api-reference/configuration/observe-conversation-config)。
+类别：模型操作。[按模型查看操作](/api-reference/configuration/subscribe-conversation-config)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeConversationConfig(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.EffectiveConfig>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeConversationConfig(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.EffectiveConfig>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-10dbb06e68d2e4ab" />
+<a id="entry-64ca0b2ae02c293a" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeMembers
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeMembers
 
-类别：模型操作。[按模型查看操作](/api-reference/members/observe-members)。
+类别：模型操作。[按模型查看操作](/api-reference/members/subscribe-members)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Member>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Member>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-05ca8b6bc30dbb2b" />
+<a id="entry-42649e1bd4cad947" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeMessages
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeMessages
 
-类别：模型操作。[按模型查看操作](/api-reference/messages/observe)。
+类别：模型操作。[按模型查看操作](/api-reference/messages/subscribe)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-57a4cf7f69eb0e8f" />
+<a id="entry-5835513aae16f324" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeTurn
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeTurn
 
-类别：模型操作。[按模型查看操作](/api-reference/turns/observe-turn)。
+类别：模型操作。[按模型查看操作](/api-reference/turns/subscribe-turn)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Turn>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Turn>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-75bf395226277639" />
+<a id="entry-997a457e69fbfcdb" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeExecutionActivity
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeExecutionActivity
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-execution-activity)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-execution-activity)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.ExecutionActivity>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.ExecutionActivity>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-44f0f11b3302b74c" />
@@ -4767,14 +4768,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Interaction>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-1ad20623d0764b61" />
+<a id="entry-bd0ebe9971ad88d6" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeInteractions
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeInteractions
 
-类别：模型操作。[按模型查看操作](/api-reference/interactions/observe-interactions)。
+类别：模型操作。[按模型查看操作](/api-reference/interactions/subscribe-interactions)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Interaction>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Interaction>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-404c9ccf2d4c65c5" />
@@ -4798,24 +4799,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Interact
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondQuestion(com.aliyun.wuying.sdk.model.QuestionRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-73cfa86dc333e1c1" />
+<a id="entry-7da41dc9285cc358" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.onGroupSyncState
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeGroupSyncStates
 
-类别：模型操作。[按模型查看操作](/api-reference/sync/on-group-sync-state)。
-
-```java
-public com.aliyun.wuying.sdk.model.Subscription onGroupSyncState(com.aliyun.wuying.sdk.model.RuntimeRef, java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-aec7e949563664e1" />
-
-### com.aliyun.wuying.sdk.manager.ConversationManager.getConversationSummary
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-summary)。
+类别：模型操作。[按模型查看操作](/api-reference/sync/subscribe-group-sync-states)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversationSummary(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-9d6d7edc500d18eb" />
@@ -4828,14 +4819,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>> listConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-97b1d96b0ce19d8c" />
+<a id="entry-f3fe9245e75fa918" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeConversationGroups
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeConversationGroups
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-groups)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversation-groups)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-a5ad15bdf9148389" />
@@ -4848,14 +4839,14 @@ public com.aliyun.wuying.sdk.model.Subscription observeConversationGroups(com.al
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-80f09b87410b4ee7" />
+<a id="entry-de4a53f5be996bbb" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeSidebarConversations
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeSidebarConversations
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-sidebar-conversations)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-sidebar-conversations)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-406e8e54971029e6" />
@@ -4920,14 +4911,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ActiveEx
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ActiveExecutionPage> listActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-e19c8da1df3eb433" />
+<a id="entry-10200a847539dd16" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeActiveExecutions
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeActiveExecutions
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-active-executions)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-active-executions)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ActiveExecutionSnapshot>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.ActiveExecutionSnapshot>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-2faee447e16ee6d2" />
@@ -5001,14 +4992,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.CommandReceipt>> getCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-b5188cac74138db3" />
+<a id="entry-dbb197cd81719ef6" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeCommandReceipt
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeCommandReceipt
 
-类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-command-receipt)。
+类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-command-receipt)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.CommandReceipt>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.CommandReceipt>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-7c342c8821300491" />
@@ -5021,14 +5012,14 @@ public com.aliyun.wuying.sdk.model.Subscription observeCommandReceipt(com.aliyun
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MutationStatus>> getMutation(com.aliyun.wuying.sdk.model.MutationRef, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-089854918ee26944" />
+<a id="entry-5ff6968f7edbc28c" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeMutation
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeMutation
 
-类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-mutation)。
+类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-mutation)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeMutation(com.aliyun.wuying.sdk.model.MutationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.MutationStatus>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeMutation(com.aliyun.wuying.sdk.model.MutationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.MutationStatus>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-cf36a003146fb46b" />
@@ -5071,14 +5062,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Conversa
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationHistory> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-c124c47d28eacfd6" />
+<a id="entry-90e1406b1e9d23aa" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeConversationHistory
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeConversationHistory
 
-类别：模型操作。[按模型查看操作](/api-reference/messages/observe-conversation-history)。
+类别：模型操作。[按模型查看操作](/api-reference/messages/subscribe-conversation-history)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ConversationHistory>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.ConversationHistory>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-73864233a63ad4ac" />
@@ -5088,7 +5079,7 @@ public com.aliyun.wuying.sdk.model.Subscription observeConversationHistory(com.a
 类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSummary>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Group>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-93f2f4f3a6838751" />
@@ -5101,14 +5092,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncGroup(com.aliyun.wuying.sdk.model.GroupRef, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-79bf71a52637abeb" />
+<a id="entry-4669257b300e09fb" />
 
-### com.aliyun.wuying.sdk.manager.ConversationManager.observeLiveProcess
+### com.aliyun.wuying.sdk.manager.ConversationManager.subscribeLiveProcess
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-live-process)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-live-process)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeLiveProcess(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.LiveProcessSnapshot>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeLiveProcess(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.LiveProcessSnapshot>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-af5a5517cf86ad40" />
@@ -5274,14 +5265,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-db8ac6e8c1d0f12b" />
+<a id="entry-3d73c5cacf7b6aa3" />
 
-### com.aliyun.wuying.sdk.manager.ResourceManager.observeResources
+### com.aliyun.wuying.sdk.manager.ResourceManager.subscribeResources
 
-类别：模型操作。[按模型查看操作](/api-reference/resources/observe-resources)。
+类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-resources)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Resource>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Resource>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-ed9ceb6969951b24" />
@@ -5294,14 +5285,14 @@ public com.aliyun.wuying.sdk.model.Subscription observeResources(com.aliyun.wuyi
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ResourceSelection>> getConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-c860b26f22bddb63" />
+<a id="entry-a58296e30ad59a4e" />
 
-### com.aliyun.wuying.sdk.manager.ResourceManager.observeConversationResources
+### com.aliyun.wuying.sdk.manager.ResourceManager.subscribeConversationResources
 
-类别：模型操作。[按模型查看操作](/api-reference/resources/observe-conversation-resources)。
+类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-conversation-resources)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ResourceSelection>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.ResourceSelection>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-be6000971de2dcad" />
@@ -5509,14 +5500,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-5df9d44814a870e7" />
+<a id="entry-9d5e28368b4ced15" />
 
-### com.aliyun.wuying.sdk.manager.RuntimeManager.observeRuntimes
+### com.aliyun.wuying.sdk.manager.RuntimeManager.subscribeRuntimes
 
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Runtime>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeRuntimes(com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Runtime>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-4d3cd29b495f7900" />
@@ -5536,17 +5527,17 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandListener, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-66a8937585b214f3" />
+<a id="entry-c56afa333e8b7ec4" />
 
-### com.aliyun.wuying.sdk.manager.RuntimeManager.observeCommand
+### com.aliyun.wuying.sdk.manager.RuntimeManager.subscribeCommand
 
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe-command)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> observeCommand(com.aliyun.wuying.sdk.model.ObserveCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> subscribeCommand(com.aliyun.wuying.sdk.model.SubscribeCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandListener, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-9f1262588d69a41b" />
@@ -5740,16 +5731,6 @@ public com.aliyun.wuying.sdk.model.AgentPresentation();
 
 ```java
 public com.aliyun.wuying.sdk.model.AgentRef();
-```
-
-<a id="entry-3a112ffb0f5582f5" />
-
-### com.aliyun.wuying.sdk.model.AgentSummary.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public com.aliyun.wuying.sdk.model.AgentSummary();
 ```
 
 <a id="entry-6ffa7956fa1ab936" />
@@ -7034,14 +7015,14 @@ public com.aliyun.wuying.sdk.model.GetDownloadUrlRequest();
 public com.aliyun.wuying.sdk.model.GetModelConfigRequest();
 ```
 
-<a id="entry-02b0270776f6ccc3" />
+<a id="entry-7055806d1a0dd698" />
 
-### com.aliyun.wuying.sdk.model.GroupDirectoryEntry.constructor
+### com.aliyun.wuying.sdk.model.Group.constructor
 
 类别：类型、配置、构造、回调或辅助入口。
 
 ```java
-public com.aliyun.wuying.sdk.model.GroupDirectoryEntry();
+public com.aliyun.wuying.sdk.model.Group();
 ```
 
 <a id="entry-6f34e458a68112f0" />
@@ -7072,16 +7053,6 @@ public com.aliyun.wuying.sdk.model.GroupDirectoryQuery();
 
 ```java
 public com.aliyun.wuying.sdk.model.GroupRef();
-```
-
-<a id="entry-52e39fe724e2209e" />
-
-### com.aliyun.wuying.sdk.model.GroupSummary.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public com.aliyun.wuying.sdk.model.GroupSummary();
 ```
 
 <a id="entry-e057a53c6e2c1cba" />
@@ -7824,6 +7795,16 @@ public abstract java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model
 public abstract void close();
 ```
 
+<a id="entry-ce9b8c6212a40b8a" />
+
+### com.aliyun.wuying.sdk.model.Model.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.Model();
+```
+
 <a id="entry-3494ed685e5f0c26" />
 
 ### com.aliyun.wuying.sdk.model.ModelCapabilities.constructor
@@ -7884,16 +7865,6 @@ public com.aliyun.wuying.sdk.model.ModelConfig();
 public com.aliyun.wuying.sdk.model.ModelProvider();
 ```
 
-<a id="entry-3de6afab130cf229" />
-
-### com.aliyun.wuying.sdk.model.ModelSummary.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public com.aliyun.wuying.sdk.model.ModelSummary();
-```
-
 <a id="entry-3ac3d6a7e0581a93" />
 
 ### com.aliyun.wuying.sdk.model.MutationOptions.constructor
@@ -7922,36 +7893,6 @@ public com.aliyun.wuying.sdk.model.MutationRef();
 
 ```java
 public com.aliyun.wuying.sdk.model.MutationStatus();
-```
-
-<a id="entry-2bf475ab90ab956c" />
-
-### com.aliyun.wuying.sdk.model.ObserveCommandRequest.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public com.aliyun.wuying.sdk.model.ObserveCommandRequest();
-```
-
-<a id="entry-d466bb3f165734cb" />
-
-### com.aliyun.wuying.sdk.model.Observer.onSnapshot
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public abstract void onSnapshot(com.aliyun.wuying.sdk.model.Snapshot<T>);
-```
-
-<a id="entry-590385f5db461af7" />
-
-### com.aliyun.wuying.sdk.model.Observer.onError
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public abstract void onError(com.aliyun.wuying.sdk.model.BusinessException);
 ```
 
 <a id="entry-a8983b620ab81e58" />
@@ -8184,6 +8125,16 @@ public com.aliyun.wuying.sdk.model.QuestionRequest$AnswerValue();
 public com.aliyun.wuying.sdk.model.QuestionResponseRef();
 ```
 
+<a id="entry-c3fc09e12ef23645" />
+
+### com.aliyun.wuying.sdk.model.ReadOptions.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.ReadOptions();
+```
+
 <a id="entry-1230257a7828eb6a" />
 
 ### com.aliyun.wuying.sdk.model.RecoveredInteractions.constructor
@@ -8304,9 +8255,9 @@ public com.aliyun.wuying.sdk.model.RuntimeCapabilities();
 public com.aliyun.wuying.sdk.model.RuntimeCommandEvent();
 ```
 
-<a id="entry-063e44d4db55f94f" />
+<a id="entry-1cb5da9c6dddf8ba" />
 
-### com.aliyun.wuying.sdk.model.RuntimeCommandObserver.onEvent
+### com.aliyun.wuying.sdk.model.RuntimeCommandListener.onEvent
 
 类别：类型、配置、构造、回调或辅助入口。
 
@@ -8314,9 +8265,9 @@ public com.aliyun.wuying.sdk.model.RuntimeCommandEvent();
 public abstract void onEvent(com.aliyun.wuying.sdk.model.RuntimeCommandEvent);
 ```
 
-<a id="entry-60a751c7301018f6" />
+<a id="entry-a7ae2f6a32fa221f" />
 
-### com.aliyun.wuying.sdk.model.RuntimeCommandObserver.onError
+### com.aliyun.wuying.sdk.model.RuntimeCommandListener.onError
 
 类别：类型、配置、构造、回调或辅助入口。
 
@@ -8664,6 +8615,16 @@ public com.aliyun.wuying.sdk.model.StreamMeta();
 public com.aliyun.wuying.sdk.model.StreamState();
 ```
 
+<a id="entry-4f16ad8e08f71516" />
+
+### com.aliyun.wuying.sdk.model.SubscribeCommandRequest.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.SubscribeCommandRequest();
+```
+
 <a id="entry-9849bd64aa0d4097" />
 
 ### com.aliyun.wuying.sdk.model.Subscription.unsubscribe
@@ -8682,6 +8643,26 @@ public abstract void unsubscribe();
 
 ```java
 public default void close();
+```
+
+<a id="entry-7e9ad35b6199445f" />
+
+### com.aliyun.wuying.sdk.model.SubscriptionListener.onSnapshot
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public abstract void onSnapshot(com.aliyun.wuying.sdk.model.Snapshot<T>);
+```
+
+<a id="entry-cec66b55d0f1aa48" />
+
+### com.aliyun.wuying.sdk.model.SubscriptionListener.onError
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public abstract void onError(com.aliyun.wuying.sdk.model.BusinessException);
 ```
 
 <a id="entry-12061c24f3f93bb7" />
@@ -8975,15 +8956,15 @@ public com.aliyun.wuying.sdk.model.Subscription onDurable(com.aliyun.wuying.sdk.
 public com.aliyun.wuying.sdk.model.Subscription onTransient(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
 ```
 
-<a id="entry-d0b90103423e16ad" />
+<a id="entry-dd90b1c872701840" />
 
-### com.aliyun.wuying.sdk.transport.AgMessageClient.onStreamEvent
+### com.aliyun.wuying.sdk.transport.AgMessageClient.subscribeStreamEvents
 
-类别：模型操作。[按模型查看操作](/api-reference/transport/ag-message-client-on-stream-event)。
+类别：模型操作。[按模型查看操作](/api-reference/transport/ag-message-client-subscribe-stream-events)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription onStreamEvent(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
-public com.aliyun.wuying.sdk.model.Subscription onStreamEvent(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
+public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
 ```
 
 <a id="entry-7a232b5c433b9f48" />
@@ -9306,14 +9287,14 @@ public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java
 public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayPresence(java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-3b3c2c56112ac16a" />
+<a id="entry-d78ce1a92ea4c75c" />
 
-### com.aliyun.wuying.sdk.transport.AgMessageClient.onGroupSyncState
+### com.aliyun.wuying.sdk.transport.AgMessageClient.subscribeGroupSyncStates
 
-类别：模型操作。[按模型查看操作](/api-reference/transport/ag-message-client-on-group-sync-state)。
+类别：模型操作。[按模型查看操作](/api-reference/transport/ag-message-client-subscribe-group-sync-states)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription onGroupSyncState(java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>);
+public com.aliyun.wuying.sdk.model.Subscription subscribeGroupSyncStates(java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>);
 ```
 
 <a id="entry-ab2a3d4b5d504357" />

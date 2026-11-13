@@ -121,7 +121,7 @@ func(ctx context.Context, r m.ComposerQuery) (m.Snapshot[m.ComposerCapabilities]
 
 ```go
 *ConversationManager.GetConversation
-func(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+func(ctx context.Context, r m.ConversationRef, options ...m.ReadOptions) (m.Snapshot[*m.Conversation], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/conversations/get) · [Go DTO 参考](/reference/go/api)
@@ -170,21 +170,6 @@ func(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, er
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/workspaces/get-conversation-storage-context) · [Go DTO 参考](/reference/go/api)
-
-<a id="getconversationsummary" />
-
-## Methods.conversationGetConversationSummary
-
-`Methods.conversationGetConversationSummary` → `conversation.getConversationSummary`
-
-**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.GetConversationSummary
-func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.Conversation], error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/conversations/get-conversation-summary) · [Go DTO 参考](/reference/go/api)
 
 <a id="getmembersnapshot" />
 
@@ -391,7 +376,7 @@ func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.Group
 
 ```go
 *ConversationManager.ListGroups
-func(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
+func(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.Group], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/sync/list-groups) · [Go DTO 参考](/reference/go/api)
@@ -470,231 +455,6 @@ func(ctx context.Context, r m.SidebarRowsQuery) (m.Page[m.Conversation], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/conversations/list-sidebar-conversations) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeactiveexecutions" />
-
-## Methods.conversationObserveActiveExecutions
-
-`Methods.conversationObserveActiveExecutions` → `conversation.observeActiveExecutions`
-
-**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveActiveExecutions
-func(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/executions/observe-active-executions) · [Go DTO 参考](/reference/go/api)
-
-<a id="observecommandreceipt" />
-
-## Methods.conversationObserveCommandReceipt
-
-`Methods.conversationObserveCommandReceipt` → `conversation.observeCommandReceipt`
-
-**模式：** `observe`。**请求类型：** `m.CommandReceiptRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveCommandReceipt
-func(ctx context.Context, r m.CommandReceiptRef, o m.Observer[m.CommandReceipt]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/receipts/observe-command-receipt) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeconversationconfig" />
-
-## Methods.conversationObserveConversationConfig
-
-`Methods.conversationObserveConversationConfig` → `conversation.observeConversationConfig`
-
-**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveConversationConfig
-func(ctx context.Context, r m.ConversationRef, o m.Observer[m.EffectiveConfig]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/configuration/observe-conversation-config) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeconversationgroups" />
-
-## Methods.conversationObserveConversationGroups
-
-`Methods.conversationObserveConversationGroups` → `conversation.observeConversationGroups`
-
-**模式：** `observe`。**请求类型：** `m.ConversationGroupQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveConversationGroups
-func(ctx context.Context, r m.ConversationGroupQuery, o m.Observer[m.Page[m.SidebarGroup]]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/conversations/observe-conversation-groups) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeconversationhistory" />
-
-## Methods.conversationObserveConversationHistory
-
-`Methods.conversationObserveConversationHistory` → `conversation.observeConversationHistory`
-
-**模式：** `observe`。**请求类型：** `m.ConversationHistoryQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveConversationHistory
-func(ctx context.Context, r m.ConversationHistoryQuery, o m.Observer[m.ConversationHistory]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/messages/observe-conversation-history) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeconversations" />
-
-## Methods.conversationObserveConversations
-
-`Methods.conversationObserveConversations` → `conversation.observeConversations`
-
-**模式：** `observe`。**请求类型：** `m.ConversationQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveConversations
-func(ctx context.Context, r m.ConversationQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/conversations/observe-conversations) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeexecutionactivity" />
-
-## Methods.conversationObserveExecutionActivity
-
-`Methods.conversationObserveExecutionActivity` → `conversation.observeExecutionActivity`
-
-**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveExecutionActivity
-func(ctx context.Context, r m.ConversationRef, o m.Observer[[]m.ExecutionActivity]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/executions/observe-execution-activity) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeinteractions" />
-
-## Methods.conversationObserveInteractions
-
-`Methods.conversationObserveInteractions` → `conversation.observeInteractions`
-
-**模式：** `observe`。**请求类型：** `m.InteractionQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveInteractions
-func(ctx context.Context, r m.InteractionQuery, o m.Observer[[]m.Interaction]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/interactions/observe-interactions) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeliveprocess" />
-
-## Methods.conversationObserveLiveProcess
-
-`Methods.conversationObserveLiveProcess` → `conversation.observeLiveProcess`
-
-**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveLiveProcess
-func(ctx context.Context, r m.ConversationRef, o m.Observer[m.LiveProcessSnapshot]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/executions/observe-live-process) · [Go DTO 参考](/reference/go/api)
-
-<a id="observemembers" />
-
-## Methods.conversationObserveMembers
-
-`Methods.conversationObserveMembers` → `conversation.observeMembers`
-
-**模式：** `observe`。**请求类型：** `m.MemberQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveMembers
-func(ctx context.Context, r m.MemberQuery, o m.Observer[[]m.Member]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/members/observe-members) · [Go DTO 参考](/reference/go/api)
-
-<a id="observemessages" />
-
-## Methods.conversationObserveMessages
-
-`Methods.conversationObserveMessages` → `conversation.observeMessages`
-
-**模式：** `observe`。**请求类型：** `m.MessageQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveMessages
-func(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/messages/observe) · [Go DTO 参考](/reference/go/api)
-
-<a id="observemutation" />
-
-## Methods.conversationObserveMutation
-
-`Methods.conversationObserveMutation` → `conversation.observeMutation`
-
-**模式：** `observe`。**请求类型：** `m.MutationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveMutation
-func(ctx context.Context, r m.MutationRef, o m.Observer[m.MutationStatus]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/receipts/observe-mutation) · [Go DTO 参考](/reference/go/api)
-
-<a id="observesidebarconversations" />
-
-## Methods.conversationObserveSidebarConversations
-
-`Methods.conversationObserveSidebarConversations` → `conversation.observeSidebarConversations`
-
-**模式：** `observe`。**请求类型：** `m.SidebarRowsQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveSidebarConversations
-func(ctx context.Context, r m.SidebarRowsQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/conversations/observe-sidebar-conversations) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeturn" />
-
-## Methods.conversationObserveTurn
-
-`Methods.conversationObserveTurn` → `conversation.observeTurn`
-
-**模式：** `observe`。**请求类型：** `m.TurnRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ObserveTurn
-func(ctx context.Context, r m.TurnRef, o m.Observer[*m.Turn]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/turns/observe-turn) · [Go DTO 参考](/reference/go/api)
-
-<a id="ongroupsyncstate" />
-
-## Methods.conversationOnGroupSyncState
-
-`Methods.conversationOnGroupSyncState` → `conversation.onGroupSyncState`
-
-**模式：** `observe`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.OnGroupSyncState
-func(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/sync/on-group-sync-state) · [Go DTO 参考](/reference/go/api)
 
 <a id="prepareconversationattachmenttarget" />
 
@@ -890,6 +650,231 @@ func(ctx context.Context, r m.SteerRequest) (m.SteerResult, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/turns/steer-turn) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeactiveexecutions" />
+
+## Methods.conversationSubscribeActiveExecutions
+
+`Methods.conversationSubscribeActiveExecutions` → `conversation.subscribeActiveExecutions`
+
+**模式：** `subscribe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeActiveExecutions
+func(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ActiveExecutionSnapshot]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/subscribe-active-executions) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribecommandreceipt" />
+
+## Methods.conversationSubscribeCommandReceipt
+
+`Methods.conversationSubscribeCommandReceipt` → `conversation.subscribeCommandReceipt`
+
+**模式：** `subscribe`。**请求类型：** `m.CommandReceiptRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeCommandReceipt
+func(ctx context.Context, r m.CommandReceiptRef, o m.SubscriptionListener[m.CommandReceipt]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/receipts/subscribe-command-receipt) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeconversationconfig" />
+
+## Methods.conversationSubscribeConversationConfig
+
+`Methods.conversationSubscribeConversationConfig` → `conversation.subscribeConversationConfig`
+
+**模式：** `subscribe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeConversationConfig
+func(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.EffectiveConfig]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/configuration/subscribe-conversation-config) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeconversationgroups" />
+
+## Methods.conversationSubscribeConversationGroups
+
+`Methods.conversationSubscribeConversationGroups` → `conversation.subscribeConversationGroups`
+
+**模式：** `subscribe`。**请求类型：** `m.ConversationGroupQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeConversationGroups
+func(ctx context.Context, r m.ConversationGroupQuery, o m.SubscriptionListener[m.Page[m.SidebarGroup]]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/subscribe-conversation-groups) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeconversationhistory" />
+
+## Methods.conversationSubscribeConversationHistory
+
+`Methods.conversationSubscribeConversationHistory` → `conversation.subscribeConversationHistory`
+
+**模式：** `subscribe`。**请求类型：** `m.ConversationHistoryQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeConversationHistory
+func(ctx context.Context, r m.ConversationHistoryQuery, o m.SubscriptionListener[m.ConversationHistory]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/subscribe-conversation-history) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeconversations" />
+
+## Methods.conversationSubscribeConversations
+
+`Methods.conversationSubscribeConversations` → `conversation.subscribeConversations`
+
+**模式：** `subscribe`。**请求类型：** `m.ConversationQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeConversations
+func(ctx context.Context, r m.ConversationQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/subscribe-conversations) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeexecutionactivity" />
+
+## Methods.conversationSubscribeExecutionActivity
+
+`Methods.conversationSubscribeExecutionActivity` → `conversation.subscribeExecutionActivity`
+
+**模式：** `subscribe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeExecutionActivity
+func(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[[]m.ExecutionActivity]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/subscribe-execution-activity) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribegroupsyncstates" />
+
+## Methods.conversationSubscribeGroupSyncStates
+
+`Methods.conversationSubscribeGroupSyncStates` → `conversation.subscribeGroupSyncStates`
+
+**模式：** `subscribe`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeGroupSyncStates
+func(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/sync/subscribe-group-sync-states) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeinteractions" />
+
+## Methods.conversationSubscribeInteractions
+
+`Methods.conversationSubscribeInteractions` → `conversation.subscribeInteractions`
+
+**模式：** `subscribe`。**请求类型：** `m.InteractionQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeInteractions
+func(ctx context.Context, r m.InteractionQuery, o m.SubscriptionListener[[]m.Interaction]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/interactions/subscribe-interactions) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeliveprocess" />
+
+## Methods.conversationSubscribeLiveProcess
+
+`Methods.conversationSubscribeLiveProcess` → `conversation.subscribeLiveProcess`
+
+**模式：** `subscribe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeLiveProcess
+func(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.LiveProcessSnapshot]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/executions/subscribe-live-process) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribemembers" />
+
+## Methods.conversationSubscribeMembers
+
+`Methods.conversationSubscribeMembers` → `conversation.subscribeMembers`
+
+**模式：** `subscribe`。**请求类型：** `m.MemberQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeMembers
+func(ctx context.Context, r m.MemberQuery, o m.SubscriptionListener[[]m.Member]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/members/subscribe-members) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribemessages" />
+
+## Methods.conversationSubscribeMessages
+
+`Methods.conversationSubscribeMessages` → `conversation.subscribeMessages`
+
+**模式：** `subscribe`。**请求类型：** `m.MessageQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeMessages
+func(ctx context.Context, r m.MessageQuery, o m.SubscriptionListener[m.Page[m.Message]]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/messages/subscribe) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribemutation" />
+
+## Methods.conversationSubscribeMutation
+
+`Methods.conversationSubscribeMutation` → `conversation.subscribeMutation`
+
+**模式：** `subscribe`。**请求类型：** `m.MutationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeMutation
+func(ctx context.Context, r m.MutationRef, o m.SubscriptionListener[m.MutationStatus]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/receipts/subscribe-mutation) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribesidebarconversations" />
+
+## Methods.conversationSubscribeSidebarConversations
+
+`Methods.conversationSubscribeSidebarConversations` → `conversation.subscribeSidebarConversations`
+
+**模式：** `subscribe`。**请求类型：** `m.SidebarRowsQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeSidebarConversations
+func(ctx context.Context, r m.SidebarRowsQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/conversations/subscribe-sidebar-conversations) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeturn" />
+
+## Methods.conversationSubscribeTurn
+
+`Methods.conversationSubscribeTurn` → `conversation.subscribeTurn`
+
+**模式：** `subscribe`。**请求类型：** `m.TurnRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*ConversationManager.SubscribeTurn
+func(ctx context.Context, r m.TurnRef, o m.SubscriptionListener[*m.Turn]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/turns/subscribe-turn) · [Go DTO 参考](/reference/go/api)
 
 <a id="syncconversation" />
 

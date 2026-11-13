@@ -9,7 +9,7 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 ## listAgents
 
 ```ts
-listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & { projection: Projection; }>;
+listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<Agent> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/agents/list)
@@ -17,7 +17,7 @@ listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<Agen
 ## listAgentModels
 
 ```ts
-listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<ModelSummary & AgentRef> & { projection: Projection; }>;
+listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<Model & AgentRef> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/agents/models)
@@ -94,13 +94,13 @@ downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest
 
 [查看操作或完整契约](/api-reference/knowledge/download-knowledge-files)
 
-## observeAgents
+## subscribeAgents
 
 ```ts
-observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+subscribeAgents(ctx: Context, req: RuntimeRef, observer: SubscriptionListener<Agent[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/agents/observe-agents)
+[查看操作或完整契约](/api-reference/agents/subscribe-agents)
 
 ## getExpertDirectory
 
@@ -129,23 +129,23 @@ new new (service: Service, cloud?: CloudResources | undefined): AgentManager$1;
 ## listAgents
 
 ```ts
-listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & { projection: Projection; }>;
+listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<Agent> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/agents/list)
 
-## observeAgents
+## subscribeAgents
 
 ```ts
-observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+subscribeAgents(ctx: Context, req: RuntimeRef, observer: SubscriptionListener<Agent[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/agents/observe-agents)
+[查看操作或完整契约](/api-reference/agents/subscribe-agents)
 
 ## listAgentModels
 
 ```ts
-listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<ModelSummary & AgentRef> & { projection: Projection; }>;
+listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<Model & AgentRef> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/agents/models)

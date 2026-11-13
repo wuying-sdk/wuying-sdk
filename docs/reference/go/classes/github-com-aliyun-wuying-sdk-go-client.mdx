@@ -94,14 +94,6 @@ func (receiver *Client) GetAuthCode(ctx context.Context, r *model.GetAuthCodeReq
 
 [查看操作或完整契约](/api-reference/client/get-auth-code)
 
-## OnStreamEvent
-
-```go
-func (receiver *Client) OnStreamEvent(ctx context.Context, handler agmessage.StreamHandler) (func(), error)
-```
-
-[查看操作或完整契约](/api-reference/client/on-stream-event)
-
 ## Reboot
 
 ```go
@@ -133,6 +125,14 @@ func (receiver *Client) Stop(ctx context.Context, r *model.DesktopOperationReque
 ```
 
 [查看操作或完整契约](/api-reference/client/stop)
+
+## SubscribeStreamEvents
+
+```go
+func (receiver *Client) SubscribeStreamEvents(ctx context.Context, handler agmessage.StreamHandler) (model.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/client/subscribe-stream-events)
 
 ## Wait
 

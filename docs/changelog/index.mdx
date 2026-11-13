@@ -6,7 +6,7 @@ description: "查看文档变化、当前参考基线与升级入口。"
 ## 2026-11-13：远程脚本与 Runtime 查询
 
 - 云资源增加“远程脚本”独立入口，给出 TypeScript、Go、Java、CLI 最小示例和结果恢复步骤。
-- RuntimeSummary 简化为 Runtime；listRuntimes 直接返回 Runtime 数组，观察接口继续携带同步状态。
+- RuntimeSummary 简化为 Runtime；listRuntimes 直接返回 Runtime 数组，订阅接口继续携带同步状态。
 - 同步各语言声明、移动 JSON 合同、示例及配套 CLI；不保留旧类型兼容别名。
 - 远端基础提交仍为 05bd99e；以上包含本次未提交的源码改动，须使用重新构建的配套制品。
 
@@ -22,7 +22,7 @@ description: "查看文档变化、当前参考基线与升级入口。"
 
 - 基础提交更新至 4b855bc，保留 RuntimeManager 首版调整与配套 Skill。
 - JS / Go / Java 新增组织账号密码登录，CLI 新增 auth login --stdin；权限分类仍为管理员与用户态两类。
-- RuntimeManager 新增管理员 runCommand / observeCommand，文档说明逐桌面事件、输出快照、终态和断线恢复。
+- RuntimeManager 新增管理员 runCommand / subscribeCommand，文档说明逐桌面事件、输出快照、终态和断线恢复。
 - CLI Skill 同步命令执行与只读恢复；Android / iOS 未声明这些新入口。
 
 ## 2026-11-11：CLI 配套客户 Skill
@@ -50,7 +50,7 @@ description: "查看文档变化、当前参考基线与升级入口。"
 
 - 源码基线迁至 `codex/admin-aksk-client`，保留 AK/SK 管理员态与用户态身份隔离。
 - RuntimeManager 统一环境目录、能力及资源操作；公开列表只保留 listRuntimes。
-- 移除 CloudAgentManager、重复列表 listAgentInstances 及其专用 DTO；移动端同步为 113 个入口。
+- 移除 CloudAgentManager、重复列表 listAgentInstances 及其专用 DTO；移动端同步为 112 个入口。
 - Runtime 使用一个领域介绍页；SDK 方法名按实际代码展示。
 - 当前为未提交源码与本地文档预览，不代表公开发布或新原生制品已经验收。
 

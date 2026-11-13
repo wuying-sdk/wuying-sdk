@@ -65,13 +65,13 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 
 [查看操作或完整契约](/api-reference/runtimes/list)
 
-## observeRuntimes
+## subscribeRuntimes
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Runtime>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeRuntimes(com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Runtime>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-[查看操作或完整契约](/api-reference/runtimes/observe)
+[查看操作或完整契约](/api-reference/runtimes/subscribe)
 
 ## getHostCapabilities
 
@@ -84,15 +84,15 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 ## runCommand
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandListener, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/run-command)
 
-## observeCommand
+## subscribeCommand
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> observeCommand(com.aliyun.wuying.sdk.model.ObserveCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> subscribeCommand(com.aliyun.wuying.sdk.model.SubscribeCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandListener, com.aliyun.wuying.sdk.CallContext);
 ```
 
-[查看操作或完整契约](/api-reference/runtimes/observe-command)
+[查看操作或完整契约](/api-reference/runtimes/subscribe-command)

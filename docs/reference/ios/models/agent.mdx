@@ -136,7 +136,7 @@ func(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest, opts ...m.ListOpt
 
 ```go
 *AgentManager.ListAgentModels
-func(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.ModelSummary], error)
+func(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.Model], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/agents/models) · [Go DTO 参考](/reference/go/api)
@@ -166,7 +166,7 @@ func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.ProductPage,
 
 ```go
 *AgentManager.ListAgents
-func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
+func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.Agent], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/agents/list) · [Go DTO 参考](/reference/go/api)
@@ -201,17 +201,17 @@ func(ctx context.Context, r m.ListKnowledgeFilesRequest, opts ...m.ListOptions) 
 
 [模型操作、完整参数与能力边界](/api-reference/knowledge/list-knowledge-files) · [Go DTO 参考](/reference/go/api)
 
-<a id="observeagents" />
+<a id="subscribeagents" />
 
-## Methods.agentObserveAgents
+## Methods.agentSubscribeAgents
 
-`Methods.agentObserveAgents` → `agent.observeAgents`
+`Methods.agentSubscribeAgents` → `agent.subscribeAgents`
 
-**模式：** `observe`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+**模式：** `subscribe`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*AgentManager.ObserveAgents
-func(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
+*AgentManager.SubscribeAgents
+func(ctx context.Context, r m.RuntimeRef, o m.SubscriptionListener[[]m.Agent]) (m.Subscription, error)
 ```
 
-[模型操作、完整参数与能力边界](/api-reference/agents/observe-agents) · [Go DTO 参考](/reference/go/api)
+[模型操作、完整参数与能力边界](/api-reference/agents/subscribe-agents) · [Go DTO 参考](/reference/go/api)

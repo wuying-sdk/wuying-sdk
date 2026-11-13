@@ -73,7 +73,7 @@ func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.
 ## ListAgentModels
 
 ```go
-func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.ModelSummary], error)
+func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.Model], error)
 ```
 
 [查看操作或完整契约](/api-reference/agents/models)
@@ -89,7 +89,7 @@ func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.Runtime
 ## ListAgents
 
 ```go
-func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
+func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.Agent], error)
 ```
 
 [查看操作或完整契约](/api-reference/agents/list)
@@ -110,10 +110,10 @@ func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKn
 
 [查看操作或完整契约](/api-reference/knowledge/list-knowledge-files)
 
-## ObserveAgents
+## SubscribeAgents
 
 ```go
-func (receiver *AgentManager) ObserveAgents(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
+func (receiver *AgentManager) SubscribeAgents(ctx context.Context, r m.RuntimeRef, o m.SubscriptionListener[[]m.Agent]) (m.Subscription, error)
 ```
 
-[查看操作或完整契约](/api-reference/agents/observe-agents)
+[查看操作或完整契约](/api-reference/agents/subscribe-agents)

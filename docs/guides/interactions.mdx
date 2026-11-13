@@ -7,7 +7,7 @@ description: "展示真实审批与问题，只提交用户明确选择的响应
 
 ## 获取并展示
 
-使用 ConversationManager 的 listInteractions/observeInteractions；刷新已有待处理项可用 refreshPendingInteractions。权限和问题属于同一个 Interaction 领域，但数据与响应不同。
+使用 ConversationManager 的 listInteractions/subscribeInteractions；刷新已有待处理项可用 refreshPendingInteractions。权限和问题属于同一个 Interaction 领域，但数据与响应不同。
 
 - kind=permission：读取当前公共 Interaction 返回的 title、interaction.options 和关联身份。必须用真实 optionId；显示文案不是提交值。固定公共 SDK 不承诺返回 demo 私有的命令/cwd/风险 displayDetails 或 metadata/context；只有同版本其他公开读取明确返回详情时才展示。
 - kind=question：读取 interaction.questions，逐题按 questionId 及单选/多选/文本约束收集答案。

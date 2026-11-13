@@ -13,12 +13,12 @@ Message 是面向查询和界面展示的消息投影，组织发送来源、内
 
 ## 生命周期
 
-本地提交 → SDK 受理 → 快照更新 → 消息终态 → 核对最终展示。观察返回整页快照时，按稳定消息 ID 更新，而非重复追加一页。
+本地提交 → SDK 受理 → 快照更新 → 消息终态 → 核对最终展示。订阅返回整页快照时，按稳定消息 ID 更新，而非重复追加一页。
 
 ## 操作入口
 
 - [`listMessages`](/api-reference/messages/list)
-- [`observeMessages`](/api-reference/messages/observe)
+- [`subscribeMessages`](/api-reference/messages/subscribe)
 - [`getMessageDetail`](/api-reference/messages/detail)
 
 ## 使用边界

@@ -17,7 +17,7 @@ CLI 支持两类权限：aliuid 维度的 AK/SK 管理员权限，以及无影�
 | `desktops create` / `desktops wait` | 不支持 | 支持 |
 | `desktops start` / `desktops stop` / `desktops reboot` / `desktops reset` | 支持 | 支持 |
 | `desktops delete` | 不支持 | 支持 |
-| `runtimes run-command` / `runtimes observe-command` | 不支持 | 执行命令并观察结果 |
+| `runtimes run-command` / `runtimes subscribe-command` | 不支持 | 执行命令并订阅结果 |
 | `auth code` | 不支持 | 为指定无影用户获取 AuthCode |
 
 每个命令通过 `--request-file` 或 `--stdin` 提供一个 JSON 对象，二选一，最大 64 KiB。字段与 SDK 请求一致，鉴权、签名及参数校验由根 Client 处理。

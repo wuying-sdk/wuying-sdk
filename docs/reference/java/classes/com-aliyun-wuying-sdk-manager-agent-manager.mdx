@@ -17,8 +17,8 @@ public com.aliyun.wuying.sdk.manager.AgentManager(com.aliyun.wuying.sdk.internal
 ## listAgents
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Agent>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Agent>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/agents/list)
@@ -26,19 +26,19 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 ## listAgentModels
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Model>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Model>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/agents/models)
 
-## observeAgents
+## subscribeAgents
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.AgentSummary>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription subscribeAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Agent>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
-[查看操作或完整契约](/api-reference/agents/observe-agents)
+[查看操作或完整契约](/api-reference/agents/subscribe-agents)
 
 ## describeWyDrives
 

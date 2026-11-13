@@ -9,7 +9,7 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 ## listRecentGroups
 
 ```ts
-listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
+listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroup>>;
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list-recent-groups)
@@ -105,7 +105,7 @@ listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & List
 ## listGroups
 
 ```ts
-listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: GroupDirectoryEntry[]; nextCursor: string | null; }>;
+listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: Group[]; nextCursor: string | null; }>;
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-groups)
@@ -126,21 +126,21 @@ syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
 
 [查看操作或完整契约](/api-reference/sync/sync-group)
 
-## onGroupSyncState
+## subscribeGroupSyncStates
 
 ```ts
-onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/sync/on-group-sync-state)
+[查看操作或完整契约](/api-reference/sync/subscribe-group-sync-states)
 
-## observeLiveProcess
+## subscribeLiveProcess
 
 ```ts
-observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/executions/observe-live-process)
+[查看操作或完整契约](/api-reference/executions/subscribe-live-process)
 
 ## prepareConversationAttachmentTarget
 
@@ -158,37 +158,29 @@ createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions):
 
 [查看操作或完整契约](/api-reference/conversations/create)
 
-## observeConversationGroups
+## subscribeConversationGroups
 
 ```ts
-observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/conversations/observe-conversation-groups)
+[查看操作或完整契约](/api-reference/conversations/subscribe-conversation-groups)
 
-## observeSidebarConversations
+## subscribeSidebarConversations
 
 ```ts
-observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+subscribeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/conversations/observe-sidebar-conversations)
+[查看操作或完整契约](/api-reference/conversations/subscribe-sidebar-conversations)
 
-## getConversationSummary
+## subscribeConversation
 
 ```ts
-getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+subscribeConversation(ctx: Context, req: ConversationRef, observer: SubscriptionListener<Conversation>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/conversations/get-conversation-summary)
-
-## observeConversationSummary
-
-```ts
-observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
-```
-
-[查看操作或完整契约](/api-reference/conversations/observe-conversation-summary)
+[查看操作或完整契约](/api-reference/conversations/subscribe-conversation)
 
 ## getMessageFiles
 
@@ -206,13 +198,13 @@ getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<M
 
 [查看操作或完整契约](/api-reference/messages/presentation)
 
-## observeActiveExecutions
+## subscribeActiveExecutions
 
 ```ts
-observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+subscribeActiveExecutions(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ActiveExecutionSnapshot>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/executions/observe-active-executions)
+[查看操作或完整契约](/api-reference/executions/subscribe-active-executions)
 
 ## cancelExecution
 
@@ -238,13 +230,13 @@ getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<Comman
 
 [查看操作或完整契约](/api-reference/receipts/get-command-receipt)
 
-## observeCommandReceipt
+## subscribeCommandReceipt
 
 ```ts
-observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/receipts/observe-command-receipt)
+[查看操作或完整契约](/api-reference/receipts/subscribe-command-receipt)
 
 ## steerTurn
 
@@ -294,26 +286,26 @@ getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unk
 
 [查看操作或完整契约](/api-reference/receipts/get-mutation)
 
-## observeMutation
+## subscribeMutation
 
 ```ts
-observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/receipts/observe-mutation)
+[查看操作或完整契约](/api-reference/receipts/subscribe-mutation)
 
-## observeConversations
+## subscribeConversations
 
 ```ts
-observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/conversations/observe-conversations)
+[查看操作或完整契约](/api-reference/conversations/subscribe-conversations)
 
 ## getConversation
 
 ```ts
-getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+getConversation(ctx: Context, request: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
 ```
 
 [查看操作或完整契约](/api-reference/conversations/get)
@@ -350,13 +342,13 @@ getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<Effe
 
 [查看操作或完整契约](/api-reference/configuration/get)
 
-## observeConversationConfig
+## subscribeConversationConfig
 
 ```ts
-observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+subscribeConversationConfig(ctx: Context, req: ConversationRef, observer: SubscriptionListener<EffectiveConfig>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/configuration/observe-conversation-config)
+[查看操作或完整契约](/api-reference/configuration/subscribe-conversation-config)
 
 ## archiveConversation
 
@@ -374,13 +366,13 @@ unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationR
 
 [查看操作或完整契约](/api-reference/conversations/unarchive-conversation)
 
-## observeMembers
+## subscribeMembers
 
 ```ts
-observeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: Observer<Member[]>): Promise<Subscription>;
+subscribeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: SubscriptionListener<Member[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/members/observe-members)
+[查看操作或完整契约](/api-reference/members/subscribe-members)
 
 ## addMember
 
@@ -438,29 +430,29 @@ resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<Conve
 
 [查看操作或完整契约](/api-reference/messages/resolve-conversation-read)
 
-## observeConversationHistory
+## subscribeConversationHistory
 
 ```ts
-observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+subscribeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: SubscriptionListener<ConversationHistory>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/messages/observe-conversation-history)
+[查看操作或完整契约](/api-reference/messages/subscribe-conversation-history)
 
-## observeMessages
+## subscribeMessages
 
 ```ts
-observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+subscribeMessages(ctx: Context, req: MessageQuery, observer: SubscriptionListener<Page<Message>>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/messages/observe)
+[查看操作或完整契约](/api-reference/messages/subscribe)
 
-## observeExecutionActivity
+## subscribeExecutionActivity
 
 ```ts
-observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+subscribeExecutionActivity(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ExecutionActivity[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/executions/observe-execution-activity)
+[查看操作或完整契约](/api-reference/executions/subscribe-execution-activity)
 
 ## getMessageDetail
 
@@ -478,13 +470,13 @@ getTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<Snaps
 
 [查看操作或完整契约](/api-reference/turns/get)
 
-## observeTurn
+## subscribeTurn
 
 ```ts
-observeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+subscribeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: SubscriptionListener<Turn | undefined>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/turns/observe-turn)
+[查看操作或完整契约](/api-reference/turns/subscribe-turn)
 
 ## cancelTurn
 
@@ -502,13 +494,13 @@ refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<{ recove
 
 [查看操作或完整契约](/api-reference/interactions/refresh-pending-interactions)
 
-## observeInteractions
+## subscribeInteractions
 
 ```ts
-observeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: Observer<Interaction[]>): Promise<Subscription>;
+subscribeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: SubscriptionListener<Interaction[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/interactions/observe-interactions)
+[查看操作或完整契约](/api-reference/interactions/subscribe-interactions)
 
 ## respondPermission
 
@@ -542,13 +534,13 @@ new new (service: Service): ConversationManager$1;
 
 [查看操作或完整契约](/reference/js/public#entry-5b73ae15ebe839b2)
 
-## observeLiveProcess
+## subscribeLiveProcess
 
 ```ts
-observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/executions/observe-live-process)
+[查看操作或完整契约](/api-reference/executions/subscribe-live-process)
 
 ## prepareConversationAttachmentTarget
 
@@ -585,7 +577,7 @@ listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<
 ## listGroups
 
 ```ts
-listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: GroupDirectoryEntry[]; nextCursor: string | null; }>;
+listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: Group[]; nextCursor: string | null; }>;
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-groups)
@@ -593,7 +585,7 @@ listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<
 ## listRecentGroups
 
 ```ts
-listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
+listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroup>>;
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list-recent-groups)
@@ -614,13 +606,13 @@ syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
 
 [查看操作或完整契约](/api-reference/sync/sync-group)
 
-## onGroupSyncState
+## subscribeGroupSyncStates
 
 ```ts
-onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/sync/on-group-sync-state)
+[查看操作或完整契约](/api-reference/sync/subscribe-group-sync-states)
 
 ## createConversation
 
@@ -638,13 +630,13 @@ listConversationGroups(ctx: Context, request: (ConversationGroupQuery) & ListOpt
 
 [查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
 
-## observeConversationGroups
+## subscribeConversationGroups
 
 ```ts
-observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/conversations/observe-conversation-groups)
+[查看操作或完整契约](/api-reference/conversations/subscribe-conversation-groups)
 
 ## listSidebarConversations
 
@@ -654,29 +646,21 @@ listSidebarConversations(ctx: Context, request: (SidebarRowsQuery) & ListOptions
 
 [查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
 
-## observeSidebarConversations
+## subscribeSidebarConversations
 
 ```ts
-observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+subscribeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/conversations/observe-sidebar-conversations)
+[查看操作或完整契约](/api-reference/conversations/subscribe-sidebar-conversations)
 
-## getConversationSummary
+## subscribeConversation
 
 ```ts
-getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+subscribeConversation(ctx: Context, req: ConversationRef, observer: SubscriptionListener<Conversation>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/conversations/get-conversation-summary)
-
-## observeConversationSummary
-
-```ts
-observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
-```
-
-[查看操作或完整契约](/api-reference/conversations/observe-conversation-summary)
+[查看操作或完整契约](/api-reference/conversations/subscribe-conversation)
 
 ## getMessagePresentation
 
@@ -694,13 +678,13 @@ listActiveExecutions(ctx: Context, request: (ConversationRef) & ListOptions): Pr
 
 [查看操作或完整契约](/api-reference/executions/list-active-executions)
 
-## observeActiveExecutions
+## subscribeActiveExecutions
 
 ```ts
-observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+subscribeActiveExecutions(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ActiveExecutionSnapshot>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/executions/observe-active-executions)
+[查看操作或完整契约](/api-reference/executions/subscribe-active-executions)
 
 ## cancelExecution
 
@@ -726,13 +710,13 @@ getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<Comman
 
 [查看操作或完整契约](/api-reference/receipts/get-command-receipt)
 
-## observeCommandReceipt
+## subscribeCommandReceipt
 
 ```ts
-observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/receipts/observe-command-receipt)
+[查看操作或完整契约](/api-reference/receipts/subscribe-command-receipt)
 
 ## steerTurn
 
@@ -782,13 +766,13 @@ getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
 
 [查看操作或完整契约](/api-reference/receipts/get-mutation)
 
-## observeMutation
+## subscribeMutation
 
 ```ts
-observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/receipts/observe-mutation)
+[查看操作或完整契约](/api-reference/receipts/subscribe-mutation)
 
 ## listConversations
 
@@ -801,18 +785,18 @@ listConversations(ctx: Context, request: (ConversationQuery) & ListOptions): Pro
 ## getConversation
 
 ```ts
-getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+getConversation(ctx: Context, req: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
 ```
 
 [查看操作或完整契约](/api-reference/conversations/get)
 
-## observeConversations
+## subscribeConversations
 
 ```ts
-observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/conversations/observe-conversations)
+[查看操作或完整契约](/api-reference/conversations/subscribe-conversations)
 
 ## renameConversation
 
@@ -838,13 +822,13 @@ setConversationConfigOption(ctx: Context, req: ConversationRef & { optionId: "mo
 
 [查看操作或完整契约](/api-reference/configuration/set-conversation-config-option)
 
-## observeConversationConfig
+## subscribeConversationConfig
 
 ```ts
-observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+subscribeConversationConfig(ctx: Context, req: ConversationRef, observer: SubscriptionListener<EffectiveConfig>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/configuration/observe-conversation-config)
+[查看操作或完整契约](/api-reference/configuration/subscribe-conversation-config)
 
 ## getConversationConfig
 
@@ -878,13 +862,13 @@ listMembers(ctx: Context, request: (ConversationRef & { includeRemoved?: boolean
 
 [查看操作或完整契约](/api-reference/members/list)
 
-## observeMembers
+## subscribeMembers
 
 ```ts
-observeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: Observer<Member[]>): Promise<Subscription>;
+subscribeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: SubscriptionListener<Member[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/members/observe-members)
+[查看操作或完整契约](/api-reference/members/subscribe-members)
 
 ## addMember
 
@@ -950,13 +934,13 @@ listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & List
 
 [查看操作或完整契约](/api-reference/messages/list-conversation-history)
 
-## observeConversationHistory
+## subscribeConversationHistory
 
 ```ts
-observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+subscribeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: SubscriptionListener<ConversationHistory>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/messages/observe-conversation-history)
+[查看操作或完整契约](/api-reference/messages/subscribe-conversation-history)
 
 ## listMessages
 
@@ -974,13 +958,13 @@ getMessageDetail(ctx: Context, req: ConversationRef & { messageId: string; itemC
 
 [查看操作或完整契约](/api-reference/messages/detail)
 
-## observeMessages
+## subscribeMessages
 
 ```ts
-observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+subscribeMessages(ctx: Context, req: MessageQuery, observer: SubscriptionListener<Page<Message>>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/messages/observe)
+[查看操作或完整契约](/api-reference/messages/subscribe)
 
 ## listExecutionActivity
 
@@ -990,21 +974,21 @@ listExecutionActivity(ctx: Context, request: (ConversationRef) & ListOptions): P
 
 [查看操作或完整契约](/api-reference/executions/list-execution-activity)
 
-## observeExecutionActivity
+## subscribeExecutionActivity
 
 ```ts
-observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+subscribeExecutionActivity(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ExecutionActivity[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/executions/observe-execution-activity)
+[查看操作或完整契约](/api-reference/executions/subscribe-execution-activity)
 
-## observeTurn
+## subscribeTurn
 
 ```ts
-observeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+subscribeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: SubscriptionListener<Turn | undefined>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/turns/observe-turn)
+[查看操作或完整契约](/api-reference/turns/subscribe-turn)
 
 ## getTurn
 
@@ -1022,13 +1006,13 @@ cancelTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<{ 
 
 [查看操作或完整契约](/api-reference/turns/cancel)
 
-## observeInteractions
+## subscribeInteractions
 
 ```ts
-observeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: Observer<Interaction[]>): Promise<Subscription>;
+subscribeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: SubscriptionListener<Interaction[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/interactions/observe-interactions)
+[查看操作或完整契约](/api-reference/interactions/subscribe-interactions)
 
 ## refreshPendingInteractions
 

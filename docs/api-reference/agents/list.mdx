@@ -26,20 +26,20 @@ req.runtimeId 来自已授权目录；读取 items 当前页并保留 projection
 ### JavaScript / TypeScript · AgentManager
 
 ```ts
-listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & { projection: Projection; }>;
+listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<Agent> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.AgentManager
 
 ```go
-func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
+func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.Agent], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.AgentManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Agent>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Agent>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · agents
@@ -77,7 +77,7 @@ interface Page<T> {
     projection?: Projection;
 }
 
-interface AgentSummary extends AgentRef {
+interface Agent extends AgentRef {
     name: string;
     enabled: boolean;
     availability: 'available' | 'unavailable' | 'unknown';
@@ -116,7 +116,7 @@ interface Projection {
 
 ## 结果、错误与生命周期
 
-以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+以本语言签名中的实际返回包装为准。快照保留投影；订阅结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 

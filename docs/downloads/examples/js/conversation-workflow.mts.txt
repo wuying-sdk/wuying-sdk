@@ -1,4 +1,4 @@
-import type { Client, Context, ConversationRef, MessageCompletion, Observer, Page, Message } from '@aliyun/wuying-sdk';
+import type { Client, Context, ConversationRef, MessageCompletion, SubscriptionListener, Page, Message } from '@aliyun/wuying-sdk';
 
 /** Root Client only. The caller selects a Runtime and Agent and owns Client.close(). */
 export async function openConversation(
@@ -21,10 +21,10 @@ export async function sendAndObserve(
   client: Client,
   ctx: Context,
   request: ConversationRef & { text: string; attachmentIds?: string[] },
-  observer: Observer<Page<Message>>,
+  observer: SubscriptionListener<Page<Message>>,
 ): Promise<MessageCompletion> {
   const conversations = await client.buildConversationManager(ctx);
-  const subscription = await conversations.observeMessages(ctx, { runtimeId: request.runtimeId, conversationId: request.conversationId }, observer);
+  const subscription = await conversations.subscribeMessages(ctx, { runtimeId: request.runtimeId, conversationId: request.conversationId }, observer);
   try {
     // The observer receives projection snapshots, not append-only text fragments.
     return await conversations.sendMessageAndWait(ctx, request);

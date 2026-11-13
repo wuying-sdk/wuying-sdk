@@ -13,7 +13,7 @@ import FirstTask from '/snippets/first-task.mdx';
 
 先运行本语言指南的默认帮助或离线自检，再由宿主注入认证和私有数据配置，执行其只读示例。只读示例输出计数用于验证接线，不替你选择具体环境。
 
-CLI 可运行 `runtimes list`，再对选定的 Runtime 运行 `agents list --runtime RUNTIME_ID`；Go/Java/JS 通过 RuntimeManager 的 listRuntimes/ListRuntimes 取得 Runtime 分页列表，通过 AgentManager 的 listAgents/ListAgents 查询 Agent。列表查询统一读取 items / nextCursor，默认50项，最多100项；观察与详情按各自类型读取。详见 [Runtime](/domain-model/02-runtime-agent) / [Agent](/domain-model/agent)。
+CLI 可运行 `runtimes list`，再对选定的 Runtime 运行 `agents list --runtime RUNTIME_ID`；Go/Java/JS 通过 RuntimeManager 的 listRuntimes/ListRuntimes 取得 Runtime 分页列表，通过 AgentManager 的 listAgents/ListAgents 查询 Agent。列表查询统一读取 items / nextCursor，默认50项，最多100项；订阅与详情按各自类型读取。详见 [Runtime](/domain-model/02-runtime-agent) / [Agent](/domain-model/agent)。
 
 预期结果：查询成功且投影可用，返回你被授权使用的实际对象。目录尚未就绪时，不根据计数 0 推断无权限。
 
@@ -52,7 +52,7 @@ CLI 命令仅供包含 CLI 的交付使用；其他单语言包通过自己的�
 
 ## 4. 判断结果
 
-| 观察到什么 | 下一步 |
+| 订阅到什么 | 下一步 |
 |---|---|
 | create 返回 conversationId | 保存会话引用；之后的轮次可以复用它 |
 | 发送返回 accepted | 保存 Turn/Message 关联；这只代表受理 |
@@ -60,7 +60,7 @@ CLI 命令仅供包含 CLI 的交付使用；其他单语言包通过自己的�
 | pending Interaction | 展示真实问题/审批详情，等待用户选择；不要自动批准 |
 | 本地超时、断线或 unknown | 按原请求/Turn 身份查询；不要再新建一条消息 |
 
-最后取消观察订阅并关闭 Client。不要把应用退出当作远端任务取消；如需停止，显式取消对应 Turn 并核对结果。
+最后取消订阅订阅并关闭 Client。不要把应用退出当作远端任务取消；如需停止，显式取消对应 Turn 并核对结果。
 
 ## 下一步
 

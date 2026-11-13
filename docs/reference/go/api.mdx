@@ -60,10 +60,6 @@ func (c *Client) Delete(ctx context.Context, r *model.DesktopOperationRequest) (
 func (c *Client) GetAuthCode(ctx context.Context, r *model.GetAuthCodeRequest) (*model.GetAuthCodeResponse, error)
     GetAuthCode issues a user authorization code through this same AK/SK Client.
 
-func (c *Client) OnStreamEvent(ctx context.Context, handler agmessage.StreamHandler) (func(), error)
-    OnStreamEvent在既有Client上增加不透明事件订阅，不改变SendMessageStream的业务命令语义。
-    需先在UserConfig.Streaming中启用；可在建立Runtime前注册，回调不得长时间阻塞。
-
 func (c *Client) Reboot(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
 
 func (c *Client) Reset(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
@@ -71,6 +67,10 @@ func (c *Client) Reset(ctx context.Context, r *model.DesktopOperationRequest) (*
 func (c *Client) Start(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
 
 func (c *Client) Stop(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+
+func (c *Client) SubscribeStreamEvents(ctx context.Context, handler agmessage.StreamHandler) (model.Subscription, error)
+    OnStreamEvent在既有Client上增加不透明事件订阅，不改变SendMessageStream的业务命令语义。
+    需先在UserConfig.Streaming中启用；可在建立Runtime前注册，回调不得长时间阻塞。
 
 func (c *Client) Wait(ctx context.Context, r *model.WaitDesktopsRequest) (*model.WaitDesktopsResponse, error)
     Wait observes only requested resources. Events are produced by signed,
@@ -270,13 +270,13 @@ func (a *AgentManager) GetExpertDirectory(ctx context.Context, r m.ExpertQuery) 
 func (a *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeSpace], error)
     ListAgentKnowledgeSpaces returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.ModelSummary], error)
+func (a *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.Model], error)
     ListAgentModels returns one page. Use NextCursor for continuation.
 
 func (a *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.ProductPage, error)
     ListAgentProducts returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
+func (a *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.Agent], error)
     ListAgents returns one page. Use NextCursor for continuation.
 
 func (a *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery, opts ...m.ListOptions) (m.Page[m.Expert], error)
@@ -285,7 +285,7 @@ func (a *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery, opts ..
 func (a *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeFile], error)
     ListKnowledgeFiles returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ObserveAgents(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
+func (a *AgentManager) SubscribeAgents(ctx context.Context, r m.RuntimeRef, o m.SubscriptionListener[[]m.Agent]) (m.Subscription, error)
 
 type ApproveFotaUpdateRequest struct {
 	// Agent 运行资源 ID（来自 agent.RuntimeResourceInfo.ResourceId）
@@ -339,15 +339,13 @@ func (a *ConversationManager) GetCommandReceipt(ctx context.Context, r m.Command
 
 func (a *ConversationManager) GetComposerCapabilities(ctx context.Context, r m.ComposerQuery) (m.Snapshot[m.ComposerCapabilities], error)
 
-func (a *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+func (a *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef, options ...m.ReadOptions) (m.Snapshot[*m.Conversation], error)
 
 func (a *ConversationManager) GetConversationConfig(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.EffectiveConfig], error)
 
 func (a *ConversationManager) GetConversationHeaderMetadata(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ConversationHeaderMetadata], error)
 
 func (a *ConversationManager) GetConversationStorageContext(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, error)
-
-func (a *ConversationManager) GetConversationSummary(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.Conversation], error)
 
 func (a *ConversationManager) GetMemberSnapshot(ctx context.Context, r m.MemberSnapshotQuery) (m.Snapshot[m.MemberSnapshot], error)
 
@@ -381,7 +379,7 @@ func (a *ConversationManager) ListExecutionActivity(ctx context.Context, r m.Con
 func (a *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.GroupSyncState], error)
     ListGroupSyncStates returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
+func (a *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.Group], error)
     ListGroups returns one page. Use NextCursor for continuation.
 
 func (a *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery, opts ...m.ListOptions) (m.Page[m.Interaction], error)
@@ -398,37 +396,6 @@ func (a *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery
 
 func (a *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Page[m.Conversation], error)
     ListSidebarConversations returns one page. Use NextCursor for continuation.
-
-func (a *ConversationManager) ObserveActiveExecutions(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.Observer[m.CommandReceipt]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveConversationConfig(ctx context.Context, r m.ConversationRef, o m.Observer[m.EffectiveConfig]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.Observer[m.Page[m.SidebarGroup]]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.Observer[m.ConversationHistory]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveConversations(ctx context.Context, r m.ConversationQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveExecutionActivity(ctx context.Context, r m.ConversationRef, o m.Observer[[]m.ExecutionActivity]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveInteractions(ctx context.Context, r m.InteractionQuery, o m.Observer[[]m.Interaction]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveLiveProcess(ctx context.Context, r m.ConversationRef, o m.Observer[m.LiveProcessSnapshot]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveMembers(ctx context.Context, r m.MemberQuery, o m.Observer[[]m.Member]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveMessages(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveMutation(ctx context.Context, r m.MutationRef, o m.Observer[m.MutationStatus]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
-
-func (a *ConversationManager) ObserveTurn(ctx context.Context, r m.TurnRef, o m.Observer[*m.Turn]) (m.Subscription, error)
-
-func (a *ConversationManager) OnGroupSyncState(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
-    OnGroupSyncState订阅后立即获得已有状态，不要求业务方理解或维护内部seq。
 
 func (a *ConversationManager) PrepareConversationAttachmentTarget(ctx context.Context, r m.ConversationRef) (m.ConversationAttachmentTarget, error)
 
@@ -455,6 +422,37 @@ func (a *ConversationManager) SetConversationConfigOption(ctx context.Context, r
 func (a *ConversationManager) SetConversationPinned(ctx context.Context, r m.PinnedRequest, options ...m.MutationOptions) (m.ConversationRef, error)
 
 func (a *ConversationManager) SteerTurn(ctx context.Context, r m.SteerRequest) (m.SteerResult, error)
+
+func (a *ConversationManager) SubscribeActiveExecutions(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ActiveExecutionSnapshot]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.SubscriptionListener[m.CommandReceipt]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeConversationConfig(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.EffectiveConfig]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.SubscriptionListener[m.Page[m.SidebarGroup]]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.SubscriptionListener[m.ConversationHistory]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeConversations(ctx context.Context, r m.ConversationQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeExecutionActivity(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[[]m.ExecutionActivity]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeGroupSyncStates(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
+    OnGroupSyncState订阅后立即获得已有状态，不要求业务方理解或维护内部seq。
+
+func (a *ConversationManager) SubscribeInteractions(ctx context.Context, r m.InteractionQuery, o m.SubscriptionListener[[]m.Interaction]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeLiveProcess(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.LiveProcessSnapshot]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeMembers(ctx context.Context, r m.MemberQuery, o m.SubscriptionListener[[]m.Member]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeMessages(ctx context.Context, r m.MessageQuery, o m.SubscriptionListener[m.Page[m.Message]]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeMutation(ctx context.Context, r m.MutationRef, o m.SubscriptionListener[m.MutationStatus]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
+
+func (a *ConversationManager) SubscribeTurn(ctx context.Context, r m.TurnRef, o m.SubscriptionListener[*m.Turn]) (m.Subscription, error)
 
 func (a *ConversationManager) SyncConversation(ctx context.Context, r m.ConversationRef) (m.GroupSyncState, error)
     SyncConversation按业务会话定位唯一群，等待本轮历史完整接收和应用；取消只结束当前调用等待。
@@ -645,15 +643,15 @@ func (a *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery, 
 func (a *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
     ListWorkspaces returns one page. Use NextCursor for continuation.
 
-func (a *ResourceManager) ObserveConversationResources(ctx context.Context, r m.ConversationRef, o m.Observer[m.ResourceSelection]) (m.Subscription, error)
-
-func (a *ResourceManager) ObserveResources(ctx context.Context, r m.ResourceQuery, o m.Observer[[]m.Resource]) (m.Subscription, error)
-
 func (a *ResourceManager) SetConversationResources(ctx context.Context, r m.ResourceRequest) (m.ResourceSelection, error)
 
 func (a *ResourceManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
 
 func (a *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
+
+func (a *ResourceManager) SubscribeConversationResources(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ResourceSelection]) (m.Subscription, error)
+
+func (a *ResourceManager) SubscribeResources(ctx context.Context, r m.ResourceQuery, o m.SubscriptionListener[[]m.Resource]) (m.Subscription, error)
 
 type RuntimeManager struct {
 	// Has unexported fields.
@@ -708,11 +706,11 @@ func (a *RuntimeManager) GetHostCapabilities(ctx context.Context, r model.Runtim
 func (a *RuntimeManager) ListRuntimes(ctx context.Context, opts ...m.ListOptions) (m.Page[m.Runtime], error)
     ListRuntimes returns one page. Use NextCursor for continuation.
 
-func (m *RuntimeManager) ObserveCommand(ctx context.Context, r *model.ObserveCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
+func (m *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandListener) (model.RuntimeCommandSubscription, error)
 
-func (a *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.Runtime]) (model.Subscription, error)
+func (m *RuntimeManager) SubscribeCommand(ctx context.Context, r *model.SubscribeCommandRequest, o model.RuntimeCommandListener) (model.RuntimeCommandSubscription, error)
 
-func (m *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
+func (a *RuntimeManager) SubscribeRuntimes(ctx context.Context, o model.SubscriptionListener[[]model.Runtime]) (model.Subscription, error)
 
 func (m *RuntimeManager) UpdateAgentInstance(ctx context.Context, req *UpdateAgentInstanceRequest, opts ...CallOption) error
     UpdateAgentInstance updates the metadata of an existing agent instance.
@@ -874,37 +872,16 @@ type Actor struct {
 }
 
 type Agent struct {
-	// OnlineStatus is a cloud API projection, never an IM presence subscription.
-	OnlineStatus AgentStatus       `json:"online_status,omitempty"`
-	ID           string            `json:"id"`
+	Presentation *AgentPresentation `json:"presentation,omitempty"`
+	AgentRef
 	Name         string            `json:"name"`
-	Type         string            `json:"type"`
-	SessionID    string            `json:"session_id,omitempty"`
-	Metadata     map[string]string `json:"metadata,omitempty"`
-	CreatedAt    time.Time         `json:"created_at"`
-
-	// Fields populated from ListAgentInstance API
-	AvatarUrl         string `json:"avatar_url,omitempty"`
-	Description       string `json:"description,omitempty"`
-	RuntimeID         string `json:"runtime_id,omitempty"`
-	RuntimeType       string `json:"runtime_type,omitempty"`
-	RegionID          string `json:"region_id,omitempty"`
-	OsType            string `json:"os_type,omitempty"`
-	IMID              string `json:"im_id,omitempty"`
-	SimplePersonaType string `json:"simple_persona_type,omitempty"`
-	SimpleModelType   string `json:"simple_model_type,omitempty"`
-	AgentPlatform     string `json:"agent_platform,omitempty"` // ENTERPRISE / JVS / ENTERPRISE_JVS
-
-	// RuntimeResourceInfo describes the runtime/desktop resource backing this agent.
-	RuntimeResourceInfo *RuntimeResourceInfo `json:"runtime_resource_info,omitempty"`
-
-	// FOTA 升级信息（仅 QueryFotaUpdate=true 时填充）
-	FotaUpdate *AgentFotaUpdate `json:"fota_update,omitempty"`
-
-	// OpenIM online status (populated by subscribing to user status)
-	Status AgentStatus `json:"status,omitempty"`
+	Enabled      bool              `json:"enabled"`
+	Availability string            `json:"availability"`
+	Category     string            `json:"category,omitempty"`
+	ProbeStatus  string            `json:"probeStatus,omitempty"`
+	Capabilities AgentCapabilities `json:"capabilities"`
+	Revision     Int64             `json:"revision"`
 }
-    Agent represents a Wuying agent instance.
 
 type AgentAuthedSkill struct {
 	SkillId            string     `json:"skill_id"`
@@ -957,8 +934,8 @@ type AgentFotaUpdate struct {
     GetAgentListRequest.QueryFotaUpdate=true 时填充
 
 type AgentModelCatalog struct {
-	Models         []ModelSummary `json:"models"`
-	DefaultModelID string         `json:"defaultModelId,omitempty"`
+	Models         []Model `json:"models"`
+	DefaultModelID string  `json:"defaultModelId,omitempty"`
 }
 
 type AgentPlatform string
@@ -996,18 +973,6 @@ const (
 	AgentStatusError    AgentStatus = "error"
 	AgentStatusUnknown  AgentStatus = "unknown"
 )
-type AgentSummary struct {
-	Presentation *AgentPresentation `json:"presentation,omitempty"`
-	AgentRef
-	Name         string            `json:"name"`
-	Enabled      bool              `json:"enabled"`
-	Availability string            `json:"availability"`
-	Category     string            `json:"category,omitempty"`
-	ProbeStatus  string            `json:"probeStatus,omitempty"`
-	Capabilities AgentCapabilities `json:"capabilities"`
-	Revision     Int64             `json:"revision"`
-}
-
 type AttachmentAccess struct {
 	URL       string `json:"url"`
 	ExpiresAt string `json:"expiresAt"`
@@ -1710,10 +1675,25 @@ type GetModelConfigRequest struct {
 }
     GetModelConfigRequest is the request for getting model configuration.
 
+type Group struct {
+	RuntimeID            string `json:"runtimeId,omitempty"` // 仅在当前已授权目录中唯一关联时提供。
+	GroupID              string `json:"groupId"`
+	ConversationID       string `json:"conversationId"`
+	ConversationIDIm     string `json:"conversationIdIm"`
+	ControllerUserID     string `json:"controllerUserId"`
+	GroupName            string `json:"groupName"`
+	FaceURL              string `json:"faceURL"`
+	Status               string `json:"status"`
+	MembershipGeneration uint64 `json:"membershipGeneration"`
+	MemberRevision       uint64 `json:"memberRevision"`
+	JoinedAtMs           int64  `json:"joinedAtMs"`
+}
+    Group 是服务器目录中的群元数据；不等同本地消息已就绪。
+
 type GroupDirectoryPage struct {
-	Groups     []GroupSummary `json:"groups"`
-	NextCursor string         `json:"nextCursor"`
-	HasMore    bool           `json:"hasMore"`
+	Groups     []Group `json:"groups"`
+	NextCursor string  `json:"nextCursor"`
+	HasMore    bool    `json:"hasMore"`
 }
     GroupDirectoryPage 是一页服务器目录；HasMore 与 NextCursor 分开表达。
 
@@ -1732,21 +1712,6 @@ type GroupRef struct {
 	GroupID   string `json:"groupId"`
 }
     GroupRef 显式指定一个群执行消息同步，不经过会话 ID 猜测。
-
-type GroupSummary struct {
-	RuntimeID            string `json:"runtimeId,omitempty"` // 仅在当前已授权目录中唯一关联时提供。
-	GroupID              string `json:"groupId"`
-	ConversationID       string `json:"conversationId"`
-	ConversationIDIm     string `json:"conversationIdIm"`
-	ControllerUserID     string `json:"controllerUserId"`
-	GroupName            string `json:"groupName"`
-	FaceURL              string `json:"faceURL"`
-	Status               string `json:"status"`
-	MembershipGeneration uint64 `json:"membershipGeneration"`
-	MemberRevision       uint64 `json:"memberRevision"`
-	JoinedAtMs           int64  `json:"joinedAtMs"`
-}
-    GroupSummary 是服务器目录中的群元数据；不等同本地消息已就绪。
 
 type GroupSyncState struct {
 	GroupID              string `json:"groupId"`
@@ -1950,8 +1915,6 @@ type ListOptions struct {
 	Limit  int    `json:"limit,omitempty"`
 	Cursor string `json:"cursor,omitempty"`
 }
-    ListOptions is shared by collection queries. Zero Limit defaults to 50;
-    maximum 100.
 
 type LiveProcessDiagnostics struct {
 	Received   int  `json:"received"`
@@ -2205,6 +2168,21 @@ type MessageStream interface {
     Next returns io.EOF after a terminal Turn; Close stops local waiting,
     Cancel requests remote cancellation.
 
+type Model struct {
+	IsDefault       *bool           `json:"isDefault,omitempty"`
+	ProviderName    string          `json:"providerName,omitempty"`
+	GroupName       string          `json:"groupName,omitempty"`
+	SortOrder       *float64        `json:"sortOrder,omitempty"`
+	Description     string          `json:"description,omitempty"`
+	Features        map[string]bool `json:"features,omitempty"`
+	Thinking        *ThinkingConfig `json:"thinking,omitempty"`
+	InputModalities []string        `json:"inputModalities,omitempty"`
+	ModelID         string          `json:"modelId"`
+	Name            string          `json:"name"`
+	Available       bool            `json:"available"`
+	Revision        Int64           `json:"revision"`
+}
+
 type ModelCatalogQuery struct {
 	AgentRef
 	Consistency string `json:"consistency,omitempty"`
@@ -2227,21 +2205,6 @@ type ModelProvider struct {
 	LlmInfoList             []LlmInfo `json:"llm_info_list"`
 }
     ModelProvider represents a model provider in the model config.
-
-type ModelSummary struct {
-	IsDefault       *bool           `json:"isDefault,omitempty"`
-	ProviderName    string          `json:"providerName,omitempty"`
-	GroupName       string          `json:"groupName,omitempty"`
-	SortOrder       *float64        `json:"sortOrder,omitempty"`
-	Description     string          `json:"description,omitempty"`
-	Features        map[string]bool `json:"features,omitempty"`
-	Thinking        *ThinkingConfig `json:"thinking,omitempty"`
-	InputModalities []string        `json:"inputModalities,omitempty"`
-	ModelID         string          `json:"modelId"`
-	Name            string          `json:"name"`
-	Available       bool            `json:"available"`
-	Revision        Int64           `json:"revision"`
-}
 
 type MutationOptions struct {
 	MutationID string `json:"mutationId"`
@@ -2270,18 +2233,6 @@ type NetworkError struct {
 func (e *NetworkError) Error() string
 
 func (e *NetworkError) Unwrap() error
-
-type ObserveCommandRequest struct {
-	RegionID       string   `json:"regionId"`
-	DesktopIDs     []string `json:"desktopIds"`
-	InvokeID       string   `json:"invokeId"`
-	PollIntervalMs int64    `json:"pollIntervalMs,omitempty"`
-}
-
-type Observer[T any] struct {
-	OnSnapshot func(Snapshot[T])
-	OnError    func(error)
-}
 
 type OperationTask struct {
 	TaskId          string `json:"task_id"`
@@ -2483,6 +2434,12 @@ type RateLimitError struct {
 
 func (e *RateLimitError) Error() string
 
+type ReadOptions struct {
+	Consistency string `json:"consistency,omitempty"`
+}
+    ListOptions is shared by collection queries. Zero Limit defaults to 50;
+    maximum 100.
+
 type RecoveredInteractions struct {
 	ConversationRef
 	Recovered int `json:"recovered"`
@@ -2562,7 +2519,7 @@ type RuntimeCommandEvent struct {
 	AllSucceeded bool                   `json:"allSucceeded,omitempty"`
 }
 
-type RuntimeCommandObserver struct {
+type RuntimeCommandListener struct {
 	OnEvent func(RuntimeCommandEvent)
 	OnError func(error)
 }
@@ -2797,9 +2754,21 @@ type StreamChunk struct {
 	Content   string   `json:"content,omitempty"`
 }
 
+type SubscribeCommandRequest struct {
+	RegionID       string   `json:"regionId"`
+	DesktopIDs     []string `json:"desktopIds"`
+	InvokeID       string   `json:"invokeId"`
+	PollIntervalMs int64    `json:"pollIntervalMs,omitempty"`
+}
+
 type Subscription interface{ Unsubscribe() }
     Subscription releases local observation only; it never cancels remote
     execution.
+
+type SubscriptionListener[T any] struct {
+	OnSnapshot func(Snapshot[T])
+	OnError    func(error)
+}
 
 type ThinkingConfig struct {
 	Supported    bool     `json:"supported"`

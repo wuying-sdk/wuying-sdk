@@ -1,13 +1,12 @@
 ---
-title: "实时观察与停止监听"
-description: "观察同一会话的最新结果，并在退出时释放自己的订阅。"
+title: "订阅数据变化"
+description: "统一使用 subscribe 建立订阅，用 Subscription 取消订阅。"
 ---
 
-聊天界面需要随消息变化更新时，使用 observe 类方法。`Subscription` 是返回的本地监听句柄；页面退出时通过它停止监听。
+使用 `subscribe*` 订阅数据或执行状态的后续变化。方法返回 `Subscription`，页面退出时调用 `unsubscribe()`。订阅不会自动取消远端任务。
 
 ```ts
-const conversations = await client.buildConversationManager(ctx);
-const subscription = await conversations.observeMessages(ctx, {
+const subscription = await conversations.subscribeMessages(ctx, {
   runtimeId, conversationId,
 }, {
   onSnapshot: renderMessages,
@@ -17,8 +16,10 @@ const subscription = await conversations.observeMessages(ctx, {
 subscription.unsubscribe();
 ```
 
-`renderMessages` 和 `showError` 由应用实现，最后一行在页面退出或切换会话时调用。每次回调是一份当前查询范围的快照，应按稳定消息 ID 更新界面，不把整页重复追加。
+`SubscriptionListener<T>` 描述回调：消息、会话等数据订阅通过 `onSnapshot` 交付当前数据与同步状态，失败通过 `onError` 交付错误。`subscribe` 说明建立订阅，`onSnapshot` 说明收到的数据形态，两者并不冲突。
 
-停止监听只结束本地观察，不取消远端任务，也不关闭其他页面共享的 Client。Android/iOS 使用自己的 Request 管理本地生命周期，见[移动端契约](/reference/mobile/contract)。
+远程脚本的订阅使用 `RuntimeCommandListener.onEvent`，因为它交付受理、桌面结果与完成等执行事件。入口统一为 `subscribeCommand`，CLI 对应 `runtimes subscribe-command`。
 
-[完整类型与语言差异](/sdk-reference/index)
+每次数据回调按稳定 ID 替换或对账，避免把整份消息列表重复追加。先订阅再发送任务，所有退出路径都释放自己创建的句柄；应用最后关闭 Client。
+
+公开模型统一使用 `Runtime`、`Agent`、`Model`、`Group`。技能的 `skillSummary` 字段表示简介文本。

@@ -54,29 +54,29 @@ func (receiver *RuntimeManager) ListRuntimes(ctx context.Context, opts ...m.List
 
 [查看操作或完整契约](/api-reference/runtimes/list)
 
-## ObserveCommand
-
-```go
-func (receiver *RuntimeManager) ObserveCommand(ctx context.Context, r *model.ObserveCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
-```
-
-[查看操作或完整契约](/api-reference/runtimes/observe-command)
-
-## ObserveRuntimes
-
-```go
-func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.Runtime]) (model.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/runtimes/observe)
-
 ## RunCommand
 
 ```go
-func (receiver *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
+func (receiver *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandListener) (model.RuntimeCommandSubscription, error)
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/run-command)
+
+## SubscribeCommand
+
+```go
+func (receiver *RuntimeManager) SubscribeCommand(ctx context.Context, r *model.SubscribeCommandRequest, o model.RuntimeCommandListener) (model.RuntimeCommandSubscription, error)
+```
+
+[查看操作或完整契约](/api-reference/runtimes/subscribe-command)
+
+## SubscribeRuntimes
+
+```go
+func (receiver *RuntimeManager) SubscribeRuntimes(ctx context.Context, o model.SubscriptionListener[[]model.Runtime]) (model.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/runtimes/subscribe)
 
 ## UpdateAgentInstance
 

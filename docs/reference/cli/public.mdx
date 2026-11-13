@@ -208,6 +208,7 @@ optional --mutation-id <id> — Stable ID for retrying the same create request
 wuying conversations get
 required --runtime <id> — Explicit authorized Runtime ID
 required --conversation <id> — Product Conversation ID
+optional --consistency <mode> — cache or refresh (default: cache)
 ```
 
 <a id="entry-8724028aa5ae53bc" />
@@ -489,18 +490,6 @@ optional --limit <count> — Page size (1..100) (default: 50)
 optional --cursor <cursor> — Opaque nextCursor
 ```
 
-<a id="entry-100fc8994e4fa292" />
-
-### runtimes.runtimes observe-command
-
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
-
-```sh
-wuying runtimes observe-command
-optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
-optional --stdin — Read SDK request JSON from stdin
-```
-
 <a id="entry-2277ba4de770765d" />
 
 ### runtimes.runtimes run-command
@@ -509,6 +498,18 @@ optional --stdin — Read SDK request JSON from stdin
 
 ```sh
 wuying runtimes run-command
+optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
+optional --stdin — Read SDK request JSON from stdin
+```
+
+<a id="entry-bc6fd2418b7c6e27" />
+
+### runtimes.runtimes subscribe-command
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe-command)。
+
+```sh
+wuying runtimes subscribe-command
 optional --request-file <path> — SDK request JSON file (maximum 64 KiB)
 optional --stdin — Read SDK request JSON from stdin
 ```

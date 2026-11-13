@@ -128,16 +128,6 @@ func (receiver *Client) Delete(ctx context.Context, r *model.DesktopOperationReq
 func (receiver *Client) GetAuthCode(ctx context.Context, r *model.GetAuthCodeRequest) (*model.GetAuthCodeResponse, error)
 ```
 
-<a id="entry-65d48a3e57e71a6f" />
-
-### github.com/aliyun/wuying-sdk-go.Client.OnStreamEvent
-
-类别：模型操作。[按模型查看操作](/api-reference/client/on-stream-event)。
-
-```go
-func (receiver *Client) OnStreamEvent(ctx context.Context, handler agmessage.StreamHandler) (func(), error)
-```
-
 <a id="entry-7a7e4293e4357399" />
 
 ### github.com/aliyun/wuying-sdk-go.Client.Reboot
@@ -176,6 +166,16 @@ func (receiver *Client) Start(ctx context.Context, r *model.DesktopOperationRequ
 
 ```go
 func (receiver *Client) Stop(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
+```
+
+<a id="entry-73374bdac0006989" />
+
+### github.com/aliyun/wuying-sdk-go.Client.SubscribeStreamEvents
+
+类别：模型操作。[按模型查看操作](/api-reference/client/subscribe-stream-events)。
+
+```go
+func (receiver *Client) SubscribeStreamEvents(ctx context.Context, handler agmessage.StreamHandler) (model.Subscription, error)
 ```
 
 <a id="entry-6d0aef69bf13187a" />
@@ -605,7 +605,7 @@ func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.
 类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
 
 ```go
-func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.ModelSummary], error)
+func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.Model], error)
 ```
 
 <a id="entry-9940cc00c970267e" />
@@ -625,7 +625,7 @@ func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.Runtime
 类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
 
 ```go
-func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
+func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.Agent], error)
 ```
 
 <a id="entry-89fffa72700baaf4" />
@@ -648,14 +648,14 @@ func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery, 
 func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeFile], error)
 ```
 
-<a id="entry-f564f83d2b1b3e1b" />
+<a id="entry-fcac6b58411db156" />
 
-### github.com/aliyun/wuying-sdk-go/manager.AgentManager.ObserveAgents
+### github.com/aliyun/wuying-sdk-go/manager.AgentManager.SubscribeAgents
 
-类别：模型操作。[按模型查看操作](/api-reference/agents/observe-agents)。
+类别：模型操作。[按模型查看操作](/api-reference/agents/subscribe-agents)。
 
 ```go
-func (receiver *AgentManager) ObserveAgents(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
+func (receiver *AgentManager) SubscribeAgents(ctx context.Context, r m.RuntimeRef, o m.SubscriptionListener[[]m.Agent]) (m.Subscription, error)
 ```
 
 <a id="entry-bcd0d7c5e8fd2193" />
@@ -758,16 +758,6 @@ func (receiver *ConversationManager) GetConversationHeaderMetadata(ctx context.C
 func (receiver *ConversationManager) GetConversationStorageContext(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, error)
 ```
 
-<a id="entry-6c061220b5973363" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetConversationSummary
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-summary)。
-
-```go
-func (receiver *ConversationManager) GetConversationSummary(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.Conversation], error)
-```
-
 <a id="entry-f20b1a1ec416a067" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetConversation
@@ -775,7 +765,7 @@ func (receiver *ConversationManager) GetConversationSummary(ctx context.Context,
 类别：模型操作。[按模型查看操作](/api-reference/conversations/get)。
 
 ```go
-func (receiver *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+func (receiver *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef, options ...m.ReadOptions) (m.Snapshot[*m.Conversation], error)
 ```
 
 <a id="entry-353db5509b6d9add" />
@@ -915,7 +905,7 @@ func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r 
 类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
 
 ```go
-func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
+func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.Group], error)
 ```
 
 <a id="entry-c487e15cdedb21f4" />
@@ -966,156 +956,6 @@ func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.Messa
 
 ```go
 func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Page[m.Conversation], error)
-```
-
-<a id="entry-112a929a9ee993ed" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveActiveExecutions
-
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-active-executions)。
-
-```go
-func (receiver *ConversationManager) ObserveActiveExecutions(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
-```
-
-<a id="entry-e9b3cd46f6747d78" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveCommandReceipt
-
-类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-command-receipt)。
-
-```go
-func (receiver *ConversationManager) ObserveCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.Observer[m.CommandReceipt]) (m.Subscription, error)
-```
-
-<a id="entry-cf168e4890dedbb2" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveConversationConfig
-
-类别：模型操作。[按模型查看操作](/api-reference/configuration/observe-conversation-config)。
-
-```go
-func (receiver *ConversationManager) ObserveConversationConfig(ctx context.Context, r m.ConversationRef, o m.Observer[m.EffectiveConfig]) (m.Subscription, error)
-```
-
-<a id="entry-6adf3be311b4e6bd" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveConversationGroups
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-groups)。
-
-```go
-func (receiver *ConversationManager) ObserveConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.Observer[m.Page[m.SidebarGroup]]) (m.Subscription, error)
-```
-
-<a id="entry-52ddb0763fd475ea" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveConversationHistory
-
-类别：模型操作。[按模型查看操作](/api-reference/messages/observe-conversation-history)。
-
-```go
-func (receiver *ConversationManager) ObserveConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.Observer[m.ConversationHistory]) (m.Subscription, error)
-```
-
-<a id="entry-ba2c112d86cc857a" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveConversations
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversations)。
-
-```go
-func (receiver *ConversationManager) ObserveConversations(ctx context.Context, r m.ConversationQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
-```
-
-<a id="entry-73a6bafb69df1ab0" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveExecutionActivity
-
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-execution-activity)。
-
-```go
-func (receiver *ConversationManager) ObserveExecutionActivity(ctx context.Context, r m.ConversationRef, o m.Observer[[]m.ExecutionActivity]) (m.Subscription, error)
-```
-
-<a id="entry-e7814a7897deef73" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveInteractions
-
-类别：模型操作。[按模型查看操作](/api-reference/interactions/observe-interactions)。
-
-```go
-func (receiver *ConversationManager) ObserveInteractions(ctx context.Context, r m.InteractionQuery, o m.Observer[[]m.Interaction]) (m.Subscription, error)
-```
-
-<a id="entry-6e40f5d4a4169b89" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveLiveProcess
-
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-live-process)。
-
-```go
-func (receiver *ConversationManager) ObserveLiveProcess(ctx context.Context, r m.ConversationRef, o m.Observer[m.LiveProcessSnapshot]) (m.Subscription, error)
-```
-
-<a id="entry-2f20c23e2abf7d3c" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveMembers
-
-类别：模型操作。[按模型查看操作](/api-reference/members/observe-members)。
-
-```go
-func (receiver *ConversationManager) ObserveMembers(ctx context.Context, r m.MemberQuery, o m.Observer[[]m.Member]) (m.Subscription, error)
-```
-
-<a id="entry-b577102069094180" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveMessages
-
-类别：模型操作。[按模型查看操作](/api-reference/messages/observe)。
-
-```go
-func (receiver *ConversationManager) ObserveMessages(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
-```
-
-<a id="entry-08c36b5d4f6b5a0c" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveMutation
-
-类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-mutation)。
-
-```go
-func (receiver *ConversationManager) ObserveMutation(ctx context.Context, r m.MutationRef, o m.Observer[m.MutationStatus]) (m.Subscription, error)
-```
-
-<a id="entry-adba7662ccb49963" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveSidebarConversations
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-sidebar-conversations)。
-
-```go
-func (receiver *ConversationManager) ObserveSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
-```
-
-<a id="entry-e9b6e1e0d7318b01" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.ObserveTurn
-
-类别：模型操作。[按模型查看操作](/api-reference/turns/observe-turn)。
-
-```go
-func (receiver *ConversationManager) ObserveTurn(ctx context.Context, r m.TurnRef, o m.Observer[*m.Turn]) (m.Subscription, error)
-```
-
-<a id="entry-6e2b80be50e7f95a" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.OnGroupSyncState
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/on-group-sync-state)。
-
-```go
-func (receiver *ConversationManager) OnGroupSyncState(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
 ```
 
 <a id="entry-07efe74c84cda2a8" />
@@ -1246,6 +1086,156 @@ func (receiver *ConversationManager) SetConversationPinned(ctx context.Context, 
 
 ```go
 func (receiver *ConversationManager) SteerTurn(ctx context.Context, r m.SteerRequest) (m.SteerResult, error)
+```
+
+<a id="entry-67826e87e3b656fe" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeActiveExecutions
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-active-executions)。
+
+```go
+func (receiver *ConversationManager) SubscribeActiveExecutions(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ActiveExecutionSnapshot]) (m.Subscription, error)
+```
+
+<a id="entry-9b47048ba0bbacdc" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeCommandReceipt
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-command-receipt)。
+
+```go
+func (receiver *ConversationManager) SubscribeCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.SubscriptionListener[m.CommandReceipt]) (m.Subscription, error)
+```
+
+<a id="entry-f59a01a0b5c9fa99" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeConversationConfig
+
+类别：模型操作。[按模型查看操作](/api-reference/configuration/subscribe-conversation-config)。
+
+```go
+func (receiver *ConversationManager) SubscribeConversationConfig(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.EffectiveConfig]) (m.Subscription, error)
+```
+
+<a id="entry-c9f0d08d7a1b807a" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeConversationGroups
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversation-groups)。
+
+```go
+func (receiver *ConversationManager) SubscribeConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.SubscriptionListener[m.Page[m.SidebarGroup]]) (m.Subscription, error)
+```
+
+<a id="entry-dbb138bf403d1a42" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeConversationHistory
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/subscribe-conversation-history)。
+
+```go
+func (receiver *ConversationManager) SubscribeConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.SubscriptionListener[m.ConversationHistory]) (m.Subscription, error)
+```
+
+<a id="entry-d324f907256ad27f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversations)。
+
+```go
+func (receiver *ConversationManager) SubscribeConversations(ctx context.Context, r m.ConversationQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+<a id="entry-ee3c3fee4c122790" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeExecutionActivity
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-execution-activity)。
+
+```go
+func (receiver *ConversationManager) SubscribeExecutionActivity(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[[]m.ExecutionActivity]) (m.Subscription, error)
+```
+
+<a id="entry-4a7eeac9d0c71df2" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeGroupSyncStates
+
+类别：模型操作。[按模型查看操作](/api-reference/sync/subscribe-group-sync-states)。
+
+```go
+func (receiver *ConversationManager) SubscribeGroupSyncStates(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
+```
+
+<a id="entry-09ae13af1e1e6de1" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeInteractions
+
+类别：模型操作。[按模型查看操作](/api-reference/interactions/subscribe-interactions)。
+
+```go
+func (receiver *ConversationManager) SubscribeInteractions(ctx context.Context, r m.InteractionQuery, o m.SubscriptionListener[[]m.Interaction]) (m.Subscription, error)
+```
+
+<a id="entry-d06146dc38d415ca" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeLiveProcess
+
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-live-process)。
+
+```go
+func (receiver *ConversationManager) SubscribeLiveProcess(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.LiveProcessSnapshot]) (m.Subscription, error)
+```
+
+<a id="entry-71b69bda04d9c929" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeMembers
+
+类别：模型操作。[按模型查看操作](/api-reference/members/subscribe-members)。
+
+```go
+func (receiver *ConversationManager) SubscribeMembers(ctx context.Context, r m.MemberQuery, o m.SubscriptionListener[[]m.Member]) (m.Subscription, error)
+```
+
+<a id="entry-ba031ee9b501af93" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeMessages
+
+类别：模型操作。[按模型查看操作](/api-reference/messages/subscribe)。
+
+```go
+func (receiver *ConversationManager) SubscribeMessages(ctx context.Context, r m.MessageQuery, o m.SubscriptionListener[m.Page[m.Message]]) (m.Subscription, error)
+```
+
+<a id="entry-6be330c2d742bfa1" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeMutation
+
+类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-mutation)。
+
+```go
+func (receiver *ConversationManager) SubscribeMutation(ctx context.Context, r m.MutationRef, o m.SubscriptionListener[m.MutationStatus]) (m.Subscription, error)
+```
+
+<a id="entry-80ac9ea025033168" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeSidebarConversations
+
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-sidebar-conversations)。
+
+```go
+func (receiver *ConversationManager) SubscribeSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+<a id="entry-b4738b9d8d81bf3f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeTurn
+
+类别：模型操作。[按模型查看操作](/api-reference/turns/subscribe-turn)。
+
+```go
+func (receiver *ConversationManager) SubscribeTurn(ctx context.Context, r m.TurnRef, o m.SubscriptionListener[*m.Turn]) (m.Subscription, error)
 ```
 
 <a id="entry-6c4428ff734b9e14" />
@@ -1458,26 +1448,6 @@ func (receiver *ResourceManager) ListResources(ctx context.Context, r m.Resource
 func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
 ```
 
-<a id="entry-d5b11dfb66eebf2c" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ObserveConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/observe-conversation-resources)。
-
-```go
-func (receiver *ResourceManager) ObserveConversationResources(ctx context.Context, r m.ConversationRef, o m.Observer[m.ResourceSelection]) (m.Subscription, error)
-```
-
-<a id="entry-05bdff9e6eb74778" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ObserveResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/observe-resources)。
-
-```go
-func (receiver *ResourceManager) ObserveResources(ctx context.Context, r m.ResourceQuery, o m.Observer[[]m.Resource]) (m.Subscription, error)
-```
-
 <a id="entry-11c32d186f4713b3" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.SetConversationResources
@@ -1506,6 +1476,26 @@ func (receiver *ResourceManager) StageAttachment(ctx context.Context, r m.StageA
 
 ```go
 func (receiver *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
+```
+
+<a id="entry-4a33428c3fafb8d0" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.SubscribeConversationResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-conversation-resources)。
+
+```go
+func (receiver *ResourceManager) SubscribeConversationResources(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ResourceSelection]) (m.Subscription, error)
+```
+
+<a id="entry-ec7750adb11b2969" />
+
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.SubscribeResources
+
+类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-resources)。
+
+```go
+func (receiver *ResourceManager) SubscribeResources(ctx context.Context, r m.ResourceQuery, o m.SubscriptionListener[[]m.Resource]) (m.Subscription, error)
 ```
 
 <a id="entry-8e4c6be8be093363" />
@@ -1568,26 +1558,6 @@ func (receiver *RuntimeManager) GetHostCapabilities(ctx context.Context, r model
 func (receiver *RuntimeManager) ListRuntimes(ctx context.Context, opts ...m.ListOptions) (m.Page[m.Runtime], error)
 ```
 
-<a id="entry-f524474c4b0b8024" />
-
-### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.ObserveCommand
-
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
-
-```go
-func (receiver *RuntimeManager) ObserveCommand(ctx context.Context, r *model.ObserveCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
-```
-
-<a id="entry-89fb844b0cbc6e62" />
-
-### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.ObserveRuntimes
-
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
-
-```go
-func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.Runtime]) (model.Subscription, error)
-```
-
 <a id="entry-e715942c3b7bab5f" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.RunCommand
@@ -1595,7 +1565,27 @@ func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Obs
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
 
 ```go
-func (receiver *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
+func (receiver *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandListener) (model.RuntimeCommandSubscription, error)
+```
+
+<a id="entry-c991eb5a95c3896f" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.SubscribeCommand
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe-command)。
+
+```go
+func (receiver *RuntimeManager) SubscribeCommand(ctx context.Context, r *model.SubscribeCommandRequest, o model.RuntimeCommandListener) (model.RuntimeCommandSubscription, error)
+```
+
+<a id="entry-d695d2de4eef57d2" />
+
+### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.SubscribeRuntimes
+
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe)。
+
+```go
+func (receiver *RuntimeManager) SubscribeRuntimes(ctx context.Context, o model.SubscriptionListener[[]model.Runtime]) (model.Subscription, error)
 ```
 
 <a id="entry-175da63d708e0fd7" />
@@ -2548,16 +2538,6 @@ func (receiver *Client) OnDurableMessage(handler DurableHandler) (func(), error)
 func (receiver *Client) OnError(fn func(error)) func()
 ```
 
-<a id="entry-bdd0359bbb1b9926" />
-
-### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnGroupSyncState
-
-类别：模型操作。[按模型查看操作](/api-reference/transport/on-group-sync-state)。
-
-```go
-func (receiver *Client) OnGroupSyncState(fn func(GroupSyncState)) func()
-```
-
 <a id="entry-b8fb7c0bd7f3ab60" />
 
 ### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnInitialSyncProgress
@@ -2626,16 +2606,6 @@ func (receiver *Client) OnRelayMessage(handler RelayMessageHandler) (func(), err
 
 ```go
 func (receiver *Client) OnRelayRequest(handler RelayRequestHandler) (func(), error)
-```
-
-<a id="entry-f241735b218647a8" />
-
-### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.OnStreamEvent
-
-类别：模型操作。[按模型查看操作](/api-reference/transport/on-stream-event)。
-
-```go
-func (receiver *Client) OnStreamEvent(handler StreamHandler) (func(), error)
 ```
 
 <a id="entry-d8a1273e3e4f7fcc" />
@@ -2836,6 +2806,26 @@ func (receiver *Client) StreamList(ctx context.Context, groupID, cursor string, 
 
 ```go
 func (receiver *Client) StreamState(ctx context.Context, groupID, senderUserID, streamID string) (*StreamInfo, error)
+```
+
+<a id="entry-1ddc80a81b4d334a" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.SubscribeGroupSyncStates
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/subscribe-group-sync-states)。
+
+```go
+func (receiver *Client) SubscribeGroupSyncStates(fn func(GroupSyncState)) func()
+```
+
+<a id="entry-382eb608c678467b" />
+
+### github.com/aliyun/wuying-sdk-go/transport/agmessage.Client.SubscribeStreamEvents
+
+类别：模型操作。[按模型查看操作](/api-reference/transport/subscribe-stream-events)。
+
+```go
+func (receiver *Client) SubscribeStreamEvents(handler StreamHandler) (func(), error)
 ```
 
 <a id="entry-8de831bd6ee19bf4" />

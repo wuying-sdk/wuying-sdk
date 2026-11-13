@@ -13,7 +13,7 @@ description: "通过 runCommand 在云桌面内执行脚本，管理进程、文
 
 ## 执行第一个脚本
 
-先完成管理员 Client 初始化，下面只保留必要参数。`handleEvent` / `handleError`（Go / Java 的 observer）由宿主按下一节实现：
+先完成管理员 Client 初始化，下面只保留必要参数。`handleEvent` / `handleError`（Go / Java 的 subscriptionlistener）由宿主按下一节实现：
 
 <CodeGroup>
 
@@ -31,7 +31,7 @@ if err != nil { return err }
 subscription, err := runtimeManager.RunCommand(ctx, &model.RunCommandRequest{
     RegionID: regionID, DesktopIDs: []string{desktopID}, Type: "RunPowerShellScript",
     CommandContent: "Get-Process | Select-Object -First 5 ProcessName, Id",
-}, observer)
+}, subscriptionlistener)
 ```
 
 ```java Java
@@ -41,7 +41,7 @@ request.regionId = regionId;
 request.desktopIds = Collections.singletonList(desktopId);
 request.type = "RunPowerShellScript";
 request.commandContent = "Get-Process | Select-Object -First 5 ProcessName, Id";
-RuntimeCommandSubscription subscription = runtimeManager.runCommand(request, observer, ctx)
+RuntimeCommandSubscription subscription = runtimeManager.runCommand(request, subscriptionlistener, ctx)
     .toCompletableFuture().get();
 ```
 
@@ -74,31 +74,31 @@ CLI 的 script.json：
 
 只有桌面状态 Success 且 exitCode 为字符串 `"0"` 才算成功，缺失退出码不能补零。SDK 自动查询云端执行记录，当前不是服务端主动 Push；接入方无须再建立一套轮询器。
 
-保留 Client 和订阅直到 completed 或 onError。Go / Java 的 ctx 也要覆盖整个观察过程；Java 默认调用期限只有 30 秒，长脚本需显式设置足够期限。`timeoutSeconds` 是云端脚本执行期限，调用 ctx / CLI timeout 是本地观察期限，含义不同。完整字段和预算见 [`runCommand`](/api-reference/runtimes/run-command)。
+保留 Client 和订阅直到 completed 或 onError。Go / Java 的 ctx 也要覆盖整个订阅过程；Java 默认调用期限只有 30 秒，长脚本需显式设置足够期限。`timeoutSeconds` 是云端脚本执行期限，调用 ctx / CLI timeout 是本地订阅期限，含义不同。完整字段和预算见 [`runCommand`](/api-reference/runtimes/run-command)。
 
 ## 断线后继续读取原结果
 
-取得 invokeId 后，用原回执恢复观察，不重新执行脚本：
+取得 invokeId 后，用原回执恢复订阅，不重新执行脚本：
 
 <CodeGroup>
 
 ```ts TypeScript
-const subscription = await runtimeManager.observeCommand({ timeout: 600_000 }, {
+const subscription = await runtimeManager.subscribeCommand({ timeout: 600_000 }, {
   regionId, desktopIds: [desktopId], invokeId,
 }, { onEvent: handleEvent, onError: handleError });
 ```
 
 ```sh CLI
-wuying runtimes observe-command --profile admin --request-file receipt.json --timeout 600000 --output jsonl
+wuying runtimes subscribe-command --profile admin --request-file receipt.json --timeout 600000 --output jsonl
 ```
 
 </CodeGroup>
 
-receipt.json 只包含原回执的 regionId、desktopIds、invokeId，不是整个 JSONL 输出对象。当前 Client 已关闭时，可先用相同管理员身份创建新 Client 再恢复观察。
+receipt.json 只包含原回执的 regionId、desktopIds、invokeId，不是整个 JSONL 输出对象。当前 Client 已关闭时，可先用相同管理员身份创建新 Client 再恢复订阅。
 
-提交超时且没有取得 invokeId 时，先核对已授权的云端执行记录，不自动重发脚本。退订、关闭 Client 或中断 CLI 只停止本地观察，不停止已受理的远程命令。
+提交超时且没有取得 invokeId 时，先核对已授权的云端执行记录，不自动重发脚本。退订、关闭 Client 或中断 CLI 只停止本地订阅，不停止已受理的远程命令。
 
-CLI 的 runtime-command 事件位于 JSONL 的 data 中。全部目标成功退出 0；脚本失败退出 5并在 error.details 保留逐桌面结果；超时/未知结果退出 6，认证/授权错误退出 3，中断退出 130。先保留身份和回执再处理恢复，详见 [`observeCommand`](/api-reference/runtimes/observe-command)。
+CLI 的 runtime-command 事件位于 JSONL 的 data 中。全部目标成功退出 0；脚本失败退出 5并在 error.details 保留逐桌面结果；超时/未知结果退出 6，认证/授权错误退出 3，中断退出 130。先保留身份和回执再处理恢复，详见 [`subscribeCommand`](/api-reference/runtimes/subscribe-command)。
 
 ## 与其它云资源能力配合
 

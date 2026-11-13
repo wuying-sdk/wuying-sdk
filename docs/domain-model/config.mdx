@@ -13,12 +13,12 @@ JS 声明中的会话配置在根模块导出为 `ConversationSettings`；不要
 
 ## 生命周期
 
-读取当前配置与能力 → 用户选择修改 → 按当前版本提交 → 观察 desired / applied / application → 核对实际应用结果。
+读取当前配置与能力 → 用户选择修改 → 按当前版本提交 → 订阅 desired / applied / application → 核对实际应用结果。
 
 ## 操作入口
 
 - [`getConversationConfig`](/api-reference/configuration/get)
-- [`observeConversationConfig`](/api-reference/configuration/observe-conversation-config)
+- [`subscribeConversationConfig`](/api-reference/configuration/subscribe-conversation-config)
 - [`updateConversationConfig`](/api-reference/configuration/update)
 - [`setConversationConfigOption`](/api-reference/configuration/set-conversation-config-option)
 - [`getComposerCapabilities`](/api-reference/configuration/get-composer-capabilities)

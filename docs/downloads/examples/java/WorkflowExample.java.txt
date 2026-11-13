@@ -19,7 +19,7 @@ public final class WorkflowExample {
     ConversationManager manager=client.buildConversationManager(ctx);CreateRequest create=new CreateRequest();create.runtimeId=runtime;create.agentId=agent;create.name="Customer SDK workflow";create.mode="single";MutationOptions options=new MutationOptions();options.mutationId=mutation;
     CreatedConversation created=manager.createConversation(create,options,ctx).toCompletableFuture().get(65,TimeUnit.SECONDS);System.out.println("conversationId="+created.conversationId);
     MessageQuery query=new MessageQuery();query.runtimeId=runtime;query.conversationId=created.conversationId;
-    try(Subscription subscription=manager.observeMessages(query,new com.aliyun.wuying.sdk.model.Observer<Page<Message>>(){
+    try(Subscription subscription=manager.subscribeMessages(query,new com.aliyun.wuying.sdk.model.SubscriptionListener<Page<Message>>(){
      public void onSnapshot(Snapshot<Page<Message>> snapshot){System.out.println("snapshotPhase="+snapshot.projection.phase);}
      public void onError(BusinessException error){System.err.println("Observation failed; reconcile the original operation before retrying.");}
     },ctx)){

@@ -190,40 +190,6 @@ func(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.Workspac
 
 [模型操作、完整参数与能力边界](/api-reference/workspaces/list) · [Go DTO 参考](/reference/go/api)
 
-<a id="observeconversationresources" />
-
-## Methods.resourceObserveConversationResources
-
-`Methods.resourceObserveConversationResources` → `resource.observeConversationResources`
-
-**模式：** `observe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
-
-```go
-*ResourceManager.ObserveConversationResources
-func(ctx context.Context, r m.ConversationRef, o m.Observer[m.ResourceSelection]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/resources/observe-conversation-resources) · [Go DTO 参考](/reference/go/api)
-
-<a id="observeresources" />
-
-## Methods.resourceObserveResources
-
-`Methods.resourceObserveResources` → `resource.observeResources`
-
-**模式：** `observe`。**请求类型：** `m.ResourceQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
-
-```go
-*ResourceManager.ObserveResources
-func(ctx context.Context, r m.ResourceQuery, o m.Observer[[]m.Resource]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/resources/observe-resources) · [Go DTO 参考](/reference/go/api)
-
 <a id="setconversationresources" />
 
 ## Methods.resourceSetConversationResources
@@ -270,3 +236,37 @@ func(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, 
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/drafts/stage-draft-attachment) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscribeconversationresources" />
+
+## Methods.resourceSubscribeConversationResources
+
+`Methods.resourceSubscribeConversationResources` → `resource.subscribeConversationResources`
+
+**模式：** `subscribe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
+
+```go
+*ResourceManager.SubscribeConversationResources
+func(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ResourceSelection]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/resources/subscribe-conversation-resources) · [Go DTO 参考](/reference/go/api)
+
+<a id="subscriberesources" />
+
+## Methods.resourceSubscribeResources
+
+`Methods.resourceSubscribeResources` → `resource.subscribeResources`
+
+**模式：** `subscribe`。**请求类型：** `m.ResourceQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
+
+```go
+*ResourceManager.SubscribeResources
+func(ctx context.Context, r m.ResourceQuery, o m.SubscriptionListener[[]m.Resource]) (m.Subscription, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/resources/subscribe-resources) · [Go DTO 参考](/reference/go/api)

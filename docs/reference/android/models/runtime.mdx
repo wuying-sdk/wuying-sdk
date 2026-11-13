@@ -96,20 +96,20 @@ func(ctx context.Context, opts ...m.ListOptions) (m.Page[m.Runtime], error)
 
 [模型操作、完整参数与能力边界](/api-reference/runtimes/list) · [Go DTO 参考](/reference/go/api)
 
-<a id="observeruntimes" />
+<a id="subscriberuntimes" />
 
-## Methods.runtimeObserveRuntimes
+## Methods.runtimeSubscribeRuntimes
 
-`Methods.runtimeObserveRuntimes` → `runtime.observeRuntimes`
+`Methods.runtimeSubscribeRuntimes` → `runtime.subscribeRuntimes`
 
-**模式：** `observe`。**请求类型：** 无业务字段（空对象）。**MutationOptions：** 不支持；省略 `mutationId`。
+**模式：** `subscribe`。**请求类型：** 无业务字段（空对象）。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*RuntimeManager.ObserveRuntimes
-func(ctx context.Context, o model.Observer[[]model.Runtime]) (model.Subscription, error)
+*RuntimeManager.SubscribeRuntimes
+func(ctx context.Context, o model.SubscriptionListener[[]model.Runtime]) (model.Subscription, error)
 ```
 
-[模型操作、完整参数与能力边界](/api-reference/runtimes/observe) · [Go DTO 参考](/reference/go/api)
+[模型操作、完整参数与能力边界](/api-reference/runtimes/subscribe) · [Go DTO 参考](/reference/go/api)
 
 <a id="updateagentinstance" />
 

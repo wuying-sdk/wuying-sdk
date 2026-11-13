@@ -103,14 +103,14 @@ public com.aliyun.wuying.sdk.model.Subscription onTransient(com.aliyun.wuying.sd
 
 [查看操作或完整契约](/api-reference/transport/on-transient)
 
-## onStreamEvent
+## subscribeStreamEvents
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription onStreamEvent(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
-public com.aliyun.wuying.sdk.model.Subscription onStreamEvent(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
+public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
+public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
 ```
 
-[查看操作或完整契约](/api-reference/transport/ag-message-client-on-stream-event)
+[查看操作或完整契约](/api-reference/transport/ag-message-client-subscribe-stream-events)
 
 ## onReceived
 
@@ -368,13 +368,13 @@ public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java
 
 [查看操作或完整契约](/api-reference/transport/relay-presence)
 
-## onGroupSyncState
+## subscribeGroupSyncStates
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription onGroupSyncState(java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>);
+public com.aliyun.wuying.sdk.model.Subscription subscribeGroupSyncStates(java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>);
 ```
 
-[查看操作或完整契约](/api-reference/transport/ag-message-client-on-group-sync-state)
+[查看操作或完整契约](/api-reference/transport/ag-message-client-subscribe-group-sync-states)
 
 ## sessionId
 

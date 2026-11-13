@@ -15,7 +15,7 @@ Interaction 表示执行过程向用户发起的一次有身份、有生命周�
 | canonicalInteractionId / identityAliases（可选） | 展示及精确范围内的等价身份 | 不能跨 owner/Turn/kind 合并交互 |
 | kind=permission 时的 interaction.options | 真实 optionId 与显示标签 | 提交 ID，不能提交翻译文案 |
 | kind=question 时的 interaction.questions | questionId、可选项、单选/多选/文本等约束 | 按本题结构组装，不用对象 toString 代替 JSON |
-| InteractionResponse | applied/pending 及可用的 outcome/回执信息 | pending 后继续观察，不伪造成功 |
+| InteractionResponse | applied/pending 及可用的 outcome/回执信息 | pending 后继续订阅，不伪造成功 |
 | QuestionResponseRef | 稳定回复关联与当前 expectedVersion | 仅在该公开回执契约适用时读回 |
 
 ## 生命周期
@@ -28,7 +28,7 @@ Interaction 表示执行过程向用户发起的一次有身份、有生命周�
 |---|---|---|---|---|
 | 列出待处理项 | listInteractions | ListInteractions | listInteractions | interactions list |
 | 恢复当前上下文 | refreshPendingInteractions | RefreshPendingInteractions | refreshPendingInteractions | interactions refresh |
-| 观察 | observeInteractions | ObserveInteractions | observeInteractions | 当前无独立长期订阅命令 |
+| 订阅 | subscribeInteractions | SubscribeInteractions | subscribeInteractions | 当前无独立长期订阅命令 |
 | 回复审批 | respondPermission | RespondPermission | respondPermission | interactions respond --option |
 | 回复问题 | respondQuestion | RespondQuestion | respondQuestion | interactions respond --answer-file |
 

@@ -3,9 +3,9 @@ title: "实时展示消息和执行过程"
 description: "按稳定身份更新快照，区分消息受理、执行结束和最终展示完整。"
 ---
 
-[查看可接入界面的消息观察代码 →](/examples/index#2-观察会话消息)
+[查看可接入界面的消息订阅代码 →](/examples/index#2-订阅会话消息)
 
-目标：一次用户发送只展示真实的消息和过程更新；恢复观察后不重复追加旧卡片。前置条件是已取得 ConversationRef 和同账号 Client。
+目标：一次用户发送只展示真实的消息和过程更新；恢复订阅后不重复追加旧卡片。前置条件是已取得 ConversationRef 和同账号 Client。
 
 ## 选择发送方式
 
@@ -13,7 +13,7 @@ description: "按稳定身份更新快照，区分消息受理、执行结束和
 
 ## 推荐顺序
 
-1. 先观察会话消息，保留订阅句柄和 Snapshot.projection。
+1. 先订阅会话消息，保留订阅句柄和 Snapshot.projection。
 2. 用稳定 clientCommandId 提交一次任务，保存返回的 accepted/turnId；不要把 accepted 当作已完成。
 3. 将完整快照按 Message ID 对账/替换。只有真正的文本增量才追加；text.replace 替换其关联文本。
 4. 消费结果时核对 Turn 状态；流关闭、本地超时、cancel requested 都不等于远端 completed。
@@ -22,11 +22,11 @@ description: "按稳定身份更新快照，区分消息受理、执行结束和
 
 ## 处理重复和恢复
 
-observeMessages 的回调读取 Snapshot.data.items；listRuntimes、listMessages 等列表查询统一读取 items / nextCursor。列表与观察事件的结构分别以当前公开类型为准。
+subscribeMessages 的回调读取 Snapshot.data.items；listRuntimes、listMessages 等列表查询统一读取 items / nextCursor。列表与订阅事件的结构分别以当前公开类型为准。
 
 一轮可以有多条真实消息。去重必须使用服务端 Message/Turn/Item 的身份，不能仅按 Agent 名称或正文合并；相同 Agent 的两轮也不能混为一张卡片。历史/实时的归并规则见 [Message](/domain-model/05-message) 和 [投影](/domain-model/10-projection-events)。
 
-重连后重新观察同一会话并对账稳定 ID；如发送结果未知，按原请求身份核对。完整组合代码见 [语言示例](/domain-model/language-bindings)，恢复决策见 [会话与流式指南](/integration/02-conversations-and-streams)。
+重连后重新订阅同一会话并对账稳定 ID；如发送结果未知，按原请求身份核对。完整组合代码见 [语言示例](/domain-model/language-bindings)，恢复决策见 [会话与流式指南](/integration/02-conversations-and-streams)。
 
 ## 当前 JS 业务流的交付范围
 

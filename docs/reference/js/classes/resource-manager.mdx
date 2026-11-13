@@ -86,13 +86,13 @@ createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Work
 
 [查看操作或完整契约](/api-reference/workspaces/create)
 
-## observeResources
+## subscribeResources
 
 ```ts
-observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: Observer<Resource[]>): Promise<Subscription>;
+subscribeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/resources/observe-resources)
+[查看操作或完整契约](/api-reference/resources/subscribe-resources)
 
 ## getConversationResources
 
@@ -102,13 +102,13 @@ getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<R
 
 [查看操作或完整契约](/api-reference/resources/get-conversation-resources)
 
-## observeConversationResources
+## subscribeConversationResources
 
 ```ts
-observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/resources/observe-conversation-resources)
+[查看操作或完整契约](/api-reference/resources/subscribe-conversation-resources)
 
 ## setConversationResources
 
@@ -230,21 +230,21 @@ listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; })
 
 [查看操作或完整契约](/api-reference/resources/list-resources)
 
-## observeResources
+## subscribeResources
 
 ```ts
-observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: Observer<Resource[]>): Promise<Subscription>;
+subscribeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/resources/observe-resources)
+[查看操作或完整契约](/api-reference/resources/subscribe-resources)
 
-## observeConversationResources
+## subscribeConversationResources
 
 ```ts
-observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/resources/observe-conversation-resources)
+[查看操作或完整契约](/api-reference/resources/subscribe-conversation-resources)
 
 ## getConversationResources
 

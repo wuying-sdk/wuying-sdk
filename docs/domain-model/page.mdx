@@ -77,6 +77,6 @@ CLI 的结果信封保留 `data`，因此当前页在 `data.items`，下一页�
 
 部分列表额外返回 `projection`、`complete`、当前目录或草稿信息。这些字段保留同步与业务状态；`nextCursor = null` 仅表示没有下一页，不等于同步已经完整或资源在线。判断同步状态见[读取查询结果](/domain-model/10-projection-events)。
 
-观察接口 `observe*` 仍按各自声明发送 `Snapshot`；分页调整不改变取消订阅与远端任务的关系。详情查询返回的单个对象或配置，也不改成列表。
+订阅接口 `subscribe*` 仍按各自声明发送 `Snapshot`；分页调整不改变取消订阅与远端任务的关系。详情查询返回的单个对象或配置，也不改成列表。
 
 [完整接口签名](/api-reference/index) · [SDK 类型](/sdk-reference/index)

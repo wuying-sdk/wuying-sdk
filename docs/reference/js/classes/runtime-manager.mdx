@@ -22,13 +22,13 @@ listRuntimes(ctx: Context, request?: ListOptions): Promise<Page<Runtime>>;
 
 [查看操作或完整契约](/api-reference/runtimes/list)
 
-## observeRuntimes
+## subscribeRuntimes
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
+subscribeRuntimes(ctx: Context, observer: SubscriptionListener<Runtime[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/runtimes/observe)
+[查看操作或完整契约](/api-reference/runtimes/subscribe)
 
 ## getHostCapabilities
 
@@ -73,18 +73,18 @@ generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: C
 ## runCommand
 
 ```ts
-runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/run-command)
 
-## observeCommand
+## subscribeCommand
 
 ```ts
-observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+subscribeCommand(ctx: ExecutionContext, request: SubscribeCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
-[查看操作或完整契约](/api-reference/runtimes/observe-command)
+[查看操作或完整契约](/api-reference/runtimes/subscribe-command)
 
 ## constructor
 
@@ -110,13 +110,13 @@ listRuntimes(ctx: Context, request?: ListOptions): Promise<Page<Runtime>>;
 
 [查看操作或完整契约](/api-reference/runtimes/list)
 
-## observeRuntimes
+## subscribeRuntimes
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
+subscribeRuntimes(ctx: Context, observer: SubscriptionListener<Runtime[]>): Promise<Subscription>;
 ```
 
-[查看操作或完整契约](/api-reference/runtimes/observe)
+[查看操作或完整契约](/api-reference/runtimes/subscribe)
 
 ## getHostCapabilities
 
@@ -161,15 +161,15 @@ generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: C
 ## runCommand
 
 ```ts
-runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/run-command)
 
-## observeCommand
+## subscribeCommand
 
 ```ts
-observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+subscribeCommand(ctx: ExecutionContext, request: SubscribeCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
-[查看操作或完整契约](/api-reference/runtimes/observe-command)
+[查看操作或完整契约](/api-reference/runtimes/subscribe-command)

@@ -11,14 +11,14 @@ description: "错误、诊断、升级和生产接入检查：职责、模型关
 | UNAUTHENTICATED | 走宿主登录流程取得有效材料，再建立正确身份 Client |
 | FORBIDDEN | 核对账号/租户/Runtime/会话/附件授权，不用重试绕过 |
 | UNSUPPORTED | 当前公开面或远端能力未提供；停用该项业务入口并说明原因 |
-| SYNC_NOT_READY | 同步/必要锚点未就绪；保留投影状态，按 SDK 公开观察或刷新恢复 |
+| SYNC_NOT_READY | 同步/必要锚点未就绪；保留投影状态，按 SDK 公开订阅或刷新恢复 |
 | STORAGE_UNAVAILABLE | 核对持久化能力、权限、空间、版本升级和消费者速度；不删库掩盖未知写入 |
 | CURSOR_EXPIRED | 当前投影代际改变，重新第一页并保留原筛选条件 |
 | CONFLICT | 查询最新实体 / Interaction / 写版本，核对是否已在另一端处理 |
 | BUSINESS_REJECTED | owner 明确拒绝或执行失败；展示脱敏原因，结合 outcome 判断 |
 | OUTCOME_UNKNOWN、TIMEOUT、CANCELLED | 保留原操作 ID，对账或继续等待；不是自动重发依据 |
 | PROTOCOL_ERROR | 保存脱敏错误码、关联 ID 与版本，交支持人员定位；不本地猜测修正 owner 数据 |
-| CLIENT_CLOSED | 停止旧 Client 上的请求/观察，重新建立生命周期 |
+| CLIENT_CLOSED | 停止旧 Client 上的请求/订阅，重新建立生命周期 |
 
 语言绑定可能还暴露云 API 错误与兼容错误；以实际类型为准。Java 的 CompletionStage/ExecutionException 需要解出 BusinessException 后读取字段；Go 使用 errors.As 判断业务错误；JS 用 BusinessError，非业务错误走通用脱敏提示。不要将任意 Error 序列化到浏览器或日志。
 

@@ -8,6 +8,10 @@ description: "完整公开接口 · Conversation"
 
 返回对象可能为 undefined，结合投影判断；不把未覆盖的数据当作权威不存在。
 
+## 读取策略
+
+默认读取缓存。JS 在请求中设置 consistency: "refresh"；Go 使用可选 `model.ReadOptions{Consistency: "refresh"}`；Java 使用 ReadOptions 重载；Android/iOS 在 request 中设置 consistency。CLI 通过 --consistency refresh 选择刷新。
+
 ## 语言与授权
 
 | 语言 | 公开入口 | 状态 |
@@ -26,19 +30,26 @@ description: "完整公开接口 · Conversation"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+getConversation(ctx: Context, request: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
+```
+
+### JavaScript / TypeScript · ConversationManager
+
+```ts
+getConversation(ctx: Context, req: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+func (receiver *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef, options ...m.ReadOptions) (m.Snapshot[*m.Conversation], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ReadOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · conversations
@@ -47,6 +58,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 wuying conversations get
 required --runtime <id> — Explicit authorized Runtime ID
 required --conversation <id> — Product Conversation ID
+optional --consistency <mode> — cache or refresh (default: cache)
 ```
 
 ## TypeScript 参数与结果结构
@@ -66,6 +78,10 @@ interface ConversationRef extends RuntimeRef {
 
 interface RuntimeRef {
     runtimeId: string;
+}
+
+interface ReadOptions {
+    consistency?: 'cache' | 'refresh';
 }
 
 interface Snapshot<T> {
@@ -96,7 +112,7 @@ interface Conversation extends ConversationRef {
 
 ## 结果、错误与生命周期
 
-以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+以本语言签名中的实际返回包装为准。快照保留投影；订阅结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 

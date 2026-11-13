@@ -26,7 +26,7 @@ description: "会话、消息、流式与断线恢复：职责、模型关联、
 
 新建单 Agent 会话使用 mode=single 与选定 agentId；群会话需要合法成员与协调配置，不能把一个单聊 UI 参数直接视为群聊配置。查询保留分页 cursor、projection 和会话归属。cursor 是不透明值，过期后从新第一页重查；不要将不同过滤条件的游标混用。
 
-模型/审批配置的提交回执与生效状态分开。公开配置查询/观察中的 desired/applied/application 需要如实展示 pending/failed；不能点击后立即把本地选择当成已经生效。当前未暴露的 demo 扩展会话操作，不可绕过 SDK 直接调用私有 Gateway 方法。
+模型/审批配置的提交回执与生效状态分开。公开配置查询/订阅中的 desired/applied/application 需要如实展示 pending/failed；不能点击后立即把本地选择当成已经生效。当前未暴露的 demo 扩展会话操作，不可绕过 SDK 直接调用私有 Gateway 方法。
 
 ## 三种发送方式
 
@@ -40,7 +40,7 @@ description: "会话、消息、流式与断线恢复：职责、模型关联、
 
 ## 消息渲染不能把快照当增量
 
-observeMessages 提供快照，列表在 snapshot.data.items，分页在 snapshot.data.nextCursor；保留 snapshot.projection。按稳定 Message ID 更新/替换已有记录，不能把每次快照整个 append。文本流须区分 text.delta 与 text.replace，replace 必须替换对应文本。否则会出现重复气泡、两张卡片、断线重连后重复正文。
+subscribeMessages 提供快照，列表在 snapshot.data.items，分页在 snapshot.data.nextCursor；保留 snapshot.projection。按稳定 Message ID 更新/替换已有记录，不能把每次快照整个 append。文本流须区分 text.delta 与 text.replace，replace 必须替换对应文本。否则会出现重复气泡、两张卡片、断线重连后重复正文。
 
 历史消息的 Agent 名称/图标需匹配当前目录身份与来源范围；目录尚未完整时保持加载/未知，不把陌生 ID 硬编码成默认主 Agent。身份展示不应改变执行事实。
 
@@ -48,9 +48,9 @@ observeMessages 提供快照，列表在 snapshot.data.items，分页在 snapsho
 
 | 发生了什么 | 正确处理 |
 |---|---|
-| 已拿到 accepted，等待超时 | 保存原 Turn/Message ID，查询/观察该 Turn；不再次发送任务 |
+| 已拿到 accepted，等待超时 | 保存原 Turn/Message ID，查询/订阅该 Turn；不再次发送任务 |
 | 写入 outcome=unknown，没拿到 accepted | 保留原请求身份，读回 operation / 会话事实；不换 ID 重发 |
-| 观察断线或 projection stale | 恢复同一 Client / 账号的数据位置并重新观察，对账稳定 ID |
+| 订阅断线或 projection stale | 恢复同一 Client / 账号的数据位置并重新订阅，对账稳定 ID |
 | 写前预检失败，或 owner 明确证明未提交且无副作用 | 修正条件后由业务明确发起新尝试；普通 SDK 错误的 not_started 枚举值不足以证明这一点 |
 | 新机器/新空库没有完整历史 | 按 partial/SYNC_NOT_READY 处理，不把缓存缺失解释成远端实体不存在 |
 | Turn 已 completed，正文尚未完整 | 精确获取消息展示并核对覆盖范围；不要从 completed 标志编造回复 |

@@ -1,6 +1,6 @@
 ---
 title: "代码示例"
-description: "从选择运行环境、发送任务和观察消息开始，再运行同版本的完整 Demo。"
+description: "从选择运行环境、发送任务和订阅消息开始，再运行同版本的完整 Demo。"
 ---
 
 以下 TypeScript 核心片段使用已初始化的同账号 Client、ctx 及用户选定的 runtimeId。浏览器使用原生 IndexedDB；Node 按 [JS 安装指南](/sdk-reference/js)先配置持久化。调用方管理 Context 超时、错误处理和 Client 关闭。
@@ -18,13 +18,13 @@ const { items: availableAgents } = await agents.listAgents(ctx, { runtimeId });
 
 **预期结果：** 返回一页目录 `items`、续查游标 `nextCursor` 以及可用的 `projection`。投影未就绪或已过期时，空数组不足以证明用户没有权限。选定真实 Runtime/Agent 后运行[第一个任务](/getting-started/first-conversation)。
 
-## 2. 观察会话消息
+## 2. 订阅会话消息
 
 把每次回调作为一份分页快照交给界面，按 Message ID 对账；不要把整页消息重复追加。下面取得订阅句柄，页面离开时调用 `unsubscribe()`。`client`、`ctx`、真实 runtimeId / conversationId 已准备好；`render` 和 `showObservationError` 由界面提供。
 
 ```ts TypeScript
 const conversations = await client.buildConversationManager(ctx);
-const subscription = await conversations.observeMessages(ctx, {
+const subscription = await conversations.subscribeMessages(ctx, {
   runtimeId, conversationId,
 }, {
   onSnapshot: render,
@@ -35,9 +35,9 @@ const subscription = await conversations.observeMessages(ctx, {
 subscription.unsubscribe();
 ```
 
-**预期结果：** 回调包含 `snapshot.data.items` 和 `snapshot.projection`。列表查询使用 items / nextCursor，观察事件仍保留 Snapshot 包装。当前 JS 发送流交付 Message/Turn 快照，不能假设它会推送逐 Token 的 `text.delta`。
+**预期结果：** 回调包含 `snapshot.data.items` 和 `snapshot.projection`。列表查询使用 items / nextCursor，订阅事件仍保留 Snapshot 包装。当前 JS 发送流交付 Message/Turn 快照，不能假设它会推送逐 Token 的 `text.delta`。
 
-在发送之前建立观察，Context 覆盖整个订阅生命周期；所有退出路径先退订，再由应用关闭 Client。断线后重新观察同一会话；发送结果未知时按原请求身份查询，恢复流程见[实时展示](/guides/streaming)。
+在发送之前建立订阅，Context 覆盖整个订阅生命周期；所有退出路径先退订，再由应用关闭 Client。断线后重新订阅同一会话；发送结果未知时按原请求身份查询，恢复流程见[实时展示](/guides/streaming)。
 
 ## 3. 运行完整 Demo
 

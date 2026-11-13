@@ -7,7 +7,7 @@ Agent 描述一个执行环境中可调用的产品入口，用于选择谁来�
 
 ## 模型与关联
 
-`AgentSummary` / `AgentRef` 使用 `runtimeId + agentId`；名称和图标只用于展示。`ProductCatalog` 解释产品与运行入口，`AgentModelCatalog` / `ModelSummary` 提供可选模型目录。
+`Agent` / `AgentRef` 使用 `runtimeId + agentId`；名称和图标只用于展示。`ProductCatalog` 解释产品与运行入口，`AgentModelCatalog` / `Model` 提供可选模型目录。
 
 [Runtime](/domain-model/02-runtime-agent) 确定目录范围；[Member](/domain-model/04-member-config) 表示 Agent 在会话内的参与身份，不与 agentId 共用身份。
 
@@ -18,7 +18,7 @@ Agent 描述一个执行环境中可调用的产品入口，用于选择谁来�
 ## 操作入口
 
 - [`listAgents`](/api-reference/agents/list)
-- [`observeAgents`](/api-reference/agents/observe-agents)
+- [`subscribeAgents`](/api-reference/agents/subscribe-agents)
 - [`listAgentModels`](/api-reference/agents/models)
 - [`listAgentProducts`](/api-reference/agents/list-agent-products)
 - [`getAgentModelCatalog`](/api-reference/agents/get-agent-model-catalog)

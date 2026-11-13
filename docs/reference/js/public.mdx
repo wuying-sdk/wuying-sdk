@@ -25,7 +25,7 @@ new new (message: string, statusCode: number, rawBody: string, requestId?: strin
 类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
 
 ```ts
-listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & { projection: Projection; }>;
+listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<Agent> & { projection: Projection; }>;
 ```
 
 <a id="entry-65dfb93b368faa72" />
@@ -35,7 +35,7 @@ listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<Agen
 类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
 
 ```ts
-listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<ModelSummary & AgentRef> & { projection: Projection; }>;
+listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<Model & AgentRef> & { projection: Projection; }>;
 ```
 
 <a id="entry-c0232f4ee75e197b" />
@@ -128,14 +128,14 @@ listKnowledgeFiles(ctx: ExecutionContext, request: Omit<ListKnowledgeFilesReques
 downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest): Promise<DownloadKnowledgeFileResult[]>;
 ```
 
-<a id="entry-fe30a14a4283c6ed" />
+<a id="entry-a23757b04b7c545d" />
 
-### AgentManager.observeAgents
+### AgentManager.subscribeAgents
 
-类别：模型操作。[按模型查看操作](/api-reference/agents/observe-agents)。
+类别：模型操作。[按模型查看操作](/api-reference/agents/subscribe-agents)。
 
 ```ts
-observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+subscribeAgents(ctx: Context, req: RuntimeRef, observer: SubscriptionListener<Agent[]>): Promise<Subscription>;
 ```
 
 <a id="entry-fae3ca5102bc72c0" />
@@ -588,14 +588,14 @@ buildResourceManager(_context: Context): Promise<ResourceManager>;
 buildCreditManager(_context: ExecutionContext): Promise<CreditManager>;
 ```
 
-<a id="entry-2528ee91c86f7c96" />
+<a id="entry-3a46921218eac4be" />
 
-### Client.onStreamEvent
+### Client.subscribeStreamEvents
 
-类别：模型操作。[按模型查看操作](/api-reference/client/on-stream-event)。
+类别：模型操作。[按模型查看操作](/api-reference/client/subscribe-stream-events)。
 
 ```ts
-onStreamEvent(handler: (event: StreamEvent) => void): () => void;
+subscribeStreamEvents(handler: (event: StreamEvent) => void): Subscription;
 ```
 
 <a id="entry-e2e546d6d28afc25" />
@@ -895,7 +895,7 @@ accessKeySecret(): string;
 类别：模型操作。[按模型查看操作](/api-reference/conversations/list-recent-groups)。
 
 ```ts
-listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
+listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroup>>;
 ```
 
 <a id="entry-0f0db7444a400b02" />
@@ -1015,7 +1015,7 @@ listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & List
 类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
 
 ```ts
-listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: GroupDirectoryEntry[]; nextCursor: string | null; }>;
+listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: Group[]; nextCursor: string | null; }>;
 ```
 
 <a id="entry-07942c3adc076ee1" />
@@ -1038,24 +1038,24 @@ syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
 syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
 ```
 
-<a id="entry-995fb71126353a9f" />
+<a id="entry-9678b7fbc7e7f35e" />
 
-### ConversationManager.onGroupSyncState
+### ConversationManager.subscribeGroupSyncStates
 
-类别：模型操作。[按模型查看操作](/api-reference/sync/on-group-sync-state)。
+类别：模型操作。[按模型查看操作](/api-reference/sync/subscribe-group-sync-states)。
 
 ```ts
-onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
 ```
 
-<a id="entry-1cac6512aa294055" />
+<a id="entry-bf0301b0eb366e26" />
 
-### ConversationManager.observeLiveProcess
+### ConversationManager.subscribeLiveProcess
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-live-process)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-live-process)。
 
 ```ts
-observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
 ```
 
 <a id="entry-8362d3644b85882e" />
@@ -1078,44 +1078,34 @@ prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise
 createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<{ coordinatorMemberId?: string | undefined; memberMappings?: { clientMemberKey: string; memberId: string; }[] | undefined; mappingState?: "unknown" | "complete" | undefined; conversationId: string; runtimeId: string; }>;
 ```
 
-<a id="entry-80ef6211a9af5c2f" />
+<a id="entry-b35e6a1633941c42" />
 
-### ConversationManager.observeConversationGroups
+### ConversationManager.subscribeConversationGroups
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-groups)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversation-groups)。
 
 ```ts
-observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
 ```
 
-<a id="entry-56f71367cd1f6411" />
+<a id="entry-9b709576d35644f2" />
 
-### ConversationManager.observeSidebarConversations
+### ConversationManager.subscribeSidebarConversations
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-sidebar-conversations)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-sidebar-conversations)。
 
 ```ts
-observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+subscribeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
 ```
 
-<a id="entry-f2c26ed945cc610f" />
+<a id="entry-5ee3ad49c821f91d" />
 
-### ConversationManager.getConversationSummary
+### ConversationManager.subscribeConversation
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-summary)。
-
-```ts
-getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
-```
-
-<a id="entry-b758bd19254b0a74" />
-
-### ConversationManager.observeConversationSummary
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-summary)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversation)。
 
 ```ts
-observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+subscribeConversation(ctx: Context, req: ConversationRef, observer: SubscriptionListener<Conversation>): Promise<Subscription>;
 ```
 
 <a id="entry-74d21ae9615cd1f2" />
@@ -1138,14 +1128,14 @@ getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageF
 getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
 ```
 
-<a id="entry-a0c114aa2fcb2491" />
+<a id="entry-24c34bfa9797c761" />
 
-### ConversationManager.observeActiveExecutions
+### ConversationManager.subscribeActiveExecutions
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-active-executions)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-active-executions)。
 
 ```ts
-observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+subscribeActiveExecutions(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ActiveExecutionSnapshot>): Promise<Subscription>;
 ```
 
 <a id="entry-74bfe60b45a6eb99" />
@@ -1178,14 +1168,14 @@ getComposerCapabilities(ctx: Context, req: ConversationRef & { memberId?: string
 getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
 ```
 
-<a id="entry-b376ec28003699d7" />
+<a id="entry-43060e59e5d3b043" />
 
-### ConversationManager.observeCommandReceipt
+### ConversationManager.subscribeCommandReceipt
 
-类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-command-receipt)。
+类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-command-receipt)。
 
 ```ts
-observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
 ```
 
 <a id="entry-1dfed513373944bb" />
@@ -1248,24 +1238,24 @@ getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" |
 getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
 ```
 
-<a id="entry-bc67e8d8dd2e2785" />
+<a id="entry-81e824fb9c1573b2" />
 
-### ConversationManager.observeMutation
+### ConversationManager.subscribeMutation
 
-类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-mutation)。
+类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-mutation)。
 
 ```ts
-observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
 ```
 
-<a id="entry-147a7a9a57028d23" />
+<a id="entry-8f07e129732230e1" />
 
-### ConversationManager.observeConversations
+### ConversationManager.subscribeConversations
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversations)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversations)。
 
 ```ts
-observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
 ```
 
 <a id="entry-58bcaa00667cc834" />
@@ -1275,7 +1265,7 @@ observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Pa
 类别：模型操作。[按模型查看操作](/api-reference/conversations/get)。
 
 ```ts
-getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+getConversation(ctx: Context, request: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
 ```
 
 <a id="entry-7d609eae8ed5e318" />
@@ -1318,14 +1308,14 @@ setConversationConfigOption(ctx: Context, req: ConversationRef & { optionId: "mo
 getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig & ConversationRef>>;
 ```
 
-<a id="entry-97a23f63cf8eb77f" />
+<a id="entry-f63fd9b3ecd3e300" />
 
-### ConversationManager.observeConversationConfig
+### ConversationManager.subscribeConversationConfig
 
-类别：模型操作。[按模型查看操作](/api-reference/configuration/observe-conversation-config)。
+类别：模型操作。[按模型查看操作](/api-reference/configuration/subscribe-conversation-config)。
 
 ```ts
-observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+subscribeConversationConfig(ctx: Context, req: ConversationRef, observer: SubscriptionListener<EffectiveConfig>): Promise<Subscription>;
 ```
 
 <a id="entry-1cd640ba5c902553" />
@@ -1348,14 +1338,14 @@ archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef
 unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
 ```
 
-<a id="entry-22cee6e23ccd86af" />
+<a id="entry-ee01a05951bdcc87" />
 
-### ConversationManager.observeMembers
+### ConversationManager.subscribeMembers
 
-类别：模型操作。[按模型查看操作](/api-reference/members/observe-members)。
+类别：模型操作。[按模型查看操作](/api-reference/members/subscribe-members)。
 
 ```ts
-observeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: Observer<Member[]>): Promise<Subscription>;
+subscribeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: SubscriptionListener<Member[]>): Promise<Subscription>;
 ```
 
 <a id="entry-4b0765295d6b7b5b" />
@@ -1428,34 +1418,34 @@ sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
 resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
 ```
 
-<a id="entry-aaa7ebf792a000a6" />
+<a id="entry-d93c9c4d36df34a9" />
 
-### ConversationManager.observeConversationHistory
+### ConversationManager.subscribeConversationHistory
 
-类别：模型操作。[按模型查看操作](/api-reference/messages/observe-conversation-history)。
+类别：模型操作。[按模型查看操作](/api-reference/messages/subscribe-conversation-history)。
 
 ```ts
-observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+subscribeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: SubscriptionListener<ConversationHistory>): Promise<Subscription>;
 ```
 
-<a id="entry-5d41e03a6a31088e" />
+<a id="entry-bf5bb6c2bde72621" />
 
-### ConversationManager.observeMessages
+### ConversationManager.subscribeMessages
 
-类别：模型操作。[按模型查看操作](/api-reference/messages/observe)。
+类别：模型操作。[按模型查看操作](/api-reference/messages/subscribe)。
 
 ```ts
-observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+subscribeMessages(ctx: Context, req: MessageQuery, observer: SubscriptionListener<Page<Message>>): Promise<Subscription>;
 ```
 
-<a id="entry-9385c62ffe36960e" />
+<a id="entry-fa7c5ebba246ea2e" />
 
-### ConversationManager.observeExecutionActivity
+### ConversationManager.subscribeExecutionActivity
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-execution-activity)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-execution-activity)。
 
 ```ts
-observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+subscribeExecutionActivity(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ExecutionActivity[]>): Promise<Subscription>;
 ```
 
 <a id="entry-5637a07d4ccfdbb3" />
@@ -1478,14 +1468,14 @@ getMessageDetail(ctx: Context, req: ConversationRef & { messageId: string; itemC
 getTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<Snapshot<Turn | undefined>>;
 ```
 
-<a id="entry-3166d035e8ce82ef" />
+<a id="entry-ac28caef63eef600" />
 
-### ConversationManager.observeTurn
+### ConversationManager.subscribeTurn
 
-类别：模型操作。[按模型查看操作](/api-reference/turns/observe-turn)。
+类别：模型操作。[按模型查看操作](/api-reference/turns/subscribe-turn)。
 
 ```ts
-observeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+subscribeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: SubscriptionListener<Turn | undefined>): Promise<Subscription>;
 ```
 
 <a id="entry-617145aa0b0cc2b5" />
@@ -1508,14 +1498,14 @@ cancelTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<{ 
 refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<{ recovered: number; conversationId: string; runtimeId: string; }>;
 ```
 
-<a id="entry-9e99a38408bf848e" />
+<a id="entry-0afe2fef69c17bca" />
 
-### ConversationManager.observeInteractions
+### ConversationManager.subscribeInteractions
 
-类别：模型操作。[按模型查看操作](/api-reference/interactions/observe-interactions)。
+类别：模型操作。[按模型查看操作](/api-reference/interactions/subscribe-interactions)。
 
 ```ts
-observeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: Observer<Interaction[]>): Promise<Subscription>;
+subscribeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: SubscriptionListener<Interaction[]>): Promise<Subscription>;
 ```
 
 <a id="entry-e0d46700e9c128f9" />
@@ -1788,26 +1778,6 @@ buildModelManager(ctx: ExecutionContext, container: ServiceContainer): Promise<M
 new new (message: string, cause?: Error): NetworkError;
 ```
 
-<a id="entry-e1d70b2cd413105b" />
-
-### Observer.onSnapshot
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```ts
-onSnapshot(value: Snapshot<T>): void;
-```
-
-<a id="entry-9ae014a34fad4652" />
-
-### Observer.onError
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```ts
-onError(error: BusinessError$2): void;
-```
-
 <a id="entry-a2ade9a582650591" />
 
 ### PermissionError.constructor
@@ -1928,14 +1898,14 @@ getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; 
 createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
 ```
 
-<a id="entry-091732dc78a86f7f" />
+<a id="entry-f1ecd7cd633919dc" />
 
-### ResourceManager.observeResources
+### ResourceManager.subscribeResources
 
-类别：模型操作。[按模型查看操作](/api-reference/resources/observe-resources)。
+类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-resources)。
 
 ```ts
-observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: Observer<Resource[]>): Promise<Subscription>;
+subscribeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
 ```
 
 <a id="entry-7b608baf37b263d1" />
@@ -1948,14 +1918,14 @@ observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, o
 getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
 ```
 
-<a id="entry-85c916cf5ea9d2d9" />
+<a id="entry-236606edd32b5dc6" />
 
-### ResourceManager.observeConversationResources
+### ResourceManager.subscribeConversationResources
 
-类别：模型操作。[按模型查看操作](/api-reference/resources/observe-conversation-resources)。
+类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-conversation-resources)。
 
 ```ts
-observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
 ```
 
 <a id="entry-7277e2ddbfbe60dc" />
@@ -2008,9 +1978,9 @@ getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string;
 new new (service: Service): ResourceManager$1;
 ```
 
-<a id="entry-da559000610436c3" />
+<a id="entry-04547221dbb03c47" />
 
-### RuntimeCommandObserver.onEvent
+### RuntimeCommandListener.onEvent
 
 类别：类型、配置、构造、回调或辅助入口。
 
@@ -2018,9 +1988,9 @@ new new (service: Service): ResourceManager$1;
 onEvent(event: RuntimeCommandEvent): void;
 ```
 
-<a id="entry-3c93c31ec880c98b" />
+<a id="entry-23609bcc6c17e488" />
 
-### RuntimeCommandObserver.onError
+### RuntimeCommandListener.onError
 
 类别：类型、配置、构造、回调或辅助入口。
 
@@ -2058,14 +2028,14 @@ describeCreditPackageAgents(ctx: ExecutionContext, request?: DescribeCreditPacka
 listRuntimes(ctx: Context, request?: ListOptions): Promise<Page<Runtime>>;
 ```
 
-<a id="entry-f553cb30638c35bc" />
+<a id="entry-34d468463c14d694" />
 
-### RuntimeManager.observeRuntimes
+### RuntimeManager.subscribeRuntimes
 
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe)。
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
+subscribeRuntimes(ctx: Context, observer: SubscriptionListener<Runtime[]>): Promise<Subscription>;
 ```
 
 <a id="entry-21ab7a934565dc06" />
@@ -2125,17 +2095,17 @@ generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: C
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
 
 ```ts
-runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
-<a id="entry-dbe2dbe38021ccd0" />
+<a id="entry-38d01d04fd49ecab" />
 
-### RuntimeManager.observeCommand
+### RuntimeManager.subscribeCommand
 
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe-command)。
 
 ```ts
-observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+subscribeCommand(ctx: ExecutionContext, request: SubscribeCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
 <a id="entry-572e0000989d8b4e" />
@@ -2248,6 +2218,26 @@ buildSkillManager(ctx: ExecutionContext, container: ServiceContainer): Promise<S
 unsubscribe(): void;
 ```
 
+<a id="entry-6dba091ea1314435" />
+
+### SubscriptionListener.onSnapshot
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+onSnapshot(value: Snapshot<T>): void;
+```
+
+<a id="entry-1a900318889f3d00" />
+
+### SubscriptionListener.onError
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+onError(error: BusinessError$2): void;
+```
+
 <a id="entry-66d040e57d178f10" />
 
 ### TimeoutError.constructor
@@ -2328,14 +2318,14 @@ describeCreditPackageAgents(ctx: ExecutionContext, request?: DescribeCreditPacka
 listRuntimes(ctx: Context, request?: ListOptions): Promise<Page<Runtime>>;
 ```
 
-<a id="entry-b1e5f99531538997" />
+<a id="entry-d4c778feadab3107" />
 
-### RuntimeManager.observeRuntimes
+### RuntimeManager.subscribeRuntimes
 
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe)。
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
+subscribeRuntimes(ctx: Context, observer: SubscriptionListener<Runtime[]>): Promise<Subscription>;
 ```
 
 <a id="entry-8edbe51456ca1f5e" />
@@ -2395,17 +2385,17 @@ generateSceneUrl(ctx: ExecutionContext, req: GenerateSceneUrlRequest, ...opts: C
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/run-command)。
 
 ```ts
-runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
-<a id="entry-dce51e32eb29cb7b" />
+<a id="entry-17cf3dc50c4cbdef" />
 
-### RuntimeManager.observeCommand
+### RuntimeManager.subscribeCommand
 
-类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe-command)。
+类别：模型操作。[按模型查看操作](/api-reference/runtimes/subscribe-command)。
 
 ```ts
-observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+subscribeCommand(ctx: ExecutionContext, request: SubscribeCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
 <a id="entry-86f92a55d2fdb8e2" />
@@ -2415,17 +2405,17 @@ observeCommand(ctx: ExecutionContext, request: ObserveCommandRequest, observer: 
 类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
 
 ```ts
-listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & { projection: Projection; }>;
+listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<Agent> & { projection: Projection; }>;
 ```
 
-<a id="entry-99539ca6cb84c190" />
+<a id="entry-a23e8f5b995e7455" />
 
-### AgentManager.observeAgents
+### AgentManager.subscribeAgents
 
-类别：模型操作。[按模型查看操作](/api-reference/agents/observe-agents)。
+类别：模型操作。[按模型查看操作](/api-reference/agents/subscribe-agents)。
 
 ```ts
-observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+subscribeAgents(ctx: Context, req: RuntimeRef, observer: SubscriptionListener<Agent[]>): Promise<Subscription>;
 ```
 
 <a id="entry-f70ecfcf24c0216b" />
@@ -2435,7 +2425,7 @@ observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>)
 类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
 
 ```ts
-listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<ModelSummary & AgentRef> & { projection: Projection; }>;
+listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<Model & AgentRef> & { projection: Projection; }>;
 ```
 
 <a id="entry-66b443f1dc7ecb4a" />
@@ -2548,14 +2538,14 @@ listKnowledgeFiles(ctx: ExecutionContext, request: Omit<ListKnowledgeFilesReques
 downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest): Promise<DownloadKnowledgeFileResult[]>;
 ```
 
-<a id="entry-e1190dadf683284b" />
+<a id="entry-a641a0eb0e4de637" />
 
-### ConversationManager.observeLiveProcess
+### ConversationManager.subscribeLiveProcess
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-live-process)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-live-process)。
 
 ```ts
-observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
 ```
 
 <a id="entry-431b76d2e8ea4483" />
@@ -2605,7 +2595,7 @@ listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<
 类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
 
 ```ts
-listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: GroupDirectoryEntry[]; nextCursor: string | null; }>;
+listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: Group[]; nextCursor: string | null; }>;
 ```
 
 <a id="entry-d2729e61e542e632" />
@@ -2615,7 +2605,7 @@ listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<
 类别：模型操作。[按模型查看操作](/api-reference/conversations/list-recent-groups)。
 
 ```ts
-listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
+listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroup>>;
 ```
 
 <a id="entry-3ddcb13ebf30b43c" />
@@ -2638,14 +2628,14 @@ syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
 syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
 ```
 
-<a id="entry-219457e0963ba92b" />
+<a id="entry-11b6c701f1ed84a4" />
 
-### ConversationManager.onGroupSyncState
+### ConversationManager.subscribeGroupSyncStates
 
-类别：模型操作。[按模型查看操作](/api-reference/sync/on-group-sync-state)。
+类别：模型操作。[按模型查看操作](/api-reference/sync/subscribe-group-sync-states)。
 
 ```ts
-onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
 ```
 
 <a id="entry-6cbb39fcb14ad4c3" />
@@ -2668,14 +2658,14 @@ createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions):
 listConversationGroups(ctx: Context, request: (ConversationGroupQuery) & ListOptions): Promise<Page<SidebarGroup> & { projection: Projection; }>;
 ```
 
-<a id="entry-4c644992e80d064d" />
+<a id="entry-3d9eb5313937fd00" />
 
-### ConversationManager.observeConversationGroups
+### ConversationManager.subscribeConversationGroups
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-groups)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversation-groups)。
 
 ```ts
-observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
 ```
 
 <a id="entry-24aa282992da26db" />
@@ -2688,34 +2678,24 @@ observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: O
 listSidebarConversations(ctx: Context, request: (SidebarRowsQuery) & ListOptions): Promise<Page<Conversation> & { projection: Projection; }>;
 ```
 
-<a id="entry-a9ca9be0bddf2dad" />
+<a id="entry-f4fd7f65a15a2bbd" />
 
-### ConversationManager.observeSidebarConversations
+### ConversationManager.subscribeSidebarConversations
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-sidebar-conversations)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-sidebar-conversations)。
 
 ```ts
-observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+subscribeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
 ```
 
-<a id="entry-ef31984d883ac14d" />
+<a id="entry-d4650cfd31ffd9b9" />
 
-### ConversationManager.getConversationSummary
+### ConversationManager.subscribeConversation
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/get-conversation-summary)。
-
-```ts
-getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
-```
-
-<a id="entry-49e0c518fa0f7a34" />
-
-### ConversationManager.observeConversationSummary
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversation-summary)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversation)。
 
 ```ts
-observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+subscribeConversation(ctx: Context, req: ConversationRef, observer: SubscriptionListener<Conversation>): Promise<Subscription>;
 ```
 
 <a id="entry-888293249f0f185c" />
@@ -2738,14 +2718,14 @@ getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<M
 listActiveExecutions(ctx: Context, request: (ConversationRef) & ListOptions): Promise<{ projection: Projection; items: ActiveExecution[]; nextCursor: string | null; complete: boolean; }>;
 ```
 
-<a id="entry-4d32a42f70bfc413" />
+<a id="entry-325969cb648c0582" />
 
-### ConversationManager.observeActiveExecutions
+### ConversationManager.subscribeActiveExecutions
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-active-executions)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-active-executions)。
 
 ```ts
-observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+subscribeActiveExecutions(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ActiveExecutionSnapshot>): Promise<Subscription>;
 ```
 
 <a id="entry-9778c30601c0fad6" />
@@ -2778,14 +2758,14 @@ getComposerCapabilities(ctx: Context, req: ConversationRef & { memberId?: string
 getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
 ```
 
-<a id="entry-4d73fb88fbba97d1" />
+<a id="entry-1faa78f7aab89714" />
 
-### ConversationManager.observeCommandReceipt
+### ConversationManager.subscribeCommandReceipt
 
-类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-command-receipt)。
+类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-command-receipt)。
 
 ```ts
-observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
 ```
 
 <a id="entry-6f52e28335de5266" />
@@ -2848,14 +2828,14 @@ getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" |
 getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
 ```
 
-<a id="entry-580a5285137f09a2" />
+<a id="entry-f3da075d79bc5357" />
 
-### ConversationManager.observeMutation
+### ConversationManager.subscribeMutation
 
-类别：模型操作。[按模型查看操作](/api-reference/receipts/observe-mutation)。
+类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-mutation)。
 
 ```ts
-observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
 ```
 
 <a id="entry-000bfcde0967e74c" />
@@ -2875,17 +2855,17 @@ listConversations(ctx: Context, request: (ConversationQuery) & ListOptions): Pro
 类别：模型操作。[按模型查看操作](/api-reference/conversations/get)。
 
 ```ts
-getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+getConversation(ctx: Context, req: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
 ```
 
-<a id="entry-796667e556516f93" />
+<a id="entry-542905926a784e59" />
 
-### ConversationManager.observeConversations
+### ConversationManager.subscribeConversations
 
-类别：模型操作。[按模型查看操作](/api-reference/conversations/observe-conversations)。
+类别：模型操作。[按模型查看操作](/api-reference/conversations/subscribe-conversations)。
 
 ```ts
-observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
 ```
 
 <a id="entry-d2a00b3fc51a9106" />
@@ -2918,14 +2898,14 @@ updateConversationConfig(ctx: Context, req: ConversationRef & { config: Config; 
 setConversationConfigOption(ctx: Context, req: ConversationRef & { optionId: "model" | "runtime.permissionPreset" | "runtime.thinkingLevel"; value: string; }): Promise<ConversationRef>;
 ```
 
-<a id="entry-005fb84ecab87cf7" />
+<a id="entry-0d32fc359ae9dd99" />
 
-### ConversationManager.observeConversationConfig
+### ConversationManager.subscribeConversationConfig
 
-类别：模型操作。[按模型查看操作](/api-reference/configuration/observe-conversation-config)。
+类别：模型操作。[按模型查看操作](/api-reference/configuration/subscribe-conversation-config)。
 
 ```ts
-observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+subscribeConversationConfig(ctx: Context, req: ConversationRef, observer: SubscriptionListener<EffectiveConfig>): Promise<Subscription>;
 ```
 
 <a id="entry-c108d4099374565e" />
@@ -2968,14 +2948,14 @@ unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationR
 listMembers(ctx: Context, request: (ConversationRef & { includeRemoved?: boolean; }) & ListOptions): Promise<Page<Member & ConversationRef> & { projection: Projection; }>;
 ```
 
-<a id="entry-5ca5e21f1173c74b" />
+<a id="entry-ed43feb626f51c8b" />
 
-### ConversationManager.observeMembers
+### ConversationManager.subscribeMembers
 
-类别：模型操作。[按模型查看操作](/api-reference/members/observe-members)。
+类别：模型操作。[按模型查看操作](/api-reference/members/subscribe-members)。
 
 ```ts
-observeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: Observer<Member[]>): Promise<Subscription>;
+subscribeMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }, observer: SubscriptionListener<Member[]>): Promise<Subscription>;
 ```
 
 <a id="entry-dec6582d3a7c095c" />
@@ -3058,14 +3038,14 @@ resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<Conve
 listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & ListOptions): Promise<{ projection: Projection; conversation?: Conversation; members: Member[]; turnItems: Item[]; turns: Turn[]; activities: ExecutionActivity[]; presentations: MessagePresentation[]; items: Message[]; nextCursor: string | null; }>;
 ```
 
-<a id="entry-fd6fec46cfa69676" />
+<a id="entry-701e6edf8c19281e" />
 
-### ConversationManager.observeConversationHistory
+### ConversationManager.subscribeConversationHistory
 
-类别：模型操作。[按模型查看操作](/api-reference/messages/observe-conversation-history)。
+类别：模型操作。[按模型查看操作](/api-reference/messages/subscribe-conversation-history)。
 
 ```ts
-observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+subscribeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: SubscriptionListener<ConversationHistory>): Promise<Subscription>;
 ```
 
 <a id="entry-d97ea973ef50df7f" />
@@ -3088,14 +3068,14 @@ listMessages(ctx: Context, request: (MessageQuery) & ListOptions): Promise<Page<
 getMessageDetail(ctx: Context, req: ConversationRef & { messageId: string; itemCursor?: string; limit?: number; }): Promise<Snapshot<MessageDetail | undefined>>;
 ```
 
-<a id="entry-77c4916baa925010" />
+<a id="entry-081511eec152a776" />
 
-### ConversationManager.observeMessages
+### ConversationManager.subscribeMessages
 
-类别：模型操作。[按模型查看操作](/api-reference/messages/observe)。
+类别：模型操作。[按模型查看操作](/api-reference/messages/subscribe)。
 
 ```ts
-observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+subscribeMessages(ctx: Context, req: MessageQuery, observer: SubscriptionListener<Page<Message>>): Promise<Subscription>;
 ```
 
 <a id="entry-72ad2a9ed19baf80" />
@@ -3108,24 +3088,24 @@ observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message
 listExecutionActivity(ctx: Context, request: (ConversationRef) & ListOptions): Promise<Page<ExecutionActivity> & { projection: Projection; }>;
 ```
 
-<a id="entry-a609f79559bc0c31" />
+<a id="entry-bd863ff733b6d219" />
 
-### ConversationManager.observeExecutionActivity
+### ConversationManager.subscribeExecutionActivity
 
-类别：模型操作。[按模型查看操作](/api-reference/executions/observe-execution-activity)。
+类别：模型操作。[按模型查看操作](/api-reference/executions/subscribe-execution-activity)。
 
 ```ts
-observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+subscribeExecutionActivity(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ExecutionActivity[]>): Promise<Subscription>;
 ```
 
-<a id="entry-7688e1a189f14357" />
+<a id="entry-91ac603cc2b50eed" />
 
-### ConversationManager.observeTurn
+### ConversationManager.subscribeTurn
 
-类别：模型操作。[按模型查看操作](/api-reference/turns/observe-turn)。
+类别：模型操作。[按模型查看操作](/api-reference/turns/subscribe-turn)。
 
 ```ts
-observeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+subscribeTurn(ctx: Context, req: ConversationRef & { turnId: string; }, observer: SubscriptionListener<Turn | undefined>): Promise<Subscription>;
 ```
 
 <a id="entry-cb641f0c2dfe192c" />
@@ -3148,14 +3128,14 @@ getTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<Snaps
 cancelTurn(ctx: Context, req: ConversationRef & { turnId: string; }): Promise<{ state: "requested" | "cancelled" | "already_finished"; }>;
 ```
 
-<a id="entry-fbae63fd6c64a80f" />
+<a id="entry-e8554b78c02432ca" />
 
-### ConversationManager.observeInteractions
+### ConversationManager.subscribeInteractions
 
-类别：模型操作。[按模型查看操作](/api-reference/interactions/observe-interactions)。
+类别：模型操作。[按模型查看操作](/api-reference/interactions/subscribe-interactions)。
 
 ```ts
-observeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: Observer<Interaction[]>): Promise<Subscription>;
+subscribeInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }, observer: SubscriptionListener<Interaction[]>): Promise<Subscription>;
 ```
 
 <a id="entry-4940ca1dee0d49de" />
@@ -3308,24 +3288,24 @@ createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Work
 listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; }) & ListOptions): Promise<Page<Resource> & { projection: Projection; }>;
 ```
 
-<a id="entry-57d309be43f36483" />
+<a id="entry-3142d808c368eb83" />
 
-### ResourceManager.observeResources
+### ResourceManager.subscribeResources
 
-类别：模型操作。[按模型查看操作](/api-reference/resources/observe-resources)。
+类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-resources)。
 
 ```ts
-observeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: Observer<Resource[]>): Promise<Subscription>;
+subscribeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
 ```
 
-<a id="entry-68802dcb5df2c5e7" />
+<a id="entry-0187a0579bdb7f95" />
 
-### ResourceManager.observeConversationResources
+### ResourceManager.subscribeConversationResources
 
-类别：模型操作。[按模型查看操作](/api-reference/resources/observe-conversation-resources)。
+类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-conversation-resources)。
 
 ```ts
-observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
 ```
 
 <a id="entry-1542c224bd6ba529" />

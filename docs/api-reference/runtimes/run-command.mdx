@@ -21,9 +21,9 @@ description: "完整公开接口 · Runtime"
 
 事件 accepted 保存 receipt；desktop 使用 result 替换输出并检查 outputTruncated / dropped；completed 检查 results / allSucceeded。只有 Success 且 exitCode 为字符串 "0" 才成功；缺失退出码不补零。脚本输出最多保留 16 KiB、错误信息最多 8 KiB，超限显式标记。
 
-每个 Client 最多 32 个活跃观察。Node / Go 缺省观察 10 分钟；Java CallContext.defaults 仅 30 秒。观察最多 1 小时，并受调用期限与 HTTP timeout 约束。Go/Java 精确字段名见下方签名与原始 DTO。当前 Android/iOS 移动清单无此入口。
+每个 Client 最多 32 个活跃订阅。Node / Go 缺省订阅 10 分钟；Java CallContext.defaults 仅 30 秒。订阅最多 1 小时，并受调用期限与 HTTP timeout 约束。Go/Java 精确字段名见下方签名与原始 DTO。当前 Android/iOS 移动清单无此入口。
 
-提交不自动重试。已受理后的查询超时、拒绝或断线通过 onError 返回，结果仍未知；按 receipt 在新 Client 用 observeCommand 恢复。退订/关闭只停止本地观察，不撤销远端执行。详见[远程脚本](/domain-model/remote-script)。
+提交不自动重试。已受理后的查询超时、拒绝或断线通过 onError 返回，结果仍未知；按 receipt 在新 Client 用 subscribeCommand 恢复。退订/关闭只停止本地订阅，不撤销远端执行。详见[远程脚本](/domain-model/remote-script)。
 
 ## 语言与授权
 
@@ -41,19 +41,19 @@ description: "完整公开接口 · Runtime"
 ### JavaScript / TypeScript · RuntimeManager
 
 ```ts
-runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandObserver): Promise<RuntimeCommandSubscription>;
+runCommand(ctx: ExecutionContext, request: RunCommandRequest, observer: RuntimeCommandListener): Promise<RuntimeCommandSubscription>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.RuntimeManager
 
 ```go
-func (receiver *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
+func (receiver *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandListener) (model.RuntimeCommandSubscription, error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.RuntimeManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandListener, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · runtimes
@@ -88,7 +88,7 @@ interface RunCommandRequest {
     pollIntervalMs?: number;
 }
 
-interface RuntimeCommandObserver {
+interface RuntimeCommandListener {
     onEvent(event: RuntimeCommandEvent): void;
     onError(error: BusinessError$1): void;
 }
@@ -101,7 +101,7 @@ interface RuntimeCommandSubscription {
 
 ## 结果、错误与生命周期
 
-以本语言签名中的实际返回包装为准。快照保留投影；观察结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+以本语言签名中的实际返回包装为准。快照保留投影；订阅结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 

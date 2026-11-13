@@ -34,7 +34,7 @@ try {
   const ctx = {timeout: 60000};
   const runtimesAPI = await client.buildRuntimeManager(ctx);
   const runtimes = await runtimesAPI.listRuntimes(ctx);
-  // 使用 runtimes.items 和 runtimes.nextCursor；观察接口仍携带同步状态。
+  // 使用 runtimes.items 和 runtimes.nextCursor；订阅接口仍携带同步状态。
 } finally {
   await client.close();
 }
@@ -67,7 +67,7 @@ const created = await conversations.createConversation(ctx, {
 });
 // 从 created 的公开结果取得 conversationId，勿自行猜测或使用桌面 ID。
 const ref = {runtimeId, conversationId};
-const sub = await conversations.observeMessages(ctx, ref, {
+const sub = await conversations.subscribeMessages(ctx, ref, {
   onSnapshot(page) { renderByStableId(page); },
   onError(error) { showSanitizedError(error); },
 });
@@ -77,9 +77,9 @@ try {
 } finally { sub.unsubscribe(); }
 ```
 
-此段是业务接线模板；`selection/runtimeId/conversationId/renderByStableId/showSanitizedError` 由宿主实现。精确类型和结果字段见 tgz 内 `dist/index.d.ts` 与 `docs/NodeJS-SDK-API-V3.md`。消息观察是快照，请按 Message ID 对账，不能每次整体追加。订阅上下文的 timeout 要匹配实际订阅生命周期，不应直接复用过期调用上下文。
+此段是业务接线模板；`selection/runtimeId/conversationId/renderByStableId/showSanitizedError` 由宿主实现。精确类型和结果字段见 tgz 内 `dist/index.d.ts` 与 `docs/NodeJS-SDK-API-V3.md`。消息订阅是快照，请按 Message ID 对账，不能每次整体追加。订阅上下文的 timeout 要匹配实际订阅生命周期，不应直接复用过期调用上下文。
 
-附件通过 SDK staging 后把 attachmentIds 传入消息请求；文件路径文本本身不上传。审批/问答从公开 Interaction 观察中取得真实 ID、option ID、writeVersion，再调用对应 `respondPermission/respondQuestion`。未知回执先精确刷新和对账，不自动重答。执行中 steer、分叉或技能等以交付 SDK 的公开能力和远端能力协商为准，不依据 demo 页面可见就宣布支持。
+附件通过 SDK staging 后把 attachmentIds 传入消息请求；文件路径文本本身不上传。审批/问答从公开 Interaction 订阅中取得真实 ID、option ID、writeVersion，再调用对应 `respondPermission/respondQuestion`。未知回执先精确刷新和对账，不自动重答。执行中 steer、分叉或技能等以交付 SDK 的公开能力和远端能力协商为准，不依据 demo 页面可见就宣布支持。
 
 ## 错误与验收
 

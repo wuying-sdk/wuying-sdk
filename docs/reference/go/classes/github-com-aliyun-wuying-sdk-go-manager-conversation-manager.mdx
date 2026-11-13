@@ -86,18 +86,10 @@ func (receiver *ConversationManager) GetConversationStorageContext(ctx context.C
 
 [查看操作或完整契约](/api-reference/workspaces/get-conversation-storage-context)
 
-## GetConversationSummary
-
-```go
-func (receiver *ConversationManager) GetConversationSummary(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.Conversation], error)
-```
-
-[查看操作或完整契约](/api-reference/conversations/get-conversation-summary)
-
 ## GetConversation
 
 ```go
-func (receiver *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef) (m.Snapshot[*m.Conversation], error)
+func (receiver *ConversationManager) GetConversation(ctx context.Context, r m.ConversationRef, options ...m.ReadOptions) (m.Snapshot[*m.Conversation], error)
 ```
 
 [查看操作或完整契约](/api-reference/conversations/get)
@@ -209,7 +201,7 @@ func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r 
 ## ListGroups
 
 ```go
-func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
+func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.Group], error)
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-groups)
@@ -253,126 +245,6 @@ func (receiver *ConversationManager) ListSidebarConversations(ctx context.Contex
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
-
-## ObserveActiveExecutions
-
-```go
-func (receiver *ConversationManager) ObserveActiveExecutions(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/executions/observe-active-executions)
-
-## ObserveCommandReceipt
-
-```go
-func (receiver *ConversationManager) ObserveCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.Observer[m.CommandReceipt]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/receipts/observe-command-receipt)
-
-## ObserveConversationConfig
-
-```go
-func (receiver *ConversationManager) ObserveConversationConfig(ctx context.Context, r m.ConversationRef, o m.Observer[m.EffectiveConfig]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/configuration/observe-conversation-config)
-
-## ObserveConversationGroups
-
-```go
-func (receiver *ConversationManager) ObserveConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.Observer[m.Page[m.SidebarGroup]]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/conversations/observe-conversation-groups)
-
-## ObserveConversationHistory
-
-```go
-func (receiver *ConversationManager) ObserveConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.Observer[m.ConversationHistory]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/messages/observe-conversation-history)
-
-## ObserveConversations
-
-```go
-func (receiver *ConversationManager) ObserveConversations(ctx context.Context, r m.ConversationQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/conversations/observe-conversations)
-
-## ObserveExecutionActivity
-
-```go
-func (receiver *ConversationManager) ObserveExecutionActivity(ctx context.Context, r m.ConversationRef, o m.Observer[[]m.ExecutionActivity]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/executions/observe-execution-activity)
-
-## ObserveInteractions
-
-```go
-func (receiver *ConversationManager) ObserveInteractions(ctx context.Context, r m.InteractionQuery, o m.Observer[[]m.Interaction]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/interactions/observe-interactions)
-
-## ObserveLiveProcess
-
-```go
-func (receiver *ConversationManager) ObserveLiveProcess(ctx context.Context, r m.ConversationRef, o m.Observer[m.LiveProcessSnapshot]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/executions/observe-live-process)
-
-## ObserveMembers
-
-```go
-func (receiver *ConversationManager) ObserveMembers(ctx context.Context, r m.MemberQuery, o m.Observer[[]m.Member]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/members/observe-members)
-
-## ObserveMessages
-
-```go
-func (receiver *ConversationManager) ObserveMessages(ctx context.Context, r m.MessageQuery, o m.Observer[m.Page[m.Message]]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/messages/observe)
-
-## ObserveMutation
-
-```go
-func (receiver *ConversationManager) ObserveMutation(ctx context.Context, r m.MutationRef, o m.Observer[m.MutationStatus]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/receipts/observe-mutation)
-
-## ObserveSidebarConversations
-
-```go
-func (receiver *ConversationManager) ObserveSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.Observer[m.Page[m.Conversation]]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/conversations/observe-sidebar-conversations)
-
-## ObserveTurn
-
-```go
-func (receiver *ConversationManager) ObserveTurn(ctx context.Context, r m.TurnRef, o m.Observer[*m.Turn]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/turns/observe-turn)
-
-## OnGroupSyncState
-
-```go
-func (receiver *ConversationManager) OnGroupSyncState(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/sync/on-group-sync-state)
 
 ## PrepareConversationAttachmentTarget
 
@@ -477,6 +349,126 @@ func (receiver *ConversationManager) SteerTurn(ctx context.Context, r m.SteerReq
 ```
 
 [查看操作或完整契约](/api-reference/turns/steer-turn)
+
+## SubscribeActiveExecutions
+
+```go
+func (receiver *ConversationManager) SubscribeActiveExecutions(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ActiveExecutionSnapshot]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/executions/subscribe-active-executions)
+
+## SubscribeCommandReceipt
+
+```go
+func (receiver *ConversationManager) SubscribeCommandReceipt(ctx context.Context, r m.CommandReceiptRef, o m.SubscriptionListener[m.CommandReceipt]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/receipts/subscribe-command-receipt)
+
+## SubscribeConversationConfig
+
+```go
+func (receiver *ConversationManager) SubscribeConversationConfig(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.EffectiveConfig]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/configuration/subscribe-conversation-config)
+
+## SubscribeConversationGroups
+
+```go
+func (receiver *ConversationManager) SubscribeConversationGroups(ctx context.Context, r m.ConversationGroupQuery, o m.SubscriptionListener[m.Page[m.SidebarGroup]]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/subscribe-conversation-groups)
+
+## SubscribeConversationHistory
+
+```go
+func (receiver *ConversationManager) SubscribeConversationHistory(ctx context.Context, r m.ConversationHistoryQuery, o m.SubscriptionListener[m.ConversationHistory]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/messages/subscribe-conversation-history)
+
+## SubscribeConversations
+
+```go
+func (receiver *ConversationManager) SubscribeConversations(ctx context.Context, r m.ConversationQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/subscribe-conversations)
+
+## SubscribeExecutionActivity
+
+```go
+func (receiver *ConversationManager) SubscribeExecutionActivity(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[[]m.ExecutionActivity]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/executions/subscribe-execution-activity)
+
+## SubscribeGroupSyncStates
+
+```go
+func (receiver *ConversationManager) SubscribeGroupSyncStates(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/sync/subscribe-group-sync-states)
+
+## SubscribeInteractions
+
+```go
+func (receiver *ConversationManager) SubscribeInteractions(ctx context.Context, r m.InteractionQuery, o m.SubscriptionListener[[]m.Interaction]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/interactions/subscribe-interactions)
+
+## SubscribeLiveProcess
+
+```go
+func (receiver *ConversationManager) SubscribeLiveProcess(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.LiveProcessSnapshot]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/executions/subscribe-live-process)
+
+## SubscribeMembers
+
+```go
+func (receiver *ConversationManager) SubscribeMembers(ctx context.Context, r m.MemberQuery, o m.SubscriptionListener[[]m.Member]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/members/subscribe-members)
+
+## SubscribeMessages
+
+```go
+func (receiver *ConversationManager) SubscribeMessages(ctx context.Context, r m.MessageQuery, o m.SubscriptionListener[m.Page[m.Message]]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/messages/subscribe)
+
+## SubscribeMutation
+
+```go
+func (receiver *ConversationManager) SubscribeMutation(ctx context.Context, r m.MutationRef, o m.SubscriptionListener[m.MutationStatus]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/receipts/subscribe-mutation)
+
+## SubscribeSidebarConversations
+
+```go
+func (receiver *ConversationManager) SubscribeSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/conversations/subscribe-sidebar-conversations)
+
+## SubscribeTurn
+
+```go
+func (receiver *ConversationManager) SubscribeTurn(ctx context.Context, r m.TurnRef, o m.SubscriptionListener[*m.Turn]) (m.Subscription, error)
+```
+
+[查看操作或完整契约](/api-reference/turns/subscribe-turn)
 
 ## SyncConversation
 

@@ -5,7 +5,7 @@ description: "附件、审批、问答、工作空间与产物：职责、模型
 
 ## 附件的生命周期
 
-选择文件 → 校验本地可读和产品大小/类型限制 → ResourceManager.stageAttachment → 收到 attachmentId → 在同一 Conversation 的 SendRequest.attachmentIds 中引用 → 观察真实消息与远端执行。尚未提交的附件需要丢弃时用 discardAttachment，不直接修改 SDK 存储。
+选择文件 → 校验本地可读和产品大小/类型限制 → ResourceManager.stageAttachment → 收到 attachmentId → 在同一 Conversation 的 SendRequest.attachmentIds 中引用 → 订阅真实消息与远端执行。尚未提交的附件需要丢弃时用 discardAttachment，不直接修改 SDK 存储。
 
 | 步骤 | 验收点 |
 |---|---|
@@ -19,12 +19,12 @@ JS 的 stage 文件为 Blob；Go / Java 使用各自的 StageAttachmentRequest�
 
 ## 审批和问答的正确接线
 
-1. 使用 observeInteractions 观察待处理项，恢复后必要时 refreshPendingInteractions。
+1. 使用 subscribeInteractions 订阅待处理项，恢复后必要时 refreshPendingInteractions。
 2. 按真实 Interaction.kind 展示 permission / question，不从工具名称猜类型。
 3. 保留当前 interactionId、writeVersion、owner 与选项 ID；按公开详情展示参数、权限/风险、作用范围等可用信息。
 4. 用户明确选择后，permission 调 respondPermission，question 调 respondQuestion。
 5. expectedVersion 来自当前写版本，optionId 是真实选项 ID，不能用“允许一次”等翻译字符串代替。
-6. 只有确认已应用的回执才能显示提交成功；后续继续观察 owner 状态。
+6. 只有确认已应用的回执才能显示提交成功；后续继续订阅 owner 状态。
 
 问答的单选、多选、自由输入、题目 ID 和其他输入结构由当前 Interaction schema 决定。不要把所有答案固定为一个字符串数组，也不要把整份 Java/Go对象的 toString 当作答案 JSON。
 
