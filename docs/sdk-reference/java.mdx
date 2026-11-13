@@ -57,8 +57,8 @@ try (WuyingClient client = new WuyingClient(options, config);
      CallContext context = CallContext.withTimeout(Duration.ofSeconds(60))) {
     RuntimeManager runtimesAPI = client.buildRuntimeManager(context);
     int count = runtimesAPI.listRuntimes(context)
-        .toCompletableFuture().get(65, TimeUnit.SECONDS).data.size();
-    // 正式业务还需保留查询返回的 projection，不只读取数量。
+        .toCompletableFuture().get(65, TimeUnit.SECONDS).size();
+    // Runtime 查询直接返回列表；其它快照接口保留自己的同步状态。
 }
 ```
 
@@ -88,7 +88,7 @@ SDK 管理持久副本和连接；每账号/环境使用独立数据库，应用
 |---|---|---|
 | 构造 | new WuyingClient(options, config) | AutoCloseable 根 Client |
 | Manager | buildRuntimeManager / buildAgentManager / buildConversationManager / buildResourceManager | CallContext 显式传入 |
-| 环境 | listRuntimes(ctx) / listAgents(request, ctx) | CompletionStage，保存 Snapshot.projection |
+| 环境 | listRuntimes(ctx) / listAgents(request, ctx) | Runtime 查询返回 List&lt;Runtime&gt;；Agent 查询仍返回 Snapshot |
 | 建会 | createConversation(request, options, ctx) | CreateRequest，MutationOptions.mutationId |
 | 消息 | listMessages / observeMessages | 请求在前，ctx 在后；Observer 接收 Snapshot |
 | 发送 | sendMessageStream / sendMessageAndWait | SendRequest.clientCommandId，MessageCompletion.accepted/turn |

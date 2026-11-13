@@ -65,3 +65,5 @@ remote-desktop Skill 新增 `references/cloud-operations.md`，与两个 Skill �
 更新配套 CLI 后，重新执行安装命令即可更新 CLI 管理的 Skill 文件；客户额外添加的文件会保留。若目标目录由客户自行维护，或受管理路径存在符号链接，命令返回冲突，不覆盖它。客户可保留原目录，并将新 Skill 安装到另一个明确选择的项目。
 
 其他支持 Skill 的 Agent 宿主，可按其自身机制加载下载包中的完整 Skill 目录。需要在 Agent 实际运行的环境中安装 CLI；手工复制时保留 references，确认 `wuying` 在 PATH 中或配置宿主认可的可执行路径。当前自动安装命令只针对 Codex，其他宿主不宣称已经完成适配验收。
+
+远程脚本完整接入示例见[云资源 → 远程脚本](/domain-model/remote-script)。Runtime 目录查询现在直接返回数组；其它快照接口仍按自己的返回结构读取。

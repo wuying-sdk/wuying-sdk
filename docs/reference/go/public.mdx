@@ -1565,7 +1565,7 @@ func (receiver *RuntimeManager) GetHostCapabilities(ctx context.Context, r model
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
 
 ```go
-func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
+func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) ([]model.Runtime, error)
 ```
 
 <a id="entry-f524474c4b0b8024" />
@@ -1585,7 +1585,7 @@ func (receiver *RuntimeManager) ObserveCommand(ctx context.Context, r *model.Obs
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
 
 ```go
-func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.RuntimeSummary]) (model.Subscription, error)
+func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.Runtime]) (model.Subscription, error)
 ```
 
 <a id="entry-e715942c3b7bab5f" />

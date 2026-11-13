@@ -2045,7 +2045,7 @@ unsubscribe(): void;
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
 
 ```ts
-listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+listRuntimes(ctx: Context): Promise<Runtime[]>;
 ```
 
 <a id="entry-f553cb30638c35bc" />
@@ -2055,7 +2055,7 @@ listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
 ```
 
 <a id="entry-21ab7a934565dc06" />
@@ -2315,7 +2315,7 @@ function mergeToInternal(userConfig: UserConfig): Config$1;
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
 
 ```ts
-listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+listRuntimes(ctx: Context): Promise<Runtime[]>;
 ```
 
 <a id="entry-b1e5f99531538997" />
@@ -2325,7 +2325,7 @@ listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
 ```
 
 <a id="entry-8edbe51456ca1f5e" />

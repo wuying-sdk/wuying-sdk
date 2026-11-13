@@ -6,7 +6,9 @@ description: "完整公开接口 · Runtime"
 
 `listRuntimes` · Runtime
 
-返回数组快照：读取 data 并保留 projection；未就绪的空目录不能证明无权限。
+直接返回 Runtime 数组，不包含 Snapshot 包装；目录未加载或认证失败会报错，不用空数组隐藏错误。
+
+直接返回 Runtime 数组，不读取 .data 或 projection；认证/目录加载失败按错误返回。observeRuntimes 观察同一目录时仍携带同步状态。
 
 ## 语言与授权
 
@@ -26,19 +28,19 @@ description: "完整公开接口 · Runtime"
 ### JavaScript / TypeScript · RuntimeManager
 
 ```ts
-listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+listRuntimes(ctx: Context): Promise<Runtime[]>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.RuntimeManager
 
 ```go
-func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
+func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) ([]model.Runtime, error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.RuntimeManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · runtimes
@@ -59,12 +61,7 @@ interface Context {
     traceId?: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
-}
-
-interface RuntimeSummary extends RuntimeRef {
+interface Runtime extends RuntimeRef {
     name: string;
     state: 'online' | 'offline' | 'unknown';
     capabilities: {

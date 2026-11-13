@@ -3,7 +3,7 @@ title: "Java 公共 API 参考"
 description: "同版本 Java SDK jar 的公开签名；参数说明另见随包离线 Javadoc。"
 ---
 
-由本次 JDK 8/11 验证产物 javap -public 生成。基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加 RuntimeManager 工作区草稿；不是旧提交原始 jar。
+当前基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加 Runtime 首版未提交草稿；由验证产物 javap 生成。
 
 ```java
 Compiled from "Administration.java"
@@ -995,8 +995,8 @@ public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliy
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUsageInfo> describeCreditUsageInfo(com.aliyun.wuying.sdk.model.DescribeCreditUsageInfoRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> approveFotaUpdate(com.aliyun.wuying.sdk.model.ApproveFotaUpdateRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GenerateSceneUrlResponse> generateSceneUrl(com.aliyun.wuying.sdk.model.GenerateSceneUrlRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+  public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Runtime>>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.HostCapabilities>> getHostCapabilities(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> observeCommand(com.aliyun.wuying.sdk.model.ObserveCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
@@ -3025,6 +3025,13 @@ public final class com.aliyun.wuying.sdk.model.RunCommandRequest {
   public java.lang.Long pollIntervalMs;
   public com.aliyun.wuying.sdk.model.RunCommandRequest();
 }
+Compiled from "Runtime.java"
+public class com.aliyun.wuying.sdk.model.Runtime extends com.aliyun.wuying.sdk.model.RuntimeRef {
+  public java.lang.String name;
+  public java.lang.String state;
+  public com.aliyun.wuying.sdk.model.RuntimeCapabilities capabilities;
+  public com.aliyun.wuying.sdk.model.Runtime();
+}
 Compiled from "RuntimeCapabilities.java"
 public class com.aliyun.wuying.sdk.model.RuntimeCapabilities {
   public com.aliyun.wuying.sdk.model.Capability agentQuery;
@@ -3070,13 +3077,6 @@ public class com.aliyun.wuying.sdk.model.RuntimeResourceInfo {
   public java.lang.String resourceName;
   public java.lang.String localDeviceName;
   public com.aliyun.wuying.sdk.model.RuntimeResourceInfo();
-}
-Compiled from "RuntimeSummary.java"
-public class com.aliyun.wuying.sdk.model.RuntimeSummary extends com.aliyun.wuying.sdk.model.RuntimeRef {
-  public java.lang.String name;
-  public java.lang.String state;
-  public com.aliyun.wuying.sdk.model.RuntimeCapabilities capabilities;
-  public com.aliyun.wuying.sdk.model.RuntimeSummary();
 }
 Compiled from "SceneFeatureInfo.java"
 public class com.aliyun.wuying.sdk.model.SceneFeatureInfo {

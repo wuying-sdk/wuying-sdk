@@ -17,7 +17,7 @@ public final class ReadOnlyExample {
             SdkConfig config=SdkConfig.builder().clientId(required("WUYING_CLIENT_ID")).dataPath(Paths.get(required("WUYING_DATA_PATH"))).build();
             try(WuyingClient client=new WuyingClient(login.build(),config);CallContext context=CallContext.withTimeout(Duration.ofSeconds(60))) {
                 RuntimeManager runtimesAPI=client.buildRuntimeManager(context);
-                System.out.println("runtimes="+runtimesAPI.listRuntimes(context).toCompletableFuture().get(65,TimeUnit.SECONDS).data.size());
+                System.out.println("runtimes="+runtimesAPI.listRuntimes(context).toCompletableFuture().get(65,TimeUnit.SECONDS).size());
             }
         } catch(Exception error) { System.err.println("SDK read failed; verify credentials, authorization and network. Error details are intentionally not logged.");System.exit(1); }
     }

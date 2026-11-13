@@ -3,7 +3,7 @@ title: "Go 公共 API 参考"
 description: "同版本 Go 根入口、config、manager 与 model 公共包的完整签名。"
 ---
 
-由本次 RuntimeManager 源码草稿执行 go doc -all 生成，基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03，不是该提交原始制品。
+当前基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加 Runtime 首版未提交草稿；实际来源由归档哈希确定。
 
 ## .
 
@@ -681,11 +681,11 @@ func (m *RuntimeManager) GenerateSceneUrl(ctx context.Context, req *GenerateScen
 
 func (a *RuntimeManager) GetHostCapabilities(ctx context.Context, r model.RuntimeRef) (model.Snapshot[model.HostCapabilities], error)
 
-func (a *RuntimeManager) ListRuntimes(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
+func (a *RuntimeManager) ListRuntimes(ctx context.Context) ([]model.Runtime, error)
 
 func (m *RuntimeManager) ObserveCommand(ctx context.Context, r *model.ObserveCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
 
-func (a *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.RuntimeSummary]) (model.Subscription, error)
+func (a *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.Runtime]) (model.Subscription, error)
 
 func (m *RuntimeManager) RunCommand(ctx context.Context, r *model.RunCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
 
@@ -2532,6 +2532,13 @@ type RunCommandRequest struct {
 	PollIntervalMs  int64    `json:"pollIntervalMs,omitempty"`
 }
 
+type Runtime struct {
+	RuntimeRef
+	Name         string              `json:"name"`
+	State        string              `json:"state"`
+	Capabilities RuntimeCapabilities `json:"capabilities"`
+}
+
 type RuntimeCapabilities struct {
 	AgentQuery         Capability `json:"agentQuery"`
 	ConversationCreate Capability `json:"conversationCreate"`
@@ -2575,13 +2582,6 @@ type RuntimeResourceInfo struct {
 	LocalDeviceName string `json:"local_device_name"`
 }
     RuntimeResourceInfo contains runtime resource information for an agent.
-
-type RuntimeSummary struct {
-	RuntimeRef
-	Name         string              `json:"name"`
-	State        string              `json:"state"`
-	Capabilities RuntimeCapabilities `json:"capabilities"`
-}
 
 type SDKError struct {
 	Code      int    `json:"code"`     // Numeric error code

@@ -26,19 +26,19 @@ description: "完整公开接口 · Runtime"
 ### JavaScript / TypeScript · RuntimeManager
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.RuntimeManager
 
 ```go
-func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.RuntimeSummary]) (model.Subscription, error)
+func (receiver *RuntimeManager) ObserveRuntimes(ctx context.Context, o model.Observer[[]model.Runtime]) (model.Subscription, error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.RuntimeManager
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Runtime>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -57,7 +57,7 @@ interface Observer<T> {
     onError(error: BusinessError$2): void;
 }
 
-interface RuntimeSummary extends RuntimeRef {
+interface Runtime extends RuntimeRef {
     name: string;
     state: 'online' | 'offline' | 'unknown';
     capabilities: {

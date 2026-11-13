@@ -34,7 +34,7 @@ try {
   const ctx = {timeout: 60000};
   const runtimesAPI = await client.buildRuntimeManager(ctx);
   const runtimes = await runtimesAPI.listRuntimes(ctx);
-  // 使用 runtimes.data，同时保留 runtimes.projection。
+  // 使用 runtimes 数组；观察接口仍携带同步状态。
 } finally {
   await client.close();
 }

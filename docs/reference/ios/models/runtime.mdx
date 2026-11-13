@@ -91,7 +91,7 @@ func(ctx context.Context, r model.RuntimeRef) (model.Snapshot[model.HostCapabili
 
 ```go
 *RuntimeManager.ListRuntimes
-func(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
+func(ctx context.Context) ([]model.Runtime, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/runtimes/list) · [Go DTO 参考](/reference/go/api)
@@ -106,7 +106,7 @@ func(ctx context.Context) (model.Snapshot[[]model.RuntimeSummary], error)
 
 ```go
 *RuntimeManager.ObserveRuntimes
-func(ctx context.Context, o model.Observer[[]model.RuntimeSummary]) (model.Subscription, error)
+func(ctx context.Context, o model.Observer[[]model.Runtime]) (model.Subscription, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/runtimes/observe) · [Go DTO 参考](/reference/go/api)

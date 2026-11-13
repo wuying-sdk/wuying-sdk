@@ -55,6 +55,6 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("runtimes=%d phase=%s coverage=%s\n", len(result.Data), result.Projection.Phase, result.Projection.Coverage)
+	fmt.Printf("runtimes=%d\n", len(result))
 	return nil
 }

@@ -9,7 +9,7 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 ## listRuntimes
 
 ```ts
-listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+listRuntimes(ctx: Context): Promise<Runtime[]>;
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/list)
@@ -17,7 +17,7 @@ listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
 ## observeRuntimes
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/observe)
@@ -97,7 +97,7 @@ new new (container: ServiceContainer | undefined, checkOpen: () => void, runtime
 ## listRuntimes
 
 ```ts
-listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
+listRuntimes(ctx: Context): Promise<Runtime[]>;
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/list)
@@ -105,7 +105,7 @@ listRuntimes(ctx: Context): Promise<Snapshot<RuntimeSummary[]>>;
 ## observeRuntimes
 
 ```ts
-observeRuntimes(ctx: Context, observer: Observer<RuntimeSummary[]>): Promise<Subscription>;
+observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/observe)

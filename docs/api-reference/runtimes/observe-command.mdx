@@ -20,7 +20,7 @@ description: "完整公开接口 · Runtime"
 
 每个 Client 最多 32 个活跃观察。Node / Go 缺省观察 10 分钟；Java CallContext.defaults 仅 30 秒。观察最多 1 小时，并受调用期限与 HTTP timeout 约束。Go/Java 精确字段名见下方签名与原始 DTO。当前 Android/iOS 移动清单无此入口。
 
-提交不自动重试。已受理后的查询超时、拒绝或断线通过 onError 返回，结果仍未知；按 receipt 在新 Client 用 observeCommand 恢复。退订/关闭只停止本地观察，不撤销远端执行。详见 [Runtime](/domain-model/02-runtime-agent#执行系统命令)。
+提交不自动重试。已受理后的查询超时、拒绝或断线通过 onError 返回，结果仍未知；按 receipt 在新 Client 用 observeCommand 恢复。退订/关闭只停止本地观察，不撤销远端执行。详见[远程脚本](/domain-model/remote-script)。
 
 ## 语言与授权
 
@@ -96,4 +96,4 @@ interface RuntimeCommandSubscription {
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 
-[模型与能力边界](/domain-model/02-runtime-agent) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)
+[模型与能力边界](/domain-model/remote-script) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

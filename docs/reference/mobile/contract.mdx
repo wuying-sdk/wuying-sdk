@@ -70,3 +70,5 @@ Android 的 Java 包装和 iOS 的 Swift 包装复用 Go mobile 的唯一方法�
 ## RuntimeManager 首版接口
 
 目录、能力与云实例共 8 个入口统一使用 `runtime.*`。不存在 `cloudAgent.*` 或 AgentManager 的 Runtime 方法别名。原生 AAR/XCFramework 必须用本次源码重新构建，旧二进制不能配合新常量使用。本次通过 Go 移动合同与宿主 Swift 包装测试，未完成 Android/iOS 真机或模拟器验收。
+
+当前首版 `runtime.listRuntimes` 的成功数据为 Runtime 数组，停止使用 Snapshot 包装及 RuntimeSummary 类型名；`runtime.observeRuntimes` 的观察事件仍携带同步状态。方法常量保持不变，需用本次源码重新构建配套原生库。

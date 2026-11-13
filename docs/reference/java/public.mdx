@@ -5476,7 +5476,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Generate
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-5df9d44814a870e7" />
@@ -5486,7 +5486,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/observe)。
 
 ```java
-public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.RuntimeSummary>>, com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Runtime>>, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-4d3cd29b495f7900" />
@@ -8201,6 +8201,16 @@ public com.aliyun.wuying.sdk.model.ResponsibilityPatch();
 public com.aliyun.wuying.sdk.model.RunCommandRequest();
 ```
 
+<a id="entry-a253b06d6990d82e" />
+
+### com.aliyun.wuying.sdk.model.Runtime.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.Runtime();
+```
+
 <a id="entry-9bcd3ed6fadb1adf" />
 
 ### com.aliyun.wuying.sdk.model.RuntimeCapabilities.constructor
@@ -8299,16 +8309,6 @@ public com.aliyun.wuying.sdk.model.RuntimeRef();
 
 ```java
 public com.aliyun.wuying.sdk.model.RuntimeResourceInfo();
-```
-
-<a id="entry-2136d4adab92a6be" />
-
-### com.aliyun.wuying.sdk.model.RuntimeSummary.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public com.aliyun.wuying.sdk.model.RuntimeSummary();
 ```
 
 <a id="entry-2b29284e6aa44961" />

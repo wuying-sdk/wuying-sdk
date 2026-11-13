@@ -52,6 +52,7 @@
                 "pages": [
                   "domain-model/02-runtime-agent",
                   "domain-model/asp",
+                  "domain-model/remote-script",
                   "domain-model/port-service"
                 ]
               },
@@ -492,8 +493,6 @@
                   "api-reference/runtimes/capabilities",
                   "api-reference/runtimes/list",
                   "api-reference/runtimes/observe",
-                  "api-reference/runtimes/observe-command",
-                  "api-reference/runtimes/run-command",
                   "api-reference/runtimes/update-agent-instance"
                 ]
               },
@@ -504,6 +503,13 @@
                   "api-reference/asp/get-asp-stream-session",
                   "api-reference/asp/start",
                   "api-reference/asp/stop-asp-stream"
+                ]
+              },
+              {
+                "group": "远程脚本",
+                "pages": [
+                  "api-reference/runtimes/observe-command",
+                  "api-reference/runtimes/run-command"
                 ]
               },
               {

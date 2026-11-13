@@ -13,7 +13,7 @@ import FirstTask from '/snippets/first-task.mdx';
 
 先运行本语言指南的默认帮助或离线自检，再由宿主注入认证和私有数据配置，执行其只读示例。只读示例输出计数用于验证接线，不替你选择具体环境。
 
-CLI 可运行 `runtimes list`，再对选定的 Runtime 运行 `agents list --runtime RUNTIME_ID`；Go/Java/JS 在 AgentManager 中调用 listRuntimes/ListRuntimes 和 listAgents/ListAgents。返回数组、分页、Snapshot/直接 DTO 的形状按本语言类型读取，不统一写成 data.items。详见 [Runtime](/domain-model/02-runtime-agent) / [Agent](/domain-model/agent)。
+CLI 可运行 `runtimes list`，再对选定的 Runtime 运行 `agents list --runtime RUNTIME_ID`；Go/Java/JS 通过 RuntimeManager 的 listRuntimes/ListRuntimes 直接取得 Runtime 数组，通过 AgentManager 的 listAgents/ListAgents 查询 Agent。返回数组、分页、Snapshot/直接 DTO 的形状按本语言类型读取，不统一写成 data.items。详见 [Runtime](/domain-model/02-runtime-agent) / [Agent](/domain-model/agent)。
 
 预期结果：查询成功且投影可用，返回你被授权使用的实际对象。目录尚未就绪时，不根据计数 0 推断无权限。
 

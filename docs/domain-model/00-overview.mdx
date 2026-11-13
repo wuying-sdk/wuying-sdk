@@ -8,7 +8,7 @@ description: "按云资源、AI 能力、存储能力与计量查找无影 SDK �
 
 | 能力分类 | 包含的模型 | 可以做什么 |
 |---|---|---|
-| 云资源 | [Runtime](/domain-model/02-runtime-agent)、[ASP 流化](/domain-model/asp)、[端口服务](/domain-model/port-service) | 查询授权执行环境、操作资源、接入桌面画面或资源内服务 |
+| 云资源 | [Runtime](/domain-model/02-runtime-agent)、[ASP 流化](/domain-model/asp)、[远程脚本](/domain-model/remote-script)、[端口服务](/domain-model/port-service) | 查询和管理资源、执行系统脚本、接入桌面画面或资源内服务 |
 | AI 能力 | [Agent](/domain-model/agent)、[Conversation](/domain-model/03-conversation)、[Skill](/domain-model/11-cloud-capabilities)、[Model](/domain-model/model)、[Resource（预留）](/domain-model/08-resource-attachment) | 调用 Agent、管理会话、使用技能、配置模型及会话资源 |
 | 存储能力 | [WyDrive](/domain-model/wy-drive)、[KnowledgeSpace](/domain-model/knowledge-space) | 查询云盘文件、知识空间及知识文件 |
 | 计量 | [Credit](/domain-model/credit) | 查询套餐与用量 |
@@ -17,7 +17,7 @@ description: "按云资源、AI 能力、存储能力与计量查找无影 SDK �
 
 ## 云资源
 
-Runtime 定位用户已获授权的执行环境。ASP 将桌面或应用画面接入界面；端口服务通过当前公开的场景地址接口访问资源内服务。画面连接成功、服务地址生成成功与 Agent 任务完成分别判断。
+Runtime 定位用户已获授权的执行环境。远程脚本通过 runCommand 操作资源内系统、文件、进程和应用。ASP 将桌面或应用画面接入界面；端口服务通过当前公开的场景地址接口访问资源内服务。画面连接成功、服务地址生成成功与 Agent 任务完成分别判断。
 
 ## AI 能力
 

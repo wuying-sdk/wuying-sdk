@@ -40,4 +40,4 @@ target.json：
 
 `auth code` 将一次性 AuthCode 输出到 stdout，应直接交给目标用户的认证流程，避免写入日志。管理员环境凭据需要在运行用户 profile 前移除。现有 `doctor` 在线检查验证用户及 IM 链路，不能用于证明管理员资源权限。
 
-组织账号密码通过 `auth login --stdin` 完成登录，成功后只保存 LoginToken 组合；`auth import` 不接收密码。MFA/SSO/改密挑战当前返回 LOGIN_CHALLENGE_REQUIRED，不自动重试。命令事件和恢复步骤见 [Runtime 系统命令](/domain-model/02-runtime-agent#执行系统命令)。
+组织账号密码通过 `auth login --stdin` 完成登录，成功后只保存 LoginToken 组合；`auth import` 不接收密码。MFA/SSO/改密挑战当前返回 LOGIN_CHALLENGE_REQUIRED，不自动重试。命令事件和恢复步骤见 [远程脚本](/domain-model/remote-script)。
