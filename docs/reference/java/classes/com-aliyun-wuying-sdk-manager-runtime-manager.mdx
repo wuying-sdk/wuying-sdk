@@ -26,7 +26,8 @@ public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(
 ## describeCreditPackageAgents
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/describe-credit-package-agents)
@@ -58,7 +59,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Generate
 ## listRuntimes
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/list)

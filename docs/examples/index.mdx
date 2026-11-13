@@ -13,10 +13,10 @@ description: "从选择运行环境、发送任务和观察消息开始，再运
 const runtimeManager = await client.buildRuntimeManager(ctx);
 const runtimes = await runtimeManager.listRuntimes(ctx);
 const agents = await client.buildAgentManager(ctx);
-const availableAgents = await agents.listAgents(ctx, { runtimeId });
+const { items: availableAgents } = await agents.listAgents(ctx, { runtimeId });
 ```
 
-**预期结果：** 返回目录数组及其 `projection`。投影未就绪或已过期时，空数组不足以证明用户没有权限。选定真实 Runtime/Agent 后运行[第一个任务](/getting-started/first-conversation)。
+**预期结果：** 返回一页目录 `items`、续查游标 `nextCursor` 以及可用的 `projection`。投影未就绪或已过期时，空数组不足以证明用户没有权限。选定真实 Runtime/Agent 后运行[第一个任务](/getting-started/first-conversation)。
 
 ## 2. 观察会话消息
 
@@ -35,7 +35,7 @@ const subscription = await conversations.observeMessages(ctx, {
 subscription.unsubscribe();
 ```
 
-**预期结果：** 回调包含 `snapshot.data.items` 和 `snapshot.projection`。这里与上面目录数组的 `snapshot.data` 不同。当前 JS 发送流交付 Message/Turn 快照，不能假设它会推送逐 Token 的 `text.delta`。
+**预期结果：** 回调包含 `snapshot.data.items` 和 `snapshot.projection`。列表查询使用 items / nextCursor，观察事件仍保留 Snapshot 包装。当前 JS 发送流交付 Message/Turn 快照，不能假设它会推送逐 Token 的 `text.delta`。
 
 在发送之前建立观察，Context 覆盖整个订阅生命周期；所有退出路径先退订，再由应用关闭 Client。断线后重新观察同一会话；发送结果未知时按原请求身份查询，恢复流程见[实时展示](/guides/streaming)。
 

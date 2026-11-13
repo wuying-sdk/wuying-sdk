@@ -4282,7 +4282,8 @@ public com.aliyun.wuying.sdk.manager.AgentManager(com.aliyun.wuying.sdk.internal
 类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.AgentSummary>>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-6e9dd79270a0bb40" />
@@ -4292,7 +4293,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.ModelSummary>>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-7701ae9c261d7035" />
@@ -4312,7 +4314,8 @@ public com.aliyun.wuying.sdk.model.Subscription observeAgents(com.aliyun.wuying.
 类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drives)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DescribeWyDrivesResult> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WyDrivePage> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WyDrivePage> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-3a08095f467e671f" />
@@ -4322,7 +4325,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Describe
 类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drive-files)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DescribeWyDriveFilesResult> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDriveFile>> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDriveFile>> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-98244d3c7a3fe1b1" />
@@ -4352,7 +4356,8 @@ public java.util.concurrent.CompletionStage<java.lang.Void> deleteWyDriveFile(co
 类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-agent-knowledge-spaces)。
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-6b61d721726f7915" />
@@ -4362,7 +4367,8 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-knowledge-files)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListKnowledgeFilesResult> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeFile>> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeFile>> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-92776497fc39e944" />
@@ -4402,7 +4408,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/agents/list-experts)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Expert>>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-fd604f6a2f377038" />
@@ -4422,7 +4429,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/agents/list-agent-products)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ProductCatalog>> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ProductPage> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ProductPage> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-1c406155b7d491d7" />
@@ -4453,7 +4461,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedC
 类别：模型操作。[按模型查看操作](/api-reference/conversations/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-f2093319ec7ab66c" />
@@ -4538,7 +4546,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Conversa
 类别：模型操作。[按模型查看操作](/api-reference/members/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Member>>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Member>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Member>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-12da305f24d59c62" />
@@ -4592,7 +4601,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageA
 类别：模型操作。[按模型查看操作](/api-reference/messages/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>> listMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>> listMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-2299f112b91aa4b7" />
@@ -4632,7 +4641,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateRes
 类别：模型操作。[按模型查看操作](/api-reference/executions/list-execution-activity)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.ExecutionActivity>>> listExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ExecutionActivity>> listExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ExecutionActivity>> listExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-fec57ca93bbe58d1" />
@@ -4712,7 +4722,8 @@ public com.aliyun.wuying.sdk.model.Subscription observeExecutionActivity(com.ali
 类别：模型操作。[按模型查看操作](/api-reference/sync/list-group-sync-states)。
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-6d86e24d35932003" />
@@ -4752,7 +4763,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageC
 类别：模型操作。[按模型查看操作](/api-reference/interactions/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Interaction>>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Interaction>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Interaction>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-1ad20623d0764b61" />
@@ -4813,7 +4825,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/conversations/list-conversation-groups)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>>> listConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>> listConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-97b1d96b0ce19d8c" />
@@ -4833,7 +4845,7 @@ public com.aliyun.wuying.sdk.model.Subscription observeConversationGroups(com.al
 类别：模型操作。[按模型查看操作](/api-reference/conversations/list-sidebar-conversations)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-80f09b87410b4ee7" />
@@ -4904,7 +4916,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/executions/list-active-executions)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ActiveExecutionSnapshot>> listActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ActiveExecutionPage> listActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ActiveExecutionPage> listActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-e19c8da1df3eb433" />
@@ -4964,7 +4977,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/members/list-member-candidates)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.MemberCandidate>>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.MemberCandidate>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.MemberCandidate>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-5d09c5c9c918c8ea" />
@@ -5054,7 +5068,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Conversa
 类别：模型操作。[按模型查看操作](/api-reference/messages/list-conversation-history)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ConversationHistory>> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationHistory> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-c124c47d28eacfd6" />
@@ -5074,7 +5088,7 @@ public com.aliyun.wuying.sdk.model.Subscription observeConversationHistory(com.a
 类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupDirectoryPage> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSummary>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-93f2f4f3a6838751" />
@@ -5185,7 +5199,8 @@ public com.aliyun.wuying.sdk.manager.CreditManager(com.aliyun.wuying.sdk.interna
 类别：模型操作。[按模型查看操作](/api-reference/credits/describe-credit-package-agents)。
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-bf979ab25b79c398" />
@@ -5196,6 +5211,16 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 
 ```java
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUsageInfo> describeCreditUsageInfo(com.aliyun.wuying.sdk.model.DescribeCreditUsageInfoRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-815f010c900075f2" />
+
+### com.aliyun.wuying.sdk.manager.ListPagination$Cursor.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.manager.ListPagination$Cursor();
 ```
 
 <a id="entry-937174ad66ecfd01" />
@@ -5245,7 +5270,8 @@ public com.aliyun.wuying.sdk.manager.ResourceManager(com.aliyun.wuying.sdk.inter
 类别：模型操作。[按模型查看操作](/api-reference/resources/list-resources)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Resource>>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-db8ac6e8c1d0f12b" />
@@ -5335,7 +5361,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAt
 类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.DraftSnapshot>> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-b8df984d6f778a2e" />
@@ -5375,7 +5402,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.WorkspacePage>> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-0bfface69c3e745e" />
@@ -5436,7 +5464,8 @@ public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/describe-credit-package-agents)。
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-c09c60ec91507d26" />
@@ -5476,7 +5505,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Generate
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-5df9d44814a870e7" />
@@ -5536,7 +5566,8 @@ public com.aliyun.wuying.sdk.manager.SkillManager(com.aliyun.wuying.sdk.internal
 类别：模型操作。[按模型查看操作](/api-reference/skills/list-categories)。
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-2860997fd8f2b1fb" />
@@ -5546,7 +5577,8 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 类别：模型操作。[按模型查看操作](/api-reference/skills/installed)。
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-1ac0b06efb8e02ce" />
@@ -5556,7 +5588,8 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 类别：模型操作。[按模型查看操作](/api-reference/skills/list-agent-authed-skills)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsResult> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentAuthedSkill>> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentAuthedSkill>> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-92c373d86f84f80d" />
@@ -5597,6 +5630,16 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 
 ```java
 public com.aliyun.wuying.sdk.model.ActiveExecution();
+```
+
+<a id="entry-1ec31e9690a0809b" />
+
+### com.aliyun.wuying.sdk.model.ActiveExecutionPage.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.ActiveExecutionPage();
 ```
 
 <a id="entry-dc93b1c0a42fc6c7" />
@@ -6651,6 +6694,16 @@ public com.aliyun.wuying.sdk.model.DownloadUrlInfo();
 public com.aliyun.wuying.sdk.model.DraftAttachment();
 ```
 
+<a id="entry-65e22fe008d9811c" />
+
+### com.aliyun.wuying.sdk.model.DraftAttachmentPage.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.DraftAttachmentPage();
+```
+
 <a id="entry-58382109ad6fd97b" />
 
 ### com.aliyun.wuying.sdk.model.DraftAttachmentRequest.constructor
@@ -7319,6 +7372,16 @@ public com.aliyun.wuying.sdk.model.ListKnowledgeFilesResponse();
 
 ```java
 public com.aliyun.wuying.sdk.model.ListKnowledgeFilesResult();
+```
+
+<a id="entry-554a4d9c73914e92" />
+
+### com.aliyun.wuying.sdk.model.ListOptions.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.ListOptions();
 ```
 
 <a id="entry-379c622a558be2e2" />
@@ -8051,6 +8114,16 @@ public com.aliyun.wuying.sdk.model.Product();
 public com.aliyun.wuying.sdk.model.ProductCatalog();
 ```
 
+<a id="entry-57e8551ece01ad0e" />
+
+### com.aliyun.wuying.sdk.model.ProductPage.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.ProductPage();
+```
+
 <a id="entry-b4df7a98c27399cb" />
 
 ### com.aliyun.wuying.sdk.model.Projection.constructor
@@ -8721,6 +8794,16 @@ public com.aliyun.wuying.sdk.model.Workspace();
 public com.aliyun.wuying.sdk.model.WorkspaceDisplay();
 ```
 
+<a id="entry-39045a1da2b8cf12" />
+
+### com.aliyun.wuying.sdk.model.WorkspaceList.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.WorkspaceList();
+```
+
 <a id="entry-f32641c053ec6c2b" />
 
 ### com.aliyun.wuying.sdk.model.WorkspacePage.constructor
@@ -8759,6 +8842,16 @@ public com.aliyun.wuying.sdk.model.WyDrive();
 
 ```java
 public com.aliyun.wuying.sdk.model.WyDriveFile();
+```
+
+<a id="entry-ae770913637c279c" />
+
+### com.aliyun.wuying.sdk.model.WyDrivePage.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.WyDrivePage();
 ```
 
 <a id="entry-496554312dce5c05" />

@@ -9,7 +9,7 @@ description: "Go 公开成员及重载。"
 ## DescribeCreditPackageAgents
 
 ```go
-func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
 ```
 
 [查看操作或完整契约](/api-reference/credits/describe-credit-package-agents)

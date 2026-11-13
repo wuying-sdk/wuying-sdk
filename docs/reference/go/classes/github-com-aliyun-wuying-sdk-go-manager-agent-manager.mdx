@@ -17,7 +17,7 @@ func (receiver *AgentManager) DeleteWyDriveFile(ctx context.Context, r m.DeleteW
 ## DescribeWyDriveFiles
 
 ```go
-func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest, opts ...m.ListOptions) (m.Page[m.WyDriveFile], error)
 ```
 
 [查看操作或完整契约](/api-reference/files/describe-wy-drive-files)
@@ -25,7 +25,7 @@ func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.Desc
 ## DescribeWyDrives
 
 ```go
-func (receiver *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+func (receiver *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest, opts ...m.ListOptions) (m.WyDrivePage, error)
 ```
 
 [查看操作或完整契约](/api-reference/files/describe-wy-drives)
@@ -65,7 +65,7 @@ func (receiver *AgentManager) GetExpertDirectory(ctx context.Context, r m.Expert
 ## ListAgentKnowledgeSpaces
 
 ```go
-func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeSpace], error)
 ```
 
 [查看操作或完整契约](/api-reference/knowledge/list-agent-knowledge-spaces)
@@ -73,7 +73,7 @@ func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.
 ## ListAgentModels
 
 ```go
-func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.ModelSummary], error)
 ```
 
 [查看操作或完整契约](/api-reference/agents/models)
@@ -81,7 +81,7 @@ func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef)
 ## ListAgentProducts
 
 ```go
-func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
+func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.ProductPage, error)
 ```
 
 [查看操作或完整契约](/api-reference/agents/list-agent-products)
@@ -89,7 +89,7 @@ func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.Runtime
 ## ListAgents
 
 ```go
-func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
 ```
 
 [查看操作或完整契约](/api-reference/agents/list)
@@ -97,7 +97,7 @@ func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m
 ## ListExperts
 
 ```go
-func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery, opts ...m.ListOptions) (m.Page[m.Expert], error)
 ```
 
 [查看操作或完整契约](/api-reference/agents/list-experts)
@@ -105,7 +105,7 @@ func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) 
 ## ListKnowledgeFiles
 
 ```go
-func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeFile], error)
 ```
 
 [查看操作或完整契约](/api-reference/knowledge/list-knowledge-files)

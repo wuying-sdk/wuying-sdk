@@ -9,7 +9,7 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 ## listCategories
 
 ```ts
-listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+listCategories(ctx: Context, request?: (ListCategoriesRequest) & ListOptions): Promise<Page<SkillCategory>>;
 ```
 
 [查看操作或完整契约](/api-reference/skills/list-categories)
@@ -17,10 +17,18 @@ listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<Skil
 ## listInstalledSkills
 
 ```ts
-listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+listInstalledSkills(ctx: Context, request: (ListInstalledSkillsRequest) & ListOptions): Promise<Page<InstalledSkill>>;
 ```
 
 [查看操作或完整契约](/api-reference/skills/installed)
+
+## listAgentAuthedSkills
+
+```ts
+listAgentAuthedSkills(ctx: Context, request: (ListAgentAuthedSkillsRequest) & ListOptions): Promise<Page<AgentAuthedSkill>>;
+```
+
+[查看操作或完整契约](/api-reference/skills/list-agent-authed-skills)
 
 ## setSkillEnabled
 
@@ -29,14 +37,6 @@ setSkillEnabled(ctx: ExecutionContext, req: SetSkillEnabledRequest): Promise<Ope
 ```
 
 [查看操作或完整契约](/api-reference/skills/set-skill-enabled)
-
-## listAgentAuthedSkills
-
-```ts
-listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
-```
-
-[查看操作或完整契约](/api-reference/skills/list-agent-authed-skills)
 
 ## entInstallSkills
 
@@ -65,7 +65,7 @@ buildSkillManager(ctx: ExecutionContext, container: ServiceContainer): Promise<S
 ## listCategories
 
 ```ts
-listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+listCategories(ctx: Context, request?: (ListCategoriesRequest) & ListOptions): Promise<Page<SkillCategory>>;
 ```
 
 [查看操作或完整契约](/api-reference/skills/list-categories)
@@ -73,10 +73,18 @@ listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<Skil
 ## listInstalledSkills
 
 ```ts
-listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+listInstalledSkills(ctx: Context, request: (ListInstalledSkillsRequest) & ListOptions): Promise<Page<InstalledSkill>>;
 ```
 
 [查看操作或完整契约](/api-reference/skills/installed)
+
+## listAgentAuthedSkills
+
+```ts
+listAgentAuthedSkills(ctx: Context, request: (ListAgentAuthedSkillsRequest) & ListOptions): Promise<Page<AgentAuthedSkill>>;
+```
+
+[查看操作或完整契约](/api-reference/skills/list-agent-authed-skills)
 
 ## setSkillEnabled
 
@@ -85,14 +93,6 @@ setSkillEnabled(ctx: ExecutionContext, req: SetSkillEnabledRequest): Promise<Ope
 ```
 
 [查看操作或完整契约](/api-reference/skills/set-skill-enabled)
-
-## listAgentAuthedSkills
-
-```ts
-listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
-```
-
-[查看操作或完整契约](/api-reference/skills/list-agent-authed-skills)
 
 ## entInstallSkills
 

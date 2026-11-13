@@ -24,7 +24,7 @@ description: "完整公开接口 · Client"
 ### JavaScript / TypeScript · Client
 
 ```ts
-buildConversationManager(_context: Context): Promise<ConversationManager$1>;
+buildConversationManager(_context: Context): Promise<ConversationManager>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go.Client
@@ -50,35 +50,33 @@ interface Context {
     traceId?: string;
 }
 
-interface ConversationManager$1 {
+interface ConversationManager {
     /** Shared per authorization/root; 50ms notifications, no durable writes or execution control. */
     observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
     getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
     getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
     /** 仅列目录同步状态，不下载非热点群历史。 */
-    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+    listGroupSyncStates: ConversationManager$1['listGroupSyncStates'];
     /** 只读AG目录分页；不连接Runtime、不等待业务Ready、不下载历史。 */
-    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+    listGroups: ConversationManager$1['listGroups'];
     /** Bounded account activity index. This returns metadata only and opens no Runtime. */
-    listRecentGroups(ctx: Context, req: {
-        limit: number;
-    }): Promise<RecentGroupDirectoryEntry[]>;
+    listRecentGroups: ConversationManager$1['listRecentGroups'];
     /** 按业务会话定位当前机器的群；完整接收并应用本轮历史后返回。 */
     syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
     /** 显式选择分页返回的群，仍验证其属于指定Runtime。 */
     syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
     onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
-    listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+    listConversationGroups: ConversationManager$1['listConversationGroups'];
     observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
-    listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+    listSidebarConversations: ConversationManager$1['listSidebarConversations'];
     observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
     /** Metadata only; never activates or grants write authority to a cold conversation. */
     getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
     observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
     getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
-    listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+    listActiveExecutions: ConversationManager$1['listActiveExecutions'];
     observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
     cancelExecution(ctx: Context, req: ConversationRef & {
         executionId: string;
@@ -104,13 +102,13 @@ interface ConversationManager$1 {
         pinned: boolean;
     }, options?: MutationOptions): Promise<ConversationRef>;
     getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
-    listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<MemberCandidate[]>>;
+    listMemberCandidates: ConversationManager$1['listMemberCandidates'];
     getMemberSnapshot(ctx: Context, req: ConversationRef & {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<MemberSnapshot>>;
     getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
     observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
-    listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+    listConversations: ConversationManager$1['listConversations'];
     getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
     observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
     renameConversation(ctx: Context, req: ConversationRef & {
@@ -129,9 +127,7 @@ interface ConversationManager$1 {
     getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig>>;
     archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
     unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
-    listMembers(ctx: Context, req: ConversationRef & {
-        includeRemoved?: boolean;
-    }): Promise<Snapshot<Member[]>>;
+    listMembers: ConversationManager$1['listMembers'];
     observeMembers(ctx: Context, req: ConversationRef & {
         includeRemoved?: boolean;
     }, observer: Observer<Member[]>): Promise<Subscription>;
@@ -162,16 +158,16 @@ interface ConversationManager$1 {
     sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
     sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
     resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
-    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+    listConversationHistory: ConversationManager$1['listConversationHistory'];
     observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
-    listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+    listMessages: ConversationManager$1['listMessages'];
     getMessageDetail(ctx: Context, req: ConversationRef & {
         messageId: string;
         itemCursor?: string;
         limit?: number;
     }): Promise<Snapshot<MessageDetail | undefined>>;
     observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
-    listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+    listExecutionActivity: ConversationManager$1['listExecutionActivity'];
     observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
     observeTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
@@ -190,9 +186,7 @@ interface ConversationManager$1 {
     refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<ConversationRef & {
         recovered: number;
     }>;
-    listInteractions(ctx: Context, req: ConversationRef & {
-        state?: 'pending' | 'all';
-    }): Promise<Snapshot<Interaction[]>>;
+    listInteractions: ConversationManager$1['listInteractions'];
     /** expectedVersion fences the SDK snapshot; Gateway checks ownership and lifecycle, without a CAS field. */
     respondPermission(ctx: Context, req: ConversationRef & {
         interactionId: string;

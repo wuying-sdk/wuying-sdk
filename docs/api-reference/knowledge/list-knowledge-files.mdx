@@ -26,19 +26,20 @@ description: "完整公开接口 · Knowledge"
 ### JavaScript / TypeScript · AgentManager
 
 ```ts
-listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+listKnowledgeFiles(ctx: ExecutionContext, request: Omit<ListKnowledgeFilesRequest, "pageNumber" | "pageSize"> & ListOptions): Promise<Page<KnowledgeFile>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.AgentManager
 
 ```go
-func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeFile], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.AgentManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListKnowledgeFilesResult> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeFile>> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeFile>> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -59,18 +60,48 @@ interface ListKnowledgeFilesRequest {
     categoryId?: string;
     /** 文件名过滤 */
     fileNameFilter?: string;
-    /** 页码 */
-    pageNumber?: number;
-    /** 每页大小 */
-    pageSize?: number;
 }
 
-interface ListKnowledgeFilesResult {
-    requestId: string;
-    files: KnowledgeFile[];
-    totalCount: number;
-    pageNumber: number;
-    pageSize: number;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
+}
+
+interface KnowledgeFile {
+    /** 主键 ID */
+    id: number;
+    /** 文件 ID */
+    fileId: string;
+    /** 文件名 */
+    fileName: string;
+    /** 文件大小 (bytes) */
+    fileSize: number;
+    /** 文件类型 */
+    fileType: string;
+    /** 文件图标 URL */
+    fileIconUrl: string;
+    /** 文件 MD5 */
+    fileMd5: string;
+    /** 分类 ID */
+    categoryId: string;
+    /** 文件状态 */
+    status: KnowledgeFileSyncStatus;
+    /** 失败原因 */
+    failReason?: string;
+    /** 百炼文件 ID */
+    bailianFileId?: string;
+    /** 创建时间 */
+    gmtCreated: string;
+    /** 修改时间 */
+    gmtModified: string;
+    /** 完成时间（状态为 COMPLETED 时有值） */
+    gmtCompleted?: string;
 }
 ```
 

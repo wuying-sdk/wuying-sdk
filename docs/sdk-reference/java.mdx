@@ -58,7 +58,7 @@ try (WuyingClient client = new WuyingClient(options, config);
     RuntimeManager runtimesAPI = client.buildRuntimeManager(context);
     int count = runtimesAPI.listRuntimes(context)
         .toCompletableFuture().get(65, TimeUnit.SECONDS).size();
-    // Runtime 查询直接返回列表；其它快照接口保留自己的同步状态。
+    // 列表查询统一返回 items / nextCursor；观察和详情按各自声明保留同步状态。
 }
 ```
 
@@ -88,7 +88,7 @@ SDK 管理持久副本和连接；每账号/环境使用独立数据库，应用
 |---|---|---|
 | 构造 | new WuyingClient(options, config) | AutoCloseable 根 Client |
 | Manager | buildRuntimeManager / buildAgentManager / buildConversationManager / buildResourceManager | CallContext 显式传入 |
-| 环境 | listRuntimes(ctx) / listAgents(request, ctx) | Runtime 查询返回 List&lt;Runtime&gt;；Agent 查询仍返回 Snapshot |
+| 环境 | listRuntimes(ctx) / listAgents(request, ctx) | 列表查询返回 Page，使用 items / nextCursor |
 | 建会 | createConversation(request, options, ctx) | CreateRequest，MutationOptions.mutationId |
 | 消息 | listMessages / observeMessages | 请求在前，ctx 在后；Observer 接收 Snapshot |
 | 发送 | sendMessageStream / sendMessageAndWait | SendRequest.clientCommandId，MessageCompletion.accepted/turn |
@@ -107,3 +107,7 @@ SDK 管理持久副本和连接；每账号/环境使用独立数据库，应用
 ## 当前草稿的制品
 
 以下 `sdks/`、测试包及本地 tgz/jar 路径描述交付布局。本次源码尚未重新封装为完整交付包；审核当前接口须先用 RuntimeManager 草稿源码重新构建并替换对应制品。旧交付包与公网上同名版本不具备本页的新接口。源码和构建命令见各 SDK README；来源身份见 文档站的全量覆盖清单。
+
+## 列表分页
+
+列表统一使用 limit/cursor，读取 items/nextCursor；默认每页50项，最多100项。完整规则见[列表查询与分页](/domain-model/page)。

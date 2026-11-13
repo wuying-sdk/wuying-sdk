@@ -22,7 +22,7 @@ description: "按稳定身份更新快照，区分消息受理、执行结束和
 
 ## 处理重复和恢复
 
-observeMessages 的分页视图读取 data.items；listRuntimes 等数组快照则读取 data。不要为方便把所有查询返回强行归一成同一层级。
+observeMessages 的回调读取 Snapshot.data.items；listRuntimes、listMessages 等列表查询统一读取 items / nextCursor。列表与观察事件的结构分别以当前公开类型为准。
 
 一轮可以有多条真实消息。去重必须使用服务端 Message/Turn/Item 的身份，不能仅按 Agent 名称或正文合并；相同 Agent 的两轮也不能混为一张卡片。历史/实时的归并规则见 [Message](/domain-model/05-message) 和 [投影](/domain-model/10-projection-events)。
 

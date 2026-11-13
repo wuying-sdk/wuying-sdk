@@ -6,9 +6,9 @@ description: "完整公开接口 · Runtime"
 
 `listRuntimes` · Runtime
 
-直接返回 Runtime 数组，不包含 Snapshot 包装；目录未加载或认证失败会报错，不用空数组隐藏错误。
+返回 Runtime 分页列表，读取 items 和 nextCursor；目录未加载或认证失败会报错，不用空数组隐藏错误。
 
-直接返回 Runtime 数组，不读取 .data 或 projection；认证/目录加载失败按错误返回。observeRuntimes 观察同一目录时仍携带同步状态。
+返回一页 Runtime：items 是当前页，nextCursor 用于继续查询。分页参数为 limit（默认50，1..100）和 cursor；认证/目录加载失败按错误返回。见 [列表查询与分页](/domain-model/page)。observeRuntimes 仍携带同步状态。
 
 ## 语言与授权
 
@@ -28,26 +28,28 @@ description: "完整公开接口 · Runtime"
 ### JavaScript / TypeScript · RuntimeManager
 
 ```ts
-listRuntimes(ctx: Context): Promise<Runtime[]>;
+listRuntimes(ctx: Context, request?: ListOptions): Promise<Page<Runtime>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.RuntimeManager
 
 ```go
-func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) ([]model.Runtime, error)
+func (receiver *RuntimeManager) ListRuntimes(ctx context.Context, opts ...m.ListOptions) (m.Page[m.Runtime], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.RuntimeManager
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · runtimes
 
 ```sh
 wuying runtimes list
-
+optional --limit <count> — Page size (1..100) (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
 ```
 
 ## TypeScript 参数与结果结构
@@ -59,6 +61,17 @@ interface Context {
     signal?: AbortSignal;
     timeout?: number;
     traceId?: string;
+}
+
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface Runtime extends RuntimeRef {

@@ -6,6 +6,30 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 
 此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
 
+## listDraftAttachments
+
+```ts
+listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{ projection: Projection; items: DraftAttachment[]; nextCursor: string | null; remoteUpload: Capability; draftId: string; runtimeId: string; }>;
+```
+
+[查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
+
+## listWorkspaces
+
+```ts
+listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
+```
+
+[查看操作或完整契约](/api-reference/workspaces/list)
+
+## listResources
+
+```ts
+listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; }) & ListOptions): Promise<Page<Resource> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/resources/list-resources)
+
 ## attachImGroupFile
 
 ```ts
@@ -29,14 +53,6 @@ stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; u
 ```
 
 [查看操作或完整契约](/api-reference/drafts/stage-draft-attachment)
-
-## listDraftAttachments
-
-```ts
-listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
-```
-
-[查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
 
 ## commitDraftAttachments
 
@@ -62,14 +78,6 @@ getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; 
 
 [查看操作或完整契约](/api-reference/drafts/get-draft-attachment-preview)
 
-## listWorkspaces
-
-```ts
-listWorkspaces(ctx: Context, req: RuntimeRef & { parentWorkspaceId?: string; }): Promise<Snapshot<{ entries: Workspace[]; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>>;
-```
-
-[查看操作或完整契约](/api-reference/workspaces/list)
-
 ## createWorkspace
 
 ```ts
@@ -77,14 +85,6 @@ createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Work
 ```
 
 [查看操作或完整契约](/api-reference/workspaces/create)
-
-## listResources
-
-```ts
-listResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }): Promise<Snapshot<Resource[]>>;
-```
-
-[查看操作或完整契约](/api-reference/resources/list-resources)
 
 ## observeResources
 
@@ -145,7 +145,7 @@ getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string;
 ## constructor
 
 ```ts
-new new (service: Service): ResourceManager;
+new new (service: Service): ResourceManager$1;
 ```
 
 [查看操作或完整契约](/reference/js/public#entry-b9ca8ae4ef7c0fcf)
@@ -177,7 +177,7 @@ stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; u
 ## listDraftAttachments
 
 ```ts
-listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{ projection: Projection; items: DraftAttachment[]; nextCursor: string | null; remoteUpload: Capability; draftId: string; runtimeId: string; }>;
 ```
 
 [查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
@@ -209,7 +209,7 @@ getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; 
 ## listWorkspaces
 
 ```ts
-listWorkspaces(ctx: Context, req: RuntimeRef & { parentWorkspaceId?: string; }): Promise<Snapshot<WorkspacePage>>;
+listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
 ```
 
 [查看操作或完整契约](/api-reference/workspaces/list)
@@ -225,7 +225,7 @@ createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Work
 ## listResources
 
 ```ts
-listResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }): Promise<Snapshot<Resource[]>>;
+listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; }) & ListOptions): Promise<Page<Resource> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/resources/list-resources)

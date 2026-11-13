@@ -46,7 +46,7 @@ func(ctx context.Context, req *EntUninstallSkillsRequest, opts ...CallOption) ([
 
 ```go
 *SkillManager.ListAgentAuthedSkills
-func(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...CallOption) (*model.ListAgentAuthedSkillsResult, error)
+func(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...m.ListOptions) (m.Page[*m.AgentAuthedSkill], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/skills/list-agent-authed-skills) · [Go DTO 参考](/reference/go/api)
@@ -61,7 +61,7 @@ func(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...CallOption)
 
 ```go
 *SkillManager.ListCategories
-func(ctx context.Context, req *ListCategoriesRequest, opts ...CallOption) ([]*model.SkillCategory, error)
+func(ctx context.Context, req *ListCategoriesRequest, opts ...m.ListOptions) (m.Page[*m.SkillCategory], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/skills/list-categories) · [Go DTO 参考](/reference/go/api)
@@ -76,7 +76,7 @@ func(ctx context.Context, req *ListCategoriesRequest, opts ...CallOption) ([]*mo
 
 ```go
 *SkillManager.ListInstalledSkills
-func(ctx context.Context, req *ListInstalledSkillsRequest, opts ...CallOption) ([]*model.InstalledSkill, error)
+func(ctx context.Context, req *ListInstalledSkillsRequest, opts ...m.ListOptions) (m.Page[*m.InstalledSkill], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/skills/installed) · [Go DTO 参考](/reference/go/api)

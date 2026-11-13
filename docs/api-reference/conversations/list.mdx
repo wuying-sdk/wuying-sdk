@@ -6,7 +6,7 @@ description: "完整公开接口 · Conversation"
 
 `listConversations` · Conversation
 
-返回 Snapshot&lt;Page&lt;Conversation&gt;&gt;，读取 data.items；保留投影与公开分页信息。
+返回 Page&lt;Conversation&gt;，读取 items；保留投影与公开分页信息。
 
 ## 语言与授权
 
@@ -26,19 +26,19 @@ description: "完整公开接口 · Conversation"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+listConversations(ctx: Context, request: (ConversationQuery) & ListOptions): Promise<Page<Conversation> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Page[m.Conversation], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · conversations
@@ -46,7 +46,7 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 ```sh
 wuying conversations list
 required --runtime <id> — Explicit authorized Runtime ID
-optional --limit <count> — Page size (default: 20)
+optional --limit <count> — Page size (default: 50)
 optional --cursor <cursor> — Opaque nextCursor
 ```
 
@@ -73,14 +73,15 @@ interface ConversationQuery {
     cursor?: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
 }
 
 interface Page<T> {
     items: T[];
     nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface Conversation extends ConversationRef {
@@ -109,6 +110,20 @@ interface ConversationRef extends RuntimeRef {
 
 interface RuntimeRef {
     runtimeId: string;
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

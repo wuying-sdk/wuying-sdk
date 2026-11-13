@@ -26,19 +26,19 @@ description: "完整公开接口 · Conversation"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+listSidebarConversations(ctx: Context, request: (SidebarRowsQuery) & ListOptions): Promise<Page<Conversation> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Page[m.Conversation], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -71,14 +71,15 @@ interface SidebarFilter {
     category?: 'standard';
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
 }
 
 interface Page<T> {
     items: T[];
     nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface Conversation extends ConversationRef {
@@ -107,6 +108,20 @@ interface ConversationRef extends RuntimeRef {
 
 interface RuntimeRef {
     runtimeId: string;
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

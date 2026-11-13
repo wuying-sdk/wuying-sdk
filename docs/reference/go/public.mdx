@@ -535,7 +535,7 @@ func (receiver *AgentManager) DeleteWyDriveFile(ctx context.Context, r m.DeleteW
 类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drive-files)。
 
 ```go
-func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest, opts ...m.ListOptions) (m.Page[m.WyDriveFile], error)
 ```
 
 <a id="entry-c434137068932b3d" />
@@ -545,7 +545,7 @@ func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.Desc
 类别：模型操作。[按模型查看操作](/api-reference/files/describe-wy-drives)。
 
 ```go
-func (receiver *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+func (receiver *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest, opts ...m.ListOptions) (m.WyDrivePage, error)
 ```
 
 <a id="entry-80bed22f1ac8071b" />
@@ -595,7 +595,7 @@ func (receiver *AgentManager) GetExpertDirectory(ctx context.Context, r m.Expert
 类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-agent-knowledge-spaces)。
 
 ```go
-func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeSpace], error)
 ```
 
 <a id="entry-7f459d1d932e4088" />
@@ -605,7 +605,7 @@ func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.
 类别：模型操作。[按模型查看操作](/api-reference/agents/models)。
 
 ```go
-func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.ModelSummary], error)
 ```
 
 <a id="entry-9940cc00c970267e" />
@@ -615,7 +615,7 @@ func (receiver *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef)
 类别：模型操作。[按模型查看操作](/api-reference/agents/list-agent-products)。
 
 ```go
-func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
+func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.ProductPage, error)
 ```
 
 <a id="entry-93c3aba406c167f2" />
@@ -625,7 +625,7 @@ func (receiver *AgentManager) ListAgentProducts(ctx context.Context, r m.Runtime
 类别：模型操作。[按模型查看操作](/api-reference/agents/list)。
 
 ```go
-func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
 ```
 
 <a id="entry-89fffa72700baaf4" />
@@ -635,7 +635,7 @@ func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m
 类别：模型操作。[按模型查看操作](/api-reference/agents/list-experts)。
 
 ```go
-func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery, opts ...m.ListOptions) (m.Page[m.Expert], error)
 ```
 
 <a id="entry-b780d367d1233fea" />
@@ -645,7 +645,7 @@ func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) 
 类别：模型操作。[按模型查看操作](/api-reference/knowledge/list-knowledge-files)。
 
 ```go
-func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeFile], error)
 ```
 
 <a id="entry-f564f83d2b1b3e1b" />
@@ -855,7 +855,7 @@ func (receiver *ConversationManager) GetTurn(ctx context.Context, r m.TurnRef) (
 类别：模型操作。[按模型查看操作](/api-reference/executions/list-active-executions)。
 
 ```go
-func (receiver *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnapshot], error)
+func (receiver *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.ActiveExecutionPage, error)
 ```
 
 <a id="entry-cdf49529094e4193" />
@@ -865,7 +865,7 @@ func (receiver *ConversationManager) ListActiveExecutions(ctx context.Context, r
 类别：模型操作。[按模型查看操作](/api-reference/conversations/list-conversation-groups)。
 
 ```go
-func (receiver *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.SidebarGroup]], error)
+func (receiver *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Page[m.SidebarGroup], error)
 ```
 
 <a id="entry-fd5225cc1a2d45a6" />
@@ -875,7 +875,7 @@ func (receiver *ConversationManager) ListConversationGroups(ctx context.Context,
 类别：模型操作。[按模型查看操作](/api-reference/messages/list-conversation-history)。
 
 ```go
-func (receiver *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+func (receiver *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.ConversationHistory, error)
 ```
 
 <a id="entry-99b0f3c6711089e8" />
@@ -885,7 +885,7 @@ func (receiver *ConversationManager) ListConversationHistory(ctx context.Context
 类别：模型操作。[按模型查看操作](/api-reference/conversations/list)。
 
 ```go
-func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Page[m.Conversation], error)
 ```
 
 <a id="entry-09cc000cf4773fd5" />
@@ -895,7 +895,7 @@ func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.
 类别：模型操作。[按模型查看操作](/api-reference/executions/list-execution-activity)。
 
 ```go
-func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity], error)
+func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.ExecutionActivity], error)
 ```
 
 <a id="entry-4261a5c4c4615d52" />
@@ -905,7 +905,7 @@ func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, 
 类别：模型操作。[按模型查看操作](/api-reference/sync/list-group-sync-states)。
 
 ```go
-func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
+func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.GroupSyncState], error)
 ```
 
 <a id="entry-022bc7999a5ac952" />
@@ -915,7 +915,7 @@ func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r 
 类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
 
 ```go
-func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
+func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
 ```
 
 <a id="entry-c487e15cdedb21f4" />
@@ -925,7 +925,7 @@ func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDi
 类别：模型操作。[按模型查看操作](/api-reference/interactions/list)。
 
 ```go
-func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery, opts ...m.ListOptions) (m.Page[m.Interaction], error)
 ```
 
 <a id="entry-6c9931611a53edc0" />
@@ -935,7 +935,7 @@ func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.I
 类别：模型操作。[按模型查看操作](/api-reference/members/list-member-candidates)。
 
 ```go
-func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.MemberCandidate], error)
 ```
 
 <a id="entry-f8e270c1dcb1160f" />
@@ -945,7 +945,7 @@ func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r
 类别：模型操作。[按模型查看操作](/api-reference/members/list)。
 
 ```go
-func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery, opts ...m.ListOptions) (m.Page[m.Member], error)
 ```
 
 <a id="entry-f8adeda5092da91d" />
@@ -955,7 +955,7 @@ func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.Member
 类别：模型操作。[按模型查看操作](/api-reference/messages/list)。
 
 ```go
-func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Page[m.Message], error)
 ```
 
 <a id="entry-45860257d7bd052b" />
@@ -965,7 +965,7 @@ func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.Messa
 类别：模型操作。[按模型查看操作](/api-reference/conversations/list-sidebar-conversations)。
 
 ```go
-func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Page[m.Conversation], error)
 ```
 
 <a id="entry-112a929a9ee993ed" />
@@ -1305,7 +1305,7 @@ func (receiver *ConversationManager) UpdateMember(ctx context.Context, r m.Membe
 类别：模型操作。[按模型查看操作](/api-reference/credits/describe-credit-package-agents)。
 
 ```go
-func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
 ```
 
 <a id="entry-2b425c386eb56c9f" />
@@ -1435,7 +1435,7 @@ func (receiver *ResourceManager) GetImGroupAttachmentOperation(ctx context.Conte
 类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
 
 ```go
-func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef) (m.Snapshot[m.DraftSnapshot], error)
+func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
 ```
 
 <a id="entry-990096554fdbc61d" />
@@ -1445,7 +1445,7 @@ func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.D
 类别：模型操作。[按模型查看操作](/api-reference/resources/list-resources)。
 
 ```go
-func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
+func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
 ```
 
 <a id="entry-175cf5691e706458" />
@@ -1455,7 +1455,7 @@ func (receiver *ResourceManager) ListResources(ctx context.Context, r m.Resource
 类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
 
 ```go
-func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery) (m.Snapshot[m.WorkspacePage], error)
+func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
 ```
 
 <a id="entry-d5b11dfb66eebf2c" />
@@ -1525,7 +1525,7 @@ func (receiver *RuntimeManager) ApproveFotaUpdate(ctx context.Context, req *Appr
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/describe-credit-package-agents)。
 
 ```go
-func (receiver *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func (receiver *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
 ```
 
 <a id="entry-feec90a8507445d2" />
@@ -1565,7 +1565,7 @@ func (receiver *RuntimeManager) GetHostCapabilities(ctx context.Context, r model
 类别：模型操作。[按模型查看操作](/api-reference/runtimes/list)。
 
 ```go
-func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) ([]model.Runtime, error)
+func (receiver *RuntimeManager) ListRuntimes(ctx context.Context, opts ...m.ListOptions) (m.Page[m.Runtime], error)
 ```
 
 <a id="entry-f524474c4b0b8024" />
@@ -1635,7 +1635,7 @@ func (receiver *SkillManager) EntUninstallSkills(ctx context.Context, req *EntUn
 类别：模型操作。[按模型查看操作](/api-reference/skills/list-agent-authed-skills)。
 
 ```go
-func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...CallOption) (*model.ListAgentAuthedSkillsResult, error)
+func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...m.ListOptions) (m.Page[*m.AgentAuthedSkill], error)
 ```
 
 <a id="entry-ac66a727fe8f5b08" />
@@ -1645,7 +1645,7 @@ func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *Li
 类别：模型操作。[按模型查看操作](/api-reference/skills/list-categories)。
 
 ```go
-func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...CallOption) ([]*model.SkillCategory, error)
+func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...m.ListOptions) (m.Page[*m.SkillCategory], error)
 ```
 
 <a id="entry-5b640b55727b5cca" />
@@ -1655,7 +1655,7 @@ func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCateg
 类别：模型操作。[按模型查看操作](/api-reference/skills/installed)。
 
 ```go
-func (receiver *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...CallOption) ([]*model.InstalledSkill, error)
+func (receiver *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...m.ListOptions) (m.Page[*m.InstalledSkill], error)
 ```
 
 <a id="entry-4e7f2309f1327263" />

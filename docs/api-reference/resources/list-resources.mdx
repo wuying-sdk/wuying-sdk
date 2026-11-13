@@ -28,19 +28,20 @@ description: "完整公开接口 · Resource"
 ### JavaScript / TypeScript · ResourceManager
 
 ```ts
-listResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }): Promise<Snapshot<Resource[]>>;
+listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; }) & ListOptions): Promise<Page<Resource> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ResourceManager
 
 ```go
-func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
+func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ResourceManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Resource>>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -71,9 +72,29 @@ interface Resource {
     };
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

@@ -26,19 +26,20 @@ description: "完整公开接口 · Skill"
 ### JavaScript / TypeScript · SkillManager
 
 ```ts
-listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+listInstalledSkills(ctx: Context, request: (ListInstalledSkillsRequest) & ListOptions): Promise<Page<InstalledSkill>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.SkillManager
 
 ```go
-func (receiver *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...CallOption) ([]*model.InstalledSkill, error)
+func (receiver *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...m.ListOptions) (m.Page[*m.InstalledSkill], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.SkillManager
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -46,10 +47,10 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
 
 ```ts
-interface ExecutionContext {
+interface Context {
     signal?: AbortSignal;
-    traceId?: string;
     timeout?: number;
+    traceId?: string;
 }
 
 interface ListInstalledSkillsRequest {
@@ -58,6 +59,17 @@ interface ListInstalledSkillsRequest {
     desktopID?: string;
     categoryID?: string;
     skillName?: string;
+}
+
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface InstalledSkill {

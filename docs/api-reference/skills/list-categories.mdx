@@ -6,7 +6,7 @@ description: "完整公开接口 · Skill"
 
 `listCategories` · Skill
 
-获取技能分类列表
+公开方法的参数和返回值如下。使用前核对当前语言、认证模式、目标环境与能力。
 
 ## 语言与授权
 
@@ -26,19 +26,20 @@ description: "完整公开接口 · Skill"
 ### JavaScript / TypeScript · SkillManager
 
 ```ts
-listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+listCategories(ctx: Context, request?: (ListCategoriesRequest) & ListOptions): Promise<Page<SkillCategory>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.SkillManager
 
 ```go
-func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...CallOption) ([]*model.SkillCategory, error)
+func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...m.ListOptions) (m.Page[*m.SkillCategory], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.SkillManager
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -46,13 +47,24 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
 
 ```ts
-interface ExecutionContext {
+interface Context {
     signal?: AbortSignal;
-    traceId?: string;
     timeout?: number;
+    traceId?: string;
 }
 
 interface ListCategoriesRequest {
+}
+
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface SkillCategory {

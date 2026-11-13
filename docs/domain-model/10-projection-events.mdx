@@ -1,22 +1,27 @@
 ---
 title: "读取查询结果"
-description: "查询返回值里的实际数据放在哪里。"
+description: "列表读取 items，观察事件和部分详情查询保留同步状态。"
 ---
 
-部分查询返回 Snapshot，需要读取其中的 `data`。`Snapshot` 是“本次读到的数据，加上这份数据的状态”，不是另一种业务资源。
+列表查询统一从 `items` 读取这一页，从 `nextCursor` 继续查询，无需读取 `result.data`。
 
 ```ts
 const agents = await client.buildAgentManager(ctx);
-const snapshot = await agents.listAgents(ctx, { runtimeId });
-const items = snapshot.data;
+const result = await agents.listAgents(ctx, { runtimeId });
+const items = result.items;
 ```
 
-消息分页的读取方式不同：`snapshot.data.items` 是这一页的消息，`snapshot.data.nextCursor` 用来继续读取。返回路径以具体方法的签名为准，不能把所有接口都当作 `data.items`。
+部分列表还提供 `projection`，说明当前数据的同步状态。空页可能来自尚未同步完整的目录；`nextCursor` 为 `null` 也不证明同步已经完成。完整续查规则见[列表查询与分页](/domain-model/page)。
 
-还要检查 `snapshot.projection`：空数组可能来自尚未同步完成的结果，并不一定表示用户没有资源。下一步见[判断数据是否可用](/domain-model/projection)。
+## 观察事件与详情查询
 
-[完整类型与语言差异](/sdk-reference/index)
+观察接口 `observe*` 仍发送 `Snapshot`，其中 `data` 是本次观察到的数据，`projection` 是它的同步状态。部分详情查询也使用这一结构，以对应接口签名为准。
 
-## Runtime 目录查询
+```ts
+const subscription = await agents.observeAgents(ctx, { runtimeId }, {
+  onSnapshot: ({ data, projection }) => renderAgents(data, projection),
+  onError: showError,
+});
+```
 
-`listRuntimes` 直接返回 Runtime 数组，不使用 Snapshot 包装。本文的 .data / projection 用法适用于实际声明仍返回 Snapshot 的其它接口；`observeRuntimes` 仍携带同步状态。
+下一步见[判断数据是否可用](/domain-model/projection)。

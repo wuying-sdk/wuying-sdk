@@ -26,10 +26,10 @@ Runtime 是无影的执行环境模型。SDK 提供环境目录、云桌面基�
 
 ```ts
 const runtimeManager = await client.buildRuntimeManager(ctx);
-const runtimes = await runtimeManager.listRuntimes(ctx);
+const { items: runtimes } = await runtimeManager.listRuntimes(ctx);
 ```
 
-`listRuntimes` 直接返回 `Runtime[]`，无需读取 .data。认证或目录加载失败会报错，不当作空数组；空数组表示本次目录没有 Runtime。`observeRuntimes` 仍观察同一目录并携带同步状态，不自动选择第一项，也不把 IM 在线状态当成云桌面电源状态。
+`listRuntimes` 返回 `items` 和 `nextCursor`，当前页中的每项都是 `Runtime`。认证或目录加载失败会报错，不当作空页；更多资源通过 [分页](/domain-model/page) 继续查询。`observeRuntimes` 仍观察同一目录并携带同步状态，不自动选择第一项，也不把 IM 在线状态当成云桌面电源状态。
 
 ## 云桌面基础管理
 

@@ -301,7 +301,7 @@ func(ctx context.Context, r m.TurnRef) (m.Snapshot[*m.Turn], error)
 
 ```go
 *ConversationManager.ListActiveExecutions
-func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnapshot], error)
+func(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.ActiveExecutionPage, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/executions/list-active-executions) · [Go DTO 参考](/reference/go/api)
@@ -316,7 +316,7 @@ func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnap
 
 ```go
 *ConversationManager.ListConversationGroups
-func(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.SidebarGroup]], error)
+func(ctx context.Context, r m.ConversationGroupQuery) (m.Page[m.SidebarGroup], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/conversations/list-conversation-groups) · [Go DTO 参考](/reference/go/api)
@@ -331,7 +331,7 @@ func(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.Sideb
 
 ```go
 *ConversationManager.ListConversationHistory
-func(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+func(ctx context.Context, r m.ConversationHistoryQuery) (m.ConversationHistory, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/messages/list-conversation-history) · [Go DTO 参考](/reference/go/api)
@@ -346,7 +346,7 @@ func(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.Conversati
 
 ```go
 *ConversationManager.ListConversations
-func(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func(ctx context.Context, r m.ConversationQuery) (m.Page[m.Conversation], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/conversations/list) · [Go DTO 参考](/reference/go/api)
@@ -361,7 +361,7 @@ func(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversati
 
 ```go
 *ConversationManager.ListExecutionActivity
-func(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity], error)
+func(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.ExecutionActivity], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/executions/list-execution-activity) · [Go DTO 参考](/reference/go/api)
@@ -376,7 +376,7 @@ func(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity
 
 ```go
 *ConversationManager.ListGroupSyncStates
-func(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
+func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.GroupSyncState], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/sync/list-group-sync-states) · [Go DTO 参考](/reference/go/api)
@@ -391,7 +391,7 @@ func(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
 
 ```go
 *ConversationManager.ListGroups
-func(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
+func(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/sync/list-groups) · [Go DTO 参考](/reference/go/api)
@@ -406,7 +406,7 @@ func(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
 
 ```go
 *ConversationManager.ListInteractions
-func(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+func(ctx context.Context, r m.InteractionQuery, opts ...m.ListOptions) (m.Page[m.Interaction], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/interactions/list) · [Go DTO 参考](/reference/go/api)
@@ -421,7 +421,7 @@ func(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], er
 
 ```go
 *ConversationManager.ListMemberCandidates
-func(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+func(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.MemberCandidate], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/members/list-member-candidates) · [Go DTO 参考](/reference/go/api)
@@ -436,7 +436,7 @@ func(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate],
 
 ```go
 *ConversationManager.ListMembers
-func(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+func(ctx context.Context, r m.MemberQuery, opts ...m.ListOptions) (m.Page[m.Member], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/members/list) · [Go DTO 参考](/reference/go/api)
@@ -451,7 +451,7 @@ func(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
 
 ```go
 *ConversationManager.ListMessages
-func(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+func(ctx context.Context, r m.MessageQuery) (m.Page[m.Message], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/messages/list) · [Go DTO 参考](/reference/go/api)
@@ -466,7 +466,7 @@ func(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], erro
 
 ```go
 *ConversationManager.ListSidebarConversations
-func(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func(ctx context.Context, r m.SidebarRowsQuery) (m.Page[m.Conversation], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/conversations/list-sidebar-conversations) · [Go DTO 参考](/reference/go/api)

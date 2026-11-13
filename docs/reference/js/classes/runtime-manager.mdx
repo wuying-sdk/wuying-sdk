@@ -6,10 +6,18 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 
 此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
 
+## describeCreditPackageAgents
+
+```ts
+describeCreditPackageAgents(ctx: ExecutionContext, request?: DescribeCreditPackageAgentsRequest & ListOptions): Promise<Page<CreditPackageAgent>>;
+```
+
+[查看操作或完整契约](/api-reference/runtimes/describe-credit-package-agents)
+
 ## listRuntimes
 
 ```ts
-listRuntimes(ctx: Context): Promise<Runtime[]>;
+listRuntimes(ctx: Context, request?: ListOptions): Promise<Page<Runtime>>;
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/list)
@@ -29,14 +37,6 @@ getHostCapabilities(ctx: Context, req: RuntimeRef): Promise<Snapshot<HostCapabil
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/capabilities)
-
-## describeCreditPackageAgents
-
-```ts
-describeCreditPackageAgents(ctx: ExecutionContext, req?: DescribeCreditPackageAgentsRequest): Promise<CreditPackageAgent[]>;
-```
-
-[查看操作或完整契约](/api-reference/runtimes/describe-credit-package-agents)
 
 ## describeCreditUsageInfo
 
@@ -94,10 +94,18 @@ new new (container: ServiceContainer | undefined, checkOpen: () => void, runtime
 
 [查看操作或完整契约](/reference/js/public#entry-572e0000989d8b4e)
 
+## describeCreditPackageAgents
+
+```ts
+describeCreditPackageAgents(ctx: ExecutionContext, request?: DescribeCreditPackageAgentsRequest & ListOptions): Promise<Page<CreditPackageAgent>>;
+```
+
+[查看操作或完整契约](/api-reference/runtimes/describe-credit-package-agents)
+
 ## listRuntimes
 
 ```ts
-listRuntimes(ctx: Context): Promise<Runtime[]>;
+listRuntimes(ctx: Context, request?: ListOptions): Promise<Page<Runtime>>;
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/list)
@@ -117,14 +125,6 @@ getHostCapabilities(ctx: Context, req: RuntimeRef): Promise<Snapshot<HostCapabil
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/capabilities)
-
-## describeCreditPackageAgents
-
-```ts
-describeCreditPackageAgents(ctx: ExecutionContext, req?: DescribeCreditPackageAgentsRequest): Promise<CreditPackageAgent[]>;
-```
-
-[查看操作或完整契约](/api-reference/runtimes/describe-credit-package-agents)
 
 ## describeCreditUsageInfo
 

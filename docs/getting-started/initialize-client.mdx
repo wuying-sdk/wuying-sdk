@@ -93,10 +93,10 @@ SDK 负责换票和续期，密码每个 Client 生命周期只提交一次，�
 
 ```ts TypeScript
 const runtimeManager = await client.buildRuntimeManager(ctx);
-const runtimes = await runtimeManager.listRuntimes(ctx);
+const { items: runtimes, nextCursor } = await runtimeManager.listRuntimes(ctx);
 ```
 
-返回当前身份下的 Runtime 数组；目录未加载或认证失败会报错，不返回伪造空列表。查询成功不代表获得全部资源权限。Go、Java 和 Node 的完整初始化与只读验证源码见[代码示例](/examples/index)；Android / iOS 通过 `Client.request` 与 `Methods.runtimeObserveRuntimes` 观察目录，见[移动端契约](/reference/mobile/contract)。
+返回当前身份下的一页 Runtime；通过 nextCursor 继续查询，见[列表查询与分页](/domain-model/page)。目录未加载或认证失败会报错，不返回伪造空页。查询成功不代表获得全部资源权限。Go、Java 和 Node 的完整初始化与只读验证源码见[代码示例](/examples/index)；Android / iOS 通过 `Client.request` 与 `Methods.runtimeObserveRuntimes` 观察目录，见[移动端契约](/reference/mobile/contract)。
 
 ## 6. 结束或更换身份
 

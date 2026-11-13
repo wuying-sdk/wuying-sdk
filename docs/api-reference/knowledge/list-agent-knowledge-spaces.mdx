@@ -26,19 +26,20 @@ description: "完整公开接口 · Knowledge"
 ### JavaScript / TypeScript · AgentManager
 
 ```ts
-listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
+listAgentKnowledgeSpaces(ctx: ExecutionContext, request: ListAgentKnowledgeSpacesRequest & ListOptions): Promise<Page<KnowledgeSpace>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.AgentManager
 
 ```go
-func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+func (receiver *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeSpace], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.AgentManager
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -57,6 +58,17 @@ interface ListAgentKnowledgeSpacesRequest {
     agentId: string;
     /** 业务资源类型。新版 AgentManager 要求显式提供，不从桌面内 Agent 推导。 */
     agentType?: string;
+}
+
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface KnowledgeSpace {

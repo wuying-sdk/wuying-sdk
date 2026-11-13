@@ -153,7 +153,7 @@ func(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, er
 
 ```go
 *ResourceManager.ListDraftAttachments
-func(ctx context.Context, r m.DraftRef) (m.Snapshot[m.DraftSnapshot], error)
+func(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/drafts/list-draft-attachments) · [Go DTO 参考](/reference/go/api)
@@ -170,7 +170,7 @@ func(ctx context.Context, r m.DraftRef) (m.Snapshot[m.DraftSnapshot], error)
 
 ```go
 *ResourceManager.ListResources
-func(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
+func(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/resources/list-resources) · [Go DTO 参考](/reference/go/api)
@@ -185,7 +185,7 @@ func(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
 
 ```go
 *ResourceManager.ListWorkspaces
-func(ctx context.Context, r m.WorkspaceQuery) (m.Snapshot[m.WorkspacePage], error)
+func(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/workspaces/list) · [Go DTO 参考](/reference/go/api)

@@ -25,7 +25,7 @@ func (receiver *SkillManager) EntUninstallSkills(ctx context.Context, req *EntUn
 ## ListAgentAuthedSkills
 
 ```go
-func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...CallOption) (*model.ListAgentAuthedSkillsResult, error)
+func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...m.ListOptions) (m.Page[*m.AgentAuthedSkill], error)
 ```
 
 [查看操作或完整契约](/api-reference/skills/list-agent-authed-skills)
@@ -33,7 +33,7 @@ func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *Li
 ## ListCategories
 
 ```go
-func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...CallOption) ([]*model.SkillCategory, error)
+func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...m.ListOptions) (m.Page[*m.SkillCategory], error)
 ```
 
 [查看操作或完整契约](/api-reference/skills/list-categories)
@@ -41,7 +41,7 @@ func (receiver *SkillManager) ListCategories(ctx context.Context, req *ListCateg
 ## ListInstalledSkills
 
 ```go
-func (receiver *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...CallOption) ([]*model.InstalledSkill, error)
+func (receiver *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...m.ListOptions) (m.Page[*m.InstalledSkill], error)
 ```
 
 [查看操作或完整契约](/api-reference/skills/installed)

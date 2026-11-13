@@ -6,7 +6,7 @@ description: "完整公开接口 · Agent"
 
 `listAgents` · Agent
 
-req.runtimeId 来自已授权目录；读取 data 数组并保留 projection，不自动选择第一项。
+req.runtimeId 来自已授权目录；读取 items 当前页并保留 projection，不自动选择第一项。
 
 ## 语言与授权
 
@@ -26,19 +26,20 @@ req.runtimeId 来自已授权目录；读取 data 数组并保留 projection，�
 ### JavaScript / TypeScript · AgentManager
 
 ```ts
-listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.AgentManager
 
 ```go
-func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+func (receiver *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.AgentManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.AgentSummary>>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · agents
@@ -46,6 +47,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 ```sh
 wuying agents list
 required --runtime <id> — Explicit authorized Runtime ID
+optional --limit <count> — Page size (1..100) (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
 ```
 
 ## TypeScript 参数与结果结构
@@ -63,9 +66,15 @@ interface RuntimeRef {
     runtimeId: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface AgentSummary extends AgentRef {
@@ -88,6 +97,20 @@ interface AgentSummary extends AgentRef {
 
 interface AgentRef extends RuntimeRef {
     agentId: string;
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

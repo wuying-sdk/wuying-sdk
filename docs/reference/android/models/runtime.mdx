@@ -31,7 +31,7 @@ func(ctx context.Context, req *ApproveFotaUpdateRequest, opts ...CallOption) err
 
 ```go
 *RuntimeManager.DescribeCreditPackageAgents
-func(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/runtimes/describe-credit-package-agents) · [Go DTO 参考](/reference/go/api)
@@ -87,11 +87,11 @@ func(ctx context.Context, r model.RuntimeRef) (model.Snapshot[model.HostCapabili
 
 `Methods.runtimeListRuntimes` → `runtime.listRuntimes`
 
-**模式：** `call`。**请求类型：** 无业务字段（空对象）。**MutationOptions：** 不支持；省略 `mutationId`。
+**模式：** `call`。**请求类型：** `m.ListOptions`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
 *RuntimeManager.ListRuntimes
-func(ctx context.Context) ([]model.Runtime, error)
+func(ctx context.Context, opts ...m.ListOptions) (m.Page[m.Runtime], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/runtimes/list) · [Go DTO 参考](/reference/go/api)

@@ -26,19 +26,20 @@ description: "完整公开接口 · Agent"
 ### JavaScript / TypeScript · AgentManager
 
 ```ts
-listExperts(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<Expert[]>>;
+listExperts(ctx: Context, request: (RuntimeRef & { primaryAgentId: string; }) & ListOptions): Promise<Page<Expert> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.AgentManager
 
 ```go
-func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+func (receiver *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery, opts ...m.ListOptions) (m.Page[m.Expert], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.AgentManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Expert>>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -56,9 +57,15 @@ interface RuntimeRef {
     runtimeId: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface Expert extends AgentRef {
@@ -75,6 +82,20 @@ interface Expert extends AgentRef {
 
 interface AgentRef extends RuntimeRef {
     agentId: string;
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

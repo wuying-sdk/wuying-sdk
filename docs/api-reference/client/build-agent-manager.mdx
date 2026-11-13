@@ -24,7 +24,7 @@ description: "完整公开接口 · Client"
 ### JavaScript / TypeScript · Client
 
 ```ts
-buildAgentManager(_context: Context): Promise<AgentManager$1>;
+buildAgentManager(_context: Context): Promise<AgentManager>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go.Client
@@ -50,17 +50,15 @@ interface Context {
     traceId?: string;
 }
 
-interface AgentManager$1 extends Pick<CloudResources, 'describeWyDrives' | 'describeWyDriveFiles' | 'getDownloadUrl' | 'deleteWyDriveFile' | 'listAgentKnowledgeSpaces' | 'listKnowledgeFiles' | 'downloadKnowledgeFiles'> {
-    listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+interface AgentManager extends Pick<CloudResources, 'describeWyDrives' | 'describeWyDriveFiles' | 'getDownloadUrl' | 'deleteWyDriveFile' | 'listAgentKnowledgeSpaces' | 'listKnowledgeFiles' | 'downloadKnowledgeFiles'> {
+    listAgents: AgentManager$1['listAgents'];
     observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
-    listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<ModelSummary[]>>;
-    listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+    listAgentModels: AgentManager$1['listAgentModels'];
+    listAgentProducts: AgentManager$1['listAgentProducts'];
     getExpertDirectory(ctx: Context, req: RuntimeRef & {
         primaryAgentId: string;
     }): Promise<Snapshot<ExpertDirectory>>;
-    listExperts(ctx: Context, req: RuntimeRef & {
-        primaryAgentId: string;
-    }): Promise<Snapshot<Expert[]>>;
+    listExperts: AgentManager$1['listExperts'];
     getAgentModelCatalog(ctx: Context, req: AgentRef & {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<AgentModelCatalog>>;

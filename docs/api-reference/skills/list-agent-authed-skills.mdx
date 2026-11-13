@@ -6,7 +6,7 @@ description: "完整公开接口 · Skill"
 
 `listAgentAuthedSkills` · Skill
 
-查询 Agent 授权的技能列表
+公开方法的参数和返回值如下。使用前核对当前语言、认证模式、目标环境与能力。
 
 ## 语言与授权
 
@@ -26,19 +26,20 @@ description: "完整公开接口 · Skill"
 ### JavaScript / TypeScript · SkillManager
 
 ```ts
-listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
+listAgentAuthedSkills(ctx: Context, request: (ListAgentAuthedSkillsRequest) & ListOptions): Promise<Page<AgentAuthedSkill>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.SkillManager
 
 ```go
-func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...CallOption) (*model.ListAgentAuthedSkillsResult, error)
+func (receiver *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...m.ListOptions) (m.Page[*m.AgentAuthedSkill], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.SkillManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsResult> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentAuthedSkill>> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentAuthedSkill>> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -46,10 +47,10 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListAgen
 以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
 
 ```ts
-interface ExecutionContext {
+interface Context {
     signal?: AbortSignal;
-    traceId?: string;
     timeout?: number;
+    traceId?: string;
 }
 
 interface ListAgentAuthedSkillsRequest {
@@ -58,9 +59,48 @@ interface ListAgentAuthedSkillsRequest {
     agentProvider?: string;
 }
 
-interface ListAgentAuthedSkillsResult {
-    skills: AgentAuthedSkill[];
-    totalCount: number;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
+}
+
+interface AgentAuthedSkill {
+    skillId: string;
+    autoInstall: boolean;
+    channel: string;
+    skillName: string;
+    slug: string;
+    displayName: string;
+    description: string;
+    skillIcon: string;
+    skillIconUrl: string;
+    skillSummary: string;
+    categoryId: string;
+    categoryName: string;
+    categoryIcon: string;
+    supplierType: string;
+    author: string;
+    sourceMarket: string;
+    sourceLink: string;
+    gmtCreated: string;
+    version: string;
+    adminEnabled: boolean;
+    supportOSList: string[];
+    identityResourceId: string;
+    installed: boolean;
+    userEnabled: boolean;
+    gmtInstalled: string;
+    taskId: string;
+    operationStatus: string;
+    operationType: string;
+    triggerWords: string[];
+    tags: SkillTag[];
 }
 ```
 

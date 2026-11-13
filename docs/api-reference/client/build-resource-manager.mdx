@@ -24,7 +24,7 @@ description: "完整公开接口 · Client"
 ### JavaScript / TypeScript · Client
 
 ```ts
-buildResourceManager(_context: Context): Promise<ResourceManager$1>;
+buildResourceManager(_context: Context): Promise<ResourceManager>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go.Client
@@ -50,7 +50,7 @@ interface Context {
     traceId?: string;
 }
 
-interface ResourceManager$1 {
+interface ResourceManager {
     attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
     getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
     stageDraftAttachment(ctx: Context, req: DraftRef & {
@@ -58,7 +58,7 @@ interface ResourceManager$1 {
         name: string;
         uploadId: string;
     }): Promise<StagedAttachment>;
-    listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+    listDraftAttachments: ResourceManager$1['listDraftAttachments'];
     commitDraftAttachments(ctx: Context, req: DraftRef & {
         conversationId: string;
         attachmentIds: string[];
@@ -71,15 +71,11 @@ interface ResourceManager$1 {
     getDraftAttachmentPreview(ctx: Context, req: DraftRef & {
         attachmentId: string;
     }): Promise<Snapshot<AttachmentPreview>>;
-    listWorkspaces(ctx: Context, req: RuntimeRef & {
-        parentWorkspaceId?: string;
-    }): Promise<Snapshot<WorkspacePage>>;
+    listWorkspaces: ResourceManager$1['listWorkspaces'];
     createWorkspace(ctx: Context, req: RuntimeRef & {
         name: string;
     }): Promise<Workspace>;
-    listResources(ctx: Context, req: RuntimeRef & {
-        kind?: Resource['kind'];
-    }): Promise<Snapshot<Resource[]>>;
+    listResources: ResourceManager$1['listResources'];
     observeResources(ctx: Context, req: RuntimeRef & {
         kind?: Resource['kind'];
     }, observer: Observer<Resource[]>): Promise<Subscription>;

@@ -26,25 +26,26 @@ description: "完整公开接口 · File"
 ### JavaScript / TypeScript · AgentManager
 
 ```ts
-describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest | undefined): Promise<DescribeWyDrivesResult>;
+describeWyDrives(ctx: ExecutionContext, request?: (DescribeWyDrivesRequest & ListOptions) | undefined): Promise<{ items: WyDrive[]; nextCursor: string | null; projection?: Projection; requestId: string; totalSize: number; usedSize: number; capacityNotEnough: boolean; }>;
 ```
 
 ### JavaScript / TypeScript · AgentManager
 
 ```ts
-describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest): Promise<DescribeWyDrivesResult>;
+describeWyDrives(ctx: ExecutionContext, request?: DescribeWyDrivesRequest & ListOptions): Promise<{ items: WyDrive[]; nextCursor: string | null; projection?: Projection; requestId: string; totalSize: number; usedSize: number; capacityNotEnough: boolean; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.AgentManager
 
 ```go
-func (receiver *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+func (receiver *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest, opts ...m.ListOptions) (m.WyDrivePage, error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.AgentManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DescribeWyDrivesResult> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WyDrivePage> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WyDrivePage> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -65,12 +66,50 @@ interface DescribeWyDrivesRequest {
     botId?: string;
 }
 
-interface DescribeWyDrivesResult {
-    requestId: string;
-    drives: WyDrive[];
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface WyDrive {
+    /** WyDrive ID */
+    wyDriveId: string;
+    /** 创建时间 */
+    createdTime: string;
+    /** 地域 ID */
+    regionId: string;
+    /** 空间名称 */
+    name: string;
+    /** 所有者 ID */
+    ownerId: string;
+    /** 总容量 (bytes) */
     totalSize: number;
+    /** 已用容量 (bytes) */
     usedSize: number;
-    capacityNotEnough: boolean;
+    /** 空间状态 */
+    status: string;
+    /** 关联 Bot ID */
+    botId: string;
+    /** Bot 图标 URL */
+    botIcon: string;
+    /** 是否可删除 */
+    deletable: boolean;
+    /** 是否启用自动同步 */
+    enableAutoSync: boolean;
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

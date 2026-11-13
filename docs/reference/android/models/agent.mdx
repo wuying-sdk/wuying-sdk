@@ -31,7 +31,7 @@ func(ctx context.Context, r m.DeleteWyDriveFileRequest) error
 
 ```go
 *AgentManager.DescribeWyDriveFiles
-func(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+func(ctx context.Context, r m.DescribeWyDriveFilesRequest, opts ...m.ListOptions) (m.Page[m.WyDriveFile], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/files/describe-wy-drive-files) · [Go DTO 参考](/reference/go/api)
@@ -46,7 +46,7 @@ func(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFil
 
 ```go
 *AgentManager.DescribeWyDrives
-func(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+func(ctx context.Context, r m.DescribeWyDrivesRequest, opts ...m.ListOptions) (m.WyDrivePage, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/files/describe-wy-drives) · [Go DTO 参考](/reference/go/api)
@@ -121,7 +121,7 @@ func(ctx context.Context, r m.ExpertQuery) (m.Snapshot[m.ExpertDirectory], error
 
 ```go
 *AgentManager.ListAgentKnowledgeSpaces
-func(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+func(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeSpace], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/knowledge/list-agent-knowledge-spaces) · [Go DTO 参考](/reference/go/api)
@@ -136,7 +136,7 @@ func(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpa
 
 ```go
 *AgentManager.ListAgentModels
-func(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+func(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.ModelSummary], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/agents/models) · [Go DTO 参考](/reference/go/api)
@@ -151,7 +151,7 @@ func(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
 
 ```go
 *AgentManager.ListAgentProducts
-func(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
+func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.ProductPage, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/agents/list-agent-products) · [Go DTO 参考](/reference/go/api)
@@ -166,7 +166,7 @@ func(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
 
 ```go
 *AgentManager.ListAgents
-func(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/agents/list) · [Go DTO 参考](/reference/go/api)
@@ -181,7 +181,7 @@ func(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
 
 ```go
 *AgentManager.ListExperts
-func(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+func(ctx context.Context, r m.ExpertQuery, opts ...m.ListOptions) (m.Page[m.Expert], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/agents/list-experts) · [Go DTO 参考](/reference/go/api)
@@ -196,7 +196,7 @@ func(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
 
 ```go
 *AgentManager.ListKnowledgeFiles
-func(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+func(ctx context.Context, r m.ListKnowledgeFilesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeFile], error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/knowledge/list-knowledge-files) · [Go DTO 参考](/reference/go/api)

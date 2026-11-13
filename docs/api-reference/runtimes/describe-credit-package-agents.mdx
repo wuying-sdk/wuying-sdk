@@ -26,19 +26,20 @@ description: "完整公开接口 · Runtime"
 ### JavaScript / TypeScript · RuntimeManager
 
 ```ts
-describeCreditPackageAgents(ctx: ExecutionContext, req?: DescribeCreditPackageAgentsRequest): Promise<CreditPackageAgent[]>;
+describeCreditPackageAgents(ctx: ExecutionContext, request?: DescribeCreditPackageAgentsRequest & ListOptions): Promise<Page<CreditPackageAgent>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.RuntimeManager
 
 ```go
-func (receiver *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func (receiver *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.RuntimeManager
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -56,6 +57,17 @@ interface DescribeCreditPackageAgentsRequest {
     agentType?: string;
     agentIds?: string[];
     fillAgent?: boolean;
+}
+
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface CreditPackageAgent {

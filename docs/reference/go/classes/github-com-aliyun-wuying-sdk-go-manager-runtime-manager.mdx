@@ -17,7 +17,7 @@ func (receiver *RuntimeManager) ApproveFotaUpdate(ctx context.Context, req *Appr
 ## DescribeCreditPackageAgents
 
 ```go
-func (receiver *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func (receiver *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/describe-credit-package-agents)
@@ -49,7 +49,7 @@ func (receiver *RuntimeManager) GetHostCapabilities(ctx context.Context, r model
 ## ListRuntimes
 
 ```go
-func (receiver *RuntimeManager) ListRuntimes(ctx context.Context) ([]model.Runtime, error)
+func (receiver *RuntimeManager) ListRuntimes(ctx context.Context, opts ...m.ListOptions) (m.Page[m.Runtime], error)
 ```
 
 [查看操作或完整契约](/api-reference/runtimes/list)

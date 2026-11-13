@@ -45,7 +45,7 @@ runtimesAPI, err := client.BuildRuntimeManager(ctx)
 if err != nil { return err }
 runtimes, err := runtimesAPI.ListRuntimes(ctx)
 if err != nil { return err }
-// runtimes 是直接返回的 Runtime 数组；其它快照查询仍按原声明读取。
+// runtimes.Items 是当前页，runtimes.NextCursor 用于续查。
 ```
 
 导入：`wuying "github.com/aliyun/wuying-sdk-go"` 和 `"github.com/aliyun/wuying-sdk-go/config"`，以及标准库 context/os/time。完整程序处理错误并限制输出，不调用业务服务的编译检查（依赖未缓存时仍需下载）：在包根目录执行 `node scripts/qa.mjs sdk-smoke --language=go`。也可进入 `examples/go` 执行 `go run . --help`。
@@ -75,9 +75,9 @@ Client 是对外根入口；通过 `BuildAgentManager` 和 `BuildConversationMan
 | 业务 | Go 公共入口 | 参数/结果说明 |
 |---|---|---|
 | 构造与关闭 | NewClient / Close | ClientOptions + UserConfig，context 由调用传递 |
-| 选环境/Agent | RuntimeManager.ListRuntimes / AgentManager.ListAgents | RuntimeRef；Runtime 查询直接返回数组，Agent 查询保留 Snapshot.Projection |
+| 选环境/Agent | RuntimeManager.ListRuntimes / AgentManager.ListAgents | RuntimeRef；列表查询返回 Page，保留可用的同步状态 |
 | 建会 | CreateConversation | CreateRequest + 可选 MutationOptions，返回 CreatedConversation |
-| 分页历史 | ListMessages | MessageQuery，Snapshot.Data.Items / NextCursor |
+| 分页历史 | ListMessages | MessageQuery，Page.Items / NextCursor |
 | 观察历史 | ObserveMessages | model.Observer，结束 Unsubscribe |
 | 提交/流式/等待 | SendMessage / SendMessageStream / SendMessageAndWait | SendRequest，受理与终态分开 |
 | 附件 | ResourceManager.StageAttachment / GetAttachmentAccess | 对应请求 DTO，不套用 JS File |
@@ -95,3 +95,7 @@ Client 是对外根入口；通过 `BuildAgentManager` 和 `BuildConversationMan
 ## 当前草稿的制品
 
 以下 `sdks/`、测试包及本地 tgz/jar 路径描述交付布局。本次源码尚未重新封装为完整交付包；审核当前接口须先用 RuntimeManager 草稿源码重新构建并替换对应制品。旧交付包与公网上同名版本不具备本页的新接口。源码和构建命令见各 SDK README；来源身份见 文档站的全量覆盖清单。
+
+## 列表分页
+
+列表统一使用 limit/cursor，读取 items/nextCursor；默认每页50项，最多100项。完整规则见[列表查询与分页](/domain-model/page)。

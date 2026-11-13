@@ -80,6 +80,7 @@ interface ConversationHistory extends Page<Message> {
 interface Page<T> {
     items: T[];
     nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface Subscription {

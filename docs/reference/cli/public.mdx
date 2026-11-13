@@ -42,6 +42,8 @@ wuying agents
 ```sh
 wuying agents list
 required --runtime <id> — Explicit authorized Runtime ID
+optional --limit <count> — Page size (1..100) (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
 ```
 
 <a id="entry-3a59f308d78a549a" />
@@ -217,7 +219,7 @@ required --conversation <id> — Product Conversation ID
 ```sh
 wuying conversations list
 required --runtime <id> — Explicit authorized Runtime ID
-optional --limit <count> — Page size (default: 20)
+optional --limit <count> — Page size (default: 50)
 optional --cursor <cursor> — Opaque nextCursor
 ```
 
@@ -349,6 +351,8 @@ wuying interactions
 wuying interactions list
 required --runtime <id> — Explicit authorized Runtime ID
 required --conversation <id> — Product Conversation ID
+optional --limit <count> — Page size (1..100) (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
 ```
 
 <a id="entry-7ef9eb0b28a4af84" />
@@ -440,6 +444,8 @@ wuying models
 wuying models list
 required --runtime <id> — Explicit authorized Runtime ID
 required --agent <id> — Agent ID
+optional --limit <count> — Page size (1..100) (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
 ```
 
 <a id="entry-89a349421bd6ff43" />
@@ -479,7 +485,8 @@ wuying runtimes
 
 ```sh
 wuying runtimes list
-
+optional --limit <count> — Page size (1..100) (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
 ```
 
 <a id="entry-100fc8994e4fa292" />

@@ -6,7 +6,7 @@ description: "完整公开接口 · Message"
 
 `listMessages` · Message
 
-返回 Snapshot&lt;Page&lt;Message&gt;&gt;，读取 data.items；同一轮可产生多条消息，按真实 ID 对账。
+返回 Page&lt;Message&gt;，读取 items；同一轮可产生多条消息，按真实 ID 对账。
 
 ## 语言与授权
 
@@ -26,19 +26,19 @@ description: "完整公开接口 · Message"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+listMessages(ctx: Context, request: (MessageQuery) & ListOptions): Promise<Page<Message> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Page[m.Message], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>> listMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>> listMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · messages
@@ -75,14 +75,15 @@ interface RuntimeRef {
     runtimeId: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
 }
 
 interface Page<T> {
     items: T[];
     nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface Message extends ConversationRef {
@@ -96,6 +97,20 @@ interface Message extends ConversationRef {
     createdAt: Int64;
     revision: Int64;
     timing?: ExecutionTiming;
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

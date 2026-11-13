@@ -26,25 +26,20 @@ description: "完整公开接口 · Member"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<{ add: Capability; multipleIdentities: Capability; configurable: { displayName: Capability; model: Capability; responsibility: Capability; }; agentId: string; runtimeId: string; }[]>>;
-```
-
-### JavaScript / TypeScript · ConversationManager
-
-```ts
-listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<MemberCandidate[]>>;
+listMemberCandidates(ctx: Context, request: (ConversationRef) & ListOptions): Promise<Page<{ add: Capability; multipleIdentities: Capability; configurable: { displayName: Capability; model: Capability; responsibility: Capability; }; agentId: string; runtimeId: string; }> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.MemberCandidate], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.MemberCandidate>>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.MemberCandidate>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.MemberCandidate>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -66,23 +61,34 @@ interface RuntimeRef {
     runtimeId: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
 }
 
-interface MemberCandidate extends AgentRef {
-    add: Capability;
-    multipleIdentities: Capability;
-    configurable: {
-        displayName: Capability;
-        model: Capability;
-        responsibility: Capability;
-    };
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
-interface AgentRef extends RuntimeRef {
-    agentId: string;
+interface Capability {
+    supported: boolean;
+    reasonCode?: string;
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

@@ -97,3 +97,7 @@ wuying interactions respond --runtime RUNTIME_ID --conversation CONVERSATION_ID 
 ## 当前草稿的制品
 
 以下 `sdks/`、测试包及本地 tgz/jar 路径描述交付布局。本次源码尚未重新封装为完整交付包；审核当前接口须先用 RuntimeManager 草稿源码重新构建并替换对应制品。旧交付包与公网上同名版本不具备本页的新接口。源码和构建命令见各 SDK README；来源身份见 文档站的全量覆盖清单。
+
+## 列表分页
+
+列表统一使用 limit/cursor，读取 items/nextCursor；默认每页50项，最多100项。完整规则见[列表查询与分页](/domain-model/page)。

@@ -17,7 +17,8 @@ public com.aliyun.wuying.sdk.manager.AgentManager(com.aliyun.wuying.sdk.internal
 ## listAgents
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.AgentSummary>>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/agents/list)
@@ -25,7 +26,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 ## listAgentModels
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.ModelSummary>>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/agents/models)
@@ -41,7 +43,8 @@ public com.aliyun.wuying.sdk.model.Subscription observeAgents(com.aliyun.wuying.
 ## describeWyDrives
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DescribeWyDrivesResult> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WyDrivePage> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WyDrivePage> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/files/describe-wy-drives)
@@ -49,7 +52,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Describe
 ## describeWyDriveFiles
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DescribeWyDriveFilesResult> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDriveFile>> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDriveFile>> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/files/describe-wy-drive-files)
@@ -73,7 +77,8 @@ public java.util.concurrent.CompletionStage<java.lang.Void> deleteWyDriveFile(co
 ## listAgentKnowledgeSpaces
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/knowledge/list-agent-knowledge-spaces)
@@ -81,7 +86,8 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 ## listKnowledgeFiles
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListKnowledgeFilesResult> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeFile>> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeFile>> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/knowledge/list-knowledge-files)
@@ -113,7 +119,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 ## listExperts
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Expert>>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/agents/list-experts)
@@ -129,7 +136,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 ## listAgentProducts
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ProductCatalog>> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ProductPage> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ProductPage> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/agents/list-agent-products)

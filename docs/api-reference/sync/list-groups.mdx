@@ -26,19 +26,19 @@ description: "完整公开接口 · Group"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: GroupDirectoryEntry[]; nextCursor: string | null; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
+func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupDirectoryPage> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSummary>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -60,10 +60,24 @@ interface GroupDirectoryQuery {
     conversationId?: string;
 }
 
-interface GroupDirectoryPage {
-    groups: GroupDirectoryEntry[];
-    nextCursor: string | null;
-    hasMore: boolean;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface GroupDirectoryEntry {
+    /** 仅在已授权Runtime目录中能唯一关联时提供；缺失时不能猜测AG。 */
+    runtimeId?: string;
+    groupId: string;
+    conversationId: string;
+    conversationIdIm: string;
+    controllerUserId: string;
+    status: string;
+    groupName: string;
+    faceURL?: string;
+    memberRevision: number;
+    membershipGeneration: number;
+    joinedAtMs?: number;
 }
 ```
 

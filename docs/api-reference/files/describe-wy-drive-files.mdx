@@ -26,19 +26,20 @@ description: "完整公开接口 · File"
 ### JavaScript / TypeScript · AgentManager
 
 ```ts
-describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+describeWyDriveFiles(ctx: ExecutionContext, request: Omit<DescribeWyDriveFilesRequest, "pageNumber" | "pageSize"> & ListOptions): Promise<Page<WyDriveFile>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.AgentManager
 
 ```go
-func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+func (receiver *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest, opts ...m.ListOptions) (m.Page[m.WyDriveFile], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.AgentManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DescribeWyDriveFilesResult> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDriveFile>> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDriveFile>> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -63,10 +64,6 @@ interface DescribeWyDriveFilesRequest {
     parentFolderPath?: string;
     /** 文件名过滤 */
     fileNameFilter?: string;
-    /** 每页大小 */
-    pageSize?: number;
-    /** 页码 */
-    pageNumber?: number;
     /** 排序方式（如 CreateTimeDesc / CreateTimeAsc / NameAsc / NameDesc） */
     orderType?: string;
     /** 产品类型，固定传 "AIAgentProducts" */
@@ -75,10 +72,48 @@ interface DescribeWyDriveFilesRequest {
     jvsSessionId?: string;
 }
 
-interface DescribeWyDriveFilesResult {
-    requestId: string;
-    files: WyDriveFile[];
-    totalCount: number;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
+}
+
+interface WyDriveFile {
+    /** 文件 ID */
+    fileId: string;
+    /** 文件名 */
+    fileName: string;
+    /** 文件路径 */
+    path: string;
+    /** 文件类型 (folder/file) */
+    fileType: string;
+    /** 文件大小 (bytes) */
+    size: number;
+    /** 文件状态 */
+    status: string;
+    /** 文件格式图标 URL */
+    fileFormatIconUrl: string;
+    /** 创建时间 */
+    gmtCreate: string;
+    /** 修改时间 */
+    gmtModified: string;
+    /** ETag */
+    eTag: string;
+    /** 父文件夹 ID */
+    parentFileId: string;
+    /** 父文件夹名 */
+    parentFileName: string;
+    /** 是否支持预览 */
+    supportPreview: boolean;
+    /** 创建者 */
+    creator: string;
+    /** 文件标签列表 */
+    tags: FileTag[];
 }
 ```
 

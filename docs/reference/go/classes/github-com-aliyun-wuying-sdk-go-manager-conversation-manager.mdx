@@ -161,7 +161,7 @@ func (receiver *ConversationManager) GetTurn(ctx context.Context, r m.TurnRef) (
 ## ListActiveExecutions
 
 ```go
-func (receiver *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnapshot], error)
+func (receiver *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.ActiveExecutionPage, error)
 ```
 
 [查看操作或完整契约](/api-reference/executions/list-active-executions)
@@ -169,7 +169,7 @@ func (receiver *ConversationManager) ListActiveExecutions(ctx context.Context, r
 ## ListConversationGroups
 
 ```go
-func (receiver *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.SidebarGroup]], error)
+func (receiver *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Page[m.SidebarGroup], error)
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
@@ -177,7 +177,7 @@ func (receiver *ConversationManager) ListConversationGroups(ctx context.Context,
 ## ListConversationHistory
 
 ```go
-func (receiver *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+func (receiver *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.ConversationHistory, error)
 ```
 
 [查看操作或完整契约](/api-reference/messages/list-conversation-history)
@@ -185,7 +185,7 @@ func (receiver *ConversationManager) ListConversationHistory(ctx context.Context
 ## ListConversations
 
 ```go
-func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Page[m.Conversation], error)
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list)
@@ -193,7 +193,7 @@ func (receiver *ConversationManager) ListConversations(ctx context.Context, r m.
 ## ListExecutionActivity
 
 ```go
-func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity], error)
+func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.ExecutionActivity], error)
 ```
 
 [查看操作或完整契约](/api-reference/executions/list-execution-activity)
@@ -201,7 +201,7 @@ func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, 
 ## ListGroupSyncStates
 
 ```go
-func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
+func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.GroupSyncState], error)
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-group-sync-states)
@@ -209,7 +209,7 @@ func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r 
 ## ListGroups
 
 ```go
-func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
+func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-groups)
@@ -217,7 +217,7 @@ func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDi
 ## ListInteractions
 
 ```go
-func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery, opts ...m.ListOptions) (m.Page[m.Interaction], error)
 ```
 
 [查看操作或完整契约](/api-reference/interactions/list)
@@ -225,7 +225,7 @@ func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.I
 ## ListMemberCandidates
 
 ```go
-func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.MemberCandidate], error)
 ```
 
 [查看操作或完整契约](/api-reference/members/list-member-candidates)
@@ -233,7 +233,7 @@ func (receiver *ConversationManager) ListMemberCandidates(ctx context.Context, r
 ## ListMembers
 
 ```go
-func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery, opts ...m.ListOptions) (m.Page[m.Member], error)
 ```
 
 [查看操作或完整契约](/api-reference/members/list)
@@ -241,7 +241,7 @@ func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.Member
 ## ListMessages
 
 ```go
-func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Page[m.Message], error)
 ```
 
 [查看操作或完整契约](/api-reference/messages/list)
@@ -249,7 +249,7 @@ func (receiver *ConversationManager) ListMessages(ctx context.Context, r m.Messa
 ## ListSidebarConversations
 
 ```go
-func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func (receiver *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Page[m.Conversation], error)
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)

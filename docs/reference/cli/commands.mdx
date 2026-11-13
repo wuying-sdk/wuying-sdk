@@ -332,7 +332,7 @@ For task text choose exactly one of `--text`, `--input-file`, or `--stdin`.
 `--attach <path>` is repeatable: at most 16 local files, each 1 byte..10 MiB.
 Task text is at most 1 MiB. A local path is never treated as a remote desktop path.
 Use the Runtime and Agent selected by the user; the CLI never picks the first one.
-Runtime list queries return the Runtime array directly; other snapshot queries preserve the SDK's `projection`, pagination cursors and capabilities.
+List queries return a page with `items` and `nextCursor`; optional synchronization metadata and capabilities are preserved. Use --limit (default 50, maximum 100) and --cursor for continuation.
 A `partial`, `initializing`, or `stale` snapshot is not authoritative absence.
 
 `run` waits for the authoritative Turn terminal by default. `--no-wait` returns
@@ -406,7 +406,7 @@ latest 100-message projection; use paginated history for a longer Turn.
 {"schemaVersion":1,"status":"accepted","outcome":"accepted","data":{"runtimeId":"...","conversationId":"...","turnId":"...","messageId":"...","clientMessageId":"..."}}
 ```
 
-For `runtimes list`, the JSON result's `data` is the Runtime array directly. Other queries that return SDK snapshots preserve `data` and `projection`. Errors include `code`, `outcome`, optional
+For list commands, the JSON result's `data` is a page: `data.items` and `data.nextCursor`. Observer events and selected detail queries retain their declared SDK snapshots. Errors include `code`, `outcome`, optional
 `traceId`, and safe recovery IDs; raw upstream error bodies are not printed.
 
 | Exit | Meaning |
@@ -476,3 +476,5 @@ with the validated version while retaining tarball-install tests.
 profile isolation, redaction, Codex installation, cross-process disk persistence,
 and the actual SDK's business/IM storage against the persistent adapter.
 Read [CONTRACT.md](/integration/04-errors-and-operations) for ownership and compatibility details.
+
+列表查询统一使用 `limit` / `cursor`，返回 `items` / `nextCursor`，默认每页 50 项，最多 100 项。详见[列表分页](https://wuying-sdk.mintlify.app/domain-model/page)。

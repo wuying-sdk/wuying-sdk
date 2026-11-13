@@ -6,10 +6,42 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 
 此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
 
+## listAgents
+
+```ts
+listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list)
+
+## listAgentModels
+
+```ts
+listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<ModelSummary & AgentRef> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/agents/models)
+
+## listExperts
+
+```ts
+listExperts(ctx: Context, request: (RuntimeRef & { primaryAgentId: string; }) & ListOptions): Promise<Page<Expert> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list-experts)
+
+## listAgentProducts
+
+```ts
+listAgentProducts(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<{ projection: Projection; items: { productId: string; instanceIds: string[]; state: "available" | "unavailable" | "unknown"; }[]; nextCursor: string | null; complete: boolean; }>;
+```
+
+[查看操作或完整契约](/api-reference/agents/list-agent-products)
+
 ## describeWyDrives
 
 ```ts
-describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest | undefined): Promise<DescribeWyDrivesResult>;
+describeWyDrives(ctx: ExecutionContext, request?: (DescribeWyDrivesRequest & ListOptions) | undefined): Promise<{ items: WyDrive[]; nextCursor: string | null; projection?: Projection; requestId: string; totalSize: number; usedSize: number; capacityNotEnough: boolean; }>;
 ```
 
 [查看操作或完整契约](/api-reference/files/describe-wy-drives)
@@ -17,7 +49,7 @@ describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest | undefine
 ## describeWyDriveFiles
 
 ```ts
-describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+describeWyDriveFiles(ctx: ExecutionContext, request: Omit<DescribeWyDriveFilesRequest, "pageNumber" | "pageSize"> & ListOptions): Promise<Page<WyDriveFile>>;
 ```
 
 [查看操作或完整契约](/api-reference/files/describe-wy-drive-files)
@@ -41,7 +73,7 @@ deleteWyDriveFile(ctx: ExecutionContext, req: DeleteWyDriveFileRequest): Promise
 ## listAgentKnowledgeSpaces
 
 ```ts
-listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
+listAgentKnowledgeSpaces(ctx: ExecutionContext, request: ListAgentKnowledgeSpacesRequest & ListOptions): Promise<Page<KnowledgeSpace>>;
 ```
 
 [查看操作或完整契约](/api-reference/knowledge/list-agent-knowledge-spaces)
@@ -49,7 +81,7 @@ listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesReq
 ## listKnowledgeFiles
 
 ```ts
-listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+listKnowledgeFiles(ctx: ExecutionContext, request: Omit<ListKnowledgeFilesRequest, "pageNumber" | "pageSize"> & ListOptions): Promise<Page<KnowledgeFile>>;
 ```
 
 [查看操作或完整契约](/api-reference/knowledge/list-knowledge-files)
@@ -62,14 +94,6 @@ downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest
 
 [查看操作或完整契约](/api-reference/knowledge/download-knowledge-files)
 
-## listAgents
-
-```ts
-listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
-```
-
-[查看操作或完整契约](/api-reference/agents/list)
-
 ## observeAgents
 
 ```ts
@@ -77,30 +101,6 @@ observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>)
 ```
 
 [查看操作或完整契约](/api-reference/agents/observe-agents)
-
-## listAgentModels
-
-```ts
-listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<(ModelSummary & AgentRef)[]>>;
-```
-
-[查看操作或完整契约](/api-reference/agents/models)
-
-## listAgentProducts
-
-```ts
-listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
-```
-
-[查看操作或完整契约](/api-reference/agents/list-agent-products)
-
-## listExperts
-
-```ts
-listExperts(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<Expert[]>>;
-```
-
-[查看操作或完整契约](/api-reference/agents/list-experts)
 
 ## getExpertDirectory
 
@@ -121,7 +121,7 @@ getAgentModelCatalog(ctx: Context, req: AgentRef & { consistency?: "cache" | "re
 ## constructor
 
 ```ts
-new new (service: Service, cloud?: CloudResources | undefined): AgentManager;
+new new (service: Service, cloud?: CloudResources | undefined): AgentManager$1;
 ```
 
 [查看操作或完整契约](/reference/js/public#entry-c0944a4674945cdf)
@@ -129,7 +129,7 @@ new new (service: Service, cloud?: CloudResources | undefined): AgentManager;
 ## listAgents
 
 ```ts
-listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/agents/list)
@@ -145,7 +145,7 @@ observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>)
 ## listAgentModels
 
 ```ts
-listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<ModelSummary[]>>;
+listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<ModelSummary & AgentRef> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/agents/models)
@@ -153,7 +153,7 @@ listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<ModelSummary[]>>;
 ## listAgentProducts
 
 ```ts
-listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+listAgentProducts(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<{ projection: Projection; items: { productId: string; instanceIds: string[]; state: "available" | "unavailable" | "unknown"; }[]; nextCursor: string | null; complete: boolean; }>;
 ```
 
 [查看操作或完整契约](/api-reference/agents/list-agent-products)
@@ -169,7 +169,7 @@ getExpertDirectory(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }):
 ## listExperts
 
 ```ts
-listExperts(ctx: Context, req: RuntimeRef & { primaryAgentId: string; }): Promise<Snapshot<Expert[]>>;
+listExperts(ctx: Context, request: (RuntimeRef & { primaryAgentId: string; }) & ListOptions): Promise<Page<Expert> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/agents/list-experts)
@@ -185,7 +185,7 @@ getAgentModelCatalog(ctx: Context, req: AgentRef & { consistency?: "cache" | "re
 ## describeWyDrives
 
 ```ts
-describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest): Promise<DescribeWyDrivesResult>;
+describeWyDrives(ctx: ExecutionContext, request?: DescribeWyDrivesRequest & ListOptions): Promise<{ items: WyDrive[]; nextCursor: string | null; projection?: Projection; requestId: string; totalSize: number; usedSize: number; capacityNotEnough: boolean; }>;
 ```
 
 [查看操作或完整契约](/api-reference/files/describe-wy-drives)
@@ -193,7 +193,7 @@ describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest): Promise<
 ## describeWyDriveFiles
 
 ```ts
-describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+describeWyDriveFiles(ctx: ExecutionContext, request: Omit<DescribeWyDriveFilesRequest, "pageNumber" | "pageSize"> & ListOptions): Promise<Page<WyDriveFile>>;
 ```
 
 [查看操作或完整契约](/api-reference/files/describe-wy-drive-files)
@@ -217,7 +217,7 @@ deleteWyDriveFile(ctx: ExecutionContext, req: DeleteWyDriveFileRequest): Promise
 ## listAgentKnowledgeSpaces
 
 ```ts
-listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
+listAgentKnowledgeSpaces(ctx: ExecutionContext, request: ListAgentKnowledgeSpacesRequest & ListOptions): Promise<Page<KnowledgeSpace>>;
 ```
 
 [查看操作或完整契约](/api-reference/knowledge/list-agent-knowledge-spaces)
@@ -225,7 +225,7 @@ listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesReq
 ## listKnowledgeFiles
 
 ```ts
-listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+listKnowledgeFiles(ctx: ExecutionContext, request: Omit<ListKnowledgeFilesRequest, "pageNumber" | "pageSize"> & ListOptions): Promise<Page<KnowledgeFile>>;
 ```
 
 [查看操作或完整契约](/api-reference/knowledge/list-knowledge-files)

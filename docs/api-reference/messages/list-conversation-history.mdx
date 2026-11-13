@@ -26,19 +26,19 @@ description: "完整公开接口 · Message"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & ListOptions): Promise<{ projection: Projection; conversation?: Conversation; members: Member[]; turnItems: Item[]; turns: Turn[]; activities: ExecutionActivity[]; presentations: MessagePresentation[]; items: Message[]; nextCursor: string | null; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+func (receiver *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.ConversationHistory, error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ConversationHistory>> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationHistory> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -63,23 +63,137 @@ interface ConversationReadQuery {
     runtimeId?: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
 }
 
-interface ConversationHistory extends Page<Message> {
-    conversation?: Conversation;
-    members: Member[];
-    turnItems: Item[];
-    turns: Turn[];
-    activities: ExecutionActivity[];
-    presentations: MessagePresentation[];
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 
-interface Page<T> {
-    items: T[];
-    nextCursor: string | null;
+interface Conversation extends ConversationRef {
+    name: string;
+    mode: 'single' | 'group';
+    agentId?: string;
+    revision: Int64;
+    executionState: 'idle' | 'running' | 'error' | 'unknown';
+    availability: 'available' | 'unavailable' | 'unknown';
+    archived: boolean;
+    pinned: boolean;
+    lastActivityAt: Int64;
+    header?: ConversationHeaderMetadata;
+    presentation?: ConversationPresentation;
+    capabilities: {
+        send: Capability;
+        configure: Capability;
+        members: Capability;
+        resources: Capability;
+    };
+}
+
+interface ConversationRef extends RuntimeRef {
+    conversationId: string;
+}
+
+interface RuntimeRef {
+    runtimeId: string;
+}
+
+interface Member {
+    memberId: string;
+    actor: Actor;
+    displayName: string;
+    role: 'coordinator' | 'participant';
+    status: 'active' | 'muted' | 'suspended' | 'removed';
+    modelId?: string;
+    revision: Int64;
+    writeVersion?: string;
+    configuration?: MemberConfigurationView;
+    capabilities?: {
+        editName: Capability;
+        editModel: Capability;
+        editResponsibility: Capability;
+        remove: Capability;
+    };
+}
+
+interface Item {
+    itemId: string;
+    turnId: string;
+    messageId: string;
+    blocks: Block[];
+    state: 'pending' | 'streaming' | 'completed' | 'failed' | 'cancelled' | 'resolving' | 'resolved' | 'expired' | 'orphaned' | 'unknown';
+    outcome?: InteractionOutcome;
+    position: Int64;
+    revision: Int64;
+}
+
+interface Turn extends ConversationRef {
+    turnId: string;
+    messageIds: string[];
+    state: 'active' | 'completed' | 'cancelled' | 'failed' | 'interrupted' | 'unknown';
+    errorCode?: string;
+    revision: Int64;
+}
+
+interface ExecutionActivity extends ConversationRef {
+    activityId: string;
+    turnId: string;
+    kind: 'reasoning' | 'text' | 'tool' | 'status' | 'error';
+    name: string;
+    text: string;
+    result?: string;
+    state: 'running' | 'completed' | 'failed';
+    scope?: 'message' | 'turn' | 'unknown';
+    messageId?: string;
+    memberId?: string;
+    canonicalItemId?: string;
+    toolCallId?: string;
+    sequence: Int64;
+    revision: Int64;
+    frameCount: number;
+}
+
+interface MessagePresentation {
+    schemaVersion: '1';
+    message: Message;
+    snapshotRevision: string;
+    answer: {
+        state: 'final' | 'partial' | 'none' | 'unknown';
+        itemIds: string[];
+        blocks: Block[];
+        coverage: Coverage;
+    };
+    process: {
+        items: PresentationItem[];
+        nextCursor: string | null;
+        coverage: Coverage;
+    };
+    timing?: ExecutionTiming;
+}
+
+interface Message extends ConversationRef {
+    messageId: string;
+    clientMessageId?: string;
+    turnId?: string;
+    sender: Sender;
+    blocks: Block[];
+    state: 'pending' | 'streaming' | 'folded' | 'completed' | 'cancelled' | 'failed' | 'interrupted' | 'unknown';
+    position: Int64;
+    createdAt: Int64;
+    revision: Int64;
+    timing?: ExecutionTiming;
 }
 ```
 

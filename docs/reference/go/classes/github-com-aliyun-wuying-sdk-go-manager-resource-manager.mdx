@@ -81,7 +81,7 @@ func (receiver *ResourceManager) GetImGroupAttachmentOperation(ctx context.Conte
 ## ListDraftAttachments
 
 ```go
-func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef) (m.Snapshot[m.DraftSnapshot], error)
+func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
 ```
 
 [查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
@@ -89,7 +89,7 @@ func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.D
 ## ListResources
 
 ```go
-func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
+func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
 ```
 
 [查看操作或完整契约](/api-reference/resources/list-resources)
@@ -97,7 +97,7 @@ func (receiver *ResourceManager) ListResources(ctx context.Context, r m.Resource
 ## ListWorkspaces
 
 ```go
-func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery) (m.Snapshot[m.WorkspacePage], error)
+func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
 ```
 
 [查看操作或完整契约](/api-reference/workspaces/list)

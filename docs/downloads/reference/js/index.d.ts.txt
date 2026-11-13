@@ -119,10 +119,6 @@ interface DescribeWyDriveFilesRequest {
     parentFolderPath?: string;
     /** 文件名过滤 */
     fileNameFilter?: string;
-    /** 每页大小 */
-    pageSize?: number;
-    /** 页码 */
-    pageNumber?: number;
     /** 排序方式（如 CreateTimeDesc / CreateTimeAsc / NameAsc / NameDesc） */
     orderType?: string;
     /** 产品类型，固定传 "AIAgentProducts" */
@@ -301,10 +297,6 @@ interface ListKnowledgeFilesRequest {
     categoryId?: string;
     /** 文件名过滤 */
     fileNameFilter?: string;
-    /** 页码 */
-    pageNumber?: number;
-    /** 每页大小 */
-    pageSize?: number;
 }
 /** 下载文件引用（用于 InitKnowledgeFileDownloadTasks） */
 interface DownloadFileRef {
@@ -538,6 +530,888 @@ interface TokenInfo {
 }
 interface ConsumerUserGetExtTokenResponse extends TokenInfo {
     requestId: string;
+}
+
+interface ProcessInput {
+    conversationId: string;
+    source: 'stream' | 'durable';
+    rows: readonly ReplicaRow[];
+    /** Already checked against the current SDK-visible group/controller by Integration. */
+    membershipGeneration?: number;
+    access?: 'revoked';
+    stream?: {
+        id: string;
+        sequence: string;
+        closed?: boolean;
+        gap?: boolean;
+    };
+}
+
+/** Authorized export recipe. This boundary is selected by schema, never by field-name guessing. */
+interface View {
+    modelCatalogReady: boolean;
+    resourceCatalogReady: boolean;
+    interactionProjectionReady: boolean;
+    runtimes: Runtime[];
+    agents: AgentSummary[];
+    models: (ModelSummary & AgentRef)[];
+    conversations: Conversation[];
+    activities: ExecutionActivity[];
+    presentations: MessagePresentation[];
+    executions: ActiveExecution[];
+    memberCandidates: MemberCandidate[];
+    messages: Message[];
+    items: (Item & ConversationRef)[];
+    turns: Turn[];
+    members: (Member & ConversationRef)[];
+    interactions: Interaction[];
+    configs: (EffectiveConfig & ConversationRef)[];
+    resources: Resource[];
+    selections: ResourceSelection[];
+}
+interface ProjectionRecipe {
+    decode(rows: readonly ReplicaRow[], scope: Scope): View;
+}
+
+interface RuntimeRoute {
+    runtimeId: string;
+    target?: string;
+    name: string;
+}
+interface DirectoryIdentity {
+    principal: {
+        tenantId: string;
+        userId: string;
+    };
+    machines: RuntimeRoute[];
+}
+/** Login-scoped normalized presence; production uses owner-authorized IM relay metadata. */
+interface PresenceFact {
+    runtimeId: string;
+    state: 'online' | 'offline' | 'unknown';
+    revision: string;
+    expiresAt: number;
+}
+interface RuntimePresencePort {
+    start(signal: AbortSignal, receive: (facts: PresenceFact[]) => void): Promise<() => void>;
+}
+/** Login-scoped discovery cache; independent from AG installation-scoped business replicas. */
+declare class RuntimeDirectory {
+    readonly bus: Bus<undefined>;
+    private identity?;
+    private facts;
+    private generation;
+    private version;
+    private timer?;
+    private closed;
+    private presenceStop?;
+    private presenceLife;
+    private presenceStarted;
+    initialize(identity: DirectoryIdentity): void;
+    private check;
+    /** 本地已授权路由的唯一反查，不访问AG、不把第一个匹配当作唯一结果。 */
+    runtimeForController(controller: string): string | undefined;
+    resolve(runtimeId: string): {
+        principal: {
+            tenantId: string;
+            userId: string;
+        };
+        runtimeId: string;
+        target?: string;
+        name: string;
+    };
+    snapshot(): Snapshot<Runtime[]>;
+    connectPresence(port: RuntimePresencePort): Promise<void>;
+    private applyPresence;
+    private expiry;
+    close(): void;
+}
+
+interface Scope {
+    tenantId: string;
+    userId: string;
+    runtimeId: string;
+    installationId: string;
+    authGeneration: string;
+}
+interface LiveCoverage {
+    conversationId: string;
+    messageId: string;
+    itemId: string;
+    epoch: string;
+    epochRevision: string;
+    through: string;
+    baseline?: {
+        table: string;
+        key: string;
+        version: string;
+        data: Record<string, unknown>;
+    };
+}
+interface ReplicaRow {
+    table: string;
+    key: string;
+    version: string;
+    data: Record<string, unknown>;
+    deleted?: boolean;
+    liveCoverage?: LiveCoverage[];
+}
+type Change = {
+    op: 'upsert';
+    row: ReplicaRow;
+    coverage?: LiveCoverage[];
+} | {
+    op: 'delete';
+    table: string;
+    key: string;
+    version: string;
+};
+interface StoreBatch {
+    scope: Scope;
+    streamId: string;
+    checkpoint: string;
+    predecessor: string | null;
+    phase: {
+        kind: 'incremental';
+    } | {
+        kind: 'snapshot';
+        id: string;
+        stage: 'begin' | 'chunk' | 'end';
+        cutoverCheckpoint?: string | null;
+    };
+    changes: Change[];
+}
+interface LiveFrame extends ConversationRef {
+    scope: Scope;
+    turnId: string;
+    messageId: string;
+    itemId: string;
+    epoch: string;
+    epochRevision: string;
+    sequence: string;
+    baseVersion: string;
+    kind: 'replace' | 'delta' | 'end';
+    text?: string;
+    messageBase?: Message;
+    itemBase?: Item;
+}
+/** A trusted integration adapter, never supplied through the public Client configuration. */
+type ReadKind = 'conversationSummary' | 'sidebarGroups' | 'sidebarRows' | 'messageFiles' | 'storageContext' | 'composer' | 'members' | 'executions' | 'experts' | 'expertDirectory' | 'modelCatalog' | 'presentation' | 'workspaces' | 'draft.list' | 'draft.preview';
+interface Integration {
+    /** Opaque current authorization identity; never expose the relay session nonce. */
+    scopeGeneration?(scope: Scope): string;
+    scopedProjection?(scope: Scope, projection: Projection, domain: 'agents' | 'models' | 'conversation', conversationId?: string): Projection;
+    readonly scopedReadiness?: boolean;
+    /** Current visible membership admission for cached live-process hints. */
+    processAccess?(scope: Scope, conversationId: string): Promise<{
+        membershipGeneration: number;
+    } | undefined>;
+    imGroupAttachment?(scope: Scope, action: 'prepare' | 'attach' | 'query', params: Record<string, unknown>): Promise<unknown>;
+    groupSync?: {
+        list(scope: Scope): Promise<GroupSyncState[]>;
+        sync(scope: Scope, conversationId: string): Promise<GroupSyncState>;
+        syncGroup?(scope: Scope, groupId: string): Promise<GroupSyncState>;
+        observe(scope: Scope, handler: (state: GroupSyncState) => void): () => void;
+    };
+    /** 只读AG目录分页；不得视为Runtime授权或触发历史下载。 */
+    groupDirectory?: {
+        list(runtimeId: string | undefined, query: GroupDirectoryQuery, signal: AbortSignal): Promise<GroupDirectoryPage>;
+        recent?(limit: number, signal: AbortSignal): Promise<RecentGroupDirectoryEntry[]>;
+    };
+    read?(scope: Scope, kind: ReadKind, params: Record<string, unknown>, signal: AbortSignal): Promise<unknown>;
+    conversationHistory?: {
+        resolve(req: ConversationReadQuery, signal: AbortSignal): Promise<ConversationReadBinding>;
+        list(req: ConversationHistoryQuery, signal: AbortSignal): Promise<Snapshot<ConversationHistory>>;
+        observe(req: ConversationHistoryQuery, changed: () => void, signal: AbortSignal): Promise<() => void>;
+    };
+    directory?: RuntimeDirectory;
+    connectRuntime?(runtimeId: string, signal: AbortSignal): Promise<Scope>;
+    initializeRuntime?(scope: Scope): Promise<void>;
+    recipe: ProjectionRecipe;
+    ready(signal: AbortSignal): Promise<{
+        principal: {
+            tenantId: string;
+            userId: string;
+        };
+        scopes: Scope[];
+    }>;
+    start(sink: PushSink, signal: AbortSignal): Promise<void>;
+    command: CommandPort;
+    close(): Promise<void>;
+}
+interface PushSink {
+    /** 已知会话只唤醒该会话；缺省仍是 Runtime 全域失效，保留权限/目录变更边界。 */
+    invalidate?(scope: Scope, conversationIds?: readonly string[]): void;
+    summaryInvalidated?(scope: Scope): void;
+    /** Authorized public execution hints only; never participate in durable receipt/checkpoint apply. */
+    process?(scope: Scope, input: ProcessInput): void;
+    reactivate(runtimeId: string): Promise<void>;
+    checkpoint(scope: Scope, streamId: string): Promise<string | null>;
+    rows(scope: Scope, table: string, conversationId?: string): Promise<ReplicaRow[]>;
+    /** 只读取当前账户/Runtime/根会话内的消息锚点，不加载整个历史归档。 */
+    presentationMessage?(scope: Scope, conversationId: string, messageId: string): Promise<Message | undefined>;
+    store(batch: StoreBatch): Promise<void>;
+    /** Bounded Hub/recovered interaction display hints; never advance durable checkpoints. */
+    preview?(scope: Scope, rows: ReplicaRow[]): void;
+    /** Read the same authorized, unexpired hints used by the display projection. */
+    previewRows?(scope: Scope, table: string): ReplicaRow[];
+    live(frame: LiveFrame): Promise<void>;
+    status(scope: Scope, status: Pick<Projection, 'phase' | 'coverage'>): void;
+    revoke(scope: Scope): void;
+}
+interface CommandRequest {
+    key: string;
+    traceId: string;
+    scope: Scope;
+    kind: CommandKind;
+    params: Record<string, unknown>;
+}
+type CommandKind = 'conversation.create' | 'conversation.pin' | 'conversation.rename' | 'conversation.configure' | 'conversation.setOption' | 'conversation.archive' | 'conversation.unarchive' | 'member.add' | 'member.update' | 'member.remove' | 'message.send' | 'workspace.create' | 'turn.cancel' | 'turn.steer' | 'execution.cancel' | 'interaction.permission' | 'interaction.question' | 'interaction.refresh' | 'resources.set' | 'attachment.stage' | 'attachment.discard' | 'attachment.access' | 'draft.stage' | 'draft.commit' | 'draft.discard';
+type CommandResult = {
+    state: 'accepted' | 'unknown';
+} | {
+    state: 'succeeded';
+    result: unknown;
+} | {
+    state: 'failed';
+    code: ErrorCode$1;
+    failureEffect?: MutationStatus['failureEffect'];
+    retryable?: boolean;
+};
+interface CommandPort {
+    /** Trusted admission metadata for durable question receipt lookup. No answer bodies. */
+    prepareQuestion?(scope: Scope, params: Record<string, unknown>): Promise<Record<string, unknown>>;
+    execute(req: CommandRequest, signal: AbortSignal): Promise<CommandResult>;
+    query(scope: Scope, key: string, signal: AbortSignal, recovery?: {
+        kind: string;
+        params: Record<string, unknown>;
+    }): Promise<CommandResult>;
+}
+
+/** Materialized read replicas of the Store export; Hub never writes these stores. */
+declare const agTables: readonly ["conversations", "agent_session", "turns", "turn_items", "permissions", "conversation_artifacts", "attachments", "conversation_member", "conversation_messages"];
+type AGTable = typeof agTables[number];
+declare const agIndexes: readonly ["conversation_id", "root_conversation_id", "turn_id", "member_id", "agent_id", "status", "name"];
+interface AGRow extends Record<string, unknown> {
+    _sync: {
+        partition: string;
+        sourcePartition: string;
+        runtimeId: string;
+        installationId: string;
+        archiveId: string;
+        key: string;
+        version: string;
+        deleted: boolean;
+        wire: Record<string, unknown>;
+        payloadKeys: string[];
+        liveCoverage?: ReplicaRow['liveCoverage'];
+    };
+}
+
+/** 归属提示仅用于本地订阅失效；复用已有读取结果，不增加数据库操作。 */
+interface CommittedScope {
+    runtimeId: string;
+    conversationId?: string;
+}
+interface CommittedRow {
+    business: boolean;
+    row: ReplicaRow;
+    replaced: {
+        table: string;
+        key: string;
+    }[];
+    affected?: CommittedScope[];
+}
+interface OperationRecord {
+    id: string;
+    scope: Scope;
+    kind: string;
+    traceId: string;
+    paramsHash: string;
+    state: 'pending' | 'succeeded' | 'failed';
+    createdAt: number;
+    target?: string;
+    errorCode?: string;
+    notified?: boolean;
+    retryable?: boolean;
+    mutationId?: string;
+    result?: unknown;
+    failureEffect?: 'none' | 'partial' | 'unknown';
+    correlation?: {
+        memberId?: string;
+        conversationId?: string;
+        clientMessageId?: string;
+        hasAttachments?: boolean;
+        turnId?: string;
+        interactionId?: string;
+        ownerConversationId?: string;
+        nativeId?: string;
+        agentId?: string;
+        expectedVersion?: string;
+        mode?: unknown;
+        members?: unknown;
+    };
+}
+/** The only persistent replica writer. No transport or provider policy belongs here. */
+declare class Database {
+    private readonly factory;
+    private readonly name;
+    private opening?;
+    private closed;
+    private transactions;
+    constructor(factory: IDBFactory | undefined, name?: string);
+    private open;
+    private tx;
+    read(scope: Scope): Promise<{
+        generation: string;
+        commit: string;
+        rows: ReplicaRow[];
+    }>;
+    /** 展示元数据不需要读取正文；用于RPC完成后的Projection一致性边界。 */
+    readMetadata(scope: Scope): Promise<{
+        generation: string;
+        commit: string;
+    }>;
+    /** 复用现有主键精确取消息、根会话和成员。没有新增Object Store或索引。 */
+    readPresentationRows(scope: Scope, conversationId: string, messageId: string): Promise<ReplicaRow[]>;
+    /** Business rows have one user-owned copy; source archives only retain transport recovery state. */
+    readAccount(principal: Pick<Scope, 'tenantId' | 'userId'>, runtimeId?: string, conversationId?: string, purpose?: 'all' | 'conversation-list' | 'summary' | 'catalog'): Promise<{
+        scope: Scope;
+        generation: string;
+        commit: string;
+        rows: ReplicaRow[];
+    }[]>;
+    /** Exact active-installation catalog validation, without opening any AG/body store. */
+    readCatalogRows(scope: Scope, table: string): Promise<ReplicaRow[]>;
+    checkpoint(scope: Scope, streamId: string): Promise<string | null>;
+    apply(batch: StoreBatch, valid: () => void, committed?: (rows: CommittedRow[]) => void): Promise<boolean>;
+    private change;
+    private rebuildBusinessTables;
+    /** Internal indexed read; user owns the physical partition, Runtime is an optional business filter. */
+    readTable(scope: Scope, table: AGTable, filter?: {
+        field: typeof agIndexes[number];
+        value: string;
+    }): Promise<AGRow[]>;
+    claimOperation(record: OperationRecord): Promise<{
+        record: OperationRecord;
+        created: boolean;
+    }>;
+    operation(id: string): Promise<OperationRecord | undefined>;
+    saveOperation(record: OperationRecord): Promise<void>;
+    operations(scope: Scope): Promise<OperationRecord[]>;
+    close(): Promise<void>;
+}
+
+interface LateError {
+    runtimeId: string;
+    conversationId?: string;
+    error: BusinessError$1;
+}
+declare class Operations {
+    private db;
+    private port;
+    private life;
+    private authorize;
+    private notices;
+    private listeners;
+    private running;
+    private scans;
+    private grants;
+    constructor(db: Database, port: CommandPort, life: Lifetime, authorize?: (scope: Scope) => void);
+    private grant;
+    revoke(scope: Scope): void;
+    private check;
+    subscribe(fn: (notice: LateError) => boolean): () => void;
+    private notify;
+    private poll;
+    run<T>(ctx: Context, scope: Scope, kind: CommandKind, params: Record<string, unknown>, decode: (r: unknown) => T, options?: MutationOptions, correlation?: Record<string, unknown> | (() => Promise<Record<string, unknown>>)): Promise<T>;
+    /** Reopening only queries recorded keys. Unknown results continue bounded backoff; bodies are never replayed. */
+    recover(scope: Scope): Promise<void>;
+    private mutationKey;
+    private mutationResult;
+    lookup(scope: Scope, req: Omit<MutationRef, 'conversationId'> & {
+        conversationId?: string;
+    }, question?: QuestionResponseRef): Promise<CommandReceipt>;
+    private pause;
+    close(): void;
+}
+
+interface ReplicaChange {
+    runtimeId: string;
+    conversationIds?: readonly string[];
+}
+declare class Replica {
+    readonly database: Database;
+    private readonly recipe;
+    readonly bus: Bus<ReplicaChange>;
+    readonly previewBus: Bus<ReplicaChange>;
+    private projections;
+    private sourceSizes;
+    private states;
+    private closed;
+    constructor(database: Database, recipe: ProjectionRecipe);
+    authorize(scopes: Scope[]): void;
+    scope(runtimeId: string): Scope;
+    invalidate(scope: Scope, conversationIds?: readonly string[]): void;
+    runtimes(): string[];
+    private state;
+    private verify;
+    status(scope: Scope, next: Pick<Projection, 'phase' | 'coverage'>): void;
+    revoke(scope: Scope): void;
+    previewRows(scope: Scope, table: string): ReplicaRow[];
+    /** A provisional display view. Durable inbox/Store cursors remain the only recovery facts. */
+    preview(scope: Scope, rows: ReplicaRow[]): void;
+    store(batch: StoreBatch): Promise<CommittedRow[] | undefined>;
+    private notifyCommitted;
+    private publishCommitted;
+    live(frame: LiveFrame): Promise<void>;
+    /** 仅返回提交/连接版本，不为展示元数据再次解码整群历史。 */
+    projection(runtimeId: string): Promise<Projection>;
+    /** shared 仅供 SDK 内部只读 selector；对外结果仍在 Service 边界克隆。 */
+    read(runtimeId: string, conversationId?: string, purpose?: 'all' | 'summary' | 'catalog', shared?: boolean): Promise<{
+        view: View;
+        projection: Projection;
+    }>;
+    /** Share only simultaneous reads of the same authorized committed view.
+     * Never retain a settled result: a later read still observes other sources/tabs.
+     * A new Store commit uses another key and cannot join an older transaction. */
+    private readSources;
+    /** Synchronous preview notification; never joins the database query queue. */
+    readPreview(runtimeId: string, conversationId: string, shared?: boolean): {
+        view: View;
+        projection: Projection;
+    } | undefined;
+    private cacheSize;
+    /** 版本、授权State或预览有效期不同都必须重新计算；不会复用撤权后的数据。 */
+    private project;
+    private buildProjection;
+    close(): void;
+}
+
+declare class Service {
+    private integration;
+    paginationOwner(): string | undefined;
+    private readonly summaryBus;
+    private readonly summaries;
+    private readonly summaryReads;
+    private readonly liveProcesses;
+    private readonly processReads;
+    private readonly processViews;
+    private readonly processSeeds;
+    private readonly processRecovery;
+    resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    /** 先准备Runtime处理器，不等待全局Ready，避免首次应用与业务接入互相等待。 */
+    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+    /** 目录分页只依赖鉴权与AG链路，不连接Runtime、不等待业务Ready、不下载群历史。 */
+    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+    listRecentGroups(ctx: Context, limit: number): Promise<RecentGroupDirectoryEntry[]>;
+    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    readonly life: Lifetime;
+    readonly replica: Replica;
+    readonly operations: Operations;
+    private readyTask?;
+    private runtimeTasks;
+    private principal?;
+    private subscriptions;
+    constructor(integration: Integration, factory?: IDBFactory, databaseName?: string);
+    private ready;
+    private ensureRuntime;
+    query<T>(ctx: Context, req: RuntimeRef & {
+        conversationId?: string;
+    }, select: (view: View, projection: Projection) => T, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Snapshot<T>>;
+    get scopedReadiness(): boolean;
+    private domainProjection;
+    catalogQuery<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, models?: boolean): Promise<Snapshot<T>>;
+    catalogObserve<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    /** Explicit lightweight selectors; preserve connection and projection lifecycle. */
+    summaryQuery<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T): Promise<Snapshot<T>>;
+    summaryObserve<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    private summaryIdentity;
+    private summarySnapshot;
+    private summaryValue;
+    summaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', owner?: symbol): Promise<Snapshot<Page<T>>>;
+    conversationSummary(ctx: Context, req: ConversationRef, owner?: symbol): Promise<Snapshot<Conversation>>;
+    observeSummaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', observer: Observer<Page<T>>): Promise<Subscription>;
+    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    /** Reads all cached sources owned by the authenticated account; never connects other devices. */
+    accountQuery<T>(ctx: Context, req: {
+        runtimeId?: string;
+    }, select: (view: View, projection: Projection) => T): Promise<Snapshot<T>>;
+    observeAccount<T>(ctx: Context, req: {
+        runtimeId?: string;
+    }, select: (view: View, projection: Projection) => T, observer: Observer<T>): Promise<Subscription>;
+    runtimes(ctx: Context): Promise<Snapshot<Runtime[]>>;
+    observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
+    observe<T>(ctx: Context, req: RuntimeRef & {
+        conversationId?: string;
+    }, select: (v: View, p: Projection) => T, observer: Observer<T>, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Subscription>;
+    command<T>(ctx: Context, req: RuntimeRef, kind: CommandKind, allowed: string[], required: string[], decode: (data: unknown) => T, options?: MutationOptions): Promise<T>;
+    imGroupAttachment<T>(ctx: Context, req: ConversationRef, action: 'prepare' | 'attach' | 'query', params: Record<string, unknown>, decode: (v: unknown) => T): Promise<T>;
+    get supportsRemoteRead(): boolean;
+    /** One process cache per exact authorization/root; ordinary Query remains the
+     * owner of canonical message and Turn facts. No periodic detail polling. */
+    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    /** A scoped one-shot read, with no fabricated replica completeness claim. */
+    storageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+    remoteRead<T>(ctx: Context, req: RuntimeRef & {
+        conversationId?: string;
+    }, kind: ReadKind, params: Record<string, unknown>, decode: (value: unknown) => T, priority?: number, admit?: () => boolean): Promise<Snapshot<T>>;
+    getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+    getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
+    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    close(): Promise<void>;
+}
+
+declare class ResourceManager$1 implements ResourceManager {
+    private service;
+    private readonly listPagination;
+    listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{
+        projection: Projection;
+        items: DraftAttachment[];
+        nextCursor: string | null;
+        remoteUpload: Capability;
+        draftId: string;
+        runtimeId: string;
+    }>;
+    listWorkspaces(ctx: Context, request: (RuntimeRef & {
+        parentWorkspaceId?: string;
+    }) & ListOptions): Promise<{
+        projection: Projection;
+        items: Workspace[];
+        nextCursor: string | null;
+        truncated: boolean;
+        parentWorkspaceId?: string | undefined;
+        current: Workspace;
+    }>;
+    listResources(ctx: Context, request: (RuntimeRef & {
+        kind?: Resource['kind'];
+    }) & ListOptions): Promise<Page<Resource> & {
+        projection: Projection;
+    }>;
+    constructor(service: Service);
+    attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+    getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+    private imGroup;
+    stageDraftAttachment(ctx: Context, req: DraftRef & {
+        file: Blob;
+        name: string;
+        uploadId: string;
+    }): Promise<StagedAttachment>;
+    private readListDraftAttachments;
+    commitDraftAttachments(ctx: Context, req: DraftRef & {
+        conversationId: string;
+        attachmentIds: string[];
+    }): Promise<CommittedAttachment[]>;
+    discardDraftAttachments(ctx: Context, req: DraftRef & {
+        attachmentIds: string[];
+    }): Promise<{
+        state: "discarded";
+    }>;
+    getDraftAttachmentPreview(ctx: Context, req: DraftRef & {
+        attachmentId: string;
+    }): Promise<Snapshot<{
+        unavailableReason?: string | undefined;
+        dataUrl?: string | undefined;
+        text?: string | undefined;
+        title?: string | undefined;
+        mime?: string | undefined;
+        attachmentId: string;
+        kind: string;
+    }>>;
+    private readListWorkspaces;
+    createWorkspace(ctx: Context, req: RuntimeRef & {
+        name: string;
+    }): Promise<Workspace>;
+    private resources;
+    private readListResources;
+    observeResources(ctx: Context, req: RuntimeRef & {
+        kind?: Resource['kind'];
+    }, observer: Observer<Resource[]>): Promise<Subscription>;
+    getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
+    observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
+    setConversationResources(ctx: Context, req: ConversationRef & {
+        resourceIds: string[];
+        expectedVersion: string;
+    }): Promise<{
+        resourceIds: string[];
+        revision: string;
+        writeVersion: string | undefined;
+        conversationId: string;
+        runtimeId: string;
+    }>;
+    stageAttachment(ctx: Context, req: ConversationRef & {
+        file: Blob;
+        name: string;
+    }): Promise<{
+        attachmentId: string;
+        name: string;
+        mime: string;
+        size: string;
+        expiresAt: string | undefined;
+    }>;
+    discardAttachment(ctx: Context, req: ConversationRef & {
+        attachmentId: string;
+    }): Promise<{
+        state: "discarded";
+    }>;
+    getAttachmentAccess(ctx: Context, req: ConversationRef & {
+        attachmentId: string;
+        purpose: 'preview' | 'download';
+    }): Promise<{
+        url: string;
+        expiresAt: string;
+    }>;
+}
+
+declare class ConversationManager$1 implements ConversationManager {
+    private service;
+    private readonly listPagination;
+    listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
+    listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<GroupSyncState>>;
+    listActiveExecutions(ctx: Context, request: (ConversationRef) & ListOptions): Promise<{
+        projection: Projection;
+        items: ActiveExecution[];
+        nextCursor: string | null;
+        complete: boolean;
+    }>;
+    listMemberCandidates(ctx: Context, request: (ConversationRef) & ListOptions): Promise<Page<{
+        add: Capability;
+        multipleIdentities: Capability;
+        configurable: {
+            displayName: Capability;
+            model: Capability;
+            responsibility: Capability;
+        };
+        agentId: string;
+        runtimeId: string;
+    }> & {
+        projection: Projection;
+    }>;
+    listMembers(ctx: Context, request: (ConversationRef & {
+        includeRemoved?: boolean;
+    }) & ListOptions): Promise<Page<Member & ConversationRef> & {
+        projection: Projection;
+    }>;
+    listExecutionActivity(ctx: Context, request: (ConversationRef) & ListOptions): Promise<Page<ExecutionActivity> & {
+        projection: Projection;
+    }>;
+    listInteractions(ctx: Context, request: (ConversationRef & {
+        state?: 'pending' | 'all';
+    }) & ListOptions): Promise<Page<Interaction> & {
+        projection: Projection;
+    }>;
+    listConversations(ctx: Context, request: (ConversationQuery) & ListOptions): Promise<Page<Conversation> & {
+        projection: Projection;
+    }>;
+    listMessages(ctx: Context, request: (MessageQuery) & ListOptions): Promise<Page<Message> & {
+        projection: Projection;
+    }>;
+    listSidebarConversations(ctx: Context, request: (SidebarRowsQuery) & ListOptions): Promise<Page<Conversation> & {
+        projection: Projection;
+    }>;
+    listConversationGroups(ctx: Context, request: (ConversationGroupQuery) & ListOptions): Promise<Page<SidebarGroup> & {
+        projection: Projection;
+    }>;
+    listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & ListOptions): Promise<{
+        projection: Projection;
+        conversation?: Conversation;
+        members: Member[];
+        turnItems: Item[];
+        turns: Turn[];
+        activities: ExecutionActivity[];
+        presentations: MessagePresentation[];
+        items: Message[];
+        nextCursor: string | null;
+    }>;
+    listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{
+        items: GroupDirectoryEntry[];
+        nextCursor: string | null;
+    }>;
+    private readListGroupSyncStates;
+    private readListGroups;
+    private readRecentGroups;
+    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
+    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
+    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
+    constructor(service: Service);
+    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
+    prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
+    createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<{
+        coordinatorMemberId?: string | undefined;
+        memberMappings?: {
+            clientMemberKey: string;
+            memberId: string;
+        }[] | undefined;
+        mappingState?: "unknown" | "complete" | undefined;
+        conversationId: string;
+        runtimeId: string;
+    }>;
+    private readListConversationGroups;
+    observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
+    private readListSidebarConversations;
+    observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
+    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
+    getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
+    getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
+    private readListActiveExecutions;
+    observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
+    cancelExecution(ctx: Context, req: ConversationRef & {
+        executionId: string;
+        expectedVersion: string;
+    }): Promise<{
+        state: "cancelled" | "requested" | "already_finished";
+    }>;
+    getComposerCapabilities(ctx: Context, req: ConversationRef & {
+        memberId?: string;
+    }): Promise<Snapshot<ComposerCapabilities>>;
+    getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
+    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
+    steerTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+        text: string;
+        clientCommandId: string;
+    }): Promise<{
+        state: "accepted";
+        turnId: string;
+        messageId: string;
+    }>;
+    setConversationPinned(ctx: Context, req: ConversationRef & {
+        pinned: boolean;
+    }, options?: MutationOptions): Promise<ConversationRef>;
+    getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
+    getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
+    private readListMemberCandidates;
+    getMemberSnapshot(ctx: Context, req: ConversationRef & {
+        consistency?: 'cache' | 'refresh';
+    }): Promise<Snapshot<MemberSnapshot>>;
+    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
+    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
+    private conversations;
+    private readListConversations;
+    observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
+    getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
+    renameConversation(ctx: Context, req: ConversationRef & {
+        name: string;
+    }, options?: MutationOptions): Promise<ConversationRef>;
+    updateConversationConfig(ctx: Context, req: ConversationRef & {
+        config: Config;
+        expectedVersion: string;
+    }): Promise<ConversationRef>;
+    setConversationConfigOption(ctx: Context, req: ConversationRef & {
+        optionId: 'model' | 'runtime.permissionPreset' | 'runtime.thinkingLevel';
+        value: string;
+    }): Promise<ConversationRef>;
+    getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig & ConversationRef>>;
+    observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
+    archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+    unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
+    private readListMembers;
+    observeMembers(ctx: Context, req: ConversationRef & {
+        includeRemoved?: boolean;
+    }, observer: Observer<Member[]>): Promise<Subscription>;
+    addMember(ctx: Context, req: ConversationRef & {
+        agentId: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    updateMember(ctx: Context, req: ConversationRef & {
+        memberId: string;
+        expectedVersion: string;
+        displayName?: string;
+        modelId?: string;
+        responsibility?: ResponsibilityPatch;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    removeMember(ctx: Context, req: ConversationRef & {
+        memberId: string;
+        expectedVersion: string;
+    }, options?: MutationOptions): Promise<ConversationRef & {
+        memberId: string;
+    }>;
+    sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
+    sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
+    /** Wait for the Turn, not an IM receipt. Reuses the same subscription, send and recovery owner. */
+    sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
+    private messages;
+    resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
+    private readListConversationHistory;
+    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
+    private readListMessages;
+    observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
+    private readListExecutionActivity;
+    observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
+    getMessageDetail(ctx: Context, req: ConversationRef & {
+        messageId: string;
+        itemCursor?: string;
+        limit?: number;
+    }): Promise<Snapshot<MessageDetail | undefined>>;
+    getTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }): Promise<Snapshot<Turn | undefined>>;
+    observeTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }, observer: Observer<Turn | undefined>): Promise<Subscription>;
+    cancelTurn(ctx: Context, req: ConversationRef & {
+        turnId: string;
+    }): Promise<{
+        state: "cancelled" | "requested" | "already_finished";
+    }>;
+    private interactions;
+    refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<{
+        recovered: number;
+        conversationId: string;
+        runtimeId: string;
+    }>;
+    private readListInteractions;
+    observeInteractions(ctx: Context, req: ConversationRef & {
+        state?: 'pending' | 'all';
+    }, observer: Observer<Interaction[]>): Promise<Subscription>;
+    respondPermission(ctx: Context, req: ConversationRef & {
+        interactionId: string;
+        optionId: string;
+        expectedVersion: string;
+    }): Promise<InteractionResponse>;
+    getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
+    respondQuestion(ctx: Context, req: ConversationRef & {
+        interactionId: string;
+        expectedVersion: string;
+        answer: {
+            answers: {
+                questionId: string;
+                optionIds: string[];
+                text?: string;
+            }[];
+        } | {
+            skip: true;
+        };
+    }, options?: MutationOptions): Promise<InteractionResponse>;
+}
+
+/**
+ * WyDrive 文件空间相关 CloudAPI
+ * 对应 POP 接口: ecd::2020-10-02 / ecd::2025-07-30
+ *
+ * WyDrive API 提供文件空间管理能力，包括空间查询、文件列表、文件删除、下载链接获取、
+ * JVS 文件同步等功能。通过 AnonymousClient 调用 POP API。
+ */
+
+interface GetDownloadUrlResult {
+    requestId: string;
+    url: string;
+    expireTime: string;
+    fileName: string;
+    size: number;
 }
 
 interface PasswordLogin {
@@ -1879,65 +2753,90 @@ declare class ServiceContainer implements Container {
     reset(): Promise<void>;
 }
 
-/**
- * WyDrive 文件空间相关 CloudAPI
- * 对应 POP 接口: ecd::2020-10-02 / ecd::2025-07-30
- *
- * WyDrive API 提供文件空间管理能力，包括空间查询、文件列表、文件删除、下载链接获取、
- * JVS 文件同步等功能。通过 AnonymousClient 调用 POP API。
- */
-
-interface DescribeWyDrivesResult {
-    requestId: string;
-    drives: WyDrive[];
-    totalSize: number;
-    usedSize: number;
-    capacityNotEnough: boolean;
-}
-interface DescribeWyDriveFilesResult {
-    requestId: string;
-    files: WyDriveFile[];
-    totalCount: number;
-}
-interface GetDownloadUrlResult {
-    requestId: string;
-    url: string;
-    expireTime: string;
-    fileName: string;
-    size: number;
-}
-
-/**
- * 知识库相关 CloudAPI
- * 对应 POP 接口: ecd::2020-10-02（skillMgmtClient 端点）
- *
- * 知识库 API 提供知识空间查询、文件列表、下载任务初始化与启动等能力。
- * 通过 AnonymousClient 调用 POP API。
- */
-
-interface ListKnowledgeFilesResult {
-    requestId: string;
-    files: KnowledgeFile[];
-    totalCount: number;
-    pageNumber: number;
-    pageSize: number;
-}
-
 /** Independent authenticated HTTP resources. Never initializes the IM transport. */
 declare class CloudResources {
     private container;
     private checkOpen;
+    private readonly lists;
+    describeWyDrives(ctx: ExecutionContext, request?: DescribeWyDrivesRequest & ListOptions): Promise<{
+        items: WyDrive[];
+        nextCursor: string | null;
+        projection?: Projection;
+        requestId: string;
+        totalSize: number;
+        usedSize: number;
+        capacityNotEnough: boolean;
+    }>;
+    describeWyDriveFiles(ctx: ExecutionContext, request: Omit<DescribeWyDriveFilesRequest, 'pageNumber' | 'pageSize'> & ListOptions): Promise<Page<WyDriveFile>>;
+    listAgentKnowledgeSpaces(ctx: ExecutionContext, request: ListAgentKnowledgeSpacesRequest & ListOptions): Promise<Page<KnowledgeSpace>>;
+    listKnowledgeFiles(ctx: ExecutionContext, request: Omit<ListKnowledgeFilesRequest, 'pageNumber' | 'pageSize'> & ListOptions): Promise<Page<KnowledgeFile>>;
     constructor(container: ServiceContainer, checkOpen: () => void);
     private auth;
     private pagination;
     private file;
-    describeWyDrives(ctx: ExecutionContext, req?: DescribeWyDrivesRequest): Promise<DescribeWyDrivesResult>;
-    describeWyDriveFiles(ctx: ExecutionContext, req: DescribeWyDriveFilesRequest): Promise<DescribeWyDriveFilesResult>;
+    private readDescribeWyDrives;
+    private readDescribeWyDriveFiles;
     getDownloadUrl(ctx: ExecutionContext, req: GetDownloadUrlRequest): Promise<GetDownloadUrlResult>;
     deleteWyDriveFile(ctx: ExecutionContext, req: DeleteWyDriveFileRequest): Promise<void>;
-    listAgentKnowledgeSpaces(ctx: ExecutionContext, req: ListAgentKnowledgeSpacesRequest): Promise<KnowledgeSpace[]>;
-    listKnowledgeFiles(ctx: ExecutionContext, req: ListKnowledgeFilesRequest): Promise<ListKnowledgeFilesResult>;
+    private readListAgentKnowledgeSpaces;
+    private readListKnowledgeFiles;
     downloadKnowledgeFiles(ctx: ExecutionContext, req: DownloadKnowledgeFilesRequest): Promise<DownloadKnowledgeFileResult[]>;
+}
+
+declare class AgentManager$1 implements AgentManager {
+    private service;
+    private cloud?;
+    private readonly listPagination;
+    listAgents(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<AgentSummary> & {
+        projection: Projection;
+    }>;
+    listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<ModelSummary & AgentRef> & {
+        projection: Projection;
+    }>;
+    listExperts(ctx: Context, request: (RuntimeRef & {
+        primaryAgentId: string;
+    }) & ListOptions): Promise<Page<Expert> & {
+        projection: Projection;
+    }>;
+    listAgentProducts(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<{
+        projection: Projection;
+        items: {
+            productId: string;
+            instanceIds: string[];
+            state: "available" | "unavailable" | "unknown";
+        }[];
+        nextCursor: string | null;
+        complete: boolean;
+    }>;
+    constructor(service: Service, cloud?: CloudResources | undefined);
+    private resources;
+    describeWyDrives(...args: Parameters<CloudResources['describeWyDrives']>): Promise<{
+        items: WyDrive[];
+        nextCursor: string | null;
+        projection?: Projection;
+        requestId: string;
+        totalSize: number;
+        usedSize: number;
+        capacityNotEnough: boolean;
+    }>;
+    describeWyDriveFiles(...args: Parameters<CloudResources['describeWyDriveFiles']>): Promise<Page<WyDriveFile>>;
+    getDownloadUrl(...args: Parameters<CloudResources['getDownloadUrl']>): Promise<GetDownloadUrlResult>;
+    deleteWyDriveFile(...args: Parameters<CloudResources['deleteWyDriveFile']>): Promise<void>;
+    listAgentKnowledgeSpaces(...args: Parameters<CloudResources['listAgentKnowledgeSpaces']>): Promise<Page<KnowledgeSpace>>;
+    listKnowledgeFiles(...args: Parameters<CloudResources['listKnowledgeFiles']>): Promise<Page<KnowledgeFile>>;
+    downloadKnowledgeFiles(...args: Parameters<CloudResources['downloadKnowledgeFiles']>): Promise<DownloadKnowledgeFileResult[]>;
+    private readListAgents;
+    observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
+    private readListAgentModels;
+    private readListAgentProducts;
+    private readListExperts;
+    /** Additive scoped directory API; legacy listExperts/projection semantics are unchanged. */
+    getExpertDirectory(ctx: Context, req: RuntimeRef & {
+        primaryAgentId: string;
+    }): Promise<Snapshot<ExpertDirectory>>;
+    getAgentModelCatalog(ctx: Context, req: AgentRef & {
+        consistency?: 'cache' | 'refresh';
+    }): Promise<Snapshot<AgentModelCatalog>>;
 }
 
 /** Public display identities never replace execution references. */
@@ -2299,9 +3198,15 @@ interface Snapshot<T> {
     data: T;
     projection: Projection;
 }
+/** Shared by every public list query. Defaults to 50; valid limit is 1..100. */
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
 interface Page<T> {
     items: T[];
     nextCursor: string | null;
+    projection?: Projection;
 }
 interface Observer<T> {
     onSnapshot(value: Snapshot<T>): void;
@@ -2727,17 +3632,15 @@ interface InteractionResponse {
     resolvedAt?: Int64;
     isAuto?: boolean;
 }
-interface AgentManager$1 extends Pick<CloudResources, 'describeWyDrives' | 'describeWyDriveFiles' | 'getDownloadUrl' | 'deleteWyDriveFile' | 'listAgentKnowledgeSpaces' | 'listKnowledgeFiles' | 'downloadKnowledgeFiles'> {
-    listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
+interface AgentManager extends Pick<CloudResources, 'describeWyDrives' | 'describeWyDriveFiles' | 'getDownloadUrl' | 'deleteWyDriveFile' | 'listAgentKnowledgeSpaces' | 'listKnowledgeFiles' | 'downloadKnowledgeFiles'> {
+    listAgents: AgentManager$1['listAgents'];
     observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
-    listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<ModelSummary[]>>;
-    listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
+    listAgentModels: AgentManager$1['listAgentModels'];
+    listAgentProducts: AgentManager$1['listAgentProducts'];
     getExpertDirectory(ctx: Context, req: RuntimeRef & {
         primaryAgentId: string;
     }): Promise<Snapshot<ExpertDirectory>>;
-    listExperts(ctx: Context, req: RuntimeRef & {
-        primaryAgentId: string;
-    }): Promise<Snapshot<Expert[]>>;
+    listExperts: AgentManager$1['listExperts'];
     getAgentModelCatalog(ctx: Context, req: AgentRef & {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<AgentModelCatalog>>;
@@ -2808,35 +3711,33 @@ interface MemberSnapshot {
     complete: boolean;
     knownTotal?: number;
 }
-interface ConversationManager$1 {
+interface ConversationManager {
     /** Shared per authorization/root; 50ms notifications, no durable writes or execution control. */
     observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
     getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
     getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
     /** 仅列目录同步状态，不下载非热点群历史。 */
-    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+    listGroupSyncStates: ConversationManager$1['listGroupSyncStates'];
     /** 只读AG目录分页；不连接Runtime、不等待业务Ready、不下载历史。 */
-    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+    listGroups: ConversationManager$1['listGroups'];
     /** Bounded account activity index. This returns metadata only and opens no Runtime. */
-    listRecentGroups(ctx: Context, req: {
-        limit: number;
-    }): Promise<RecentGroupDirectoryEntry[]>;
+    listRecentGroups: ConversationManager$1['listRecentGroups'];
     /** 按业务会话定位当前机器的群；完整接收并应用本轮历史后返回。 */
     syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
     /** 显式选择分页返回的群，仍验证其属于指定Runtime。 */
     syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
     onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
-    listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+    listConversationGroups: ConversationManager$1['listConversationGroups'];
     observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
-    listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+    listSidebarConversations: ConversationManager$1['listSidebarConversations'];
     observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
     /** Metadata only; never activates or grants write authority to a cold conversation. */
     getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
     observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
     getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
-    listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+    listActiveExecutions: ConversationManager$1['listActiveExecutions'];
     observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
     cancelExecution(ctx: Context, req: ConversationRef & {
         executionId: string;
@@ -2862,13 +3763,13 @@ interface ConversationManager$1 {
         pinned: boolean;
     }, options?: MutationOptions): Promise<ConversationRef>;
     getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
-    listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<MemberCandidate[]>>;
+    listMemberCandidates: ConversationManager$1['listMemberCandidates'];
     getMemberSnapshot(ctx: Context, req: ConversationRef & {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<MemberSnapshot>>;
     getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
     observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
-    listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+    listConversations: ConversationManager$1['listConversations'];
     getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
     observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
     renameConversation(ctx: Context, req: ConversationRef & {
@@ -2887,9 +3788,7 @@ interface ConversationManager$1 {
     getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig>>;
     archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
     unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
-    listMembers(ctx: Context, req: ConversationRef & {
-        includeRemoved?: boolean;
-    }): Promise<Snapshot<Member[]>>;
+    listMembers: ConversationManager$1['listMembers'];
     observeMembers(ctx: Context, req: ConversationRef & {
         includeRemoved?: boolean;
     }, observer: Observer<Member[]>): Promise<Subscription>;
@@ -2920,16 +3819,16 @@ interface ConversationManager$1 {
     sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
     sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
     resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
-    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+    listConversationHistory: ConversationManager$1['listConversationHistory'];
     observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
-    listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+    listMessages: ConversationManager$1['listMessages'];
     getMessageDetail(ctx: Context, req: ConversationRef & {
         messageId: string;
         itemCursor?: string;
         limit?: number;
     }): Promise<Snapshot<MessageDetail | undefined>>;
     observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
-    listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+    listExecutionActivity: ConversationManager$1['listExecutionActivity'];
     observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
     observeTurn(ctx: Context, req: ConversationRef & {
         turnId: string;
@@ -2948,9 +3847,7 @@ interface ConversationManager$1 {
     refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<ConversationRef & {
         recovered: number;
     }>;
-    listInteractions(ctx: Context, req: ConversationRef & {
-        state?: 'pending' | 'all';
-    }): Promise<Snapshot<Interaction[]>>;
+    listInteractions: ConversationManager$1['listInteractions'];
     /** expectedVersion fences the SDK snapshot; Gateway checks ownership and lifecycle, without a CAS field. */
     respondPermission(ctx: Context, req: ConversationRef & {
         interactionId: string;
@@ -3020,7 +3917,7 @@ interface GroupSyncState {
     hasUpdates: boolean;
     errorCode?: string;
 }
-interface ResourceManager$1 {
+interface ResourceManager {
     attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
     getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
     stageDraftAttachment(ctx: Context, req: DraftRef & {
@@ -3028,7 +3925,7 @@ interface ResourceManager$1 {
         name: string;
         uploadId: string;
     }): Promise<StagedAttachment>;
-    listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
+    listDraftAttachments: ResourceManager$1['listDraftAttachments'];
     commitDraftAttachments(ctx: Context, req: DraftRef & {
         conversationId: string;
         attachmentIds: string[];
@@ -3041,15 +3938,11 @@ interface ResourceManager$1 {
     getDraftAttachmentPreview(ctx: Context, req: DraftRef & {
         attachmentId: string;
     }): Promise<Snapshot<AttachmentPreview>>;
-    listWorkspaces(ctx: Context, req: RuntimeRef & {
-        parentWorkspaceId?: string;
-    }): Promise<Snapshot<WorkspacePage>>;
+    listWorkspaces: ResourceManager$1['listWorkspaces'];
     createWorkspace(ctx: Context, req: RuntimeRef & {
         name: string;
     }): Promise<Workspace>;
-    listResources(ctx: Context, req: RuntimeRef & {
-        kind?: Resource['kind'];
-    }): Promise<Snapshot<Resource[]>>;
+    listResources: ResourceManager$1['listResources'];
     observeResources(ctx: Context, req: RuntimeRef & {
         kind?: Resource['kind'];
     }, observer: Observer<Resource[]>): Promise<Subscription>;
@@ -3273,541 +4166,6 @@ declare class RuntimeCommands {
     close(): void;
 }
 
-interface ProcessInput {
-    conversationId: string;
-    source: 'stream' | 'durable';
-    rows: readonly ReplicaRow[];
-    /** Already checked against the current SDK-visible group/controller by Integration. */
-    membershipGeneration?: number;
-    access?: 'revoked';
-    stream?: {
-        id: string;
-        sequence: string;
-        closed?: boolean;
-        gap?: boolean;
-    };
-}
-
-/** Authorized export recipe. This boundary is selected by schema, never by field-name guessing. */
-interface View {
-    modelCatalogReady: boolean;
-    resourceCatalogReady: boolean;
-    interactionProjectionReady: boolean;
-    runtimes: Runtime[];
-    agents: AgentSummary[];
-    models: (ModelSummary & AgentRef)[];
-    conversations: Conversation[];
-    activities: ExecutionActivity[];
-    presentations: MessagePresentation[];
-    executions: ActiveExecution[];
-    memberCandidates: MemberCandidate[];
-    messages: Message[];
-    items: (Item & ConversationRef)[];
-    turns: Turn[];
-    members: (Member & ConversationRef)[];
-    interactions: Interaction[];
-    configs: (EffectiveConfig & ConversationRef)[];
-    resources: Resource[];
-    selections: ResourceSelection[];
-}
-interface ProjectionRecipe {
-    decode(rows: readonly ReplicaRow[], scope: Scope): View;
-}
-
-interface RuntimeRoute {
-    runtimeId: string;
-    target?: string;
-    name: string;
-}
-interface DirectoryIdentity {
-    principal: {
-        tenantId: string;
-        userId: string;
-    };
-    machines: RuntimeRoute[];
-}
-/** Login-scoped normalized presence; production uses owner-authorized IM relay metadata. */
-interface PresenceFact {
-    runtimeId: string;
-    state: 'online' | 'offline' | 'unknown';
-    revision: string;
-    expiresAt: number;
-}
-interface RuntimePresencePort {
-    start(signal: AbortSignal, receive: (facts: PresenceFact[]) => void): Promise<() => void>;
-}
-/** Login-scoped discovery cache; independent from AG installation-scoped business replicas. */
-declare class RuntimeDirectory {
-    readonly bus: Bus<undefined>;
-    private identity?;
-    private facts;
-    private generation;
-    private version;
-    private timer?;
-    private closed;
-    private presenceStop?;
-    private presenceLife;
-    private presenceStarted;
-    initialize(identity: DirectoryIdentity): void;
-    private check;
-    /** 本地已授权路由的唯一反查，不访问AG、不把第一个匹配当作唯一结果。 */
-    runtimeForController(controller: string): string | undefined;
-    resolve(runtimeId: string): {
-        principal: {
-            tenantId: string;
-            userId: string;
-        };
-        runtimeId: string;
-        target?: string;
-        name: string;
-    };
-    snapshot(): Snapshot<Runtime[]>;
-    connectPresence(port: RuntimePresencePort): Promise<void>;
-    private applyPresence;
-    private expiry;
-    close(): void;
-}
-
-interface Scope {
-    tenantId: string;
-    userId: string;
-    runtimeId: string;
-    installationId: string;
-    authGeneration: string;
-}
-interface LiveCoverage {
-    conversationId: string;
-    messageId: string;
-    itemId: string;
-    epoch: string;
-    epochRevision: string;
-    through: string;
-    baseline?: {
-        table: string;
-        key: string;
-        version: string;
-        data: Record<string, unknown>;
-    };
-}
-interface ReplicaRow {
-    table: string;
-    key: string;
-    version: string;
-    data: Record<string, unknown>;
-    deleted?: boolean;
-    liveCoverage?: LiveCoverage[];
-}
-type Change = {
-    op: 'upsert';
-    row: ReplicaRow;
-    coverage?: LiveCoverage[];
-} | {
-    op: 'delete';
-    table: string;
-    key: string;
-    version: string;
-};
-interface StoreBatch {
-    scope: Scope;
-    streamId: string;
-    checkpoint: string;
-    predecessor: string | null;
-    phase: {
-        kind: 'incremental';
-    } | {
-        kind: 'snapshot';
-        id: string;
-        stage: 'begin' | 'chunk' | 'end';
-        cutoverCheckpoint?: string | null;
-    };
-    changes: Change[];
-}
-interface LiveFrame extends ConversationRef {
-    scope: Scope;
-    turnId: string;
-    messageId: string;
-    itemId: string;
-    epoch: string;
-    epochRevision: string;
-    sequence: string;
-    baseVersion: string;
-    kind: 'replace' | 'delta' | 'end';
-    text?: string;
-    messageBase?: Message;
-    itemBase?: Item;
-}
-/** A trusted integration adapter, never supplied through the public Client configuration. */
-type ReadKind = 'conversationSummary' | 'sidebarGroups' | 'sidebarRows' | 'messageFiles' | 'storageContext' | 'composer' | 'members' | 'executions' | 'experts' | 'expertDirectory' | 'modelCatalog' | 'presentation' | 'workspaces' | 'draft.list' | 'draft.preview';
-interface Integration {
-    /** Opaque current authorization identity; never expose the relay session nonce. */
-    scopeGeneration?(scope: Scope): string;
-    scopedProjection?(scope: Scope, projection: Projection, domain: 'agents' | 'models' | 'conversation', conversationId?: string): Projection;
-    readonly scopedReadiness?: boolean;
-    /** Current visible membership admission for cached live-process hints. */
-    processAccess?(scope: Scope, conversationId: string): Promise<{
-        membershipGeneration: number;
-    } | undefined>;
-    imGroupAttachment?(scope: Scope, action: 'prepare' | 'attach' | 'query', params: Record<string, unknown>): Promise<unknown>;
-    groupSync?: {
-        list(scope: Scope): Promise<GroupSyncState[]>;
-        sync(scope: Scope, conversationId: string): Promise<GroupSyncState>;
-        syncGroup?(scope: Scope, groupId: string): Promise<GroupSyncState>;
-        observe(scope: Scope, handler: (state: GroupSyncState) => void): () => void;
-    };
-    /** 只读AG目录分页；不得视为Runtime授权或触发历史下载。 */
-    groupDirectory?: {
-        list(runtimeId: string | undefined, query: GroupDirectoryQuery, signal: AbortSignal): Promise<GroupDirectoryPage>;
-        recent?(limit: number, signal: AbortSignal): Promise<RecentGroupDirectoryEntry[]>;
-    };
-    read?(scope: Scope, kind: ReadKind, params: Record<string, unknown>, signal: AbortSignal): Promise<unknown>;
-    conversationHistory?: {
-        resolve(req: ConversationReadQuery, signal: AbortSignal): Promise<ConversationReadBinding>;
-        list(req: ConversationHistoryQuery, signal: AbortSignal): Promise<Snapshot<ConversationHistory>>;
-        observe(req: ConversationHistoryQuery, changed: () => void, signal: AbortSignal): Promise<() => void>;
-    };
-    directory?: RuntimeDirectory;
-    connectRuntime?(runtimeId: string, signal: AbortSignal): Promise<Scope>;
-    initializeRuntime?(scope: Scope): Promise<void>;
-    recipe: ProjectionRecipe;
-    ready(signal: AbortSignal): Promise<{
-        principal: {
-            tenantId: string;
-            userId: string;
-        };
-        scopes: Scope[];
-    }>;
-    start(sink: PushSink, signal: AbortSignal): Promise<void>;
-    command: CommandPort;
-    close(): Promise<void>;
-}
-interface PushSink {
-    /** 已知会话只唤醒该会话；缺省仍是 Runtime 全域失效，保留权限/目录变更边界。 */
-    invalidate?(scope: Scope, conversationIds?: readonly string[]): void;
-    summaryInvalidated?(scope: Scope): void;
-    /** Authorized public execution hints only; never participate in durable receipt/checkpoint apply. */
-    process?(scope: Scope, input: ProcessInput): void;
-    reactivate(runtimeId: string): Promise<void>;
-    checkpoint(scope: Scope, streamId: string): Promise<string | null>;
-    rows(scope: Scope, table: string, conversationId?: string): Promise<ReplicaRow[]>;
-    /** 只读取当前账户/Runtime/根会话内的消息锚点，不加载整个历史归档。 */
-    presentationMessage?(scope: Scope, conversationId: string, messageId: string): Promise<Message | undefined>;
-    store(batch: StoreBatch): Promise<void>;
-    /** Bounded Hub/recovered interaction display hints; never advance durable checkpoints. */
-    preview?(scope: Scope, rows: ReplicaRow[]): void;
-    /** Read the same authorized, unexpired hints used by the display projection. */
-    previewRows?(scope: Scope, table: string): ReplicaRow[];
-    live(frame: LiveFrame): Promise<void>;
-    status(scope: Scope, status: Pick<Projection, 'phase' | 'coverage'>): void;
-    revoke(scope: Scope): void;
-}
-interface CommandRequest {
-    key: string;
-    traceId: string;
-    scope: Scope;
-    kind: CommandKind;
-    params: Record<string, unknown>;
-}
-type CommandKind = 'conversation.create' | 'conversation.pin' | 'conversation.rename' | 'conversation.configure' | 'conversation.setOption' | 'conversation.archive' | 'conversation.unarchive' | 'member.add' | 'member.update' | 'member.remove' | 'message.send' | 'workspace.create' | 'turn.cancel' | 'turn.steer' | 'execution.cancel' | 'interaction.permission' | 'interaction.question' | 'interaction.refresh' | 'resources.set' | 'attachment.stage' | 'attachment.discard' | 'attachment.access' | 'draft.stage' | 'draft.commit' | 'draft.discard';
-type CommandResult = {
-    state: 'accepted' | 'unknown';
-} | {
-    state: 'succeeded';
-    result: unknown;
-} | {
-    state: 'failed';
-    code: ErrorCode$1;
-    failureEffect?: MutationStatus['failureEffect'];
-    retryable?: boolean;
-};
-interface CommandPort {
-    /** Trusted admission metadata for durable question receipt lookup. No answer bodies. */
-    prepareQuestion?(scope: Scope, params: Record<string, unknown>): Promise<Record<string, unknown>>;
-    execute(req: CommandRequest, signal: AbortSignal): Promise<CommandResult>;
-    query(scope: Scope, key: string, signal: AbortSignal, recovery?: {
-        kind: string;
-        params: Record<string, unknown>;
-    }): Promise<CommandResult>;
-}
-
-/** Materialized read replicas of the Store export; Hub never writes these stores. */
-declare const agTables: readonly ["conversations", "agent_session", "turns", "turn_items", "permissions", "conversation_artifacts", "attachments", "conversation_member", "conversation_messages"];
-type AGTable = typeof agTables[number];
-declare const agIndexes: readonly ["conversation_id", "root_conversation_id", "turn_id", "member_id", "agent_id", "status", "name"];
-interface AGRow extends Record<string, unknown> {
-    _sync: {
-        partition: string;
-        sourcePartition: string;
-        runtimeId: string;
-        installationId: string;
-        archiveId: string;
-        key: string;
-        version: string;
-        deleted: boolean;
-        wire: Record<string, unknown>;
-        payloadKeys: string[];
-        liveCoverage?: ReplicaRow['liveCoverage'];
-    };
-}
-
-/** 归属提示仅用于本地订阅失效；复用已有读取结果，不增加数据库操作。 */
-interface CommittedScope {
-    runtimeId: string;
-    conversationId?: string;
-}
-interface CommittedRow {
-    business: boolean;
-    row: ReplicaRow;
-    replaced: {
-        table: string;
-        key: string;
-    }[];
-    affected?: CommittedScope[];
-}
-interface OperationRecord {
-    id: string;
-    scope: Scope;
-    kind: string;
-    traceId: string;
-    paramsHash: string;
-    state: 'pending' | 'succeeded' | 'failed';
-    createdAt: number;
-    target?: string;
-    errorCode?: string;
-    notified?: boolean;
-    retryable?: boolean;
-    mutationId?: string;
-    result?: unknown;
-    failureEffect?: 'none' | 'partial' | 'unknown';
-    correlation?: {
-        memberId?: string;
-        conversationId?: string;
-        clientMessageId?: string;
-        hasAttachments?: boolean;
-        turnId?: string;
-        interactionId?: string;
-        ownerConversationId?: string;
-        nativeId?: string;
-        agentId?: string;
-        expectedVersion?: string;
-        mode?: unknown;
-        members?: unknown;
-    };
-}
-/** The only persistent replica writer. No transport or provider policy belongs here. */
-declare class Database {
-    private readonly factory;
-    private readonly name;
-    private opening?;
-    private closed;
-    private transactions;
-    constructor(factory: IDBFactory | undefined, name?: string);
-    private open;
-    private tx;
-    read(scope: Scope): Promise<{
-        generation: string;
-        commit: string;
-        rows: ReplicaRow[];
-    }>;
-    /** 展示元数据不需要读取正文；用于RPC完成后的Projection一致性边界。 */
-    readMetadata(scope: Scope): Promise<{
-        generation: string;
-        commit: string;
-    }>;
-    /** 复用现有主键精确取消息、根会话和成员。没有新增Object Store或索引。 */
-    readPresentationRows(scope: Scope, conversationId: string, messageId: string): Promise<ReplicaRow[]>;
-    /** Business rows have one user-owned copy; source archives only retain transport recovery state. */
-    readAccount(principal: Pick<Scope, 'tenantId' | 'userId'>, runtimeId?: string, conversationId?: string, purpose?: 'all' | 'conversation-list' | 'summary' | 'catalog'): Promise<{
-        scope: Scope;
-        generation: string;
-        commit: string;
-        rows: ReplicaRow[];
-    }[]>;
-    /** Exact active-installation catalog validation, without opening any AG/body store. */
-    readCatalogRows(scope: Scope, table: string): Promise<ReplicaRow[]>;
-    checkpoint(scope: Scope, streamId: string): Promise<string | null>;
-    apply(batch: StoreBatch, valid: () => void, committed?: (rows: CommittedRow[]) => void): Promise<boolean>;
-    private change;
-    private rebuildBusinessTables;
-    /** Internal indexed read; user owns the physical partition, Runtime is an optional business filter. */
-    readTable(scope: Scope, table: AGTable, filter?: {
-        field: typeof agIndexes[number];
-        value: string;
-    }): Promise<AGRow[]>;
-    claimOperation(record: OperationRecord): Promise<{
-        record: OperationRecord;
-        created: boolean;
-    }>;
-    operation(id: string): Promise<OperationRecord | undefined>;
-    saveOperation(record: OperationRecord): Promise<void>;
-    operations(scope: Scope): Promise<OperationRecord[]>;
-    close(): Promise<void>;
-}
-
-interface LateError {
-    runtimeId: string;
-    conversationId?: string;
-    error: BusinessError$1;
-}
-declare class Operations {
-    private db;
-    private port;
-    private life;
-    private authorize;
-    private notices;
-    private listeners;
-    private running;
-    private scans;
-    private grants;
-    constructor(db: Database, port: CommandPort, life: Lifetime, authorize?: (scope: Scope) => void);
-    private grant;
-    revoke(scope: Scope): void;
-    private check;
-    subscribe(fn: (notice: LateError) => boolean): () => void;
-    private notify;
-    private poll;
-    run<T>(ctx: Context, scope: Scope, kind: CommandKind, params: Record<string, unknown>, decode: (r: unknown) => T, options?: MutationOptions, correlation?: Record<string, unknown> | (() => Promise<Record<string, unknown>>)): Promise<T>;
-    /** Reopening only queries recorded keys. Unknown results continue bounded backoff; bodies are never replayed. */
-    recover(scope: Scope): Promise<void>;
-    private mutationKey;
-    private mutationResult;
-    lookup(scope: Scope, req: Omit<MutationRef, 'conversationId'> & {
-        conversationId?: string;
-    }, question?: QuestionResponseRef): Promise<CommandReceipt>;
-    private pause;
-    close(): void;
-}
-
-interface ReplicaChange {
-    runtimeId: string;
-    conversationIds?: readonly string[];
-}
-declare class Replica {
-    readonly database: Database;
-    private readonly recipe;
-    readonly bus: Bus<ReplicaChange>;
-    readonly previewBus: Bus<ReplicaChange>;
-    private projections;
-    private sourceSizes;
-    private states;
-    private closed;
-    constructor(database: Database, recipe: ProjectionRecipe);
-    authorize(scopes: Scope[]): void;
-    scope(runtimeId: string): Scope;
-    invalidate(scope: Scope, conversationIds?: readonly string[]): void;
-    runtimes(): string[];
-    private state;
-    private verify;
-    status(scope: Scope, next: Pick<Projection, 'phase' | 'coverage'>): void;
-    revoke(scope: Scope): void;
-    previewRows(scope: Scope, table: string): ReplicaRow[];
-    /** A provisional display view. Durable inbox/Store cursors remain the only recovery facts. */
-    preview(scope: Scope, rows: ReplicaRow[]): void;
-    store(batch: StoreBatch): Promise<CommittedRow[] | undefined>;
-    private notifyCommitted;
-    private publishCommitted;
-    live(frame: LiveFrame): Promise<void>;
-    /** 仅返回提交/连接版本，不为展示元数据再次解码整群历史。 */
-    projection(runtimeId: string): Promise<Projection>;
-    /** shared 仅供 SDK 内部只读 selector；对外结果仍在 Service 边界克隆。 */
-    read(runtimeId: string, conversationId?: string, purpose?: 'all' | 'summary' | 'catalog', shared?: boolean): Promise<{
-        view: View;
-        projection: Projection;
-    }>;
-    /** Share only simultaneous reads of the same authorized committed view.
-     * Never retain a settled result: a later read still observes other sources/tabs.
-     * A new Store commit uses another key and cannot join an older transaction. */
-    private readSources;
-    /** Synchronous preview notification; never joins the database query queue. */
-    readPreview(runtimeId: string, conversationId: string, shared?: boolean): {
-        view: View;
-        projection: Projection;
-    } | undefined;
-    private cacheSize;
-    /** 版本、授权State或预览有效期不同都必须重新计算；不会复用撤权后的数据。 */
-    private project;
-    private buildProjection;
-    close(): void;
-}
-
-declare class Service {
-    private integration;
-    private readonly summaryBus;
-    private readonly summaries;
-    private readonly summaryReads;
-    private readonly liveProcesses;
-    private readonly processReads;
-    private readonly processViews;
-    private readonly processSeeds;
-    private readonly processRecovery;
-    resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
-    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
-    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
-    /** 先准备Runtime处理器，不等待全局Ready，避免首次应用与业务接入互相等待。 */
-    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
-    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
-    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-    /** 目录分页只依赖鉴权与AG链路，不连接Runtime、不等待业务Ready、不下载群历史。 */
-    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
-    listRecentGroups(ctx: Context, limit: number): Promise<RecentGroupDirectoryEntry[]>;
-    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
-    readonly life: Lifetime;
-    readonly replica: Replica;
-    readonly operations: Operations;
-    private readyTask?;
-    private runtimeTasks;
-    private principal?;
-    private subscriptions;
-    constructor(integration: Integration, factory?: IDBFactory, databaseName?: string);
-    private ready;
-    private ensureRuntime;
-    query<T>(ctx: Context, req: RuntimeRef & {
-        conversationId?: string;
-    }, select: (view: View, projection: Projection) => T, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Snapshot<T>>;
-    get scopedReadiness(): boolean;
-    private domainProjection;
-    catalogQuery<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, models?: boolean): Promise<Snapshot<T>>;
-    catalogObserve<T>(ctx: Context, req: RuntimeRef, select: (v: View, p: Projection) => T, observer: Observer<T>): Promise<Subscription>;
-    /** Explicit lightweight selectors; preserve connection and projection lifecycle. */
-    summaryQuery<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T): Promise<Snapshot<T>>;
-    summaryObserve<T>(ctx: Context, req: RuntimeRef, select: (view: View, projection: Projection) => T, observer: Observer<T>): Promise<Subscription>;
-    private summaryIdentity;
-    private summarySnapshot;
-    private summaryValue;
-    summaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', owner?: symbol): Promise<Snapshot<Page<T>>>;
-    conversationSummary(ctx: Context, req: ConversationRef, owner?: symbol): Promise<Snapshot<Conversation>>;
-    observeSummaryPage<T>(ctx: Context, req: ConversationGroupQuery | SidebarRowsQuery, kind: 'sidebarGroups' | 'sidebarRows', observer: Observer<Page<T>>): Promise<Subscription>;
-    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
-    /** Reads all cached sources owned by the authenticated account; never connects other devices. */
-    accountQuery<T>(ctx: Context, req: {
-        runtimeId?: string;
-    }, select: (view: View, projection: Projection) => T): Promise<Snapshot<T>>;
-    observeAccount<T>(ctx: Context, req: {
-        runtimeId?: string;
-    }, select: (view: View, projection: Projection) => T, observer: Observer<T>): Promise<Subscription>;
-    runtimes(ctx: Context): Promise<Snapshot<Runtime[]>>;
-    observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
-    observe<T>(ctx: Context, req: RuntimeRef & {
-        conversationId?: string;
-    }, select: (v: View, p: Projection) => T, observer: Observer<T>, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Subscription>;
-    command<T>(ctx: Context, req: RuntimeRef, kind: CommandKind, allowed: string[], required: string[], decode: (data: unknown) => T, options?: MutationOptions): Promise<T>;
-    imGroupAttachment<T>(ctx: Context, req: ConversationRef, action: 'prepare' | 'attach' | 'query', params: Record<string, unknown>, decode: (v: unknown) => T): Promise<T>;
-    get supportsRemoteRead(): boolean;
-    /** One process cache per exact authorization/root; ordinary Query remains the
-     * owner of canonical message and Turn facts. No periodic detail polling. */
-    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
-    /** A scoped one-shot read, with no fabricated replica completeness claim. */
-    storageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
-    remoteRead<T>(ctx: Context, req: RuntimeRef & {
-        conversationId?: string;
-    }, kind: ReadKind, params: Record<string, unknown>, decode: (value: unknown) => T, priority?: number, admit?: () => boolean): Promise<Snapshot<T>>;
-    getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
-    getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
-    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
-    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
-    close(): Promise<void>;
-}
-
 /**
  * Call Options - 调用选项配置
  * 对应 Go 版本: manager/call_options.go
@@ -3957,13 +4315,16 @@ declare class RuntimeManager {
     private readonly checkOpen;
     private readonly runtimeService?;
     private readonly commands?;
+    private readonly listPagination;
+    describeCreditPackageAgents(ctx: ExecutionContext, request?: DescribeCreditPackageAgentsRequest & ListOptions): Promise<Page<CreditPackageAgent>>;
+    listRuntimes(ctx: Context, request?: ListOptions): Promise<Page<Runtime>>;
     constructor(container: ServiceContainer | undefined, checkOpen: () => void, runtimeService?: (() => Service) | undefined, commands?: RuntimeCommands | undefined);
     private directory;
     private cloud;
-    listRuntimes(ctx: Context): Promise<Runtime[]>;
+    private readListRuntimes;
     observeRuntimes(ctx: Context, observer: Observer<Runtime[]>): Promise<Subscription>;
     getHostCapabilities(ctx: Context, req: RuntimeRef): Promise<Snapshot<HostCapabilities>>;
-    describeCreditPackageAgents(ctx: ExecutionContext, req?: DescribeCreditPackageAgentsRequest): Promise<CreditPackageAgent[]>;
+    private readDescribeCreditPackageAgents;
     describeCreditUsageInfo(ctx: ExecutionContext, req?: DescribeCreditUsageInfoRequest): Promise<CreditUsageInfo>;
     updateAgentInstance(ctx: ExecutionContext, req: UpdateAgentInstanceRequest, ...opts: CallOption[]): Promise<void>;
     approveFotaUpdate(ctx: ExecutionContext, req: ApproveFotaUpdateRequest, ...opts: CallOption[]): Promise<void>;
@@ -4054,11 +4415,6 @@ declare class AuthCodeCredential implements Credential {
     private refreshToken;
 }
 
-/**
- * Skill Manager
- * 对应 Go 版本: manager/skill_manager.go
- */
-
 interface ListCategoriesRequest {
 }
 interface ListSkillsRequest {
@@ -4103,13 +4459,17 @@ interface EntUninstallSkillsRequest {
     agentPlatform?: string;
 }
 declare class SkillManager {
+    private readonly listPagination;
+    listCategories(ctx: Context, request?: (ListCategoriesRequest) & ListOptions): Promise<Page<SkillCategory>>;
+    listInstalledSkills(ctx: Context, request: (ListInstalledSkillsRequest) & ListOptions): Promise<Page<InstalledSkill>>;
+    listAgentAuthedSkills(ctx: Context, request: (ListAgentAuthedSkillsRequest) & ListOptions): Promise<Page<AgentAuthedSkill>>;
     private container;
     static buildSkillManager(ctx: ExecutionContext, container: ServiceContainer): Promise<SkillManager>;
     private constructor();
     /**
      * 获取技能分类列表
      */
-    listCategories(ctx: ExecutionContext, req?: ListCategoriesRequest): Promise<SkillCategory[]>;
+    private readListCategories;
     /**
      * 获取技能列表（支持分页和多维度过滤）
      * @internal 暂不对外暴露，内部保留
@@ -4118,7 +4478,7 @@ declare class SkillManager {
     /**
      * 获取已安装技能列表
      */
-    listInstalledSkills(ctx: ExecutionContext, req: ListInstalledSkillsRequest): Promise<InstalledSkill[]>;
+    private readListInstalledSkills;
     /**
      * 启用/禁用技能并等待操作完成
      * 内部自动轮询 OperationTask 直到完成
@@ -4127,7 +4487,7 @@ declare class SkillManager {
     /**
      * 查询 Agent 授权的技能列表
      */
-    listAgentAuthedSkills(ctx: ExecutionContext, req: ListAgentAuthedSkillsRequest): Promise<ListAgentAuthedSkillsResult>;
+    private readListAgentAuthedSkills;
     /**
      * 企业安装技能并等待操作完成
      * 内部自动轮询 OperationTask 直到完成
@@ -4207,8 +4567,10 @@ interface CreditPackageQuery {
 /** Independent HTTP queries. Does not construct a legacy Agent/IM manager. */
 declare class CreditManager {
     private readonly container;
+    private readonly listPagination;
+    describeCreditPackageAgents(ctx: Context, request: (CreditPackageQuery) & ListOptions): Promise<Page<CreditPackageAgent>>;
     constructor(container: ServiceContainer);
-    describeCreditPackageAgents(ctx: ExecutionContext, req: CreditPackageQuery): Promise<CreditPackageAgent[]>;
+    private readDescribeCreditPackageAgents;
     describeCreditUsageInfo(ctx: ExecutionContext, req: DescribeCreditUsageInfoRequest$1): Promise<CreditUsageInfo>;
 }
 
@@ -4496,9 +4858,9 @@ declare class Client {
     private businessAuth;
     private businessService;
     buildRuntimeManager(_context: ExecutionContext): Promise<RuntimeManager>;
-    buildAgentManager(_context: Context): Promise<AgentManager$1>;
-    buildConversationManager(_context: Context): Promise<ConversationManager$1>;
-    buildResourceManager(_context: Context): Promise<ResourceManager$1>;
+    buildAgentManager(_context: Context): Promise<AgentManager>;
+    buildConversationManager(_context: Context): Promise<ConversationManager>;
+    buildResourceManager(_context: Context): Promise<ResourceManager>;
     buildCreditManager(_context: ExecutionContext): Promise<CreditManager>;
     private config;
     private credential;
@@ -4593,301 +4955,4 @@ declare class APIError extends SDKError {
 }
 declare function isRetryable(error: unknown): boolean;
 
-declare class ResourceManager implements ResourceManager$1 {
-    private service;
-    constructor(service: Service);
-    attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
-    getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
-    private imGroup;
-    stageDraftAttachment(ctx: Context, req: DraftRef & {
-        file: Blob;
-        name: string;
-        uploadId: string;
-    }): Promise<StagedAttachment>;
-    listDraftAttachments(ctx: Context, req: DraftRef): Promise<Snapshot<DraftSnapshot>>;
-    commitDraftAttachments(ctx: Context, req: DraftRef & {
-        conversationId: string;
-        attachmentIds: string[];
-    }): Promise<CommittedAttachment[]>;
-    discardDraftAttachments(ctx: Context, req: DraftRef & {
-        attachmentIds: string[];
-    }): Promise<{
-        state: "discarded";
-    }>;
-    getDraftAttachmentPreview(ctx: Context, req: DraftRef & {
-        attachmentId: string;
-    }): Promise<Snapshot<{
-        unavailableReason?: string | undefined;
-        dataUrl?: string | undefined;
-        text?: string | undefined;
-        title?: string | undefined;
-        mime?: string | undefined;
-        attachmentId: string;
-        kind: string;
-    }>>;
-    listWorkspaces(ctx: Context, req: RuntimeRef & {
-        parentWorkspaceId?: string;
-    }): Promise<Snapshot<{
-        entries: Workspace[];
-        truncated: boolean;
-        parentWorkspaceId?: string | undefined;
-        current: Workspace;
-    }>>;
-    createWorkspace(ctx: Context, req: RuntimeRef & {
-        name: string;
-    }): Promise<Workspace>;
-    private resources;
-    listResources(ctx: Context, req: RuntimeRef & {
-        kind?: Resource['kind'];
-    }): Promise<Snapshot<Resource[]>>;
-    observeResources(ctx: Context, req: RuntimeRef & {
-        kind?: Resource['kind'];
-    }, observer: Observer<Resource[]>): Promise<Subscription>;
-    getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
-    observeConversationResources(ctx: Context, req: ConversationRef, observer: Observer<ResourceSelection>): Promise<Subscription>;
-    setConversationResources(ctx: Context, req: ConversationRef & {
-        resourceIds: string[];
-        expectedVersion: string;
-    }): Promise<{
-        resourceIds: string[];
-        revision: string;
-        writeVersion: string | undefined;
-        conversationId: string;
-        runtimeId: string;
-    }>;
-    stageAttachment(ctx: Context, req: ConversationRef & {
-        file: Blob;
-        name: string;
-    }): Promise<{
-        attachmentId: string;
-        name: string;
-        mime: string;
-        size: string;
-        expiresAt: string | undefined;
-    }>;
-    discardAttachment(ctx: Context, req: ConversationRef & {
-        attachmentId: string;
-    }): Promise<{
-        state: "discarded";
-    }>;
-    getAttachmentAccess(ctx: Context, req: ConversationRef & {
-        attachmentId: string;
-        purpose: 'preview' | 'download';
-    }): Promise<{
-        url: string;
-        expiresAt: string;
-    }>;
-}
-
-declare class AgentManager implements AgentManager$1 {
-    private service;
-    private cloud?;
-    constructor(service: Service, cloud?: CloudResources | undefined);
-    private resources;
-    describeWyDrives(...args: Parameters<CloudResources['describeWyDrives']>): Promise<DescribeWyDrivesResult>;
-    describeWyDriveFiles(...args: Parameters<CloudResources['describeWyDriveFiles']>): Promise<DescribeWyDriveFilesResult>;
-    getDownloadUrl(...args: Parameters<CloudResources['getDownloadUrl']>): Promise<GetDownloadUrlResult>;
-    deleteWyDriveFile(...args: Parameters<CloudResources['deleteWyDriveFile']>): Promise<void>;
-    listAgentKnowledgeSpaces(...args: Parameters<CloudResources['listAgentKnowledgeSpaces']>): Promise<KnowledgeSpace[]>;
-    listKnowledgeFiles(...args: Parameters<CloudResources['listKnowledgeFiles']>): Promise<ListKnowledgeFilesResult>;
-    downloadKnowledgeFiles(...args: Parameters<CloudResources['downloadKnowledgeFiles']>): Promise<DownloadKnowledgeFileResult[]>;
-    listAgents(ctx: Context, req: RuntimeRef): Promise<Snapshot<AgentSummary[]>>;
-    observeAgents(ctx: Context, req: RuntimeRef, observer: Observer<AgentSummary[]>): Promise<Subscription>;
-    listAgentModels(ctx: Context, req: AgentRef): Promise<Snapshot<(ModelSummary & AgentRef)[]>>;
-    listAgentProducts(ctx: Context, req: RuntimeRef): Promise<Snapshot<ProductCatalog>>;
-    listExperts(ctx: Context, req: RuntimeRef & {
-        primaryAgentId: string;
-    }): Promise<Snapshot<Expert[]>>;
-    /** Additive scoped directory API; legacy listExperts/projection semantics are unchanged. */
-    getExpertDirectory(ctx: Context, req: RuntimeRef & {
-        primaryAgentId: string;
-    }): Promise<Snapshot<ExpertDirectory>>;
-    getAgentModelCatalog(ctx: Context, req: AgentRef & {
-        consistency?: 'cache' | 'refresh';
-    }): Promise<Snapshot<AgentModelCatalog>>;
-}
-
-declare class ConversationManager implements ConversationManager$1 {
-    private service;
-    listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
-    listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
-    listRecentGroups(ctx: Context, req: {
-        limit: number;
-    }): Promise<RecentGroupDirectoryEntry[]>;
-    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
-    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-    onGroupSyncState(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
-    constructor(service: Service);
-    observeLiveProcess(ctx: Context, req: ConversationRef, observer: Observer<LiveProcessSnapshot>): Promise<Subscription>;
-    prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
-    createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<{
-        coordinatorMemberId?: string | undefined;
-        memberMappings?: {
-            clientMemberKey: string;
-            memberId: string;
-        }[] | undefined;
-        mappingState?: "unknown" | "complete" | undefined;
-        conversationId: string;
-        runtimeId: string;
-    }>;
-    listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
-    observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: Observer<Page<SidebarGroup>>): Promise<Subscription>;
-    listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
-    observeSidebarConversations(ctx: Context, req: SidebarRowsQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
-    getConversationSummary(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation>>;
-    observeConversationSummary(ctx: Context, req: ConversationRef, observer: Observer<Conversation>): Promise<Subscription>;
-    getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
-    getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<MessagePresentation | undefined>>;
-    listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
-    observeActiveExecutions(ctx: Context, req: ConversationRef, observer: Observer<ActiveExecutionSnapshot>): Promise<Subscription>;
-    cancelExecution(ctx: Context, req: ConversationRef & {
-        executionId: string;
-        expectedVersion: string;
-    }): Promise<{
-        state: "cancelled" | "requested" | "already_finished";
-    }>;
-    getComposerCapabilities(ctx: Context, req: ConversationRef & {
-        memberId?: string;
-    }): Promise<Snapshot<ComposerCapabilities>>;
-    getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
-    observeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: Observer<CommandReceipt>): Promise<Subscription>;
-    steerTurn(ctx: Context, req: ConversationRef & {
-        turnId: string;
-        text: string;
-        clientCommandId: string;
-    }): Promise<{
-        state: "accepted";
-        turnId: string;
-        messageId: string;
-    }>;
-    setConversationPinned(ctx: Context, req: ConversationRef & {
-        pinned: boolean;
-    }, options?: MutationOptions): Promise<ConversationRef>;
-    getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
-    getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
-    listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<{
-        add: Capability;
-        multipleIdentities: Capability;
-        configurable: {
-            displayName: Capability;
-            model: Capability;
-            responsibility: Capability;
-        };
-        agentId: string;
-        runtimeId: string;
-    }[]>>;
-    getMemberSnapshot(ctx: Context, req: ConversationRef & {
-        consistency?: 'cache' | 'refresh';
-    }): Promise<Snapshot<MemberSnapshot>>;
-    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
-    observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatus>): Promise<Subscription>;
-    private conversations;
-    listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
-    observeConversations(ctx: Context, req: ConversationQuery, observer: Observer<Page<Conversation>>): Promise<Subscription>;
-    getConversation(ctx: Context, req: ConversationRef): Promise<Snapshot<Conversation | undefined>>;
-    renameConversation(ctx: Context, req: ConversationRef & {
-        name: string;
-    }, options?: MutationOptions): Promise<ConversationRef>;
-    updateConversationConfig(ctx: Context, req: ConversationRef & {
-        config: Config;
-        expectedVersion: string;
-    }): Promise<ConversationRef>;
-    setConversationConfigOption(ctx: Context, req: ConversationRef & {
-        optionId: 'model' | 'runtime.permissionPreset' | 'runtime.thinkingLevel';
-        value: string;
-    }): Promise<ConversationRef>;
-    getConversationConfig(ctx: Context, req: ConversationRef): Promise<Snapshot<EffectiveConfig & ConversationRef>>;
-    observeConversationConfig(ctx: Context, req: ConversationRef, observer: Observer<EffectiveConfig>): Promise<Subscription>;
-    archiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
-    unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationRef>;
-    listMembers(ctx: Context, req: ConversationRef & {
-        includeRemoved?: boolean;
-    }): Promise<Snapshot<(Member & ConversationRef)[]>>;
-    observeMembers(ctx: Context, req: ConversationRef & {
-        includeRemoved?: boolean;
-    }, observer: Observer<Member[]>): Promise<Subscription>;
-    addMember(ctx: Context, req: ConversationRef & {
-        agentId: string;
-        displayName?: string;
-        modelId?: string;
-        responsibility?: ResponsibilityPatch;
-    }, options?: MutationOptions): Promise<ConversationRef & {
-        memberId: string;
-    }>;
-    updateMember(ctx: Context, req: ConversationRef & {
-        memberId: string;
-        expectedVersion: string;
-        displayName?: string;
-        modelId?: string;
-        responsibility?: ResponsibilityPatch;
-    }, options?: MutationOptions): Promise<ConversationRef & {
-        memberId: string;
-    }>;
-    removeMember(ctx: Context, req: ConversationRef & {
-        memberId: string;
-        expectedVersion: string;
-    }, options?: MutationOptions): Promise<ConversationRef & {
-        memberId: string;
-    }>;
-    sendMessage(ctx: Context, req: SendRequest): Promise<MessageAccepted>;
-    sendMessageStream(ctx: Context, req: SendRequest): MessageStream;
-    /** Wait for the Turn, not an IM receipt. Reuses the same subscription, send and recovery owner. */
-    sendMessageAndWait(ctx: Context, req: SendRequest): Promise<MessageCompletion>;
-    private messages;
-    resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<ConversationReadBinding>;
-    listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
-    observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer: Observer<ConversationHistory>): Promise<Subscription>;
-    listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
-    observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message>>): Promise<Subscription>;
-    listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
-    observeExecutionActivity(ctx: Context, req: ConversationRef, observer: Observer<ExecutionActivity[]>): Promise<Subscription>;
-    getMessageDetail(ctx: Context, req: ConversationRef & {
-        messageId: string;
-        itemCursor?: string;
-        limit?: number;
-    }): Promise<Snapshot<MessageDetail | undefined>>;
-    getTurn(ctx: Context, req: ConversationRef & {
-        turnId: string;
-    }): Promise<Snapshot<Turn | undefined>>;
-    observeTurn(ctx: Context, req: ConversationRef & {
-        turnId: string;
-    }, observer: Observer<Turn | undefined>): Promise<Subscription>;
-    cancelTurn(ctx: Context, req: ConversationRef & {
-        turnId: string;
-    }): Promise<{
-        state: "cancelled" | "requested" | "already_finished";
-    }>;
-    private interactions;
-    refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<{
-        recovered: number;
-        conversationId: string;
-        runtimeId: string;
-    }>;
-    listInteractions(ctx: Context, req: ConversationRef & {
-        state?: 'pending' | 'all';
-    }): Promise<Snapshot<Interaction[]>>;
-    observeInteractions(ctx: Context, req: ConversationRef & {
-        state?: 'pending' | 'all';
-    }, observer: Observer<Interaction[]>): Promise<Subscription>;
-    respondPermission(ctx: Context, req: ConversationRef & {
-        interactionId: string;
-        optionId: string;
-        expectedVersion: string;
-    }): Promise<InteractionResponse>;
-    getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
-    respondQuestion(ctx: Context, req: ConversationRef & {
-        interactionId: string;
-        expectedVersion: string;
-        answer: {
-            answers: {
-                questionId: string;
-                optionIds: string[];
-                text?: string;
-            }[];
-        } | {
-            skip: true;
-        };
-    }, options?: MutationOptions): Promise<InteractionResponse>;
-}
-
-export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type AgentSummary, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientConfig, type ClientOptions, BusinessError as CloudBusinessError, CloudClient, type CloudClientOptions, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type GroupDirectoryEntry, type GroupDirectoryPage, type GroupDirectoryQuery, type GroupRef, type GroupSyncState, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type ModelSummary, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type ObserveCommandRequest, type Observer, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type Resource, ResourceManager, type ResourceSelection, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandObserver, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type StreamDeliveryPacket, type StreamEvent, type StreamLifecycleStatus, type Subscription, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, getAuthCode, isRetryable, mergeToInternal };
+export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type AgentSummary, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientConfig, type ClientOptions, BusinessError as CloudBusinessError, CloudClient, type CloudClientOptions, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type GroupDirectoryEntry, type GroupDirectoryPage, type GroupDirectoryQuery, type GroupRef, type GroupSyncState, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type ModelSummary, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type ObserveCommandRequest, type Observer, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type Resource, ResourceManager$1 as ResourceManager, type ResourceSelection, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandObserver, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type StreamDeliveryPacket, type StreamEvent, type StreamLifecycleStatus, type Subscription, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, getAuthCode, isRetryable, mergeToInternal };

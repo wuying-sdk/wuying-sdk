@@ -6,29 +6,109 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 
 此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
 
+## listRecentGroups
+
+```ts
+listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-recent-groups)
+
 ## listGroupSyncStates
 
 ```ts
-listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<GroupSyncState>>;
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-group-sync-states)
 
+## listActiveExecutions
+
+```ts
+listActiveExecutions(ctx: Context, request: (ConversationRef) & ListOptions): Promise<{ projection: Projection; items: ActiveExecution[]; nextCursor: string | null; complete: boolean; }>;
+```
+
+[查看操作或完整契约](/api-reference/executions/list-active-executions)
+
+## listMemberCandidates
+
+```ts
+listMemberCandidates(ctx: Context, request: (ConversationRef) & ListOptions): Promise<Page<{ add: Capability; multipleIdentities: Capability; configurable: { displayName: Capability; model: Capability; responsibility: Capability; }; agentId: string; runtimeId: string; }> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/members/list-member-candidates)
+
+## listMembers
+
+```ts
+listMembers(ctx: Context, request: (ConversationRef & { includeRemoved?: boolean; }) & ListOptions): Promise<Page<Member & ConversationRef> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/members/list)
+
+## listExecutionActivity
+
+```ts
+listExecutionActivity(ctx: Context, request: (ConversationRef) & ListOptions): Promise<Page<ExecutionActivity> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/executions/list-execution-activity)
+
+## listInteractions
+
+```ts
+listInteractions(ctx: Context, request: (ConversationRef & { state?: "pending" | "all"; }) & ListOptions): Promise<Page<Interaction> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/interactions/list)
+
+## listConversations
+
+```ts
+listConversations(ctx: Context, request: (ConversationQuery) & ListOptions): Promise<Page<Conversation> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list)
+
+## listMessages
+
+```ts
+listMessages(ctx: Context, request: (MessageQuery) & ListOptions): Promise<Page<Message> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/messages/list)
+
+## listSidebarConversations
+
+```ts
+listSidebarConversations(ctx: Context, request: (SidebarRowsQuery) & ListOptions): Promise<Page<Conversation> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
+
+## listConversationGroups
+
+```ts
+listConversationGroups(ctx: Context, request: (ConversationGroupQuery) & ListOptions): Promise<Page<SidebarGroup> & { projection: Projection; }>;
+```
+
+[查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
+
+## listConversationHistory
+
+```ts
+listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & ListOptions): Promise<{ projection: Projection; conversation?: Conversation; members: Member[]; turnItems: Item[]; turns: Turn[]; activities: ExecutionActivity[]; presentations: MessagePresentation[]; items: Message[]; nextCursor: string | null; }>;
+```
+
+[查看操作或完整契约](/api-reference/messages/list-conversation-history)
+
 ## listGroups
 
 ```ts
-listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: GroupDirectoryEntry[]; nextCursor: string | null; }>;
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-groups)
-
-## listRecentGroups
-
-```ts
-listRecentGroups(ctx: Context, req: { limit: number; }): Promise<RecentGroupDirectoryEntry[]>;
-```
-
-[查看操作或完整契约](/api-reference/conversations/list-recent-groups)
 
 ## syncConversation
 
@@ -78,14 +158,6 @@ createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions):
 
 [查看操作或完整契约](/api-reference/conversations/create)
 
-## listConversationGroups
-
-```ts
-listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
-```
-
-[查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
-
 ## observeConversationGroups
 
 ```ts
@@ -93,14 +165,6 @@ observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: O
 ```
 
 [查看操作或完整契约](/api-reference/conversations/observe-conversation-groups)
-
-## listSidebarConversations
-
-```ts
-listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
-```
-
-[查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
 
 ## observeSidebarConversations
 
@@ -141,14 +205,6 @@ getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<M
 ```
 
 [查看操作或完整契约](/api-reference/messages/presentation)
-
-## listActiveExecutions
-
-```ts
-listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
-```
-
-[查看操作或完整契约](/api-reference/executions/list-active-executions)
 
 ## observeActiveExecutions
 
@@ -222,14 +278,6 @@ getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snaps
 
 [查看操作或完整契约](/api-reference/conversations/get-conversation-header-metadata)
 
-## listMemberCandidates
-
-```ts
-listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<{ add: Capability; multipleIdentities: Capability; configurable: { displayName: Capability; model: Capability; responsibility: Capability; }; agentId: string; runtimeId: string; }[]>>;
-```
-
-[查看操作或完整契约](/api-reference/members/list-member-candidates)
-
 ## getMemberSnapshot
 
 ```ts
@@ -253,14 +301,6 @@ observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatu
 ```
 
 [查看操作或完整契约](/api-reference/receipts/observe-mutation)
-
-## listConversations
-
-```ts
-listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
-```
-
-[查看操作或完整契约](/api-reference/conversations/list)
 
 ## observeConversations
 
@@ -334,14 +374,6 @@ unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationR
 
 [查看操作或完整契约](/api-reference/conversations/unarchive-conversation)
 
-## listMembers
-
-```ts
-listMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }): Promise<Snapshot<(Member & ConversationRef)[]>>;
-```
-
-[查看操作或完整契约](/api-reference/members/list)
-
 ## observeMembers
 
 ```ts
@@ -406,14 +438,6 @@ resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<Conve
 
 [查看操作或完整契约](/api-reference/messages/resolve-conversation-read)
 
-## listConversationHistory
-
-```ts
-listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
-```
-
-[查看操作或完整契约](/api-reference/messages/list-conversation-history)
-
 ## observeConversationHistory
 
 ```ts
@@ -422,14 +446,6 @@ observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer
 
 [查看操作或完整契约](/api-reference/messages/observe-conversation-history)
 
-## listMessages
-
-```ts
-listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
-```
-
-[查看操作或完整契约](/api-reference/messages/list)
-
 ## observeMessages
 
 ```ts
@@ -437,14 +453,6 @@ observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message
 ```
 
 [查看操作或完整契约](/api-reference/messages/observe)
-
-## listExecutionActivity
-
-```ts
-listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
-```
-
-[查看操作或完整契约](/api-reference/executions/list-execution-activity)
 
 ## observeExecutionActivity
 
@@ -494,14 +502,6 @@ refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<{ recove
 
 [查看操作或完整契约](/api-reference/interactions/refresh-pending-interactions)
 
-## listInteractions
-
-```ts
-listInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }): Promise<Snapshot<Interaction[]>>;
-```
-
-[查看操作或完整契约](/api-reference/interactions/list)
-
 ## observeInteractions
 
 ```ts
@@ -537,7 +537,7 @@ respondQuestion(ctx: Context, req: ConversationRef & { interactionId: string; ex
 ## constructor
 
 ```ts
-new new (service: Service): ConversationManager;
+new new (service: Service): ConversationManager$1;
 ```
 
 [查看操作或完整契约](/reference/js/public#entry-5b73ae15ebe839b2)
@@ -577,7 +577,7 @@ getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<Conve
 ## listGroupSyncStates
 
 ```ts
-listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
+listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<GroupSyncState>>;
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-group-sync-states)
@@ -585,7 +585,7 @@ listGroupSyncStates(ctx: Context, req: RuntimeRef): Promise<GroupSyncState[]>;
 ## listGroups
 
 ```ts
-listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
+listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: GroupDirectoryEntry[]; nextCursor: string | null; }>;
 ```
 
 [查看操作或完整契约](/api-reference/sync/list-groups)
@@ -593,7 +593,7 @@ listGroups(ctx: Context, req: GroupDirectoryQuery): Promise<GroupDirectoryPage>;
 ## listRecentGroups
 
 ```ts
-listRecentGroups(ctx: Context, req: { limit: number; }): Promise<RecentGroupDirectoryEntry[]>;
+listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list-recent-groups)
@@ -633,7 +633,7 @@ createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions):
 ## listConversationGroups
 
 ```ts
-listConversationGroups(ctx: Context, req: ConversationGroupQuery): Promise<Snapshot<Page<SidebarGroup>>>;
+listConversationGroups(ctx: Context, request: (ConversationGroupQuery) & ListOptions): Promise<Page<SidebarGroup> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list-conversation-groups)
@@ -649,7 +649,7 @@ observeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: O
 ## listSidebarConversations
 
 ```ts
-listSidebarConversations(ctx: Context, req: SidebarRowsQuery): Promise<Snapshot<Page<Conversation>>>;
+listSidebarConversations(ctx: Context, request: (SidebarRowsQuery) & ListOptions): Promise<Page<Conversation> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list-sidebar-conversations)
@@ -689,7 +689,7 @@ getMessagePresentation(ctx: Context, req: PresentationQuery): Promise<Snapshot<M
 ## listActiveExecutions
 
 ```ts
-listActiveExecutions(ctx: Context, req: ConversationRef): Promise<Snapshot<ActiveExecutionSnapshot>>;
+listActiveExecutions(ctx: Context, request: (ConversationRef) & ListOptions): Promise<{ projection: Projection; items: ActiveExecution[]; nextCursor: string | null; complete: boolean; }>;
 ```
 
 [查看操作或完整契约](/api-reference/executions/list-active-executions)
@@ -761,7 +761,7 @@ getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snaps
 ## listMemberCandidates
 
 ```ts
-listMemberCandidates(ctx: Context, req: ConversationRef): Promise<Snapshot<MemberCandidate[]>>;
+listMemberCandidates(ctx: Context, request: (ConversationRef) & ListOptions): Promise<Page<{ add: Capability; multipleIdentities: Capability; configurable: { displayName: Capability; model: Capability; responsibility: Capability; }; agentId: string; runtimeId: string; }> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/members/list-member-candidates)
@@ -793,7 +793,7 @@ observeMutation(ctx: Context, req: MutationRef, observer: Observer<MutationStatu
 ## listConversations
 
 ```ts
-listConversations(ctx: Context, req: ConversationQuery): Promise<Snapshot<Page<Conversation>>>;
+listConversations(ctx: Context, request: (ConversationQuery) & ListOptions): Promise<Page<Conversation> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/conversations/list)
@@ -873,7 +873,7 @@ unarchiveConversation(ctx: Context, req: ConversationRef): Promise<ConversationR
 ## listMembers
 
 ```ts
-listMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }): Promise<Snapshot<Member[]>>;
+listMembers(ctx: Context, request: (ConversationRef & { includeRemoved?: boolean; }) & ListOptions): Promise<Page<Member & ConversationRef> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/members/list)
@@ -945,7 +945,7 @@ resolveConversationRead(ctx: Context, req: ConversationReadQuery): Promise<Conve
 ## listConversationHistory
 
 ```ts
-listConversationHistory(ctx: Context, req: ConversationHistoryQuery): Promise<Snapshot<ConversationHistory>>;
+listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & ListOptions): Promise<{ projection: Projection; conversation?: Conversation; members: Member[]; turnItems: Item[]; turns: Turn[]; activities: ExecutionActivity[]; presentations: MessagePresentation[]; items: Message[]; nextCursor: string | null; }>;
 ```
 
 [查看操作或完整契约](/api-reference/messages/list-conversation-history)
@@ -961,7 +961,7 @@ observeConversationHistory(ctx: Context, req: ConversationHistoryQuery, observer
 ## listMessages
 
 ```ts
-listMessages(ctx: Context, req: MessageQuery): Promise<Snapshot<Page<Message>>>;
+listMessages(ctx: Context, request: (MessageQuery) & ListOptions): Promise<Page<Message> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/messages/list)
@@ -985,7 +985,7 @@ observeMessages(ctx: Context, req: MessageQuery, observer: Observer<Page<Message
 ## listExecutionActivity
 
 ```ts
-listExecutionActivity(ctx: Context, req: ConversationRef): Promise<Snapshot<ExecutionActivity[]>>;
+listExecutionActivity(ctx: Context, request: (ConversationRef) & ListOptions): Promise<Page<ExecutionActivity> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/executions/list-execution-activity)
@@ -1041,7 +1041,7 @@ refreshPendingInteractions(ctx: Context, req: ConversationRef): Promise<Conversa
 ## listInteractions
 
 ```ts
-listInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }): Promise<Snapshot<Interaction[]>>;
+listInteractions(ctx: Context, request: (ConversationRef & { state?: "pending" | "all"; }) & ListOptions): Promise<Page<Interaction> & { projection: Projection; }>;
 ```
 
 [查看操作或完整契约](/api-reference/interactions/list)

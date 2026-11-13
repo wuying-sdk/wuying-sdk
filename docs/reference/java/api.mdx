@@ -815,21 +815,29 @@ public interface com.aliyun.wuying.sdk.config.TokenRefresher {
 Compiled from "AgentManager.java"
 public final class com.aliyun.wuying.sdk.manager.AgentManager extends com.aliyun.wuying.sdk.manager.BaseManager {
   public com.aliyun.wuying.sdk.manager.AgentManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.AgentSummary>>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.ModelSummary>>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentSummary>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ModelSummary>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.AgentSummary>>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DescribeWyDrivesResult> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DescribeWyDriveFilesResult> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WyDrivePage> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WyDrivePage> describeWyDrives(com.aliyun.wuying.sdk.model.DescribeWyDrivesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDriveFile>> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDriveFile>> describeWyDriveFiles(com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DownloadUrlInfo> getDownloadURL(com.aliyun.wuying.sdk.model.GetDownloadUrlRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> deleteWyDriveFile(com.aliyun.wuying.sdk.model.DeleteWyDriveFileRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListKnowledgeFilesResult> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeSpace>> listAgentKnowledgeSpaces(com.aliyun.wuying.sdk.model.ListAgentKnowledgeSpacesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeFile>> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.KnowledgeFile>> listKnowledgeFiles(com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.DownloadKnowledgeFileResult>> downloadKnowledgeFiles(com.aliyun.wuying.sdk.model.DownloadKnowledgeFilesRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DownloadUrlInfo> getDownloadUrl(com.aliyun.wuying.sdk.model.GetDownloadUrlRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ExpertDirectory>> getExpertDirectory(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Expert>>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AgentModelCatalog>> getAgentModelCatalog(com.aliyun.wuying.sdk.model.ModelCatalogQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ProductCatalog>> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ProductPage> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ProductPage> listAgentProducts(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "BaseManager.java"
 abstract class com.aliyun.wuying.sdk.manager.BaseManager {
@@ -857,7 +865,7 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public com.aliyun.wuying.sdk.manager.ConversationManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedConversation> createConversation(com.aliyun.wuying.sdk.model.CreateRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedConversation> createConversation(com.aliyun.wuying.sdk.model.CreateRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.EffectiveConfig>> getConversationConfig(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> renameConversation(com.aliyun.wuying.sdk.model.RenameRequest, com.aliyun.wuying.sdk.CallContext);
@@ -870,7 +878,8 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> updateConversationConfig(com.aliyun.wuying.sdk.model.ConfigRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> setConversationConfigOption(com.aliyun.wuying.sdk.model.ConfigOptionRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> setConversationConfigOption(com.aliyun.wuying.sdk.model.ConfigOptionRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Member>>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Member>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Member>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> addMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> addMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> updateMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.CallContext);
@@ -879,11 +888,12 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MemberResult> removeMember(com.aliyun.wuying.sdk.model.MemberRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageAccepted> sendMessage(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageAccepted> sendMessage(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>> listMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>> listMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MessageDetail>> getMessageDetail(com.aliyun.wuying.sdk.model.MessageDetailQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Turn>> getTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> cancelTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.ExecutionActivity>>> listExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ExecutionActivity>> listExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ExecutionActivity>> listExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Conversation>, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeConversationConfig(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.EffectiveConfig>, com.aliyun.wuying.sdk.CallContext);
@@ -891,20 +901,22 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public com.aliyun.wuying.sdk.model.Subscription observeMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Turn>, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.ExecutionActivity>>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.MessageStream sendMessageStream(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageCompletion> sendMessageAndWait(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Interaction>>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Interaction>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Interaction>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Interaction>>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondPermission(com.aliyun.wuying.sdk.model.PermissionRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondQuestion(com.aliyun.wuying.sdk.model.QuestionRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondQuestion(com.aliyun.wuying.sdk.model.QuestionRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription onGroupSyncState(com.aliyun.wuying.sdk.model.RuntimeRef, java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Conversation>> getConversationSummary(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>>> listConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>> listConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> setConversationPinned(com.aliyun.wuying.sdk.model.PinnedRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationRef> setConversationPinned(com.aliyun.wuying.sdk.model.PinnedRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
@@ -912,13 +924,15 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationAttachmentTarget> prepareConversationAttachmentTarget(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MessageFilesResult>> getMessageFiles(com.aliyun.wuying.sdk.model.MessageFilesQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MessagePresentation>> getMessagePresentation(com.aliyun.wuying.sdk.model.PresentationQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ActiveExecutionSnapshot>> listActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ActiveExecutionPage> listActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ActiveExecutionPage> listActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeActiveExecutions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ActiveExecutionSnapshot>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> cancelExecution(com.aliyun.wuying.sdk.model.CancelExecutionRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ComposerCapabilities>> getComposerCapabilities(com.aliyun.wuying.sdk.model.ComposerQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.SteerResult> steerTurn(com.aliyun.wuying.sdk.model.SteerRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ConversationHeaderMetadata>> getConversationHeaderMetadata(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.MemberCandidate>>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.MemberCandidate>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.MemberCandidate>> listMemberCandidates(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MemberSnapshot>> getMemberSnapshot(com.aliyun.wuying.sdk.model.MemberSnapshotQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.CommandReceipt>> getCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.CommandReceipt>, com.aliyun.wuying.sdk.CallContext);
@@ -927,9 +941,9 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.CommandReceipt>> getQuestionResponseReceipt(com.aliyun.wuying.sdk.model.QuestionResponseRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionRefresh> refreshPendingInteractions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationReadBinding> resolveConversationRead(com.aliyun.wuying.sdk.model.ConversationReadQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ConversationHistory>> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationHistory> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ConversationHistory>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupDirectoryPage> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSummary>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncGroup(com.aliyun.wuying.sdk.model.GroupRef, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeLiveProcess(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.LiveProcessSnapshot>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.admin.AuthorizedUser>> listAuthorizedUsers(com.aliyun.wuying.sdk.model.AuthorizedUserQuery, com.aliyun.wuying.sdk.CallContext);
@@ -956,8 +970,31 @@ class com.aliyun.wuying.sdk.manager.ConversationManager$2 implements com.aliyun.
 Compiled from "CreditManager.java"
 public final class com.aliyun.wuying.sdk.manager.CreditManager extends com.aliyun.wuying.sdk.manager.BaseManager {
   public com.aliyun.wuying.sdk.manager.CreditManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUsageInfo> describeCreditUsageInfo(com.aliyun.wuying.sdk.model.DescribeCreditUsageInfoRequest, com.aliyun.wuying.sdk.CallContext);
+}
+Compiled from "KnowledgeFilesPageRequest.java"
+final class com.aliyun.wuying.sdk.manager.KnowledgeFilesPageRequest extends com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest {
+  public long pageNumber;
+  public long pageSize;
+}
+Compiled from "ListPagination.java"
+final class com.aliyun.wuying.sdk.manager.ListPagination {
+}
+Compiled from "ListPagination.java"
+public class com.aliyun.wuying.sdk.manager.ListPagination$Cursor {
+  public int version;
+  public java.lang.String scope;
+  public java.lang.String kind;
+  public java.lang.String revision;
+  public int offset;
+  public int size;
+  public long total;
+  public com.aliyun.wuying.sdk.manager.ListPagination$Cursor();
+}
+Compiled from "ListPagination.java"
+final class com.aliyun.wuying.sdk.manager.ListPagination$Numbered<T> {
 }
 Compiled from "ModelManager.java"
 public final class com.aliyun.wuying.sdk.manager.ModelManager extends com.aliyun.wuying.sdk.manager.BaseManager {
@@ -968,7 +1005,8 @@ public final class com.aliyun.wuying.sdk.manager.ModelManager extends com.aliyun
 Compiled from "ResourceManager.java"
 public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.aliyun.wuying.sdk.manager.BaseManager {
   public com.aliyun.wuying.sdk.manager.ResourceManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Resource>>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Resource>>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.ResourceSelection>> getConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeConversationResources(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.Observer<com.aliyun.wuying.sdk.model.ResourceSelection>, com.aliyun.wuying.sdk.CallContext);
@@ -977,11 +1015,13 @@ public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.ali
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardAttachment(com.aliyun.wuying.sdk.model.AttachmentRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.AttachmentAccess> getAttachmentAccess(com.aliyun.wuying.sdk.model.AttachmentAccessRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageDraftAttachment(com.aliyun.wuying.sdk.model.StageDraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.DraftSnapshot>> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CommittedAttachment>> commitDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AttachmentPreview>> getDraftAttachmentPreview(com.aliyun.wuying.sdk.model.DraftPreviewRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.WorkspacePage>> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspace> createWorkspace(com.aliyun.wuying.sdk.model.CreateWorkspaceRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupAttachmentResult> attachImGroupFile(com.aliyun.wuying.sdk.model.IMGroupFileRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupAttachmentResult> getImGroupAttachmentOperation(com.aliyun.wuying.sdk.model.IMGroupFileRequest, com.aliyun.wuying.sdk.CallContext);
@@ -991,11 +1031,13 @@ public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliy
   public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
   public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService, com.aliyun.wuying.sdk.internal.RuntimeCommands, java.lang.Runnable);
   public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUsageInfo> describeCreditUsageInfo(com.aliyun.wuying.sdk.model.DescribeCreditUsageInfoRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> approveFotaUpdate(com.aliyun.wuying.sdk.model.ApproveFotaUpdateRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GenerateSceneUrlResponse> generateSceneUrl(com.aliyun.wuying.sdk.model.GenerateSceneUrlRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Runtime>> listRuntimes(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription observeRuntimes(com.aliyun.wuying.sdk.model.Observer<java.util.List<com.aliyun.wuying.sdk.model.Runtime>>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.HostCapabilities>> getHostCapabilities(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.RuntimeCommandSubscription> runCommand(com.aliyun.wuying.sdk.model.RunCommandRequest, com.aliyun.wuying.sdk.model.RuntimeCommandObserver, com.aliyun.wuying.sdk.CallContext);
@@ -1004,12 +1046,20 @@ public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliy
 Compiled from "SkillManager.java"
 public final class com.aliyun.wuying.sdk.manager.SkillManager extends com.aliyun.wuying.sdk.manager.BaseManager {
   public com.aliyun.wuying.sdk.manager.SkillManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsResult> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentAuthedSkill>> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentAuthedSkill>> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.OperationTask>> setSkillEnabled(com.aliyun.wuying.sdk.model.SetSkillEnabledRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.OperationTask>> entInstallSkills(com.aliyun.wuying.sdk.model.EntInstallSkillsRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.OperationTask>> entUninstallSkills(com.aliyun.wuying.sdk.model.EntUninstallSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+}
+Compiled from "WyDriveFilesPageRequest.java"
+final class com.aliyun.wuying.sdk.manager.WyDriveFilesPageRequest extends com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest {
+  public long pageNumber;
+  public long pageSize;
 }
 Compiled from "ActiveExecution.java"
 public class com.aliyun.wuying.sdk.model.ActiveExecution extends com.aliyun.wuying.sdk.model.ConversationRef {
@@ -1022,6 +1072,11 @@ public class com.aliyun.wuying.sdk.model.ActiveExecution extends com.aliyun.wuyi
   public com.aliyun.wuying.sdk.model.Capability cancel;
   public java.lang.String revision;
   public com.aliyun.wuying.sdk.model.ActiveExecution();
+}
+Compiled from "ActiveExecutionPage.java"
+public class com.aliyun.wuying.sdk.model.ActiveExecutionPage extends com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.ActiveExecution> {
+  public boolean complete;
+  public com.aliyun.wuying.sdk.model.ActiveExecutionPage();
 }
 Compiled from "ActiveExecutionSnapshot.java"
 public class com.aliyun.wuying.sdk.model.ActiveExecutionSnapshot {
@@ -1676,8 +1731,6 @@ public class com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest {
   public java.lang.String parentFolderId;
   public java.lang.String parentFolderPath;
   public java.lang.String fileNameFilter;
-  public long pageSize;
-  public long pageNumber;
   public java.lang.String orderType;
   public java.lang.String productType;
   public java.lang.String jvsSessionId;
@@ -1815,6 +1868,13 @@ public class com.aliyun.wuying.sdk.model.DraftAttachment extends com.aliyun.wuyi
   public java.lang.String kind;
   public java.lang.String createdAt;
   public com.aliyun.wuying.sdk.model.DraftAttachment();
+}
+Compiled from "DraftAttachmentPage.java"
+public class com.aliyun.wuying.sdk.model.DraftAttachmentPage extends com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.DraftAttachment> {
+  public java.lang.String runtimeId;
+  public java.lang.String draftId;
+  public com.aliyun.wuying.sdk.model.Capability remoteUpload;
+  public com.aliyun.wuying.sdk.model.DraftAttachmentPage();
 }
 Compiled from "DraftAttachmentRequest.java"
 public class com.aliyun.wuying.sdk.model.DraftAttachmentRequest extends com.aliyun.wuying.sdk.model.DraftRef {
@@ -2352,8 +2412,6 @@ public class com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest {
   public java.lang.String knowledgeSpaceId;
   public java.lang.String categoryId;
   public java.lang.String fileNameFilter;
-  public long pageNumber;
-  public long pageSize;
   public com.aliyun.wuying.sdk.model.ListKnowledgeFilesRequest();
 }
 Compiled from "ListKnowledgeFilesResponse.java"
@@ -2372,6 +2430,12 @@ public class com.aliyun.wuying.sdk.model.ListKnowledgeFilesResult {
   public long pageNumber;
   public long pageSize;
   public com.aliyun.wuying.sdk.model.ListKnowledgeFilesResult();
+}
+Compiled from "ListOptions.java"
+public final class com.aliyun.wuying.sdk.model.ListOptions {
+  public int limit;
+  public java.lang.String cursor;
+  public com.aliyun.wuying.sdk.model.ListOptions();
 }
 Compiled from "ListSkillsRequest.java"
 public class com.aliyun.wuying.sdk.model.ListSkillsRequest {
@@ -2805,6 +2869,7 @@ public class com.aliyun.wuying.sdk.model.OperationTask {
 }
 Compiled from "Page.java"
 public class com.aliyun.wuying.sdk.model.Page<T> {
+  public com.aliyun.wuying.sdk.model.Projection projection;
   public java.util.List<T> items;
   public java.lang.String nextCursor;
   public com.aliyun.wuying.sdk.model.Page();
@@ -2904,6 +2969,11 @@ public class com.aliyun.wuying.sdk.model.ProductCatalog {
   public java.util.List<com.aliyun.wuying.sdk.model.Product> products;
   public boolean complete;
   public com.aliyun.wuying.sdk.model.ProductCatalog();
+}
+Compiled from "ProductPage.java"
+public class com.aliyun.wuying.sdk.model.ProductPage extends com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Product> {
+  public boolean complete;
+  public com.aliyun.wuying.sdk.model.ProductPage();
 }
 Compiled from "Projection.java"
 public class com.aliyun.wuying.sdk.model.Projection {
@@ -3411,6 +3481,12 @@ public class com.aliyun.wuying.sdk.model.WorkspaceDisplay {
   public java.lang.String platform;
   public com.aliyun.wuying.sdk.model.WorkspaceDisplay();
 }
+Compiled from "WorkspaceList.java"
+public class com.aliyun.wuying.sdk.model.WorkspaceList extends com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Workspace> {
+  public com.aliyun.wuying.sdk.model.Workspace current;
+  public java.lang.String parentWorkspaceId;
+  public com.aliyun.wuying.sdk.model.WorkspaceList();
+}
 Compiled from "WorkspacePage.java"
 public class com.aliyun.wuying.sdk.model.WorkspacePage {
   public com.aliyun.wuying.sdk.model.Workspace current;
@@ -3458,6 +3534,14 @@ public class com.aliyun.wuying.sdk.model.WyDriveFile {
   public java.lang.String creator;
   public java.util.List<com.aliyun.wuying.sdk.model.FileTag> tags;
   public com.aliyun.wuying.sdk.model.WyDriveFile();
+}
+Compiled from "WyDrivePage.java"
+public class com.aliyun.wuying.sdk.model.WyDrivePage extends com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.WyDrive> {
+  public java.lang.String requestId;
+  public long totalSize;
+  public long usedSize;
+  public boolean capacityNotEnough;
+  public com.aliyun.wuying.sdk.model.WyDrivePage();
 }
 Compiled from "AgMessageClient.java"
 public final class com.aliyun.wuying.sdk.transport.AgMessageClient implements java.lang.AutoCloseable {

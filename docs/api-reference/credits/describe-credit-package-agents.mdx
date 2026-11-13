@@ -26,19 +26,20 @@ description: "完整公开接口 · Credit"
 ### JavaScript / TypeScript · CreditManager
 
 ```ts
-describeCreditPackageAgents(ctx: ExecutionContext, req: CreditPackageQuery): Promise<CreditPackageAgent[]>;
+describeCreditPackageAgents(ctx: Context, request: (CreditPackageQuery) & ListOptions): Promise<Page<CreditPackageAgent>>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.CreditManager
 
 ```go
-func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.CreditManager
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -46,16 +47,27 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
 
 ```ts
-interface ExecutionContext {
+interface Context {
     signal?: AbortSignal;
-    traceId?: string;
     timeout?: number;
+    traceId?: string;
 }
 
 interface CreditPackageQuery {
     agentType: string;
     agentIds: string[];
     fillAgent?: boolean;
+}
+
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface CreditPackageAgent {

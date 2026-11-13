@@ -1,19 +1,82 @@
 ---
-title: "读取下一页"
-description: "沿用同一查询条件，用返回的游标继续读取。"
+title: "列表查询与分页"
+description: "使用 limit 和 cursor 读取列表，所有列表结果统一从 items 读取。"
 ---
 
-列表方法如果返回 `Page`，其中 `items` 是当前页，`nextCursor` 是继续读取的位置；外层若是 Snapshot，实际路径是 `snapshot.data.items` 和 `snapshot.data.nextCursor`。
+列表查询统一返回 `items` 和 `nextCursor`。`items` 是当前页的数据；`nextCursor` 为 `null` 时，当前查询没有可继续读取的一页。列表查询不再套一层 `Snapshot.data`。
+
+## 读取当前页
 
 ```ts
-const conversations = await client.buildConversationManager(ctx);
-const first = await conversations.listMessages(ctx, { runtimeId, conversationId });
-const cursor = first.data.nextCursor;
-if (cursor) {
-  const next = await conversations.listMessages(ctx, { runtimeId, conversationId, cursor });
+const { items: runtimes, nextCursor } = await runtimeManager.listRuntimes(ctx, {
+  limit: 20,
+});
+```
+
+省略 `limit` 时默认读取 50 项，每页允许 1～100 项。一次调用只返回一页，不会自动拉取全部页面。
+
+## 读取下一页
+
+```ts
+if (nextCursor) {
+  const next = await runtimeManager.listRuntimes(ctx, {
+    limit: 20,
+    cursor: nextCursor,
+  });
 }
 ```
 
-`runtimeId`、`conversationId` 已由调用方选定。游标是不透明字符串，不能计算或改写，也不能跨会话、筛选条件或数据代际使用。收到 CURSOR_EXPIRED 时按当前接口合同从第一页重新读取。
+继续使用同一 Client、Manager、查询条件和 `limit`。不要解析、拼接或修改游标，也不要将游标持久保存为资源标识。`CURSOR_EXPIRED` 表示列表或同步代际已经变化，应从第一页重新读取；作用域或筛选条件不匹配时返回 `INVALID_ARGUMENT`。
 
-[完整类型与语言差异](/sdk-reference/index)
+## 不同 SDK
+
+<Tabs>
+<Tab title="Go">
+```go
+page, err := runtimeManager.ListRuntimes(ctx, model.ListOptions{Limit: 20})
+```
+
+Go 中已有 `Limit`、`Cursor` 的查询结构继续使用该结构；其它列表通过可选的 `model.ListOptions` 传入分页参数。结果使用 `page.Items`、`page.NextCursor`。
+</Tab>
+<Tab title="Java">
+```java
+ListOptions options = new ListOptions();
+options.limit = 20;
+CompletionStage<Page<Runtime>> page = runtimeManager.listRuntimes(options, ctx);
+```
+
+Java 中已有 `limit`、`cursor` 的查询对象继续使用该对象；其它列表使用 `ListOptions` 重载。不传 `ListOptions` 时读取默认大小的第一页。结果使用 `page.items`、`page.nextCursor`。
+</Tab>
+<Tab title="CLI">
+```sh
+wuying runtimes list --limit 20
+wuying runtimes list --limit 20 --cursor '<nextCursor>'
+```
+
+CLI 的结果信封保留 `data`，因此当前页在 `data.items`，下一页游标在 `data.nextCursor`。`runtimes list`、`agents list`、`models list`、`conversations list`、`messages list`、`interactions list` 均提供这两个分页选项。
+</Tab>
+<Tab title="Android / iOS">
+```json
+{"request":{"limit":20}}
+```
+
+原生 SDK 使用相同的 JSON 参数；下一次调用增加 `cursor`。调用完成事件的 `data` 中返回 `items`、`nextCursor`。这一契约需要使用本版本重新构建的原生产物。
+</Tab>
+</Tabs>
+
+## 分页与数据完整性
+
+| 列表来源 | 续查方式与边界 |
+|---|---|
+| 会话、消息、会话历史、侧边栏、群目录 | 沿用服务已有的游标机制，统一返回 `items`、`nextCursor` |
+| Runtime、Agent、成员、执行记录、技能、套餐等完整目录 | SDK 对本次授权读取的目录分页；目录内容变化时使本地游标失效 |
+| 云盘文件、知识库文件 | SDK 将游标转换为底层页码；保持同一 `limit`，总数变化时要求重新查询。底层没有版本快照，翻页期间的并发增删仍可能造成重复或漏项，需避免并发修改或按资源 ID 去重、重新查询 |
+| Workspace | 上游结果若已截断且没有续查位置，返回 `UNSUPPORTED`，不会将这份结果包装为完整列表 |
+| 已授权技能列表 | 上游返回的条目少于声明总数时返回 `UNSUPPORTED` |
+| 最近群目录 | 上游最多提供 100 项；达到该上限时返回 `UNSUPPORTED`，完整目录使用 `listGroups` |
+
+部分列表额外返回 `projection`、`complete`、当前目录或草稿信息。这些字段保留同步与业务状态；`nextCursor = null` 仅表示没有下一页，不等于同步已经完整或资源在线。判断同步状态见[读取查询结果](/domain-model/10-projection-events)。
+
+观察接口 `observe*` 仍按各自声明发送 `Snapshot`；分页调整不改变取消订阅与远端任务的关系。详情查询返回的单个对象或配置，也不改成列表。
+
+[完整接口签名](/api-reference/index) · [SDK 类型](/sdk-reference/index)

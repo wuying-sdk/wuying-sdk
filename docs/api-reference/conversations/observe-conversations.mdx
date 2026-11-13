@@ -72,6 +72,7 @@ interface Observer<T> {
 interface Page<T> {
     items: T[];
     nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface Conversation extends ConversationRef {

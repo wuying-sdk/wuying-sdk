@@ -26,19 +26,20 @@ description: "完整公开接口 · Interaction"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listInteractions(ctx: Context, req: ConversationRef & { state?: "pending" | "all"; }): Promise<Snapshot<Interaction[]>>;
+listInteractions(ctx: Context, request: (ConversationRef & { state?: "pending" | "all"; }) & ListOptions): Promise<Page<Interaction> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+func (receiver *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery, opts ...m.ListOptions) (m.Page[m.Interaction], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Interaction>>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Interaction>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Interaction>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ### CLI · interactions
@@ -47,6 +48,8 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot
 wuying interactions list
 required --runtime <id> — Explicit authorized Runtime ID
 required --conversation <id> — Product Conversation ID
+optional --limit <count> — Page size (1..100) (default: 50)
+optional --cursor <cursor> — Opaque nextCursor
 ```
 
 ## TypeScript 参数与结果结构
@@ -68,9 +71,15 @@ interface RuntimeRef {
     runtimeId: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 type Interaction = ConversationRef & {
@@ -104,6 +113,20 @@ type Interaction = ConversationRef & {
     questions: Question[];
     allowSkip: boolean;
 });
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
+}
 ```
 
 ## 结果、错误与生命周期

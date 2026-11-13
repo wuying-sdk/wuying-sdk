@@ -17,7 +17,8 @@ public com.aliyun.wuying.sdk.manager.SkillManager(com.aliyun.wuying.sdk.internal
 ## listCategories
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/skills/list-categories)
@@ -25,7 +26,8 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 ## listInstalledSkills
 
 ```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/skills/installed)
@@ -33,7 +35,8 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 ## listAgentAuthedSkills
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsResult> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentAuthedSkill>> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.AgentAuthedSkill>> listAgentAuthedSkills(com.aliyun.wuying.sdk.model.ListAgentAuthedSkillsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 [查看操作或完整契约](/api-reference/skills/list-agent-authed-skills)

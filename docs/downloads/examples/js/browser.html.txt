@@ -10,7 +10,7 @@ document.querySelector('#read').onclick=async()=>{
     if(!window.wuyingLogin||!window.wuyingClientId)throw Error('LOGIN_REQUIRED');
     client=Client.create(window.wuyingLogin,{clientId:window.wuyingClientId,logger:{info(){},warn(){},error(){},debug(){}}});
     const ctx={timeout:60000};const runtimesAPI=await client.buildRuntimeManager(ctx);const result=await runtimesAPI.listRuntimes(ctx);
-    status.textContent=JSON.stringify({count:result.length});
+    status.textContent=JSON.stringify({count:result.items.length});
   }catch{status.textContent='查询失败：请核对凭据、授权和网络；不输出原始错误或令牌。';}finally{if(client)await client.close();}
 };
 </script></html>

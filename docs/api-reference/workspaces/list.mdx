@@ -26,25 +26,20 @@ description: "完整公开接口 · Workspace"
 ### JavaScript / TypeScript · ResourceManager
 
 ```ts
-listWorkspaces(ctx: Context, req: RuntimeRef & { parentWorkspaceId?: string; }): Promise<Snapshot<{ entries: Workspace[]; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>>;
-```
-
-### JavaScript / TypeScript · ResourceManager
-
-```ts
-listWorkspaces(ctx: Context, req: RuntimeRef & { parentWorkspaceId?: string; }): Promise<Snapshot<WorkspacePage>>;
+listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ResourceManager
 
 ```go
-func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery) (m.Snapshot[m.WorkspacePage], error)
+func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ResourceManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.WorkspacePage>> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -62,16 +57,30 @@ interface RuntimeRef {
     runtimeId: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
 }
 
-interface WorkspacePage {
-    current: Workspace;
-    parentWorkspaceId?: string;
-    entries: Workspace[];
-    truncated: boolean;
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
+}
+
+interface Workspace {
+    workspaceId: string;
+    name: string;
+    displayPath: string;
+    environmentId?: string;
 }
 ```
 

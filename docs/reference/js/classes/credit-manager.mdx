@@ -9,7 +9,7 @@ description: "JavaScript / TypeScript 公开成员及重载。"
 ## describeCreditPackageAgents
 
 ```ts
-describeCreditPackageAgents(ctx: ExecutionContext, req: CreditPackageQuery): Promise<CreditPackageAgent[]>;
+describeCreditPackageAgents(ctx: Context, request: (CreditPackageQuery) & ListOptions): Promise<Page<CreditPackageAgent>>;
 ```
 
 [查看操作或完整契约](/api-reference/credits/describe-credit-package-agents)
@@ -33,7 +33,7 @@ new new (container: ServiceContainer): CreditManager;
 ## describeCreditPackageAgents
 
 ```ts
-describeCreditPackageAgents(ctx: ExecutionContext, req: CreditPackageQuery): Promise<CreditPackageAgent[]>;
+describeCreditPackageAgents(ctx: Context, request: (CreditPackageQuery) & ListOptions): Promise<Page<CreditPackageAgent>>;
 ```
 
 [查看操作或完整契约](/api-reference/credits/describe-credit-package-agents)

@@ -6,7 +6,7 @@ description: "完整公开接口 · Member"
 
 `listMembers` · Member
 
-读取 data 数组；memberId 是会话内身份，不能用 Agent ID 或显示名替代。
+读取 items 当前页；memberId 是会话内身份，不能用 Agent ID 或显示名替代。
 
 ## 语言与授权
 
@@ -26,25 +26,20 @@ description: "完整公开接口 · Member"
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }): Promise<Snapshot<(Member & ConversationRef)[]>>;
-```
-
-### JavaScript / TypeScript · ConversationManager
-
-```ts
-listMembers(ctx: Context, req: ConversationRef & { includeRemoved?: boolean; }): Promise<Snapshot<Member[]>>;
+listMembers(ctx: Context, request: (ConversationRef & { includeRemoved?: boolean; }) & ListOptions): Promise<Page<Member & ConversationRef> & { projection: Projection; }>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go/manager.ConversationManager
 
 ```go
-func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+func (receiver *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery, opts ...m.ListOptions) (m.Page[m.Member], error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.manager.ConversationManager
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<java.util.List<com.aliyun.wuying.sdk.model.Member>>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Member>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Member>> listMembers(com.aliyun.wuying.sdk.model.MemberQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -66,9 +61,15 @@ interface RuntimeRef {
     runtimeId: string;
 }
 
-interface Snapshot<T> {
-    data: T;
-    projection: Projection;
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface Member {
@@ -87,6 +88,20 @@ interface Member {
         editResponsibility: Capability;
         remove: Capability;
     };
+}
+
+interface Projection {
+    /** Scoped mode only: authorized control/protocol availability, independent of catalogs/history. */
+    controlReady?: boolean;
+    /** Present only with explicit scoped readiness; coverage refers to this domain. */
+    readinessDomain?: 'agents' | 'models' | 'conversation' | 'summaries';
+    phase: 'initializing' | 'ready' | 'stale' | 'resyncing' | 'unavailable';
+    coverage: 'partial' | 'complete';
+    generation: string;
+    commitId?: string;
+    viewVersion: string;
+    statusVersion: string;
+    lastSyncedAt?: Int64;
 }
 ```
 

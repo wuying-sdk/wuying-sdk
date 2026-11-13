@@ -24,7 +24,7 @@ Bounded account activity index. This returns metadata only and opens no Runtime.
 ### JavaScript / TypeScript · ConversationManager
 
 ```ts
-listRecentGroups(ctx: Context, req: { limit: number; }): Promise<RecentGroupDirectoryEntry[]>;
+listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroupDirectoryEntry>>;
 ```
 
 ## TypeScript 参数与结果结构
@@ -36,6 +36,17 @@ interface Context {
     signal?: AbortSignal;
     timeout?: number;
     traceId?: string;
+}
+
+interface ListOptions {
+    limit?: number;
+    cursor?: string;
+}
+
+interface Page<T> {
+    items: T[];
+    nextCursor: string | null;
+    projection?: Projection;
 }
 
 interface RecentGroupDirectoryEntry extends GroupDirectoryEntry {

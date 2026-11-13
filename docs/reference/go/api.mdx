@@ -253,9 +253,11 @@ func NewAgentManager(s *business.Service) *AgentManager
 
 func (a *AgentManager) DeleteWyDriveFile(ctx context.Context, r m.DeleteWyDriveFileRequest) error
 
-func (a *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest) (m.DescribeWyDriveFilesResult, error)
+func (a *AgentManager) DescribeWyDriveFiles(ctx context.Context, r m.DescribeWyDriveFilesRequest, opts ...m.ListOptions) (m.Page[m.WyDriveFile], error)
+    DescribeWyDriveFiles returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest) (m.DescribeWyDrivesResult, error)
+func (a *AgentManager) DescribeWyDrives(ctx context.Context, r m.DescribeWyDrivesRequest, opts ...m.ListOptions) (m.WyDrivePage, error)
+    DescribeWyDrives returns one page. Use NextCursor for continuation.
 
 func (a *AgentManager) DownloadKnowledgeFiles(ctx context.Context, r m.DownloadKnowledgeFilesRequest) ([]m.DownloadKnowledgeFileResult, error)
 
@@ -265,17 +267,23 @@ func (a *AgentManager) GetDownloadURL(ctx context.Context, r m.GetDownloadUrlReq
 
 func (a *AgentManager) GetExpertDirectory(ctx context.Context, r m.ExpertQuery) (m.Snapshot[m.ExpertDirectory], error)
 
-func (a *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest) ([]m.KnowledgeSpace, error)
+func (a *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAgentKnowledgeSpacesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeSpace], error)
+    ListAgentKnowledgeSpaces returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef) (m.Snapshot[[]m.ModelSummary], error)
+func (a *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.ModelSummary], error)
+    ListAgentModels returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef) (m.Snapshot[m.ProductCatalog], error)
+func (a *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.ProductPage, error)
+    ListAgentProducts returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef) (m.Snapshot[[]m.AgentSummary], error)
+func (a *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.AgentSummary], error)
+    ListAgents returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery) (m.Snapshot[[]m.Expert], error)
+func (a *AgentManager) ListExperts(ctx context.Context, r m.ExpertQuery, opts ...m.ListOptions) (m.Page[m.Expert], error)
+    ListExperts returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest) (m.ListKnowledgeFilesResult, error)
+func (a *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKnowledgeFilesRequest, opts ...m.ListOptions) (m.Page[m.KnowledgeFile], error)
+    ListKnowledgeFiles returns one page. Use NextCursor for continuation.
 
 func (a *AgentManager) ObserveAgents(ctx context.Context, r m.RuntimeRef, o m.Observer[[]m.AgentSummary]) (m.Subscription, error)
 
@@ -355,32 +363,41 @@ func (a *ConversationManager) GetQuestionResponseReceipt(ctx context.Context, r 
 
 func (a *ConversationManager) GetTurn(ctx context.Context, r m.TurnRef) (m.Snapshot[*m.Turn], error)
 
-func (a *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ActiveExecutionSnapshot], error)
+func (a *ConversationManager) ListActiveExecutions(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.ActiveExecutionPage, error)
+    ListActiveExecutions returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Snapshot[m.Page[m.SidebarGroup]], error)
+func (a *ConversationManager) ListConversationGroups(ctx context.Context, r m.ConversationGroupQuery) (m.Page[m.SidebarGroup], error)
+    ListConversationGroups returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.Snapshot[m.ConversationHistory], error)
+func (a *ConversationManager) ListConversationHistory(ctx context.Context, r m.ConversationHistoryQuery) (m.ConversationHistory, error)
+    ListConversationHistory returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func (a *ConversationManager) ListConversations(ctx context.Context, r m.ConversationQuery) (m.Page[m.Conversation], error)
+    ListConversations returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.ExecutionActivity], error)
+func (a *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.ExecutionActivity], error)
+    ListExecutionActivity returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef) ([]m.GroupSyncState, error)
-    ListGroupSyncStates只读取该Runtime的群目录状态，不下载非热点群历史。
+func (a *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.GroupSyncState], error)
+    ListGroupSyncStates returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.GroupDirectoryPage, error)
-    ListGroups读取服务器群目录的一页，按 runtimeId（必要时加 AG 原始会话 ID） 服务端过滤；不连接全部 AG、不等待消息
-    Ready、不自动翻页。
+func (a *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.GroupSummary], error)
+    ListGroups returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery) (m.Snapshot[[]m.Interaction], error)
+func (a *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery, opts ...m.ListOptions) (m.Page[m.Interaction], error)
+    ListInteractions returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef) (m.Snapshot[[]m.MemberCandidate], error)
+func (a *ConversationManager) ListMemberCandidates(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.MemberCandidate], error)
+    ListMemberCandidates returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery) (m.Snapshot[[]m.Member], error)
+func (a *ConversationManager) ListMembers(ctx context.Context, r m.MemberQuery, opts ...m.ListOptions) (m.Page[m.Member], error)
+    ListMembers returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Snapshot[m.Page[m.Message]], error)
+func (a *ConversationManager) ListMessages(ctx context.Context, r m.MessageQuery) (m.Page[m.Message], error)
+    ListMessages returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Snapshot[m.Page[m.Conversation]], error)
+func (a *ConversationManager) ListSidebarConversations(ctx context.Context, r m.SidebarRowsQuery) (m.Page[m.Conversation], error)
+    ListSidebarConversations returns one page. Use NextCursor for continuation.
 
 func (a *ConversationManager) ObserveActiveExecutions(ctx context.Context, r m.ConversationRef, o m.Observer[m.ActiveExecutionSnapshot]) (m.Subscription, error)
 
@@ -457,7 +474,9 @@ type CreditManager struct {
 
 func NewCreditManager(sc *container.ServiceContainer) *CreditManager
 
-func (m *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func (self *CreditManager) DescribeCreditPackageAgents(ctx context.Context, r *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
+    DescribeCreditPackageAgents returns one page. Use NextCursor for
+    continuation.
 
 func (m *CreditManager) DescribeCreditUsageInfo(ctx context.Context, r *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
 
@@ -617,11 +636,14 @@ func (a *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.Dra
 
 func (a *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
 
-func (a *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef) (m.Snapshot[m.DraftSnapshot], error)
+func (a *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
+    ListDraftAttachments returns one page. Use NextCursor for continuation.
 
-func (a *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery) (m.Snapshot[[]m.Resource], error)
+func (a *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
+    ListResources returns one page. Use NextCursor for continuation.
 
-func (a *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery) (m.Snapshot[m.WorkspacePage], error)
+func (a *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
+    ListWorkspaces returns one page. Use NextCursor for continuation.
 
 func (a *ResourceManager) ObserveConversationResources(ctx context.Context, r m.ConversationRef, o m.Observer[m.ResourceSelection]) (m.Subscription, error)
 
@@ -644,7 +666,9 @@ func (m *RuntimeManager) ApproveFotaUpdate(ctx context.Context, req *ApproveFota
     upgrade detection. This is an internal method not exported to external
     callers.
 
-func (m *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...CallOption) ([]*model.CreditPackageAgent, error)
+func (self *RuntimeManager) DescribeCreditPackageAgents(ctx context.Context, req *DescribeCreditPackageAgentsRequest, opts ...m.ListOptions) (m.Page[*m.CreditPackageAgent], error)
+    DescribeCreditPackageAgents returns one page. Use NextCursor for
+    continuation.
 
 func (m *RuntimeManager) DescribeCreditUsageInfo(ctx context.Context, req *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
     DescribeCreditUsageInfo retrieves credit usage information. Supports both
@@ -681,7 +705,8 @@ func (m *RuntimeManager) GenerateSceneUrl(ctx context.Context, req *GenerateScen
 
 func (a *RuntimeManager) GetHostCapabilities(ctx context.Context, r model.RuntimeRef) (model.Snapshot[model.HostCapabilities], error)
 
-func (a *RuntimeManager) ListRuntimes(ctx context.Context) ([]model.Runtime, error)
+func (a *RuntimeManager) ListRuntimes(ctx context.Context, opts ...m.ListOptions) (m.Page[m.Runtime], error)
+    ListRuntimes returns one page. Use NextCursor for continuation.
 
 func (m *RuntimeManager) ObserveCommand(ctx context.Context, r *model.ObserveCommandRequest, o model.RuntimeCommandObserver) (model.RuntimeCommandSubscription, error)
 
@@ -760,50 +785,14 @@ func (m *SkillManager) EntUninstallSkills(ctx context.Context, req *EntUninstall
             tasks := result.([]*model.OperationTask)
         }))
 
-func (m *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...CallOption) (*model.ListAgentAuthedSkillsResult, error)
-    ListAgentAuthedSkills retrieves the list of skills authorized for an agent.
-    Supports both sync and async modes via CallOption.
+func (self *SkillManager) ListAgentAuthedSkills(ctx context.Context, req *ListAgentAuthedSkillsRequest, opts ...m.ListOptions) (m.Page[*m.AgentAuthedSkill], error)
+    ListAgentAuthedSkills returns one page. Use NextCursor for continuation.
 
-    Sync usage:
+func (self *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...m.ListOptions) (m.Page[*m.SkillCategory], error)
+    ListCategories returns one page. Use NextCursor for continuation.
 
-        result, err := mgr.ListAgentAuthedSkills(ctx, &manager.ListAgentAuthedSkillsRequest{RuntimeId: "runtime-xxx"})
-
-    Async usage:
-
-        mgr.ListAgentAuthedSkills(ctx, req, manager.WithAsync(func(result interface{}, err error) {
-            res := result.(*model.ListAgentAuthedSkillsResult)
-            // handle result or error
-        }))
-
-func (m *SkillManager) ListCategories(ctx context.Context, req *ListCategoriesRequest, opts ...CallOption) ([]*model.SkillCategory, error)
-    ListCategories retrieves the list of skill categories. Supports both sync
-    and async modes via CallOption.
-
-    Sync usage:
-
-        categories, err := mgr.ListCategories(ctx, nil)
-
-    Async usage:
-
-        mgr.ListCategories(ctx, nil, manager.WithAsync(func(result interface{}, err error) {
-            categories := result.([]*model.SkillCategory)
-            // handle result or error
-        }))
-
-func (m *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...CallOption) ([]*model.InstalledSkill, error)
-    ListInstalledSkills retrieves the list of installed skills for a specific
-    agent. Supports both sync and async modes via CallOption.
-
-    Sync usage:
-
-        skills, err := mgr.ListInstalledSkills(ctx, &manager.ListInstalledSkillsRequest{RuntimeId: "runtime-xxx"})
-
-    Async usage:
-
-        mgr.ListInstalledSkills(ctx, req, manager.WithAsync(func(result interface{}, err error) {
-            skills := result.([]*model.InstalledSkill)
-            // handle result or error
-        }))
+func (self *SkillManager) ListInstalledSkills(ctx context.Context, req *ListInstalledSkillsRequest, opts ...m.ListOptions) (m.Page[*m.InstalledSkill], error)
+    ListInstalledSkills returns one page. Use NextCursor for continuation.
 
 func (m *SkillManager) SetSkillEnabled(ctx context.Context, req *SetSkillEnabledRequest, opts ...CallOption) ([]*model.OperationTask, error)
     SetSkillEnabled enables or disables the specified skills and waits for all
@@ -865,6 +854,11 @@ type ActiveExecution struct {
 	State               string     `json:"state"`
 	Cancel              Capability `json:"cancel"`
 	Revision            string     `json:"revision"`
+}
+
+type ActiveExecutionPage struct {
+	Page[ActiveExecution]
+	Complete bool `json:"complete"`
 }
 
 type ActiveExecutionSnapshot struct {
@@ -1451,8 +1445,6 @@ type DescribeWyDriveFilesRequest struct {
 	ParentFolderID   string `json:"parentFolderId,omitempty"`
 	ParentFolderPath string `json:"parentFolderPath,omitempty"`
 	FileNameFilter   string `json:"fileNameFilter,omitempty"`
-	PageSize         int64  `json:"pageSize,omitempty"`
-	PageNumber       int64  `json:"pageNumber,omitempty"`
 	OrderType        string `json:"orderType,omitempty"`
 	ProductType      string `json:"productType,omitempty"`
 	JvsSessionID     string `json:"jvsSessionId,omitempty"`
@@ -1558,6 +1550,12 @@ type DraftAttachment struct {
 	DraftRef
 	CommittedAttachment
 	CreatedAt string `json:"createdAt"`
+}
+
+type DraftAttachmentPage struct {
+	Page[DraftAttachment]
+	DraftRef
+	RemoteUpload Capability `json:"remoteUpload"`
 }
 
 type DraftAttachmentRequest struct {
@@ -1938,8 +1936,6 @@ type ListKnowledgeFilesRequest struct {
 	KnowledgeSpaceID string `json:"knowledgeSpaceId"`
 	CategoryID       string `json:"categoryId,omitempty"`
 	FileNameFilter   string `json:"fileNameFilter,omitempty"`
-	PageNumber       int64  `json:"pageNumber,omitempty"`
-	PageSize         int64  `json:"pageSize,omitempty"`
 }
 
 type ListKnowledgeFilesResult struct {
@@ -1949,6 +1945,13 @@ type ListKnowledgeFilesResult struct {
 	PageNumber int64           `json:"pageNumber"`
 	PageSize   int64           `json:"pageSize"`
 }
+
+type ListOptions struct {
+	Limit  int    `json:"limit,omitempty"`
+	Cursor string `json:"cursor,omitempty"`
+}
+    ListOptions is shared by collection queries. Zero Limit defaults to 50;
+    maximum 100.
 
 type LiveProcessDiagnostics struct {
 	Received   int  `json:"received"`
@@ -2292,8 +2295,9 @@ type OperationTask struct {
     OperationTask represents an asynchronous skill operation task.
 
 type Page[T any] struct {
-	Items      []T     `json:"items"`
-	NextCursor *string `json:"nextCursor"`
+	Projection *Projection `json:"projection,omitempty"`
+	Items      []T         `json:"items"`
+	NextCursor *string     `json:"nextCursor"`
 }
 
 type PermissionError struct {
@@ -2401,6 +2405,11 @@ type Product struct {
 type ProductCatalog struct {
 	Products []Product `json:"products"`
 	Complete bool      `json:"complete"`
+}
+
+type ProductPage struct {
+	Page[Product]
+	Complete bool `json:"complete"`
 }
 
 type Projection struct {
@@ -2853,6 +2862,12 @@ type WorkspaceDisplay struct {
 	Platform    string `json:"platform"`
 }
 
+type WorkspaceList struct {
+	Page[Workspace]
+	Current           Workspace `json:"current"`
+	ParentWorkspaceID string    `json:"parentWorkspaceId,omitempty"`
+}
+
 type WorkspacePage struct {
 	Current           Workspace   `json:"current"`
 	ParentWorkspaceID string      `json:"parentWorkspaceId,omitempty"`
@@ -2896,6 +2911,14 @@ type WyDriveFile struct {
 	SupportPreview    bool      `json:"supportPreview"`
 	Creator           string    `json:"creator"`
 	Tags              []FileTag `json:"tags"`
+}
+
+type WyDrivePage struct {
+	RequestID string `json:"requestId"`
+	Page[WyDrive]
+	TotalSize         int64 `json:"totalSize"`
+	UsedSize          int64 `json:"usedSize"`
+	CapacityNotEnough bool  `json:"capacityNotEnough"`
 }
 
 ```

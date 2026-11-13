@@ -15,5 +15,5 @@ try {
  if(process.env.WUYING_LOGIN_REGION_ID)options.loginRegionId=process.env.WUYING_LOGIN_REGION_ID;
  client=Client.create(options,{clientId:required('WUYING_CLIENT_ID'),logger:{info(){},warn(){},error(){},debug(){}}});
  const ctx={timeout:60000},runtimesAPI=await client.buildRuntimeManager(ctx),result=await runtimesAPI.listRuntimes(ctx);
- console.log(JSON.stringify({count:result.length}));
+ console.log(JSON.stringify({count:result.items.length}));
 }catch{console.error('SDK read failed; verify host configuration, authorization and network. No raw error or credential is logged.');process.exitCode=1;}finally{await client?.close();}
