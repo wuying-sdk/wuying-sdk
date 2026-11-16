@@ -214,10 +214,8 @@
                   "reference/js/classes/agent-manager",
                   "reference/js/classes/asp-manager",
                   "reference/js/classes/client",
-                  "reference/js/classes/cloud-client",
                   "reference/js/classes/conversation-manager",
                   "reference/js/classes/credit-manager",
-                  "reference/js/classes/functions",
                   "reference/js/classes/message-stream",
                   "reference/js/classes/model-manager",
                   "reference/js/classes/resource-manager",
@@ -299,10 +297,7 @@
               {
                 "group": "接口与类型",
                 "pages": [
-                  "reference/java/classes/com-aliyun-wuying-sdk-auth-api",
-                  "reference/java/classes/com-aliyun-wuying-sdk-cloud-client",
                   "reference/java/classes/com-aliyun-wuying-sdk-wuying-client",
-                  "reference/java/classes/com-aliyun-wuying-sdk-admin-admin-im-client",
                   "reference/java/classes/com-aliyun-wuying-sdk-manager-agent-manager",
                   "reference/java/classes/com-aliyun-wuying-sdk-manager-conversation-manager",
                   "reference/java/classes/com-aliyun-wuying-sdk-manager-credit-manager",
@@ -470,9 +465,7 @@
                   "api-reference/client/build-skill-manager",
                   "api-reference/client/close",
                   "api-reference/client/get-auth-code",
-                  "api-reference/client/get-imcredentials",
                   "api-reference/client/logout",
-                  "api-reference/client/refresh-login",
                   "api-reference/client/subscribe-stream-events",
                   "api-reference/client/update-login-credentials",
                   {
@@ -482,32 +475,6 @@
                       "api-reference/subscriptions/unsubscribe"
                     ]
                   }
-                ]
-              },
-              {
-                "group": "Admin",
-                "pages": [
-                  "api-reference/admin/close",
-                  "api-reference/admin/export-history",
-                  "api-reference/admin/get-group",
-                  "api-reference/admin/list-authorized-users",
-                  "api-reference/admin/list-groups",
-                  "api-reference/admin/publish-durable",
-                  "api-reference/admin/subscribe-group",
-                  "api-reference/admin/unsubscribe-group"
-                ]
-              },
-              {
-                "group": "Auth",
-                "pages": [
-                  "api-reference/auth/get-auth-code"
-                ]
-              },
-              {
-                "group": "CloudClient",
-                "pages": [
-                  "api-reference/cloud-api/close",
-                  "api-reference/cloud-api/do-rpc"
                 ]
               }
             ]
@@ -577,11 +544,8 @@
                   "api-reference/conversations/archive",
                   "api-reference/conversations/create",
                   "api-reference/conversations/get",
-                  "api-reference/conversations/get-authorized-group",
                   "api-reference/conversations/get-conversation-header-metadata",
                   "api-reference/conversations/list",
-                  "api-reference/conversations/list-authorized-groups",
-                  "api-reference/conversations/list-authorized-users",
                   "api-reference/conversations/list-conversation-groups",
                   "api-reference/conversations/list-recent-groups",
                   "api-reference/conversations/list-sidebar-conversations",
@@ -590,10 +554,8 @@
                   "api-reference/conversations/subscribe-conversation",
                   "api-reference/conversations/subscribe-conversation-groups",
                   "api-reference/conversations/subscribe-conversations",
-                  "api-reference/conversations/subscribe-group",
                   "api-reference/conversations/subscribe-sidebar-conversations",
                   "api-reference/conversations/unarchive-conversation",
-                  "api-reference/conversations/unsubscribe-group",
                   {
                     "group": "Mutation",
                     "pages": [
@@ -629,12 +591,10 @@
                 "group": "Message",
                 "pages": [
                   "api-reference/messages/detail",
-                  "api-reference/messages/export-group-history",
                   "api-reference/messages/get-message-files",
                   "api-reference/messages/list",
                   "api-reference/messages/list-conversation-history",
                   "api-reference/messages/presentation",
-                  "api-reference/messages/publish-group-message",
                   "api-reference/messages/resolve-conversation-read",
                   "api-reference/messages/send",
                   "api-reference/messages/stream",

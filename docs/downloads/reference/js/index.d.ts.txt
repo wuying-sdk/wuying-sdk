@@ -358,35 +358,6 @@ interface ListKnowledgeFilesResponse {
 }
 
 /**
- * 凭证类型定义
- * 对应 Go 版本: model/credential.go
- */
-declare enum AuthType {
-    AuthCode = 1,
-    LoginToken = 2
-}
-declare enum PermissionLevel {
-    User = 2
-}
-interface Credential {
-    type(): AuthType;
-    permissionLevel(): PermissionLevel;
-    signRequest(req: Request): Promise<void>;
-    isExpired(): boolean;
-    refresh(context: ExecutionContext): Promise<void>;
-    waitForReady?(context: ExecutionContext): Promise<void>;
-    getLoginToken?(): string;
-    getSessionId?(): string;
-    getEndUserId?(): string;
-    getLoginRegionId?(): string;
-}
-interface ExecutionContext {
-    signal?: AbortSignal;
-    traceId?: string;
-    timeout?: number;
-}
-
-/**
  * Internal type surface of the Agent IM message transport (agmsg/v1).
  *
  * Web only: this module must stay free of node builtins, the legacy OpenIM
@@ -425,112 +396,6 @@ type StreamEvent = {
     streamId: string;
     status: StreamLifecycleStatus;
 };
-
-/**
- * 配置管理
- * 对应 Go 版本: config/config.go
- */
-interface UserConfig {
-    /** 逐请求中继耗时诊断，默认开启；false 仅关闭该诊断。 */
-    relayRequestDiagnostics?: boolean;
-    /** 中继请求/响应的本地发送上限；默认 10 MiB，只可调小。persist=true 仍限 1 MiB。 */
-    relayMaxDataBytes?: number;
-    /** 默认预加载热点5群，首群完整应用后Ready；其余群按需同步。 */
-    readinessMode?: 'legacy' | 'scoped';
-    initialSync?: {
-        readyGroupLimit?: number;
-        waitForAllGroups?: boolean;
-    };
-    /** 新群目录低频元数据对账周期，缺省30分钟，不控制消息补拉周期。 */
-    directory?: {
-        reconcileIntervalMs?: number;
-    };
-    /**
-     * 流式回放（replay_v1）观察配置，纯附加：enabled=true 才协商 streamMode；
-     * onEvent 收到未解析的原始流事件（payload 永不进入 durable Inbox/业务解析）。
-     */
-    streaming?: {
-        enabled?: boolean;
-        onEvent?: (event: StreamEvent) => void;
-    };
-    timeout?: number;
-    maxRetries?: number;
-    logger?: Logger;
-    clientId?: string;
-    /** Authentication POP endpoint; HTTPS outside loopback tests. */
-    appStreamEndpoint?: string;
-    /** Skill 管理 API 端点。默认: https://ecd.cn-shanghai.aliyuncs.com */
-    skillMgmtEndpoint?: string;
-    /** 售卖/积分 API 端点。默认: https://ecd.cn-shanghai.aliyuncs.com */
-    salesEndpoint?: string;
-    /** 阿里云 AccessKey ID，用于 AK/SK 签名的 API 调用。 */
-    accessKeyID?: string;
-    /** 阿里云 AccessKey Secret，用于 AK/SK 签名的 API 调用。 */
-    accessKeySecret?: string;
-}
-interface Logger {
-    info(msg: string, ...args: unknown[]): void;
-    warn(msg: string, ...args: unknown[]): void;
-    error(msg: string, ...args: unknown[]): void;
-    debug(msg: string, ...args: unknown[]): void;
-}
-interface Config$1 {
-    relayMaxDataBytes(): number;
-    timeout(): number;
-    maxRetries(): number;
-    retryBaseDelay(): number;
-    retryMaxDelay(): number;
-    logger(): Logger;
-    clientId(): string;
-    authCodeRefreshInterval(): number;
-    loginTokenDefaultExpiry(): number;
-    appStreamEndpoint(): string;
-    skillMgmtEndpoint(): string;
-    salesEndpoint(): string;
-    accessKeyID(): string;
-    accessKeySecret(): string;
-}
-declare function mergeToInternal(userConfig: UserConfig): Config$1;
-
-/**
- * 匿名 CloudAPI 客户端 (无 AK/SK 签名)
- * 对应 Go 版本: internal/integrate/cloudapi/anonymous_client.go
- */
-
-interface AnonymousClientOptions {
-    /** Never expose remote text/transport errors for password authentication. */
-    sensitiveAuthentication?: boolean;
-    /** @internal Harden one-shot resource operations without changing legacy requests. */
-    resourceOperations?: boolean;
-    endpoint: string;
-    version: string;
-    timeout: number;
-    logger: Logger;
-}
-declare class AnonymousClient {
-    private readonly sensitiveAuthentication;
-    private readonly resourceOperations;
-    private closed;
-    private readonly requests;
-    close(): void;
-    private endpoint;
-    private version;
-    private timeout;
-    private logger;
-    constructor(options: AnonymousClientOptions);
-    doAnonymousRPC(context: ExecutionContext, action: string, version: string, businessParams?: Record<string, string>): Promise<Record<string, unknown>>;
-}
-
-interface TokenInfo {
-    token: string;
-    imUserId: string;
-    imApiEndpoint: string;
-    imWssEndpoint: string;
-    expireSeconds: number;
-}
-interface ConsumerUserGetExtTokenResponse extends TokenInfo {
-    requestId: string;
-}
 
 interface ProcessInput {
     conversationId: string;
@@ -1395,6 +1260,128 @@ declare class ConversationManager$1 implements ConversationManager {
             skip: true;
         };
     }, options?: MutationOptions): Promise<InteractionResponse>;
+}
+
+/**
+ * 凭证类型定义
+ * 对应 Go 版本: model/credential.go
+ */
+declare enum AuthType {
+    AuthCode = 1,
+    LoginToken = 2
+}
+declare enum PermissionLevel {
+    User = 2
+}
+interface Credential {
+    type(): AuthType;
+    permissionLevel(): PermissionLevel;
+    signRequest(req: Request): Promise<void>;
+    isExpired(): boolean;
+    refresh(context: ExecutionContext): Promise<void>;
+    waitForReady?(context: ExecutionContext): Promise<void>;
+    getLoginToken?(): string;
+    getSessionId?(): string;
+    getEndUserId?(): string;
+    getLoginRegionId?(): string;
+}
+interface ExecutionContext {
+    signal?: AbortSignal;
+    traceId?: string;
+    timeout?: number;
+}
+
+/**
+ * 配置管理
+ * 对应 Go 版本: config/config.go
+ */
+interface UserConfig {
+    /** 逐请求中继耗时诊断，默认开启；false 仅关闭该诊断。 */
+    relayRequestDiagnostics?: boolean;
+    /** 中继请求/响应的本地发送上限；默认 10 MiB，只可调小。persist=true 仍限 1 MiB。 */
+    relayMaxDataBytes?: number;
+    /** 默认预加载热点5群，首群完整应用后Ready；其余群按需同步。 */
+    readinessMode?: 'legacy' | 'scoped';
+    initialSync?: {
+        readyGroupLimit?: number;
+        waitForAllGroups?: boolean;
+    };
+    /** 新群目录低频元数据对账周期，缺省30分钟，不控制消息补拉周期。 */
+    directory?: {
+        reconcileIntervalMs?: number;
+    };
+    /**
+     * 流式回放（replay_v1）观察配置，纯附加：enabled=true 才协商 streamMode；
+     * onEvent 收到未解析的原始流事件（payload 永不进入 durable Inbox/业务解析）。
+     */
+    streaming?: {
+        enabled?: boolean;
+        onEvent?: (event: StreamEvent) => void;
+    };
+    timeout?: number;
+    maxRetries?: number;
+    logger?: Logger;
+    clientId?: string;
+    /** Authentication POP endpoint; HTTPS outside loopback tests. */
+    appStreamEndpoint?: string;
+    /** Skill 管理 API 端点。默认: https://ecd.cn-shanghai.aliyuncs.com */
+    skillMgmtEndpoint?: string;
+    /** 售卖/积分 API 端点。默认: https://ecd.cn-shanghai.aliyuncs.com */
+    salesEndpoint?: string;
+    /** 阿里云 AccessKey ID，用于 AK/SK 签名的 API 调用。 */
+    accessKeyID?: string;
+    /** 阿里云 AccessKey Secret，用于 AK/SK 签名的 API 调用。 */
+    accessKeySecret?: string;
+}
+interface Logger {
+    info(msg: string, ...args: unknown[]): void;
+    warn(msg: string, ...args: unknown[]): void;
+    error(msg: string, ...args: unknown[]): void;
+    debug(msg: string, ...args: unknown[]): void;
+}
+interface Config$1 {
+    relayMaxDataBytes(): number;
+    timeout(): number;
+    maxRetries(): number;
+    retryBaseDelay(): number;
+    retryMaxDelay(): number;
+    logger(): Logger;
+    clientId(): string;
+    authCodeRefreshInterval(): number;
+    loginTokenDefaultExpiry(): number;
+    appStreamEndpoint(): string;
+    skillMgmtEndpoint(): string;
+    salesEndpoint(): string;
+    accessKeyID(): string;
+    accessKeySecret(): string;
+}
+declare function mergeToInternal(userConfig: UserConfig): Config$1;
+
+/**
+ * 匿名 CloudAPI 客户端 (无 AK/SK 签名)
+ * 对应 Go 版本: internal/integrate/cloudapi/anonymous_client.go
+ */
+
+interface AnonymousClientOptions {
+    /** Never expose remote text/transport errors for password authentication. */
+    sensitiveAuthentication?: boolean;
+    endpoint: string;
+    version: string;
+    timeout: number;
+    logger: Logger;
+}
+declare class AnonymousClient {
+    private readonly sensitiveAuthentication;
+    private readonly resourceOperations;
+    private closed;
+    private readonly requests;
+    close(): void;
+    private endpoint;
+    private version;
+    private timeout;
+    private logger;
+    constructor(options: AnonymousClientOptions);
+    doAnonymousRPC(context: ExecutionContext, action: string, version: string, businessParams?: Record<string, string>): Promise<Record<string, unknown>>;
 }
 
 /**
@@ -4473,11 +4460,6 @@ declare class SkillManager {
      */
     private readListCategories;
     /**
-     * 获取技能列表（支持分页和多维度过滤）
-     * @internal 暂不对外暴露，内部保留
-     */
-    private listSkills;
-    /**
      * 获取已安装技能列表
      */
     private readListInstalledSkills;
@@ -4717,53 +4699,6 @@ interface WaitDesktopsResponse {
 }
 
 /**
- * 阿里云 CloudAPI Client（AK/SK 签名）
- * 对应 Go 版本: internal/integrate/cloudapi/client.go
- */
-
-interface CloudClientOptions {
-    /** @internal Bound and harden new unified administrative calls without changing legacy helpers. */
-    administrative?: boolean;
-    endpoint: string;
-    accessKeyID?: string;
-    accessKeySecret?: string;
-    securityToken?: string;
-    credentialProvider?: AdministrativeCredentialProvider;
-    timeout: number;
-    logger: Logger;
-    /** 浏览器环境下的代理路径前缀（可选），例如 '/api' */
-    browserProxyPath?: string;
-}
-declare class CloudClient {
-    private administrative;
-    private closed;
-    private readonly requests;
-    close(): void;
-    private endpoint;
-    private accessKeyID?;
-    private accessKeySecret?;
-    private securityToken?;
-    private credentialProvider?;
-    private timeout;
-    private logger;
-    private browserProxyPath?;
-    /** 是否在浏览器环境中 */
-    private isBrowser;
-    constructor(options: CloudClientOptions);
-    /**
-     * 获取实际使用的 URL
-     * 支持两种模式：
-     * 1. 相对路径（如 '/api'）：在浏览器环境中自动补全为完整 URL
-     * 2. 完整 URL（如 'https://xxx'）+ browserProxyPath：提取路径部分并拼接代理路径
-     */
-    private getEffectiveUrl;
-    /**
-     * 执行 POP RPC API 调用（使用 AK/SK 签名）
-     */
-    doRPC(context: ExecutionContext, action: string, version: string, businessParams?: Record<string, string>): Promise<Record<string, unknown>>;
-}
-
-/**
  * 认证相关 API
  * 对应 Go 版本: internal/integrate/cloudapi/auth_api.go
  */
@@ -4779,11 +4714,6 @@ interface GetAuthCodeResponse {
     authCode: string;
     requestId: string;
 }
-/**
- * 使用 AK/SK 调用 GetAuthCode API 获取 AuthCode
- * 对应 Go 版本: auth_api.go:16-46
- */
-declare function getAuthCode(client: CloudClient, context: ExecutionContext, params: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
 
 /** Explicit desktop IDs only; no implicit all-resources or group operations. */
 interface DesktopOperationRequest {
@@ -4842,7 +4772,6 @@ declare class Client {
     wait(context: ExecutionContext, request: WaitDesktopsRequest): Promise<WaitDesktopsResponse>;
     getAuthCode(context: ExecutionContext, request: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
     private checkUser;
-    getIMCredentials(context?: ExecutionContext): Promise<ConsumerUserGetExtTokenResponse>;
     /** 同账号续期保留消息/中继连接。换票核验失败、切换身份或环境时不修改旧Client。 */
     updateLoginCredentials(context: Context, credentials: {
         loginToken: string;
@@ -4957,4 +4886,4 @@ declare class APIError extends SDKError {
 }
 declare function isRetryable(error: unknown): boolean;
 
-export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientConfig, type ClientOptions, BusinessError as CloudBusinessError, CloudClient, type CloudClientOptions, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type Group, type GroupDirectoryPage, type GroupDirectoryQuery, type GroupRef, type GroupSyncState, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, type Resource, ResourceManager$1 as ResourceManager, type ResourceSelection, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type StreamDeliveryPacket, type StreamEvent, type StreamLifecycleStatus, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, getAuthCode, isRetryable, mergeToInternal };
+export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientConfig, type ClientOptions, BusinessError as CloudBusinessError, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type Group, type GroupDirectoryPage, type GroupDirectoryQuery, type GroupRef, type GroupSyncState, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, type Resource, ResourceManager$1 as ResourceManager, type ResourceSelection, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type StreamDeliveryPacket, type StreamEvent, type StreamLifecycleStatus, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };

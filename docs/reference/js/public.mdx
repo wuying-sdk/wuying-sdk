@@ -518,16 +518,6 @@ wait(context: ExecutionContext, request: WaitDesktopsRequest): Promise<WaitDeskt
 getAuthCode(context: ExecutionContext, request: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
 ```
 
-<a id="entry-6445f1740df3169b" />
-
-### Client.getIMCredentials
-
-类别：模型操作。[按模型查看操作](/api-reference/client/get-imcredentials)。
-
-```ts
-getIMCredentials(context?: ExecutionContext): Promise<ConsumerUserGetExtTokenResponse>;
-```
-
 <a id="entry-ca59b696beaf993d" />
 
 ### Client.updateLoginCredentials
@@ -706,46 +696,6 @@ credentialProvider?(context: ExecutionContext): Promise<AdministrativeCredential
 
 ```ts
 new new (message: string, businessCode?: string, cause?: Error): BusinessError;
-```
-
-<a id="entry-5add199ec260c04c" />
-
-### CloudClient.close
-
-类别：模型操作。[按模型查看操作](/api-reference/cloud-api/close)。
-
-```ts
-close(): void;
-```
-
-<a id="entry-8e1b2e79b0c54ac4" />
-
-### CloudClient.doRPC
-
-类别：模型操作。[按模型查看操作](/api-reference/cloud-api/do-rpc)。
-
-```ts
-doRPC(context: ExecutionContext, action: string, version: string, businessParams?: Record<string, string>): Promise<Record<string, unknown>>;
-```
-
-<a id="entry-9c827a0fab73ad30" />
-
-### CloudClient.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```ts
-new new (options: CloudClientOptions): CloudClient;
-```
-
-<a id="entry-0af382bd35650fd6" />
-
-### CloudClientOptions.credentialProvider
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```ts
-credentialProvider?(context: ExecutionContext): Promise<AdministrativeCredentials>;
 ```
 
 <a id="entry-e24304aa87e2c778" />
@@ -2266,16 +2216,6 @@ function WithAsync(callback: AsyncCallback): CallOption;
 
 ```ts
 function executeWithCallback<T>(callback: AsyncCallback | null, fn: () => Promise<T>): Promise<T | null>;
-```
-
-<a id="entry-bc471a09b7f7794b" />
-
-### Functions.getAuthCode
-
-类别：模型操作。[按模型查看操作](/api-reference/auth/get-auth-code)。
-
-```ts
-function getAuthCode(client: CloudClient, context: ExecutionContext, params: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
 ```
 
 <a id="entry-7f388245b57f2cfc" />

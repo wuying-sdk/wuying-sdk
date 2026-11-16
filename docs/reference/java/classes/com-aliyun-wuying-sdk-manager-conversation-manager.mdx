@@ -6,14 +6,6 @@ description: "Java 公开成员及重载。"
 
 此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
 
-## constructor
-
-```java
-public com.aliyun.wuying.sdk.manager.ConversationManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
-```
-
-[查看操作或完整契约](/reference/java/public#entry-1c406155b7d491d7)
-
 ## createConversation
 
 ```java
@@ -544,60 +536,3 @@ public com.aliyun.wuying.sdk.model.Subscription subscribeLiveProcess(com.aliyun.
 ```
 
 [查看操作或完整契约](/api-reference/executions/subscribe-live-process)
-
-## listAuthorizedUsers
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.admin.AuthorizedUser>> listAuthorizedUsers(com.aliyun.wuying.sdk.model.AuthorizedUserQuery, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/conversations/list-authorized-users)
-
-## listAuthorizedGroups
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.admin.UserGroup>> listAuthorizedGroups(com.aliyun.wuying.sdk.model.AuthorizedGroupQuery, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/conversations/list-authorized-groups)
-
-## getAuthorizedGroup
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.UserGroup> getAuthorizedGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/conversations/get-authorized-group)
-
-## exportGroupHistory
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.HistoryPage> exportGroupHistory(com.aliyun.wuying.sdk.admin.HistoryQuery, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/messages/export-group-history)
-
-## publishGroupMessage
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.PublishReceipt> publishGroupMessage(com.aliyun.wuying.sdk.admin.PublishRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/messages/publish-group-message)
-
-## subscribeGroup
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.GroupSubscription> subscribeGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.admin.GroupSubscriptionListener, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.GroupSubscription> subscribeGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/conversations/subscribe-group)
-
-## unsubscribeGroup
-
-```java
-public java.util.concurrent.CompletionStage<java.lang.Void> unsubscribeGroup(com.aliyun.wuying.sdk.admin.GroupSubscription, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/conversations/unsubscribe-group)

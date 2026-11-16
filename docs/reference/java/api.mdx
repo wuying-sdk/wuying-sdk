@@ -5,7 +5,7 @@ description: "同版本 Java SDK jar 的公开签名；参数说明另见随包�
 
 <Note>本页按所选语言保留原始完整参考，可能包含该语言的业务示例。跨语言操作请使用[快速开始](/getting-started/desktop-to-agent)和[代码示例](/examples/index)中的语言卡片。</Note>
 
-当前基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加默认桌面创建未提交草稿；由验证产物 javap 生成，排除 internal 实现包。
+基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿。此清单由 javap 生成，按客户合同排除 internal 实现、引用 internal 类型的装配签名及 @hidden 成员；不是所有 JVM public 字节码成员的清单。
 
 ```java
 Compiled from "Administration.java"
@@ -23,10 +23,6 @@ final class com.aliyun.wuying.sdk.Administration$DesktopEvents {
 }
 Compiled from "Administration.java"
 final class com.aliyun.wuying.sdk.Administration$DesktopWait {
-}
-Compiled from "AuthApi.java"
-public final class com.aliyun.wuying.sdk.AuthApi {
-  public static java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GetAuthCodeResponse> getAuthCode(com.aliyun.wuying.sdk.CloudClient, com.aliyun.wuying.sdk.model.GetAuthCodeParams, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "AuthCodeCredential.java"
 public final class com.aliyun.wuying.sdk.AuthCodeCredential implements com.aliyun.wuying.sdk.Credential {
@@ -67,15 +63,6 @@ public final class com.aliyun.wuying.sdk.CallContext implements java.lang.AutoCl
   public java.lang.AutoCloseable onCancel(java.lang.Runnable);
   public void cancel();
   public void close();
-}
-Compiled from "CloudClient.java"
-public final class com.aliyun.wuying.sdk.CloudClient implements java.lang.AutoCloseable {
-  public com.aliyun.wuying.sdk.CloudClient(com.aliyun.wuying.sdk.config.CloudClientOptions);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> doRPC(java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.String>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> doRPC(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GetAuthCodeResponse> getAuthCode(com.aliyun.wuying.sdk.model.GetAuthCodeParams, com.aliyun.wuying.sdk.CallContext);
-  public void close();
-  public java.lang.String toString();
 }
 Compiled from "Credential.java"
 public interface com.aliyun.wuying.sdk.Credential extends java.lang.AutoCloseable {
@@ -128,561 +115,9 @@ public final class com.aliyun.wuying.sdk.WuyingClient implements java.lang.AutoC
   public com.aliyun.wuying.sdk.manager.SkillManager buildSkillManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.ModelManager buildModelManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.CreditManager buildCreditManager(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMCredentials> getIMCredentials(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.lang.Void> refreshLogin(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> updateLoginCredentials(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(com.aliyun.wuying.sdk.CallContext, java.util.function.Consumer<com.aliyun.wuying.sdk.model.StreamEvent>);
   public void close();
-}
-Compiled from "AdminImClient.java"
-public final class com.aliyun.wuying.sdk.admin.AdminImClient implements java.lang.AutoCloseable {
-  public static com.aliyun.wuying.sdk.admin.AdminImClient$Builder builder();
-  public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.AuthorizedUser> listAuthorizedUsers(java.lang.String, int);
-  public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.AuthorizedUser> listAuthorizedUsers(com.aliyun.wuying.sdk.CallContext, java.lang.String, int);
-  public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.UserGroup> listGroups(java.lang.String, java.lang.String, int);
-  public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.UserGroup> listGroups(com.aliyun.wuying.sdk.CallContext, java.lang.String, java.lang.String, int);
-  public com.aliyun.wuying.sdk.admin.UserGroup getGroup(java.lang.String, java.lang.String);
-  public com.aliyun.wuying.sdk.admin.UserGroup getGroup(com.aliyun.wuying.sdk.CallContext, java.lang.String, java.lang.String);
-  public com.aliyun.wuying.sdk.admin.HistoryPage exportHistory(com.aliyun.wuying.sdk.admin.HistoryQuery);
-  public com.aliyun.wuying.sdk.admin.HistoryPage exportHistory(com.aliyun.wuying.sdk.CallContext, com.aliyun.wuying.sdk.admin.HistoryQuery);
-  public com.aliyun.wuying.sdk.admin.PublishReceipt publishDurable(com.aliyun.wuying.sdk.admin.PublishRequest);
-  public com.aliyun.wuying.sdk.admin.PublishReceipt publishDurable(com.aliyun.wuying.sdk.CallContext, com.aliyun.wuying.sdk.admin.PublishRequest);
-  public com.aliyun.wuying.sdk.admin.GroupSubscription subscribeGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.DurableMessageHandler);
-  public com.aliyun.wuying.sdk.admin.GroupSubscription subscribeGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.admin.GroupSubscriptionListener);
-  public com.aliyun.wuying.sdk.admin.GroupSubscription subscribeGroup(com.aliyun.wuying.sdk.CallContext, java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.admin.GroupSubscriptionListener);
-  public void unsubscribeGroup(com.aliyun.wuying.sdk.admin.GroupSubscription);
-  public void close();
-}
-Compiled from "AdminImClient.java"
-class com.aliyun.wuying.sdk.admin.AdminImClient$1 {
-}
-Compiled from "AdminImClient.java"
-public final class com.aliyun.wuying.sdk.admin.AdminImClient$Builder {
-  public com.aliyun.wuying.sdk.admin.AdminImClient$Builder transport(com.aliyun.wuying.sdk.admin.AdminTransport);
-  public com.aliyun.wuying.sdk.admin.AdminImClient$Builder tokenProvider(com.aliyun.wuying.sdk.admin.AdminTokenProvider);
-  public com.aliyun.wuying.sdk.admin.AdminImClient$Builder cursorStore(java.lang.String, com.aliyun.wuying.sdk.admin.GroupCursorStore);
-  public com.aliyun.wuying.sdk.admin.AdminImClient$Builder maxSubscriptions(int);
-  public com.aliyun.wuying.sdk.admin.AdminImClient$Builder maxPendingBytes(long);
-  public com.aliyun.wuying.sdk.admin.AdminImClient build();
-}
-Compiled from "AdminImClient.java"
-interface com.aliyun.wuying.sdk.admin.AdminImClient$TransportCall<T> {
-  public abstract T execute();
-}
-Compiled from "AdminPage.java"
-public final class com.aliyun.wuying.sdk.admin.AdminPage<T> {
-  public com.aliyun.wuying.sdk.admin.AdminPage(java.util.List<T>, java.lang.String, boolean);
-  public java.util.List<T> items();
-  public java.lang.String nextCursor();
-  public boolean hasMore();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "AdminSdkException.java"
-public final class com.aliyun.wuying.sdk.admin.AdminSdkException extends java.lang.RuntimeException {
-  public com.aliyun.wuying.sdk.admin.AdminSdkException(com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode, java.lang.String);
-  public com.aliyun.wuying.sdk.admin.AdminSdkException(com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode, java.lang.String, boolean);
-  public com.aliyun.wuying.sdk.admin.AdminSdkException(com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode, java.lang.String, boolean, java.lang.Throwable);
-  public com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode code();
-  public boolean retryable();
-}
-Compiled from "AdminSdkException.java"
-public final class com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode extends java.lang.Enum<com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode> {
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode INVALID_ARGUMENT;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode CLIENT_CLOSED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode CANCELLED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode TIMEOUT;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode TOKEN_UNAVAILABLE;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode CURSOR_STORE_REQUIRED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode CURSOR_LOAD_FAILED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode CURSOR_SAVE_FAILED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode TRANSPORT_ERROR;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode AUTHORIZATION_DENIED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode AUTHORIZATION_UNAVAILABLE;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode GROUP_CLOSED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode GROUP_NOT_READY;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode GROUP_NOT_FOUND;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode GROUP_UNSUPPORTED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode TARGET_USER_NOT_ASSOCIATED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode HISTORY_SNAPSHOT_MISMATCH;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode HISTORY_PAGE_VIOLATION;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode GAP_UNRESOLVED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode PROTOCOL_VIOLATION;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode SUBSCRIPTION_ALREADY_EXISTS;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode SUBSCRIPTION_LIMIT_REACHED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode SUBSCRIPTION_NOT_OWNED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode SUBSCRIPTION_NOT_PAUSED;
-  public static final com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode SUBSCRIPTION_STOPPED;
-  public static com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode[] values();
-  public static com.aliyun.wuying.sdk.admin.AdminSdkException$ErrorCode valueOf(java.lang.String);
-}
-Compiled from "AdminToken.java"
-public final class com.aliyun.wuying.sdk.admin.AdminToken {
-  public com.aliyun.wuying.sdk.admin.AdminToken(java.lang.String);
-  public static com.aliyun.wuying.sdk.admin.AdminToken of(java.lang.String);
-  public java.lang.String value();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "AdminTokenProvider.java"
-public interface com.aliyun.wuying.sdk.admin.AdminTokenProvider {
-  public abstract com.aliyun.wuying.sdk.admin.AdminToken currentToken() throws java.lang.Exception;
-}
-Compiled from "AdminTransport.java"
-public interface com.aliyun.wuying.sdk.admin.AdminTransport extends java.lang.AutoCloseable {
-  public abstract com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.AuthorizedUser> listAuthorizedUsers(com.aliyun.wuying.sdk.admin.AdminToken, java.lang.String, int);
-  public abstract com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.UserGroup> listGroups(com.aliyun.wuying.sdk.admin.AdminToken, java.lang.String, java.lang.String, int);
-  public abstract com.aliyun.wuying.sdk.admin.UserGroup getGroup(com.aliyun.wuying.sdk.admin.AdminToken, java.lang.String, java.lang.String);
-  public abstract com.aliyun.wuying.sdk.admin.HistoryPage exportHistory(com.aliyun.wuying.sdk.admin.AdminToken, com.aliyun.wuying.sdk.admin.HistoryQuery);
-  public abstract com.aliyun.wuying.sdk.admin.TransportPublishResult publishDurable(com.aliyun.wuying.sdk.admin.AdminToken, com.aliyun.wuying.sdk.admin.PublishRequest);
-  public abstract com.aliyun.wuying.sdk.admin.BackfillPage backfill(com.aliyun.wuying.sdk.admin.AdminToken, com.aliyun.wuying.sdk.admin.BackfillRequest);
-  public abstract com.aliyun.wuying.sdk.admin.SubscriptionStream openSubscription(com.aliyun.wuying.sdk.admin.AdminToken, com.aliyun.wuying.sdk.admin.SubscriptionOpenRequest, com.aliyun.wuying.sdk.admin.SubscriptionTransportListener);
-  public default void close();
-}
-Compiled from "AdminValues.java"
-final class com.aliyun.wuying.sdk.admin.AdminValues {
-}
-Compiled from "AdminWebSocketSubscription.java"
-final class com.aliyun.wuying.sdk.admin.AdminWebSocketSubscription {
-}
-Compiled from "AdminWebSocketSubscription.java"
-class com.aliyun.wuying.sdk.admin.AdminWebSocketSubscription$1 {
-}
-Compiled from "AdminWebSocketSubscription.java"
-final class com.aliyun.wuying.sdk.admin.AdminWebSocketSubscription$ProtocolViolation extends java.lang.RuntimeException {
-}
-Compiled from "AdminWebSocketSubscription.java"
-final class com.aliyun.wuying.sdk.admin.AdminWebSocketSubscription$Session implements com.aliyun.wuying.sdk.admin.SubscriptionStream {
-  public void close();
-}
-Compiled from "AssociationState.java"
-public final class com.aliyun.wuying.sdk.admin.AssociationState extends java.lang.Enum<com.aliyun.wuying.sdk.admin.AssociationState> {
-  public static final com.aliyun.wuying.sdk.admin.AssociationState CURRENT;
-  public static final com.aliyun.wuying.sdk.admin.AssociationState HISTORICAL;
-  public static com.aliyun.wuying.sdk.admin.AssociationState[] values();
-  public static com.aliyun.wuying.sdk.admin.AssociationState valueOf(java.lang.String);
-}
-Compiled from "AuthorizationState.java"
-public final class com.aliyun.wuying.sdk.admin.AuthorizationState extends java.lang.Enum<com.aliyun.wuying.sdk.admin.AuthorizationState> {
-  public static final com.aliyun.wuying.sdk.admin.AuthorizationState CURRENT;
-  public static final com.aliyun.wuying.sdk.admin.AuthorizationState HISTORICAL;
-  public static com.aliyun.wuying.sdk.admin.AuthorizationState[] values();
-  public static com.aliyun.wuying.sdk.admin.AuthorizationState valueOf(java.lang.String);
-}
-Compiled from "AuthorizedUser.java"
-public final class com.aliyun.wuying.sdk.admin.AuthorizedUser {
-  public com.aliyun.wuying.sdk.admin.AuthorizedUser(java.lang.String, com.aliyun.wuying.sdk.admin.AuthorizationState);
-  public java.lang.String userId();
-  public com.aliyun.wuying.sdk.admin.AuthorizationState state();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "BackfillPage.java"
-public final class com.aliyun.wuying.sdk.admin.BackfillPage {
-  public com.aliyun.wuying.sdk.admin.BackfillPage(java.lang.String, java.util.List<com.aliyun.wuying.sdk.admin.DurableMessage>, long, boolean);
-  public java.lang.String groupId();
-  public java.util.List<com.aliyun.wuying.sdk.admin.DurableMessage> messages();
-  public long nextAfterSeq();
-  public boolean more();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "BackfillRequest.java"
-public final class com.aliyun.wuying.sdk.admin.BackfillRequest {
-  public com.aliyun.wuying.sdk.admin.BackfillRequest(java.lang.String, java.lang.String, long, long, int);
-  public java.lang.String targetUserId();
-  public java.lang.String groupId();
-  public long afterSeq();
-  public long throughSeqInclusive();
-  public int limit();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "CursorKey.java"
-public final class com.aliyun.wuying.sdk.admin.CursorKey {
-  public com.aliyun.wuying.sdk.admin.CursorKey(java.lang.String, java.lang.String, java.lang.String);
-  public java.lang.String cursorNamespace();
-  public java.lang.String targetUserId();
-  public java.lang.String groupId();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "DurableMessage.java"
-public final class com.aliyun.wuying.sdk.admin.DurableMessage {
-  public com.aliyun.wuying.sdk.admin.DurableMessage(java.lang.String, long, java.lang.String, com.aliyun.wuying.sdk.admin.DurablePayload);
-  public com.aliyun.wuying.sdk.admin.DurableMessage(java.lang.String, long, java.lang.String, byte[]);
-  public java.lang.String groupId();
-  public long seq();
-  public java.lang.String messageId();
-  public com.aliyun.wuying.sdk.admin.DurablePayload payload();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "DurableMessageHandler.java"
-public interface com.aliyun.wuying.sdk.admin.DurableMessageHandler {
-  public abstract void onDurableMessage(com.aliyun.wuying.sdk.admin.DurableMessage) throws java.lang.Exception;
-}
-Compiled from "DurablePayload.java"
-public final class com.aliyun.wuying.sdk.admin.DurablePayload {
-  public com.aliyun.wuying.sdk.admin.DurablePayload(byte[]);
-  public byte[] data();
-  public int size();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "GroupCursorStore.java"
-public interface com.aliyun.wuying.sdk.admin.GroupCursorStore {
-  public abstract java.util.Optional<java.lang.Long> load(com.aliyun.wuying.sdk.admin.CursorKey) throws java.lang.Exception;
-  public abstract void save(com.aliyun.wuying.sdk.admin.CursorKey, long) throws java.lang.Exception;
-}
-Compiled from "GroupIds.java"
-final class com.aliyun.wuying.sdk.admin.GroupIds {
-}
-Compiled from "GroupReadScope.java"
-public final class com.aliyun.wuying.sdk.admin.GroupReadScope {
-  public com.aliyun.wuying.sdk.admin.GroupReadScope(java.util.List<com.aliyun.wuying.sdk.admin.SeqRange>);
-  public static com.aliyun.wuying.sdk.admin.GroupReadScope empty();
-  public static com.aliyun.wuying.sdk.admin.GroupReadScope prefixThrough(long);
-  public java.util.List<com.aliyun.wuying.sdk.admin.SeqRange> readableRanges();
-  public boolean contains(long);
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "GroupState.java"
-public final class com.aliyun.wuying.sdk.admin.GroupState extends java.lang.Enum<com.aliyun.wuying.sdk.admin.GroupState> {
-  public static final com.aliyun.wuying.sdk.admin.GroupState ACTIVE;
-  public static final com.aliyun.wuying.sdk.admin.GroupState CLOSED;
-  public static com.aliyun.wuying.sdk.admin.GroupState[] values();
-  public static com.aliyun.wuying.sdk.admin.GroupState valueOf(java.lang.String);
-}
-Compiled from "GroupSubscription.java"
-public final class com.aliyun.wuying.sdk.admin.GroupSubscription implements java.lang.AutoCloseable {
-  public java.lang.String targetUserId();
-  public java.lang.String groupId();
-  public com.aliyun.wuying.sdk.admin.GroupSubscriptionState state();
-  public long lastCommittedSeq();
-  public java.util.Optional<com.aliyun.wuying.sdk.admin.SubscriptionPause> pause();
-  public java.util.Optional<com.aliyun.wuying.sdk.admin.SubscriptionStopReason> stopReason();
-  public java.lang.String stopDetail();
-  public void resume();
-  public void close();
-}
-Compiled from "GroupSubscriptionListener.java"
-public interface com.aliyun.wuying.sdk.admin.GroupSubscriptionListener {
-  public default void onStarted(com.aliyun.wuying.sdk.admin.GroupSubscription);
-  public default void onMessageCommitted(com.aliyun.wuying.sdk.admin.GroupSubscription, com.aliyun.wuying.sdk.admin.DurableMessage);
-  public default void onPaused(com.aliyun.wuying.sdk.admin.GroupSubscription, com.aliyun.wuying.sdk.admin.SubscriptionPause);
-  public default void onResumed(com.aliyun.wuying.sdk.admin.GroupSubscription);
-  public default void onStopped(com.aliyun.wuying.sdk.admin.GroupSubscription, com.aliyun.wuying.sdk.admin.SubscriptionStopReason, java.lang.String);
-  public static com.aliyun.wuying.sdk.admin.GroupSubscriptionListener noop();
-}
-Compiled from "GroupSubscriptionListener.java"
-class com.aliyun.wuying.sdk.admin.GroupSubscriptionListener$1 implements com.aliyun.wuying.sdk.admin.GroupSubscriptionListener {
-}
-Compiled from "GroupSubscriptionState.java"
-public final class com.aliyun.wuying.sdk.admin.GroupSubscriptionState extends java.lang.Enum<com.aliyun.wuying.sdk.admin.GroupSubscriptionState> {
-  public static final com.aliyun.wuying.sdk.admin.GroupSubscriptionState STARTING;
-  public static final com.aliyun.wuying.sdk.admin.GroupSubscriptionState BACKFILLING;
-  public static final com.aliyun.wuying.sdk.admin.GroupSubscriptionState ACTIVE;
-  public static final com.aliyun.wuying.sdk.admin.GroupSubscriptionState RECONNECTING;
-  public static final com.aliyun.wuying.sdk.admin.GroupSubscriptionState PAUSED;
-  public static final com.aliyun.wuying.sdk.admin.GroupSubscriptionState STOPPED;
-  public static com.aliyun.wuying.sdk.admin.GroupSubscriptionState[] values();
-  public static com.aliyun.wuying.sdk.admin.GroupSubscriptionState valueOf(java.lang.String);
-}
-Compiled from "HistoryPage.java"
-public final class com.aliyun.wuying.sdk.admin.HistoryPage {
-  public com.aliyun.wuying.sdk.admin.HistoryPage(com.aliyun.wuying.sdk.admin.HistorySnapshot, java.util.List<com.aliyun.wuying.sdk.admin.DurableMessage>, long, boolean);
-  public com.aliyun.wuying.sdk.admin.HistorySnapshot snapshot();
-  public java.util.List<com.aliyun.wuying.sdk.admin.DurableMessage> messages();
-  public long nextAfterSeq();
-  public boolean more();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "HistoryQuery.java"
-public final class com.aliyun.wuying.sdk.admin.HistoryQuery {
-  public com.aliyun.wuying.sdk.admin.HistoryQuery(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.HistorySnapshot, long, int);
-  public java.lang.String targetUserId();
-  public java.lang.String groupId();
-  public com.aliyun.wuying.sdk.admin.HistorySnapshot pinnedSnapshot();
-  public long afterSeq();
-  public int limit();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "HistorySnapshot.java"
-public final class com.aliyun.wuying.sdk.admin.HistorySnapshot {
-  public com.aliyun.wuying.sdk.admin.HistorySnapshot(java.lang.String, java.lang.String, long);
-  public java.lang.String groupId();
-  public java.lang.String snapshotId();
-  public long maxSeq();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "HttpAdminTransport.java"
-public final class com.aliyun.wuying.sdk.admin.HttpAdminTransport implements com.aliyun.wuying.sdk.admin.AdminTransport {
-  public com.aliyun.wuying.sdk.admin.HttpAdminTransport(java.net.URI, java.time.Duration, java.time.Duration);
-  public com.aliyun.wuying.sdk.admin.HttpAdminTransport(java.net.URI, java.net.URI, java.time.Duration, java.time.Duration);
-  public com.aliyun.wuying.sdk.admin.UserGroup getGroup(com.aliyun.wuying.sdk.admin.AdminToken, java.lang.String, java.lang.String);
-  public com.aliyun.wuying.sdk.admin.HistoryPage exportHistory(com.aliyun.wuying.sdk.admin.AdminToken, com.aliyun.wuying.sdk.admin.HistoryQuery);
-  public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.AuthorizedUser> listAuthorizedUsers(com.aliyun.wuying.sdk.admin.AdminToken, java.lang.String, int);
-  public com.aliyun.wuying.sdk.admin.AdminPage<com.aliyun.wuying.sdk.admin.UserGroup> listGroups(com.aliyun.wuying.sdk.admin.AdminToken, java.lang.String, java.lang.String, int);
-  public com.aliyun.wuying.sdk.admin.TransportPublishResult publishDurable(com.aliyun.wuying.sdk.admin.AdminToken, com.aliyun.wuying.sdk.admin.PublishRequest);
-  public com.aliyun.wuying.sdk.admin.BackfillPage backfill(com.aliyun.wuying.sdk.admin.AdminToken, com.aliyun.wuying.sdk.admin.BackfillRequest);
-  public com.aliyun.wuying.sdk.admin.SubscriptionStream openSubscription(com.aliyun.wuying.sdk.admin.AdminToken, com.aliyun.wuying.sdk.admin.SubscriptionOpenRequest, com.aliyun.wuying.sdk.admin.SubscriptionTransportListener);
-  public void close();
-}
-Compiled from "HttpAdminTransport.java"
-class com.aliyun.wuying.sdk.admin.HttpAdminTransport$1 implements com.aliyun.wuying.sdk.admin.SubscriptionStream {
-  public void close();
-}
-Compiled from "HttpAdminTransport.java"
-class com.aliyun.wuying.sdk.admin.HttpAdminTransport$2 {
-}
-Compiled from "HttpAdminTransport.java"
-final class com.aliyun.wuying.sdk.admin.HttpAdminTransport$Phase extends java.lang.Enum<com.aliyun.wuying.sdk.admin.HttpAdminTransport$Phase> {
-  public static final com.aliyun.wuying.sdk.admin.HttpAdminTransport$Phase CONNECTING;
-  public static final com.aliyun.wuying.sdk.admin.HttpAdminTransport$Phase SENDING;
-  public static final com.aliyun.wuying.sdk.admin.HttpAdminTransport$Phase RECEIVING;
-  public static com.aliyun.wuying.sdk.admin.HttpAdminTransport$Phase[] values();
-  public static com.aliyun.wuying.sdk.admin.HttpAdminTransport$Phase valueOf(java.lang.String);
-}
-Compiled from "HttpAdminTransport.java"
-final class com.aliyun.wuying.sdk.admin.HttpAdminTransport$WatermarkListener implements com.aliyun.wuying.sdk.admin.SubscriptionTransportListener {
-  public void onAck(com.aliyun.wuying.sdk.admin.SubscriptionAck);
-  public void onMessage(com.aliyun.wuying.sdk.admin.DurableMessage);
-  public void onDisconnected(java.lang.Throwable);
-  public void onTerminated(com.aliyun.wuying.sdk.admin.SubscriptionTermination);
-}
-Compiled from "PublishReceipt.java"
-public final class com.aliyun.wuying.sdk.admin.PublishReceipt {
-  public com.aliyun.wuying.sdk.admin.PublishReceipt(com.aliyun.wuying.sdk.admin.PublishStatus, com.aliyun.wuying.sdk.admin.PublishRequest, java.lang.String, com.aliyun.wuying.sdk.admin.PublishRejection);
-  public com.aliyun.wuying.sdk.admin.PublishStatus status();
-  public com.aliyun.wuying.sdk.admin.PublishRequest request();
-  public java.lang.String messageId();
-  public com.aliyun.wuying.sdk.admin.PublishRejection rejection();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "PublishRejection.java"
-public final class com.aliyun.wuying.sdk.admin.PublishRejection {
-  public com.aliyun.wuying.sdk.admin.PublishRejection(com.aliyun.wuying.sdk.admin.PublishRejectionCode, java.lang.String, boolean);
-  public com.aliyun.wuying.sdk.admin.PublishRejectionCode code();
-  public java.lang.String message();
-  public boolean retryable();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "PublishRejectionCode.java"
-public final class com.aliyun.wuying.sdk.admin.PublishRejectionCode extends java.lang.Enum<com.aliyun.wuying.sdk.admin.PublishRejectionCode> {
-  public static final com.aliyun.wuying.sdk.admin.PublishRejectionCode GROUP_CLOSED;
-  public static final com.aliyun.wuying.sdk.admin.PublishRejectionCode GROUP_NOT_READY;
-  public static final com.aliyun.wuying.sdk.admin.PublishRejectionCode GROUP_UNSUPPORTED;
-  public static final com.aliyun.wuying.sdk.admin.PublishRejectionCode AUTHORIZATION_DENIED;
-  public static final com.aliyun.wuying.sdk.admin.PublishRejectionCode AUTHORIZATION_UNAVAILABLE;
-  public static final com.aliyun.wuying.sdk.admin.PublishRejectionCode TARGET_USER_NOT_ASSOCIATED;
-  public static final com.aliyun.wuying.sdk.admin.PublishRejectionCode INVALID_REQUEST;
-  public static final com.aliyun.wuying.sdk.admin.PublishRejectionCode OTHER;
-  public static com.aliyun.wuying.sdk.admin.PublishRejectionCode[] values();
-  public static com.aliyun.wuying.sdk.admin.PublishRejectionCode valueOf(java.lang.String);
-}
-Compiled from "PublishRequest.java"
-public final class com.aliyun.wuying.sdk.admin.PublishRequest {
-  public com.aliyun.wuying.sdk.admin.PublishRequest(java.lang.String, java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.DurablePayload);
-  public java.lang.String targetUserId();
-  public java.lang.String groupId();
-  public java.lang.String clientMessageId();
-  public com.aliyun.wuying.sdk.admin.DurablePayload payload();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "PublishStatus.java"
-public final class com.aliyun.wuying.sdk.admin.PublishStatus extends java.lang.Enum<com.aliyun.wuying.sdk.admin.PublishStatus> {
-  public static final com.aliyun.wuying.sdk.admin.PublishStatus ACCEPTED;
-  public static final com.aliyun.wuying.sdk.admin.PublishStatus PERSISTED;
-  public static final com.aliyun.wuying.sdk.admin.PublishStatus UNKNOWN;
-  public static final com.aliyun.wuying.sdk.admin.PublishStatus REJECTED;
-  public static com.aliyun.wuying.sdk.admin.PublishStatus[] values();
-  public static com.aliyun.wuying.sdk.admin.PublishStatus valueOf(java.lang.String);
-}
-Compiled from "SeqRange.java"
-public final class com.aliyun.wuying.sdk.admin.SeqRange {
-  public com.aliyun.wuying.sdk.admin.SeqRange(long, long);
-  public long fromSeq();
-  public long toSeq();
-  public boolean contains(long);
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "SubscriptionAck.java"
-public final class com.aliyun.wuying.sdk.admin.SubscriptionAck {
-  public com.aliyun.wuying.sdk.admin.SubscriptionAck(java.lang.String, long);
-  public java.lang.String subscriptionId();
-  public long liveFromSeq();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "SubscriptionOpenRequest.java"
-public final class com.aliyun.wuying.sdk.admin.SubscriptionOpenRequest {
-  public com.aliyun.wuying.sdk.admin.SubscriptionOpenRequest(java.lang.String, java.lang.String, long);
-  public java.lang.String targetUserId();
-  public java.lang.String groupId();
-  public long lastCommittedSeq();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "SubscriptionPause.java"
-public final class com.aliyun.wuying.sdk.admin.SubscriptionPause {
-  public com.aliyun.wuying.sdk.admin.SubscriptionPause(com.aliyun.wuying.sdk.admin.SubscriptionPauseReason, java.lang.String, long, long);
-  public com.aliyun.wuying.sdk.admin.SubscriptionPauseReason reason();
-  public java.lang.String detail();
-  public long lastCommittedSeq();
-  public long blockedAtSeq();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "SubscriptionPauseReason.java"
-public final class com.aliyun.wuying.sdk.admin.SubscriptionPauseReason extends java.lang.Enum<com.aliyun.wuying.sdk.admin.SubscriptionPauseReason> {
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionPauseReason HANDLER_FAILURE;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionPauseReason CURSOR_STORE_FAILURE;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionPauseReason GAP_UNRESOLVED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionPauseReason TRANSPORT_ERROR;
-  public static com.aliyun.wuying.sdk.admin.SubscriptionPauseReason[] values();
-  public static com.aliyun.wuying.sdk.admin.SubscriptionPauseReason valueOf(java.lang.String);
-}
-Compiled from "SubscriptionRunner.java"
-final class com.aliyun.wuying.sdk.admin.SubscriptionRunner {
-}
-Compiled from "SubscriptionRunner.java"
-class com.aliyun.wuying.sdk.admin.SubscriptionRunner$1 {
-}
-Compiled from "SubscriptionRunner.java"
-final class com.aliyun.wuying.sdk.admin.SubscriptionRunner$TransportAdapter implements com.aliyun.wuying.sdk.admin.SubscriptionTransportListener {
-  public void onAck(com.aliyun.wuying.sdk.admin.SubscriptionAck);
-  public void onMessage(com.aliyun.wuying.sdk.admin.DurableMessage);
-  public void onPersistedWatermark(long);
-  public void onDisconnected(java.lang.Throwable);
-  public void onTerminated(com.aliyun.wuying.sdk.admin.SubscriptionTermination);
-}
-Compiled from "SubscriptionStopReason.java"
-public final class com.aliyun.wuying.sdk.admin.SubscriptionStopReason extends java.lang.Enum<com.aliyun.wuying.sdk.admin.SubscriptionStopReason> {
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason UNSUBSCRIBED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason CLIENT_CLOSED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason AUTHORIZATION_REVOKED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason AUTHORIZATION_UNAVAILABLE;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason GROUP_CLOSED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason GROUP_UNSUPPORTED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason SERVER_CLOSED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason TRANSPORT_ERROR;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason PROTOCOL_ERROR;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionStopReason LOCAL_OVERFLOW;
-  public static com.aliyun.wuying.sdk.admin.SubscriptionStopReason[] values();
-  public static com.aliyun.wuying.sdk.admin.SubscriptionStopReason valueOf(java.lang.String);
-}
-Compiled from "SubscriptionStream.java"
-public interface com.aliyun.wuying.sdk.admin.SubscriptionStream extends java.lang.AutoCloseable {
-  public abstract void close();
-}
-Compiled from "SubscriptionTermination.java"
-public final class com.aliyun.wuying.sdk.admin.SubscriptionTermination {
-  public com.aliyun.wuying.sdk.admin.SubscriptionTermination(com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason, java.lang.String);
-  public com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason reason();
-  public java.lang.String detail();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "SubscriptionTerminationReason.java"
-public final class com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason extends java.lang.Enum<com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason> {
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason AUTHORIZATION_REVOKED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason GROUP_CLOSED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason GROUP_UNSUPPORTED;
-  public static final com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason SERVER_CLOSED;
-  public static com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason[] values();
-  public static com.aliyun.wuying.sdk.admin.SubscriptionTerminationReason valueOf(java.lang.String);
-}
-Compiled from "SubscriptionTransportListener.java"
-public interface com.aliyun.wuying.sdk.admin.SubscriptionTransportListener {
-  public abstract void onAck(com.aliyun.wuying.sdk.admin.SubscriptionAck);
-  public abstract void onMessage(com.aliyun.wuying.sdk.admin.DurableMessage);
-  public default void onPersistedWatermark(long);
-  public abstract void onDisconnected(java.lang.Throwable);
-  public abstract void onTerminated(com.aliyun.wuying.sdk.admin.SubscriptionTermination);
-}
-Compiled from "TransportPublishResult.java"
-public final class com.aliyun.wuying.sdk.admin.TransportPublishResult {
-  public com.aliyun.wuying.sdk.admin.TransportPublishResult(com.aliyun.wuying.sdk.admin.PublishStatus, java.lang.String, com.aliyun.wuying.sdk.admin.PublishRejection);
-  public com.aliyun.wuying.sdk.admin.PublishStatus status();
-  public java.lang.String messageId();
-  public com.aliyun.wuying.sdk.admin.PublishRejection rejection();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "UserGroup.java"
-public final class com.aliyun.wuying.sdk.admin.UserGroup {
-  public com.aliyun.wuying.sdk.admin.UserGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.admin.GroupState, com.aliyun.wuying.sdk.admin.AssociationState, com.aliyun.wuying.sdk.admin.GroupReadScope);
-  public java.lang.String targetUserId();
-  public java.lang.String groupId();
-  public com.aliyun.wuying.sdk.admin.GroupState groupState();
-  public com.aliyun.wuying.sdk.admin.AssociationState associationState();
-  public com.aliyun.wuying.sdk.admin.GroupReadScope readScope();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public java.lang.String toString();
-}
-Compiled from "package-info.java"
-interface com.aliyun.wuying.sdk.admin.package-info {
-}
-Compiled from "AdminAuthentication.java"
-public final class com.aliyun.wuying.sdk.config.AdminAuthentication {
-  public static com.aliyun.wuying.sdk.config.AdminAuthentication of(java.lang.String, com.aliyun.wuying.sdk.admin.AdminTokenProvider);
-  public java.lang.String getCursorNamespace();
-  public com.aliyun.wuying.sdk.admin.AdminTokenProvider getTokenProvider();
-  public java.lang.String toString();
-}
-Compiled from "AdminImConfig.java"
-public final class com.aliyun.wuying.sdk.config.AdminImConfig {
-  public static com.aliyun.wuying.sdk.config.AdminImConfig$Builder builder();
-  public java.net.URI getManageEndpoint();
-  public java.net.URI getGatewayEndpoint();
-  public com.aliyun.wuying.sdk.admin.GroupCursorStore getCursorStore();
-  public java.time.Duration getConnectTimeout();
-  public java.time.Duration getReadTimeout();
-  public java.lang.String toString();
-}
-Compiled from "AdminImConfig.java"
-class com.aliyun.wuying.sdk.config.AdminImConfig$1 {
-}
-Compiled from "AdminImConfig.java"
-public final class com.aliyun.wuying.sdk.config.AdminImConfig$Builder {
-  public com.aliyun.wuying.sdk.config.AdminImConfig$Builder();
-  public com.aliyun.wuying.sdk.config.AdminImConfig$Builder manageEndpoint(java.net.URI);
-  public com.aliyun.wuying.sdk.config.AdminImConfig$Builder gatewayEndpoint(java.net.URI);
-  public com.aliyun.wuying.sdk.config.AdminImConfig$Builder cursorStore(com.aliyun.wuying.sdk.admin.GroupCursorStore);
-  public com.aliyun.wuying.sdk.config.AdminImConfig$Builder connectTimeout(java.time.Duration);
-  public com.aliyun.wuying.sdk.config.AdminImConfig$Builder readTimeout(java.time.Duration);
-  public com.aliyun.wuying.sdk.config.AdminImConfig build();
 }
 Compiled from "ClientOptions.java"
 public final class com.aliyun.wuying.sdk.config.ClientOptions {
@@ -695,8 +130,6 @@ public final class com.aliyun.wuying.sdk.config.ClientOptions {
   public java.lang.String getSessionId();
   public java.lang.String getEndUserId();
   public java.lang.String getLoginRegionId();
-  public com.aliyun.wuying.sdk.config.AdminAuthentication getAdminAuthentication();
-  public boolean isAdministrator();
   public boolean isAccessKey();
   public java.lang.String getAccessKeyId();
   public java.lang.String getAccessKeySecret();
@@ -715,30 +148,7 @@ public final class com.aliyun.wuying.sdk.config.ClientOptions$Builder {
   public com.aliyun.wuying.sdk.config.ClientOptions$Builder sessionId(java.lang.String);
   public com.aliyun.wuying.sdk.config.ClientOptions$Builder endUserId(java.lang.String);
   public com.aliyun.wuying.sdk.config.ClientOptions$Builder loginRegionId(java.lang.String);
-  public com.aliyun.wuying.sdk.config.ClientOptions$Builder adminAuthentication(com.aliyun.wuying.sdk.config.AdminAuthentication);
   public com.aliyun.wuying.sdk.config.ClientOptions build();
-}
-Compiled from "CloudClientOptions.java"
-public final class com.aliyun.wuying.sdk.config.CloudClientOptions {
-  public static com.aliyun.wuying.sdk.config.CloudClientOptions$Builder builder();
-  public java.net.URI getEndpoint();
-  public java.lang.String getAccessKeyId();
-  public java.lang.String getAccessKeySecret();
-  public java.time.Duration getTimeout();
-  public com.aliyun.wuying.sdk.config.Logger getLogger();
-  public java.lang.String toString();
-}
-Compiled from "CloudClientOptions.java"
-class com.aliyun.wuying.sdk.config.CloudClientOptions$1 {
-}
-Compiled from "CloudClientOptions.java"
-public final class com.aliyun.wuying.sdk.config.CloudClientOptions$Builder {
-  public com.aliyun.wuying.sdk.config.CloudClientOptions$Builder();
-  public com.aliyun.wuying.sdk.config.CloudClientOptions$Builder endpoint(java.net.URI);
-  public com.aliyun.wuying.sdk.config.CloudClientOptions$Builder accessKey(java.lang.String, java.lang.String);
-  public com.aliyun.wuying.sdk.config.CloudClientOptions$Builder timeout(java.time.Duration);
-  public com.aliyun.wuying.sdk.config.CloudClientOptions$Builder logger(com.aliyun.wuying.sdk.config.Logger);
-  public com.aliyun.wuying.sdk.config.CloudClientOptions build();
 }
 Compiled from "Logger.java"
 public interface com.aliyun.wuying.sdk.config.Logger {
@@ -784,7 +194,6 @@ public final class com.aliyun.wuying.sdk.config.SdkConfig {
   public int getRelayMaxDataBytes();
   public java.lang.String getAccessKeyId();
   public java.lang.String getAccessKeySecret();
-  public com.aliyun.wuying.sdk.config.AdminImConfig getAdminIm();
   public java.lang.String toString();
 }
 Compiled from "SdkConfig.java"
@@ -793,7 +202,6 @@ class com.aliyun.wuying.sdk.config.SdkConfig$1 {
 Compiled from "SdkConfig.java"
 public final class com.aliyun.wuying.sdk.config.SdkConfig$Builder {
   public com.aliyun.wuying.sdk.config.SdkConfig$Builder();
-  public com.aliyun.wuying.sdk.config.SdkConfig$Builder adminIm(com.aliyun.wuying.sdk.config.AdminImConfig);
   public com.aliyun.wuying.sdk.config.SdkConfig$Builder directoryReconcileInterval(java.time.Duration);
   public com.aliyun.wuying.sdk.config.SdkConfig$Builder readinessMode(java.lang.String);
   public com.aliyun.wuying.sdk.config.SdkConfig$Builder clientId(java.lang.String);
@@ -820,7 +228,6 @@ public interface com.aliyun.wuying.sdk.config.TokenRefresher {
 }
 Compiled from "AgentManager.java"
 public final class com.aliyun.wuying.sdk.manager.AgentManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public com.aliyun.wuying.sdk.manager.AgentManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Agent>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Agent>> listAgents(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Model>> listAgentModels(com.aliyun.wuying.sdk.model.AgentRef, com.aliyun.wuying.sdk.CallContext);
@@ -868,7 +275,6 @@ final class com.aliyun.wuying.sdk.manager.BusinessMessageStream$Selected {
 }
 Compiled from "ConversationManager.java"
 public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public com.aliyun.wuying.sdk.manager.ConversationManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedConversation> createConversation(com.aliyun.wuying.sdk.model.CreateRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreatedConversation> createConversation(com.aliyun.wuying.sdk.model.CreateRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listConversations(com.aliyun.wuying.sdk.model.ConversationQuery, com.aliyun.wuying.sdk.CallContext);
@@ -952,14 +358,6 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Group>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncGroup(com.aliyun.wuying.sdk.model.GroupRef, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeLiveProcess(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.LiveProcessSnapshot>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.admin.AuthorizedUser>> listAuthorizedUsers(com.aliyun.wuying.sdk.model.AuthorizedUserQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.admin.UserGroup>> listAuthorizedGroups(com.aliyun.wuying.sdk.model.AuthorizedGroupQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.UserGroup> getAuthorizedGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.HistoryPage> exportGroupHistory(com.aliyun.wuying.sdk.admin.HistoryQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.PublishReceipt> publishGroupMessage(com.aliyun.wuying.sdk.admin.PublishRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.GroupSubscription> subscribeGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.admin.GroupSubscriptionListener, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.admin.GroupSubscription> subscribeGroup(com.aliyun.wuying.sdk.model.AuthorizedGroupRef, com.aliyun.wuying.sdk.admin.DurableMessageHandler, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.lang.Void> unsubscribeGroup(com.aliyun.wuying.sdk.admin.GroupSubscription, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "ConversationManager.java"
 class com.aliyun.wuying.sdk.manager.ConversationManager$1 implements com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.GroupSyncState>> {
@@ -971,11 +369,9 @@ final class com.aliyun.wuying.sdk.manager.ConversationManager$1Drain implements 
   public void run();
 }
 Compiled from "ConversationManager.java"
-class com.aliyun.wuying.sdk.manager.ConversationManager$2 implements com.aliyun.wuying.sdk.admin.GroupSubscriptionListener {
 }
 Compiled from "CreditManager.java"
 public final class com.aliyun.wuying.sdk.manager.CreditManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public com.aliyun.wuying.sdk.manager.CreditManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUsageInfo> describeCreditUsageInfo(com.aliyun.wuying.sdk.model.DescribeCreditUsageInfoRequest, com.aliyun.wuying.sdk.CallContext);
@@ -1004,13 +400,11 @@ final class com.aliyun.wuying.sdk.manager.ListPagination$Numbered<T> {
 }
 Compiled from "ModelManager.java"
 public final class com.aliyun.wuying.sdk.manager.ModelManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public com.aliyun.wuying.sdk.manager.ModelManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ModelConfig> getAgentInstanceModelConfig(com.aliyun.wuying.sdk.model.GetModelConfigRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.SetChannelGroupModelResult> setChannelGroupModel(com.aliyun.wuying.sdk.model.SetChannelGroupModelRequest, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "ResourceManager.java"
 public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public com.aliyun.wuying.sdk.manager.ResourceManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Resource>> listResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeResources(com.aliyun.wuying.sdk.model.ResourceQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.Resource>>, com.aliyun.wuying.sdk.CallContext);
@@ -1034,8 +428,6 @@ public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.ali
 }
 Compiled from "RuntimeManager.java"
 public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
-  public com.aliyun.wuying.sdk.manager.RuntimeManager(com.aliyun.wuying.sdk.internal.business.BusinessService, com.aliyun.wuying.sdk.internal.RuntimeCommands, java.lang.Runnable);
   public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
@@ -1051,7 +443,6 @@ public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliy
 }
 Compiled from "SkillManager.java"
 public final class com.aliyun.wuying.sdk.manager.SkillManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public com.aliyun.wuying.sdk.manager.SkillManager(com.aliyun.wuying.sdk.internal.business.BusinessService);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SkillCategory>> listCategories(com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.InstalledSkill>> listInstalledSkills(com.aliyun.wuying.sdk.model.ListInstalledSkillsRequest, com.aliyun.wuying.sdk.CallContext);
@@ -1233,25 +624,6 @@ public final class com.aliyun.wuying.sdk.model.AuthType extends java.lang.Enum<c
   public static com.aliyun.wuying.sdk.model.AuthType[] values();
   public static com.aliyun.wuying.sdk.model.AuthType valueOf(java.lang.String);
   public int getValue();
-}
-Compiled from "AuthorizedGroupQuery.java"
-public final class com.aliyun.wuying.sdk.model.AuthorizedGroupQuery {
-  public java.lang.String targetUserId;
-  public java.lang.String cursor;
-  public int limit;
-  public com.aliyun.wuying.sdk.model.AuthorizedGroupQuery();
-}
-Compiled from "AuthorizedGroupRef.java"
-public final class com.aliyun.wuying.sdk.model.AuthorizedGroupRef {
-  public java.lang.String targetUserId;
-  public java.lang.String groupId;
-  public com.aliyun.wuying.sdk.model.AuthorizedGroupRef();
-}
-Compiled from "AuthorizedUserQuery.java"
-public final class com.aliyun.wuying.sdk.model.AuthorizedUserQuery {
-  public java.lang.String cursor;
-  public int limit;
-  public com.aliyun.wuying.sdk.model.AuthorizedUserQuery();
 }
 Compiled from "Block.java"
 public class com.aliyun.wuying.sdk.model.Block {
@@ -2156,17 +1528,6 @@ public class com.aliyun.wuying.sdk.model.HostCapabilities extends com.aliyun.wuy
   public com.aliyun.wuying.sdk.model.Capability plugins;
   public com.aliyun.wuying.sdk.model.Capability clipboard;
   public com.aliyun.wuying.sdk.model.HostCapabilities();
-}
-Compiled from "IMCredentials.java"
-public final class com.aliyun.wuying.sdk.model.IMCredentials {
-  public java.lang.String token;
-  public java.lang.String imUserId;
-  public java.lang.String imApiEndpoint;
-  public java.lang.String imWssEndpoint;
-  public java.lang.String requestId;
-  public long expireSeconds;
-  public com.aliyun.wuying.sdk.model.IMCredentials();
-  public java.lang.String toString();
 }
 Compiled from "IMGroupAttachmentResult.java"
 public class com.aliyun.wuying.sdk.model.IMGroupAttachmentResult extends com.aliyun.wuying.sdk.model.ConversationRef {
@@ -3604,7 +2965,6 @@ public final class com.aliyun.wuying.sdk.transport.AgMessageClient implements ja
   public void close();
 }
 Compiled from "AgMessageClient.java"
-class com.aliyun.wuying.sdk.transport.AgMessageClient$1 implements com.aliyun.wuying.sdk.internal.transport.Messaging$Handler {
   public void durable(com.aliyun.wuying.sdk.CallContext, com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode);
   public void transientMessage(com.aliyun.wuying.sdk.CallContext, com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode);
   public void changed();
