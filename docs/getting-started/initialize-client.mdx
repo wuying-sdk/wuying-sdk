@@ -156,6 +156,10 @@ CLI 将同一份登录组合保存到当前用户的私有 `user` profile，后�
 
 JS / Go / Java 可由根 Client 接收当前无影用户的组织 ID、用户名和密码。以下变量由宿主安全注入；`organizationId` 是登录标识，不是 `officeSiteId`。先按上文配置 clientId 和私有数据位置。
 
+<Note>
+Android / iOS 当前没有组织账号密码直登入口，不接受 `organizationId`、`username`、`password` 配置。下方移动端卡片使用的是**宿主已有登录流程取得的完整 LoginToken 登录组合**，再初始化用户态 Client；也可使用后端签发的 AuthCode，见上文对应示例。
+</Note>
+
 <CodeGroup>
 
 ```ts TypeScript
@@ -173,6 +177,25 @@ WuyingClient client = new WuyingClient(
     ClientOptions.builder().passwordAuthentication(organizationId, username, password).build(),
     SdkConfig.builder().clientId(clientId).dataPath(dataFile).build()
 );
+```
+
+```java Android
+// 先由宿主登录流程取得当前用户的完整 LoginToken 登录组合。
+JSONObject config = new JSONObject()
+    .put("loginToken", loginToken).put("sessionId", sessionId).put("endUserId", endUserId)
+    .put("clientId", clientId).put("dataPath", dataFile);
+Client client = AndroidClient.connect(config);
+```
+
+```swift iOS
+import WuyingSDK
+
+// 先由宿主登录流程取得当前用户的完整 LoginToken 登录组合。
+let engine = try GoEngine(configuration: [
+    "loginToken": loginToken, "sessionId": sessionId, "endUserId": endUserId,
+    "clientId": clientId, "dataPath": dataFile
+])
+let client = Client(engine: engine)
 ```
 
 ```sh CLI
