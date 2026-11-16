@@ -33,7 +33,7 @@ Wuying SDK 目前按调用身份区分两类权限：**管理员权限**和**无
 
 <CodeGroup>
 
-```ts Node.js / TypeScript
+```ts TypeScript
 import { Client } from '@aliyun/wuying-sdk';
 
 const admin = Client.create({ accessKeyID, accessKeySecret });
@@ -62,6 +62,18 @@ GetAuthCodeParams request = new GetAuthCodeParams();
 request.endUserId = authorizedEndUserId;
 GetAuthCodeResponse ticket = admin.getAuthCode(request, ctx)
     .toCompletableFuture().get();
+```
+
+```text Android
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```text iOS
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```bash CLI
+wuying auth code --profile admin --request-file user.json
 ```
 
 </CodeGroup>

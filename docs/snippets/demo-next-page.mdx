@@ -1,0 +1,46 @@
+nextCursor 来自上一页成功结果。Go 使用 page.NextCursor；移动端在上一页回调中保存游标，再执行本卡片，onPage 处理错误与下一页结果。
+
+<CodeGroup>
+
+```ts TypeScript
+if (page.nextCursor) {
+  const next = await runtimeManager.listRuntimes(ctx, { limit: 20, cursor: page.nextCursor });
+}
+```
+
+```go Go
+if page.NextCursor != nil {
+    next, err := runtimeManager.ListRuntimes(ctx, model.ListOptions{Limit: 20, Cursor: *page.NextCursor})
+    if err != nil { return err }
+    _ = next
+}
+```
+
+```java Java
+if (page.nextCursor != null) {
+    ListOptions nextOptions = new ListOptions();
+    nextOptions.limit = 20;
+    nextOptions.cursor = page.nextCursor;
+    Page<Runtime> next = runtimeManager.listRuntimes(nextOptions, ctx).toCompletableFuture().get();
+}
+```
+
+```java Android
+if (nextCursor != null) {
+    client.request(Methods.runtimeListRuntimes,
+        new JSONObject().put("limit", 20).put("cursor", nextCursor), onPage);
+}
+```
+
+```swift iOS
+if let cursor = nextCursor {
+    try client.request(method: Methods.runtimeListRuntimes,
+        request: ["limit": 20, "cursor": cursor], onEvent: onPage)
+}
+```
+
+```bash CLI
+wuying runtimes list --profile user --limit 20 --cursor "$NEXT_CURSOR"
+```
+
+</CodeGroup>

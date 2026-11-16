@@ -3,15 +3,16 @@ title: "在浏览器打开云桌面"
 description: "通过 CLI 建立交互式 ASP 桌面连接，并了解生命周期及本地应用嵌入方式。"
 ---
 
+import DemoAspOpen from '/snippets/demo-asp-open.mdx';
+
+
 使用 [ASP](/domain-model/asp) 查看并交互操作已授权桌面。它连接桌面画面，不创建 Agent 会话，也不执行脚本。需要已存在、可访问的桌面和无影**用户态**凭据；管理员 AK/SK / OAuth 不支持此入口。
 
 ## 打开指定桌面
 
 先按[用户态初始化](/getting-started/initialize-client)准备 user profile，然后执行：
 
-```sh
-wuying asp open --profile user --desktop <desktopId> --region <regionId> --output jsonl
-```
+<DemoAspOpen />
 
 desktopId 和 regionId 必须来自已确认的云桌面资源，不用 Runtime ID 或显示名拼接。此命令不要求先运行 doctor 或 Agent/IM 目录查询。
 

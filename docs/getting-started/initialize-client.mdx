@@ -5,6 +5,9 @@ icon: "plug"
 description: "了解 Client 与 Manager 的关系，按管理员或无影用户身份创建 Client，并管理连接、订阅和账号生命周期。"
 ---
 
+import DemoRuntimes from '/snippets/demo-runtimes.mdx';
+
+
 import ClientInitialization from '/snippets/client-initialization.mdx';
 
 Client 是当前身份访问无影 SDK 的根入口，提供各领域 Manager，管理连接与用户态本地数据。先按[授权与认证](/integration/01-auth-and-lifecycle)选择管理员或无影用户身份；运行在服务端的用户态 Client 仍使用该用户的权限。
@@ -48,6 +51,14 @@ if err != nil { return err }
 WuyingClient admin = new WuyingClient(
     ClientOptions.builder().accessKey(accessKeyId, accessKeySecret).build()
 );
+```
+
+```text Android
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```text iOS
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
 ```
 
 ```bash CLI
@@ -132,14 +143,20 @@ let client = Client(engine: engine)
 ```
 
 ```bash CLI
+set -euo pipefail
 jq -n '{loginToken: env.WUYING_LOGIN_TOKEN, sessionId: env.WUYING_SESSION_ID,
-  endUserId: env.WUYING_END_USER_ID, clientId: env.WUYING_CLIENT_ID}' |
+  endUserId: env.WUYING_END_USER_ID, clientId: env.WUYING_CLIENT_ID} +
+  (if (env.WUYING_LOGIN_REGION_ID // "") != ""
+   then {loginRegionId: env.WUYING_LOGIN_REGION_ID} else {} end)' |
   wuying auth import --profile user --stdin
+unset WUYING_CREDENTIALS WUYING_ACCESS_KEY_ID WUYING_ACCESS_KEY_SECRET WUYING_ALIYUN_OAUTH_PROFILE
+unset WUYING_ORGANIZATION_ID WUYING_USERNAME WUYING_PASSWORD WUYING_AUTH_CODE
+unset WUYING_LOGIN_TOKEN WUYING_SESSION_ID WUYING_END_USER_ID WUYING_LOGIN_REGION_ID
 ```
 
 </CodeGroup>
 
-CLI 将同一份登录组合保存到当前用户的私有 `user` profile，后续命令使用 `--profile user`；导入成功不代表在线认证通过。环境凭据优先于 profile，切换身份前先清理另一身份的认证环境变量，不能同时注入管理员 AK/SK、AuthCode 和 LoginToken。
+CLI 将同一份登录组合保存到当前用户的私有 `user` profile，清除认证环境覆盖后，后续命令使用 `--profile user`，由该 profile 保存续期后的登录组合；导入成功不代表在线认证通过。环境凭据优先于 profile，切换身份前先清理另一身份的认证环境变量，不能同时注入管理员 AK/SK、AuthCode 和 LoginToken。
 
 
 | 语言 | 登录态字段 |
@@ -212,10 +229,7 @@ SDK 负责换票和续期，密码每个 Client 生命周期只提交一次，�
 
 构造成功说明拿到了本地 Client 对象，不能证明在线认证或资源授权已通过。使用创建出的 Client，建立目录 Manager 并执行只读查询：
 
-```ts TypeScript
-const runtimeManager = await client.buildRuntimeManager(ctx);
-const { items: runtimes, nextCursor } = await runtimeManager.listRuntimes(ctx);
-```
+<DemoRuntimes />
 
 返回当前身份下的一页 Runtime；通过 nextCursor 继续查询，见[列表查询与分页](/domain-model/page)。目录未加载或认证失败会报错，不返回伪造空页。查询成功不代表获得全部资源权限。Go、Java 和 Node 的完整初始化与只读验证源码见[代码示例](/examples/index)；Android / iOS 通过 `Client.request` 与 `Methods.runtimeSubscribeRuntimes` 订阅目录，见[移动端契约](/reference/mobile/contract)。
 

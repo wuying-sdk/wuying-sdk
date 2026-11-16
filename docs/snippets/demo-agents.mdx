@@ -1,0 +1,38 @@
+`runtimeId` 是用户从环境目录选定的真实标识。移动端 `onPage` 先检查 error，再消费成功终态 data.items / nextCursor。
+
+<CodeGroup>
+
+```ts TypeScript
+const agents = await client.buildAgentManager(ctx);
+const page = await agents.listAgents(ctx, { runtimeId });
+```
+
+```go Go
+agents, err := client.BuildAgentManager(ctx)
+if err != nil { return err }
+page, err := agents.ListAgents(ctx, model.RuntimeRef{RuntimeID: runtimeID})
+if err != nil { return err }
+```
+
+```java Java
+AgentManager agents = client.buildAgentManager(ctx);
+RuntimeRef runtime = new RuntimeRef();
+runtime.runtimeId = runtimeId;
+Page<Agent> page = agents.listAgents(runtime, ctx).toCompletableFuture().get();
+```
+
+```java Android
+client.request(Methods.agentListAgents,
+    new JSONObject().put("runtimeId", runtimeId), onPage);
+```
+
+```swift iOS
+try client.request(method: Methods.agentListAgents,
+    request: ["runtimeId": runtimeId], onEvent: onPage)
+```
+
+```bash CLI
+wuying agents list --profile user --runtime "$RUNTIME_ID"
+```
+
+</CodeGroup>

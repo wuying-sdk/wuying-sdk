@@ -4,6 +4,9 @@ sidebarTitle: "连接桌面内服务"
 description: "远程脚本在 Windows 桌面启动 HTTP 服务，通过已配置的端口服务地址打开页面，发送消息并收到回应。"
 ---
 
+import DemoPortUrl from '/snippets/demo-port-url.mdx';
+
+
 这条流程把两项能力连起来：**管理员用远程脚本启动桌面内服务，无影用户通过端口服务访问它**。
 
 ## 准备
@@ -15,57 +18,76 @@ description: "远程脚本在 Windows 桌面启动 HTTP 服务，通过已配置
 
 端口映射由平台预先配置；当前 SDK 通过 `generateSceneUrl` 获取已有配置的访问地址，不创建端口映射。若配置使用其它监听地址或端口，请同步修改下面的服务和配置；没有此 Feature 时先完成配置，不能仅启动脚本就推定能从外部访问。
 
-下载[消息服务源码](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/quickstart/echo-server.py.txt)，保存为 `echo-server.py`；下载[脚本等待函数](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/quickstart/run-script.mjs.txt)，保存为 `run-script.mjs`。文件放在本地 Node demo 的同一目录。
+下载[服务启动脚本](/downloads/examples/quickstart/start-echo-service.ps1.txt)，保存为 `start-echo-service.ps1`。脚本已包含演示服务的 Python 源码；[源码阅读入口](/downloads/examples/quickstart/echo-server.py.txt)供参考，无需额外上传文件。
+
+先下载对应语言的等待函数：[Node run-script.mjs](/downloads/examples/quickstart/run-script.mjs.txt)、[Go run-script.go](/downloads/examples/quickstart/run-script.go.txt) 或 [Java RunScript.java](/downloads/examples/quickstart/RunScript.java.txt)，去掉下载后缀 `.txt` 并放在示例目录，Go 使用同一 package。它们是随文档提供的 demo helper，不是 SDK 内置方法；负责等待 completed、检查 allSucceeded、保存受理标识并释放本地订阅，不重发未知结果的脚本。
 
 ## 1. 用脚本启动服务
 
-下面把 Python 源码随远程脚本写入目标桌面，再启动进程并验证本机响应。桌面 ID 与地域使用已确认的真实值。
+共享的 start-echo-service.ps1 将 Python 源码写入目标桌面，启动进程并验证本机响应。桌面 ID 与地域使用已确认的真实值。
 
-```js Node.js
+<CodeGroup>
+
+```ts TypeScript
 import { readFile } from 'node:fs/promises';
 import { runScript } from './run-script.mjs';
 
-const code = await readFile(new URL('./echo-server.py', import.meta.url));
-const encoded = code.toString('base64');
+const commandContent = await readFile(new URL('./start-echo-service.ps1', import.meta.url), 'utf8');
 const runtimes = await admin.buildRuntimeManager(ctx);
 const results = await runScript(runtimes, {
-  regionId, desktopIds: [desktopId], type: 'RunPowerShellScript',
-  commandContent: `
-$ErrorActionPreference = 'Stop'
-if (Get-NetTCPConnection -LocalPort 8080 -State Listen -ErrorAction SilentlyContinue) {
-  throw 'Port 8080 is already in use'
-}
-$path = Join-Path $env:TEMP 'wuying-echo-demo.py'
-[IO.File]::WriteAllBytes($path, [Convert]::FromBase64String('${encoded}'))
-$server = Start-Process python.exe -ArgumentList ('"{0}" 8080' -f $path) -PassThru
-Write-Output "Demo PID: $($server.Id)"
-$ready = $false
-for ($i = 0; $i -lt 20; $i++) {
-  if ($server.HasExited) { throw 'Demo service exited' }
-  try {
-    $reply = Invoke-RestMethod 'http://127.0.0.1:8080/' -Method Post -ContentType 'application/json' -Body '{"message":"ready-check"}' -TimeoutSec 1
-    if ($reply.reply -eq 'Wuying: ready-check') { $ready = $true; break }
-  } catch { Start-Sleep -Milliseconds 250 }
-}
-if (-not $ready) { throw 'Demo service is not ready' }
-`,
-});
+  regionId, desktopIds: [desktopId], type: 'RunPowerShellScript', commandContent,
+}, ctx);
 console.log(results[0].output);
 ```
+
+```go Go
+script, err := os.ReadFile("start-echo-service.ps1")
+if err != nil { return err }
+commandContent := string(script)
+runtimes, err := admin.BuildRuntimeManager(ctx)
+if err != nil { return err }
+results, err := RunScript(ctx, runtimes, &model.RunCommandRequest{
+    RegionID: regionID, DesktopIDs: []string{desktopID}, Type: "RunPowerShellScript", CommandContent: commandContent,
+})
+if err != nil { return err }
+fmt.Print(results[0].Output)
+```
+
+```java Java
+String commandContent = new String(Files.readAllBytes(Paths.get("start-echo-service.ps1")), StandardCharsets.UTF_8);
+RuntimeManager runtimes = admin.buildRuntimeManager(ctx);
+RunCommandRequest request = new RunCommandRequest();
+request.regionId = regionId;
+request.desktopIds = Collections.singletonList(desktopId);
+request.type = "RunPowerShellScript";
+request.commandContent = commandContent;
+List<CommandDesktopResult> results = RunScript.run(runtimes, request, ctx);
+System.out.print(results.get(0).output);
+```
+
+```text Android
+当前移动 SDK 没有管理员脚本入口。由受信任后端执行该步骤，App 只调用业务后端，不持有 AK/SK。
+```
+
+```text iOS
+当前移动 SDK 没有管理员脚本入口。由受信任后端执行该步骤，App 只调用业务后端，不持有 AK/SK。
+```
+
+```bash CLI
+jq -n --rawfile script start-echo-service.ps1 --arg region "$REGION_ID" --arg desktop "$DESKTOP_ID" \
+  '{regionId: $region, desktopIds: [$desktop], type: "RunPowerShellScript", commandContent: $script}' |
+  wuying runtimes run-command --profile admin --stdin --timeout 600000 --output jsonl
+```
+
+</CodeGroup>
 
 预期结果：脚本成功，输出服务 PID，本机 HTTP 探测收到 `Wuying: ready-check`。保存 PID 供演示结束时关闭服务；脚本失败则先处理目标环境问题，不继续假定端口访问成功。
 
 ## 2. 用户取得端口服务地址
 
-这段在已经初始化用户态 Client 的浏览器应用中运行。`featureId` 是上面预配置服务的真实标识，不使用第一个不明用途的地址。
+各卡片使用已初始化的用户态 Client；取得目标服务地址后在同一用户的系统浏览器打开。`featureId` 是上面预配置服务的真实标识，不使用第一个不明用途的地址。
 
-```ts TypeScript / 浏览器
-const runtimeManager = await client.buildRuntimeManager(ctx);
-const result = await runtimeManager.generateSceneUrl(ctx, { desktopId, regionId });
-const service = result?.items.find(item => item.feature.featureId === featureId);
-if (!service) throw new Error('未取得目标端口服务的访问地址');
-window.open(service.url, '_blank', 'noopener,noreferrer');
-```
+<DemoPortUrl />
 
 地址有时效，不持久化或公开分享其中的授权参数。这里使用 Feature 返回的原始访问地址，不自行拼接主机名、端口或 token。如果返回的是授权/跳转入口，先在授权浏览器中完成进入服务的流程；不能把任意场景 URL 当作免鉴权的 HTTP API。
 

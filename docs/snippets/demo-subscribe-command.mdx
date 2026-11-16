@@ -1,0 +1,37 @@
+<CodeGroup>
+
+```ts TypeScript
+const subscription = await runtimeManager.subscribeCommand(ctx, {
+  regionId, desktopIds: [desktopId], invokeId,
+}, { onEvent: handleEvent, onError: handleError });
+```
+
+```go Go
+subscription, err := runtimeManager.SubscribeCommand(ctx, &model.SubscribeCommandRequest{
+    RegionID: regionID, DesktopIDs: []string{desktopID}, InvokeID: invokeID,
+}, listener)
+if err != nil { return err }
+```
+
+```java Java
+SubscribeCommandRequest request = new SubscribeCommandRequest();
+request.regionId = regionId;
+request.desktopIds = Collections.singletonList(desktopId);
+request.invokeId = invokeId;
+RuntimeCommandSubscription subscription = runtimeManager.subscribeCommand(request, listener, ctx)
+    .toCompletableFuture().get();
+```
+
+```text Android
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```text iOS
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```bash CLI
+wuying runtimes subscribe-command --profile admin --request-file receipt.json --timeout 600000 --output jsonl
+```
+
+</CodeGroup>

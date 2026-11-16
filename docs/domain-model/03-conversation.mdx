@@ -3,6 +3,9 @@ title: "Conversation"
 description: "Conversation 的职责、关联模型与使用边界。"
 ---
 
+import DemoConversationRead from '/snippets/demo-conversation-read.mdx';
+
+
 ## 领域职责
 
 Conversation 是用户可见的业务会话，组织消息、执行轮次、成员和配置。它不是 IM 承载群、Provider Session 或一条消息；这些底层身份不能直接替换 conversationId。
@@ -50,10 +53,6 @@ Conversation 是用户可见的业务会话，组织消息、执行轮次、成�
 
 `getConversation` 读取会话，默认使用当前缓存。需要重新核对服务端信息时，显式选择刷新：
 
-```ts
-const result = await conversations.getConversation(ctx, {
-  runtimeId, conversationId, consistency: 'refresh',
-});
-```
+<DemoConversationRead />
 
 Go 在可选 `ReadOptions` 中设置 `Consistency: "refresh"`；Java 使用 `ReadOptions.consistency = "refresh"` 重载；Android/iOS 在 request 中设置 consistency。实时变化通过 `subscribeConversation` 或当前语言已提供的会话列表订阅接入，具体能力以对应签名为准。

@@ -1,0 +1,35 @@
+`runtimeManager` 来自当前用户 Client。移动端 onPage 从成功终态 data 读取当前页；错误单独处理。
+
+<CodeGroup>
+
+```ts TypeScript
+const runtimeManager = await client.buildRuntimeManager(ctx);
+const page = await runtimeManager.listRuntimes(ctx, { limit: 20 });
+```
+
+```go Go
+page, err := runtimeManager.ListRuntimes(ctx, model.ListOptions{Limit: 20})
+if err != nil { return err }
+```
+
+```java Java
+ListOptions options = new ListOptions();
+options.limit = 20;
+Page<Runtime> page = runtimeManager.listRuntimes(options, ctx).toCompletableFuture().get();
+```
+
+```java Android
+client.request(Methods.runtimeListRuntimes,
+    new JSONObject().put("limit", 20), onPage);
+```
+
+```swift iOS
+try client.request(method: Methods.runtimeListRuntimes,
+    request: ["limit": 20], onEvent: onPage)
+```
+
+```bash CLI
+wuying runtimes list --profile user --limit 20
+```
+
+</CodeGroup>

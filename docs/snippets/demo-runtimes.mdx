@@ -1,0 +1,34 @@
+`client`、`ctx` 来自当前用户的初始化。`onPage` 为宿主移动端事件回调：先处理 error，再从成功终态 data 读取 items / nextCursor。
+
+<CodeGroup>
+
+```ts TypeScript
+const runtimeManager = await client.buildRuntimeManager(ctx);
+const page = await runtimeManager.listRuntimes(ctx);
+```
+
+```go Go
+runtimeManager, err := client.BuildRuntimeManager(ctx)
+if err != nil { return err }
+page, err := runtimeManager.ListRuntimes(ctx)
+if err != nil { return err }
+```
+
+```java Java
+RuntimeManager runtimeManager = client.buildRuntimeManager(ctx);
+Page<Runtime> page = runtimeManager.listRuntimes(ctx).toCompletableFuture().get();
+```
+
+```java Android
+client.request(Methods.runtimeListRuntimes, new JSONObject(), onPage);
+```
+
+```swift iOS
+try client.request(method: Methods.runtimeListRuntimes, onEvent: onPage)
+```
+
+```bash CLI
+wuying runtimes list --profile user
+```
+
+</CodeGroup>

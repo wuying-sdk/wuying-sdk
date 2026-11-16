@@ -1,0 +1,52 @@
+`client`、`ctx`、真实 runtimeId / conversationId 由宿主提供。Go listener 为 `model.SubscriptionListener[model.Page[model.Message]]`，Java 为 `SubscriptionListener<Page<Message>>`；移动端 onEvent 先处理 error，再消费 snapshot 的 data 与 projection。取消语句在页面退出时执行。
+
+<CodeGroup>
+
+```ts TypeScript
+const conversations = await client.buildConversationManager(ctx);
+const subscription = await conversations.subscribeMessages(ctx, { runtimeId, conversationId }, {
+  onSnapshot: renderMessages, onError: showError,
+});
+// 页面离开时
+subscription.unsubscribe();
+```
+
+```go Go
+conversations, err := client.BuildConversationManager(ctx)
+if err != nil { return err }
+ref := model.ConversationRef{RuntimeRef: model.RuntimeRef{RuntimeID: runtimeID}, ConversationID: conversationID}
+subscription, err := conversations.SubscribeMessages(ctx, model.MessageQuery{ConversationRef: ref}, listener)
+if err != nil { return err }
+// 页面离开时
+subscription.Unsubscribe()
+```
+
+```java Java
+ConversationManager conversations = client.buildConversationManager(ctx);
+MessageQuery query = new MessageQuery();
+query.runtimeId = runtimeId;
+query.conversationId = conversationId;
+Subscription subscription = conversations.subscribeMessages(query, listener, ctx);
+// 页面离开时
+subscription.unsubscribe();
+```
+
+```java Android
+Client.Request subscription = client.request(Methods.conversationSubscribeMessages,
+    new JSONObject().put("runtimeId", runtimeId).put("conversationId", conversationId), onEvent);
+// 页面离开时
+subscription.cancel();
+```
+
+```swift iOS
+let subscription = try client.request(method: Methods.conversationSubscribeMessages,
+    request: ["runtimeId": runtimeId, "conversationId": conversationId], onEvent: onEvent)
+// 页面离开时
+subscription.cancel()
+```
+
+```text CLI
+当前 CLI 没有独立的消息订阅命令。messages list 读取消息；turns wait 等待已知轮次。run 会发送新任务，不能用来恢复已有消息订阅。
+```
+
+</CodeGroup>

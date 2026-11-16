@@ -4,34 +4,16 @@ sidebarTitle: "连接 ASP 画面"
 description: "通过 CLI 或 Node.js 启动浏览器播放器，连接并交互操作已授权的云桌面。"
 ---
 
+import DemoAspOpen from '/snippets/demo-asp-open.mdx';
+
+
 目标：打开一个可操作的云桌面画面，体验 ASP 的桌面流化能力。
 
 先安装[配套 CLI](/sdk-reference/cli)，准备已授权且已开机的 `desktopId`、`regionId`，以及名为 `user` 的[无影用户态 profile](/getting-started/initialize-client)。管理员 AK/SK / OAuth 不能用于此入口；无需先查询 Agent 或创建会话。
 
-## CLI
+## 打开桌面
 
-```sh
-wuying asp open --profile user --desktop DESKTOP_ID --region REGION_ID --output jsonl
-```
-
-将大写值替换为真实桌面与地域。系统浏览器打开后，在 60 秒内完成一次性页面交接，保持 CLI 运行。连接成功后可在浏览器中使用桌面的鼠标、键盘和应用。
-
-## Node.js
-
-Node.js 可以启动同一个已安装的 CLI 播放器，适合本地 Node 工具接入；`wuying` 需要在 PATH 中，`desktopId` 与 `regionId` 来自应用已确认的目标。
-
-```js Node.js
-import { spawn } from 'node:child_process';
-
-const viewer = spawn('wuying', [
-  'asp', 'open', '--profile', 'user',
-  '--desktop', desktopId, '--region', regionId, '--output', 'jsonl',
-], { stdio: 'inherit', shell: false });
-viewer.on('error', error => console.error(error.message));
-viewer.on('exit', code => { process.exitCode = code ?? 1; });
-```
-
-这是 Node 启动 CLI、浏览器渲染画面的接入方式。SDK 的 `AspManager.startAspStream` 本身依赖浏览器 DOM 和配套 WebSDK，不能在纯 Node 进程中直接渲染画面。需要嵌入自己的 Web 页面或本地 GUI 时，见[ASP 操作指南](/guides/asp-desktop)和 [`startAspStream`](/api-reference/asp/start)。
+<DemoAspOpen />
 
 ## 验证和退出
 

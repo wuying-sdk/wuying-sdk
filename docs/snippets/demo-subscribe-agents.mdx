@@ -1,0 +1,51 @@
+`renderAgents`、`showError`、`listener` 和移动端 `onEvent` 由宿主提供。Go listener 为 `model.SubscriptionListener[[]model.Agent]`，Java 为 `SubscriptionListener<List<Agent>>`。订阅消费 Snapshot；取消语句在页面退出时执行。
+
+<CodeGroup>
+
+```ts TypeScript
+const agents = await client.buildAgentManager(ctx);
+const subscription = await agents.subscribeAgents(ctx, { runtimeId }, {
+  onSnapshot: renderAgents, onError: showError,
+});
+// 页面离开时
+subscription.unsubscribe();
+```
+
+```go Go
+agents, err := client.BuildAgentManager(ctx)
+if err != nil { return err }
+subscription, err := agents.SubscribeAgents(ctx,
+    model.RuntimeRef{RuntimeID: runtimeID}, listener)
+if err != nil { return err }
+// 页面离开时
+subscription.Unsubscribe()
+```
+
+```java Java
+AgentManager agents = client.buildAgentManager(ctx);
+RuntimeRef runtime = new RuntimeRef();
+runtime.runtimeId = runtimeId;
+Subscription subscription = agents.subscribeAgents(runtime, listener, ctx);
+// 页面离开时
+subscription.unsubscribe();
+```
+
+```java Android
+Client.Request subscription = client.request(Methods.agentSubscribeAgents,
+    new JSONObject().put("runtimeId", runtimeId), onEvent);
+// 页面离开时
+subscription.cancel();
+```
+
+```swift iOS
+let subscription = try client.request(method: Methods.agentSubscribeAgents,
+    request: ["runtimeId": runtimeId], onEvent: onEvent)
+// 页面离开时
+subscription.cancel()
+```
+
+```text CLI
+当前 CLI 没有独立的 Agent 目录订阅命令。使用 agents list 读取当前页；持续订阅请在宿主中使用 SDK 的 subscribeAgents。
+```
+
+</CodeGroup>

@@ -40,8 +40,17 @@ let engine = try GoEngine(configuration: [
 let client = Client(engine: engine)
 ```
 
-```sh CLI
-wuying runtimes list
+```bash CLI
+set -euo pipefail
+jq -n '{authCode: env.WUYING_AUTH_CODE, clientId: env.WUYING_CLIENT_ID} +
+  (if (env.WUYING_LOGIN_REGION_ID // "") != ""
+   then {loginRegionId: env.WUYING_LOGIN_REGION_ID} else {} end)' |
+  wuying auth import --profile user --stdin
+unset WUYING_CREDENTIALS WUYING_ACCESS_KEY_ID WUYING_ACCESS_KEY_SECRET WUYING_ALIYUN_OAUTH_PROFILE
+unset WUYING_ORGANIZATION_ID WUYING_USERNAME WUYING_PASSWORD WUYING_AUTH_CODE
+unset WUYING_LOGIN_TOKEN WUYING_SESSION_ID WUYING_END_USER_ID WUYING_LOGIN_REGION_ID
 ```
 
 </CodeGroup>
+
+CLI 先把新 AuthCode 保存到私有 user profile，再清除认证环境覆盖；下一步只读查询与后续任务都使用 --profile user。首次认证由 CLI 换票后保存 LoginToken 组合，不让后续进程复用原 AuthCode。

@@ -1,0 +1,43 @@
+Node / Go / Java 卡片启动同一已安装 CLI，由系统浏览器承载播放器；不是语言内的原生渲染器。保持进程运行；Go 的 ctx 覆盖整个观看时段，Node 的 showError 由宿主处理启动失败。
+
+<CodeGroup>
+
+```ts TypeScript
+import { spawn } from 'node:child_process';
+
+const viewer = spawn('wuying', ['asp', 'open', '--profile', 'user',
+  '--desktop', desktopId, '--region', regionId, '--output', 'jsonl'], { stdio: 'inherit' });
+viewer.on('error', showError);
+```
+
+```go Go
+command := exec.CommandContext(ctx, "wuying", "asp", "open", "--profile", "user",
+    "--desktop", desktopID, "--region", regionID, "--output", "jsonl")
+command.Stdin, command.Stdout, command.Stderr = os.Stdin, os.Stdout, os.Stderr
+if err := command.Run(); err != nil { return err }
+```
+
+```java Java
+Process viewer = new ProcessBuilder("wuying", "asp", "open", "--profile", "user",
+    "--desktop", desktopId, "--region", regionId, "--output", "jsonl")
+    .inheritIO().start();
+try {
+    if (viewer.waitFor() != 0) throw new IllegalStateException("ASP 播放器异常退出");
+} finally {
+    viewer.destroy(); // 结束本地 CLI 播放器，不关机或删除云桌面。
+}
+```
+
+```text Android
+当前移动 SDK 没有原生 ASP 播放器入口。通过应用的浏览器承载配套 WebSDK 播放器；不能把服务端 CLI 的 loopback 一次性交接地址发送到手机复用。
+```
+
+```text iOS
+当前移动 SDK 没有原生 ASP 播放器入口。通过应用的浏览器承载配套 WebSDK 播放器；不能把服务端 CLI 的 loopback 一次性交接地址发送到手机复用。
+```
+
+```bash CLI
+wuying asp open --profile user --desktop "$DESKTOP_ID" --region "$REGION_ID" --output jsonl
+```
+
+</CodeGroup>

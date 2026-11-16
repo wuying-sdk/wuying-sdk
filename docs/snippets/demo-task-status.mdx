@@ -1,0 +1,49 @@
+<CodeGroup>
+
+```ts TypeScript
+const conversations = await client.buildConversationManager(ctx);
+const turn = await conversations.getTurn(ctx, { runtimeId, conversationId, turnId });
+const messages = await conversations.listMessages(ctx, { runtimeId, conversationId });
+```
+
+```go Go
+conversations, err := client.BuildConversationManager(ctx)
+if err != nil { return err }
+ref := model.ConversationRef{RuntimeRef: model.RuntimeRef{RuntimeID: runtimeID}, ConversationID: conversationID}
+turn, err := conversations.GetTurn(ctx, model.TurnRef{ConversationRef: ref, TurnID: turnID})
+if err != nil { return err }
+messages, err := conversations.ListMessages(ctx, model.MessageQuery{ConversationRef: ref})
+if err != nil { return err }
+```
+
+```java Java
+ConversationManager conversations = client.buildConversationManager(ctx);
+TurnRef ref = new TurnRef();
+ref.runtimeId = runtimeId; ref.conversationId = conversationId; ref.turnId = turnId;
+Snapshot<Turn> turn = conversations.getTurn(ref, ctx).toCompletableFuture().get();
+MessageQuery query = new MessageQuery();
+query.runtimeId = runtimeId; query.conversationId = conversationId;
+Page<Message> messages = conversations.listMessages(query, ctx).toCompletableFuture().get();
+```
+
+```java Android
+client.request(Methods.conversationGetTurn, new JSONObject().put("runtimeId", runtimeId)
+    .put("conversationId", conversationId).put("turnId", turnId), onEvent);
+client.request(Methods.conversationListMessages, new JSONObject().put("runtimeId", runtimeId)
+    .put("conversationId", conversationId), onPage);
+```
+
+```swift iOS
+try client.request(method: Methods.conversationGetTurn, request: [
+    "runtimeId": runtimeId, "conversationId": conversationId, "turnId": turnId
+], onEvent: onEvent)
+try client.request(method: Methods.conversationListMessages,
+    request: ["runtimeId": runtimeId, "conversationId": conversationId], onEvent: onPage)
+```
+
+```bash CLI
+wuying turns status --profile user --runtime "$RUNTIME_ID" --conversation "$CONVERSATION_ID" --turn "$TURN_ID"
+wuying messages list --profile user --runtime "$RUNTIME_ID" --conversation "$CONVERSATION_ID"
+```
+
+</CodeGroup>

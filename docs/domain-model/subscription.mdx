@@ -3,18 +3,12 @@ title: "订阅数据变化"
 description: "统一使用 subscribe 建立订阅，用 Subscription 取消订阅。"
 ---
 
+import DemoMessages from '/snippets/demo-messages.mdx';
+
+
 使用 `subscribe*` 订阅数据或执行状态的后续变化。方法返回 `Subscription`，页面退出时调用 `unsubscribe()`。订阅不会自动取消远端任务。
 
-```ts
-const subscription = await conversations.subscribeMessages(ctx, {
-  runtimeId, conversationId,
-}, {
-  onSnapshot: renderMessages,
-  onError: showError,
-});
-
-subscription.unsubscribe();
-```
+<DemoMessages />
 
 `SubscriptionListener<T>` 描述回调：消息、会话等数据订阅通过 `onSnapshot` 交付当前数据与同步状态，失败通过 `onError` 交付错误。`subscribe` 说明建立订阅，`onSnapshot` 说明收到的数据形态，两者并不冲突。
 

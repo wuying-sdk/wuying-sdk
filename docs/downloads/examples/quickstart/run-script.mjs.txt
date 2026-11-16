@@ -1,5 +1,5 @@
 // Copy this file as run-script.mjs beside your demo.
-export async function runScript(runtimeManager, request) {
+export async function runScript(runtimeManager, request, ctx = {}) {
   let resolveDone, rejectDone;
   const done = new Promise((resolve, reject) => {
     resolveDone = resolve;
@@ -7,7 +7,7 @@ export async function runScript(runtimeManager, request) {
   });
   // A callback can arrive before runCommand returns its subscription.
   void done.catch(() => {});
-  const subscription = await runtimeManager.runCommand({ timeout: 600_000 }, request, {
+  const subscription = await runtimeManager.runCommand({ ...ctx, timeout: ctx.timeout ?? 600_000 }, request, {
     onEvent(event) {
       if (event.kind === 'accepted') {
         console.log('Command receipt:', event.receipt);

@@ -1,0 +1,38 @@
+import com.aliyun.wuying.sdk.CallContext;
+import com.aliyun.wuying.sdk.manager.RuntimeManager;
+import com.aliyun.wuying.sdk.model.*;
+import java.util.List;
+import java.util.concurrent.*;
+
+public final class RunScript {
+    interface Starter {
+        CompletionStage<RuntimeCommandSubscription> start(RunCommandRequest request, RuntimeCommandListener listener, CallContext ctx);
+    }
+    public static List<CommandDesktopResult> run(RuntimeManager manager, RunCommandRequest request, CallContext ctx) throws Exception {
+        return run(manager::runCommand, request, ctx);
+    }
+    // Callback completion may precede the returned subscription.
+    static List<CommandDesktopResult> run(Starter starter, RunCommandRequest request, CallContext ctx) throws Exception {
+        CompletableFuture<List<CommandDesktopResult>> done = new CompletableFuture<>();
+        CompletionStage<RuntimeCommandSubscription> starting = starter.start(request, new RuntimeCommandListener() {
+            public void onEvent(RuntimeCommandEvent event) {
+                if ("accepted".equals(event.kind))
+                    System.out.println("invokeId=" + event.receipt.invokeId + " regionId=" + event.receipt.regionId);
+                if ("completed".equals(event.kind)) {
+                    if (event.allSucceeded) done.complete(event.results);
+                    else done.completeExceptionally(new IllegalStateException("Remote command failed; reconcile invokeId=" + event.receipt.invokeId));
+                }
+            }
+            public void onError(BusinessException error) { done.completeExceptionally(error); }
+        }, ctx);
+        try {
+            starting.toCompletableFuture().get();
+            return done.get(10, TimeUnit.MINUTES);
+        } finally {
+            // If this worker is interrupted before acceptance, release a late handle too.
+            starting.whenComplete((subscription, error) -> {
+                if (subscription != null) subscription.unsubscribe();
+            });
+        }
+    }
+}

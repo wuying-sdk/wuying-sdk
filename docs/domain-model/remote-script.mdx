@@ -3,6 +3,10 @@ title: "远程脚本"
 description: "通过 runCommand 在云桌面内执行脚本，管理进程、文件和应用，并获取逐桌面结果。"
 ---
 
+import DemoRunCommand from '/snippets/demo-run-command.mdx';
+import DemoSubscribeCommand from '/snippets/demo-subscribe-command.mdx';
+
+
 远程脚本提供资源内操作系统的执行入口。你可以通过脚本查询系统信息、操作文件、管理进程或启动应用，并读取每台桌面的状态与输出。它使用 `RuntimeManager.runCommand`，无须创建 Agent 会话。
 
 ## 认证和目标
@@ -15,41 +19,7 @@ description: "通过 runCommand 在云桌面内执行脚本，管理进程、文
 
 先完成管理员 Client 初始化，下面只保留必要参数。`handleEvent` / `handleError`（Go / Java 的 subscriptionlistener）由宿主按下一节实现：
 
-<CodeGroup>
-
-```ts TypeScript
-const runtimeManager = await admin.buildRuntimeManager(ctx);
-const subscription = await runtimeManager.runCommand({ timeout: 600_000 }, {
-  regionId, desktopIds: [desktopId], type: 'RunPowerShellScript',
-  commandContent: 'Get-Process | Select-Object -First 5 ProcessName, Id',
-}, { onEvent: handleEvent, onError: handleError });
-```
-
-```go Go
-runtimeManager, err := admin.BuildRuntimeManager(ctx)
-if err != nil { return err }
-subscription, err := runtimeManager.RunCommand(ctx, &model.RunCommandRequest{
-    RegionID: regionID, DesktopIDs: []string{desktopID}, Type: "RunPowerShellScript",
-    CommandContent: "Get-Process | Select-Object -First 5 ProcessName, Id",
-}, subscriptionlistener)
-```
-
-```java Java
-RuntimeManager runtimeManager = admin.buildRuntimeManager(ctx);
-RunCommandRequest request = new RunCommandRequest();
-request.regionId = regionId;
-request.desktopIds = Collections.singletonList(desktopId);
-request.type = "RunPowerShellScript";
-request.commandContent = "Get-Process | Select-Object -First 5 ProcessName, Id";
-RuntimeCommandSubscription subscription = runtimeManager.runCommand(request, subscriptionlistener, ctx)
-    .toCompletableFuture().get();
-```
-
-```sh CLI
-wuying runtimes run-command --profile admin --request-file script.json --timeout 600000 --output jsonl
-```
-
-</CodeGroup>
+<DemoRunCommand />
 
 CLI 的 script.json：
 
@@ -80,19 +50,7 @@ CLI 的 script.json：
 
 取得 invokeId 后，用原回执恢复订阅，不重新执行脚本：
 
-<CodeGroup>
-
-```ts TypeScript
-const subscription = await runtimeManager.subscribeCommand({ timeout: 600_000 }, {
-  regionId, desktopIds: [desktopId], invokeId,
-}, { onEvent: handleEvent, onError: handleError });
-```
-
-```sh CLI
-wuying runtimes subscribe-command --profile admin --request-file receipt.json --timeout 600000 --output jsonl
-```
-
-</CodeGroup>
+<DemoSubscribeCommand />
 
 receipt.json 只包含原回执的 regionId、desktopIds、invokeId，不是整个 JSONL 输出对象。当前 Client 已关闭时，可先用相同管理员身份创建新 Client 再恢复订阅。
 
@@ -106,3 +64,5 @@ CLI 的 runtime-command 事件位于 JSONL 的 data 中。全部目标成功退�
 - [ASP](/domain-model/asp)：查看并交互操作云桌面画面。
 - [端口服务](/domain-model/port-service)：访问资源内提供的服务。
 - Agent 任务通过 [Conversation](/domain-model/03-conversation) 发送自然语言；远程脚本直接提交指定脚本内容。
+
+`commandContent` 是宿主提供的 PowerShell 脚本文本；`listener` / `handleEvent` / `handleError` 是宿主回调。Go 为 `model.RuntimeCommandListener`，Java 为 `RuntimeCommandListener`。保存 accepted 的 receipt，收到 completed 且 allSucceeded 才确认成功；退出时释放订阅。

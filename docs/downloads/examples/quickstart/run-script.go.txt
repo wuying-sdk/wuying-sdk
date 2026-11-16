@@ -1,0 +1,51 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"github.com/aliyun/wuying-sdk-go/model"
+)
+
+type CommandRunner interface {
+	RunCommand(context.Context, *model.RunCommandRequest, model.RuntimeCommandListener) (model.RuntimeCommandSubscription, error)
+}
+
+// RunScript waits for the submitted command; it never retries a write.
+func RunScript(ctx context.Context, runner CommandRunner, request *model.RunCommandRequest) ([]model.CommandDesktopResult, error) {
+	type outcome struct {
+		results []model.CommandDesktopResult
+		err     error
+	}
+	done := make(chan outcome, 1)
+	finish := func(value outcome) {
+		select {
+		case done <- value:
+		default:
+		}
+	}
+	subscription, err := runner.RunCommand(ctx, request, model.RuntimeCommandListener{
+		OnEvent: func(event model.RuntimeCommandEvent) {
+			if event.Kind == "accepted" {
+				fmt.Printf("invokeId=%s regionId=%s\n", event.Receipt.InvokeID, event.Receipt.RegionID)
+			}
+			if event.Kind == "completed" {
+				value := outcome{results: event.Results}
+				if !event.AllSucceeded {
+					value.err = fmt.Errorf("remote command failed; reconcile invokeId=%s", event.Receipt.InvokeID)
+				}
+				finish(value)
+			}
+		},
+		OnError: func(err error) { finish(outcome{err: err}) },
+	})
+	if err != nil {
+		return nil, err
+	}
+	defer subscription.Unsubscribe()
+	select {
+	case value := <-done:
+		return value.results, value.err
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
+}

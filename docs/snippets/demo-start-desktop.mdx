@@ -1,0 +1,31 @@
+<CodeGroup>
+
+```ts TypeScript
+await admin.start(ctx, { regionId, desktopIds: [desktopId] });
+```
+
+```go Go
+_, err := admin.Start(ctx, &model.DesktopOperationRequest{RegionID: regionID, DesktopIDs: []string{desktopID}})
+if err != nil { return err }
+```
+
+```java Java
+DesktopOperationRequest request = new DesktopOperationRequest();
+request.regionId = regionId;
+request.desktopIds = Collections.singletonList(desktopId);
+admin.start(request, ctx).toCompletableFuture().get();
+```
+
+```text Android
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```text iOS
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```bash CLI
+wuying desktops start --profile admin --request-file target.json
+```
+
+</CodeGroup>

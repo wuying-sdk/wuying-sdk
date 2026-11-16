@@ -3,66 +3,31 @@ title: "列表查询与分页"
 description: "使用 limit 和 cursor 读取列表，所有列表结果统一从 items 读取。"
 ---
 
+import DemoPage from '/snippets/demo-page.mdx';
+
+
+import DemoNextPage from '/snippets/demo-next-page.mdx';
+
+
 列表查询统一返回 `items` 和 `nextCursor`。`items` 是当前页的数据；`nextCursor` 为 `null` 时，当前查询没有可继续读取的一页。列表查询不再套一层 `Snapshot.data`。
 
 ## 读取当前页
 
-```ts
-const { items: runtimes, nextCursor } = await runtimeManager.listRuntimes(ctx, {
-  limit: 20,
-});
-```
+<DemoPage />
 
 省略 `limit` 时默认读取 50 项，每页允许 1～100 项。一次调用只返回一页，不会自动拉取全部页面。
 
 ## 读取下一页
 
-```ts
-if (nextCursor) {
-  const next = await runtimeManager.listRuntimes(ctx, {
-    limit: 20,
-    cursor: nextCursor,
-  });
-}
-```
+<DemoNextPage />
 
 继续使用同一 Client、Manager、查询条件和 `limit`。不要解析、拼接或修改游标，也不要将游标持久保存为资源标识。`CURSOR_EXPIRED` 表示列表或同步代际已经变化，应从第一页重新读取；作用域或筛选条件不匹配时返回 `INVALID_ARGUMENT`。
 
-## 不同 SDK
+## 语言字段
 
-<Tabs>
-<Tab title="Go">
-```go
-page, err := runtimeManager.ListRuntimes(ctx, model.ListOptions{Limit: 20})
-```
+Go 使用 `page.Items`、`page.NextCursor`；Java 使用 `page.items`、`page.nextCursor`。CLI 当前页位于结果信封的 `data.items`，续查游标为 `data.nextCursor`。Android / iOS 从成功终态事件的 `data.items`、`data.nextCursor` 读取，`onPage` 由宿主提供；不要在回调到达前发起下一页。
 
-Go 中已有 `Limit`、`Cursor` 的查询结构继续使用该结构；其它列表通过可选的 `model.ListOptions` 传入分页参数。结果使用 `page.Items`、`page.NextCursor`。
-</Tab>
-<Tab title="Java">
-```java
-ListOptions options = new ListOptions();
-options.limit = 20;
-CompletionStage<Page<Runtime>> page = runtimeManager.listRuntimes(options, ctx);
-```
-
-Java 中已有 `limit`、`cursor` 的查询对象继续使用该对象；其它列表使用 `ListOptions` 重载。不传 `ListOptions` 时读取默认大小的第一页。结果使用 `page.items`、`page.nextCursor`。
-</Tab>
-<Tab title="CLI">
-```sh
-wuying runtimes list --limit 20
-wuying runtimes list --limit 20 --cursor '<nextCursor>'
-```
-
-CLI 的结果信封保留 `data`，因此当前页在 `data.items`，下一页游标在 `data.nextCursor`。`runtimes list`、`agents list`、`models list`、`conversations list`、`messages list`、`interactions list` 均提供这两个分页选项。
-</Tab>
-<Tab title="Android / iOS">
-```json
-{"request":{"limit":20}}
-```
-
-原生 SDK 使用相同的 JSON 参数；下一次调用增加 `cursor`。调用完成事件的 `data` 中返回 `items`、`nextCursor`。这一契约需要使用本版本重新构建的原生产物。
-</Tab>
-</Tabs>
+Go / Java 已有分页字段的查询使用原查询对象，其他列表使用 `ListOptions`。移动端需使用本版本重新构建的原生产物。
 
 ## 分页与数据完整性
 

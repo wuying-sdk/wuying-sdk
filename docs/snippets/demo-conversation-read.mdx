@@ -1,0 +1,47 @@
+各语言先初始化当前用户 Client。移动端 onEvent 先处理 error，再读取成功终态的 data；读取失败不能当作会话不存在。
+
+<CodeGroup>
+
+```ts TypeScript
+const conversations = await client.buildConversationManager(ctx);
+const result = await conversations.getConversation(ctx, {
+  runtimeId, conversationId, consistency: 'refresh',
+});
+```
+
+```go Go
+conversations, err := client.BuildConversationManager(ctx)
+if err != nil { return err }
+ref := model.ConversationRef{RuntimeRef: model.RuntimeRef{RuntimeID: runtimeID}, ConversationID: conversationID}
+result, err := conversations.GetConversation(ctx, ref, model.ReadOptions{Consistency: "refresh"})
+if err != nil { return err }
+```
+
+```java Java
+ConversationManager conversations = client.buildConversationManager(ctx);
+ConversationRef ref = new ConversationRef();
+ref.runtimeId = runtimeId;
+ref.conversationId = conversationId;
+ReadOptions options = new ReadOptions();
+options.consistency = "refresh";
+Snapshot<Conversation> result = conversations.getConversation(ref, options, ctx)
+    .toCompletableFuture().get();
+```
+
+```java Android
+client.request(Methods.conversationGetConversation, new JSONObject()
+    .put("runtimeId", runtimeId).put("conversationId", conversationId)
+    .put("consistency", "refresh"), onEvent);
+```
+
+```swift iOS
+try client.request(method: Methods.conversationGetConversation, request: [
+    "runtimeId": runtimeId, "conversationId": conversationId, "consistency": "refresh"
+], onEvent: onEvent)
+```
+
+```bash CLI
+wuying conversations get --profile user --runtime "$RUNTIME_ID"   --conversation "$CONVERSATION_ID" --consistency refresh
+```
+
+</CodeGroup>

@@ -3,6 +3,9 @@ title: "Runtime"
 description: "发现授权执行环境，并按当前身份创建、启动、停止、重启、重置或释放云桌面。"
 ---
 
+import DemoRuntimes from '/snippets/demo-runtimes.mdx';
+
+
 Runtime 是无影的执行环境模型。SDK 提供环境目录、云桌面基础管理、配置更新和服务访问入口；Agent、Conversation 与 Workspace 按各自接口使用真实环境作用域。
 
 ## 调用入口
@@ -24,10 +27,7 @@ Runtime 是无影的执行环境模型。SDK 提供环境目录、云桌面基�
 - [`subscribeRuntimes`](/api-reference/runtimes/subscribe)
 - [`getHostCapabilities`](/api-reference/runtimes/capabilities)
 
-```ts
-const runtimeManager = await client.buildRuntimeManager(ctx);
-const { items: runtimes } = await runtimeManager.listRuntimes(ctx);
-```
+<DemoRuntimes />
 
 `listRuntimes` 返回 `items` 和 `nextCursor`，当前页中的每项都是 `Runtime`。认证或目录加载失败会报错，不当作空页；更多资源通过 [分页](/domain-model/page) 继续查询。`subscribeRuntimes` 仍订阅同一目录并携带同步状态，不自动选择第一项，也不把 IM 在线状态当成云桌面电源状态。
 
@@ -37,7 +37,7 @@ const { items: runtimes } = await runtimeManager.listRuntimes(ctx);
 
 <CodeGroup>
 
-```ts Node.js / TypeScript
+```ts TypeScript
 const created = await admin.create();
 ```
 
@@ -47,6 +47,14 @@ created, err := admin.Create(ctx, nil)
 
 ```java Java
 CompletionStage<CreateDesktopsResponse> created = admin.create(ctx);
+```
+
+```text Android
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```text iOS
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
 ```
 
 ```sh CLI
@@ -93,6 +101,14 @@ request.regionId = regionId;
 request.desktopIds = Collections.singletonList(desktopId);
 DesktopOperationResponse receipt = client.start(request, ctx)
     .toCompletableFuture().get();
+```
+
+```text Android
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```text iOS
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
 ```
 
 ```sh CLI

@@ -1,0 +1,55 @@
+`desktopId`、`regionId`、`featureId` 由宿主确认。`openService` 是应用内打开系统浏览器的回调，不输出或记录授权地址；移动端 onPorts 先处理错误，从成功 data.items 按 feature.featureId 选择服务，再在同一用户浏览器打开原始 url。
+
+<CodeGroup>
+
+```ts TypeScript
+const runtimeManager = await client.buildRuntimeManager(ctx);
+const result = await runtimeManager.generateSceneUrl(ctx, { desktopId, regionId });
+const service = result?.items.find(item => item.feature.featureId === featureId);
+if (!service) throw new Error('未取得目标服务地址');
+openService(service.url);
+```
+
+```go Go
+runtimeManager, err := client.BuildRuntimeManager(ctx)
+if err != nil { return err }
+result, err := runtimeManager.GenerateSceneUrl(ctx, &manager.GenerateSceneUrlRequest{
+    DesktopId: desktopID, RegionId: regionID,
+})
+if err != nil { return err }
+found := false
+for _, item := range result.Items {
+    if item.Feature.FeatureID == featureID { openService(item.URL); found = true; break }
+}
+if !found { return fmt.Errorf("未取得目标服务地址") }
+```
+
+```java Java
+RuntimeManager runtimeManager = client.buildRuntimeManager(ctx);
+GenerateSceneUrlRequest request = new GenerateSceneUrlRequest();
+request.desktopId = desktopId;
+request.regionId = regionId;
+GenerateSceneUrlResponse result = runtimeManager.generateSceneUrl(request, ctx)
+    .toCompletableFuture().get();
+if (result == null || result.items == null) throw new IllegalStateException("未取得目标服务地址");
+GenerateSceneUrlItem service = result.items.stream()
+    .filter(item -> item != null && item.feature != null && featureId.equals(item.feature.featureId)).findFirst()
+    .orElseThrow(() -> new IllegalStateException("未取得目标服务地址"));
+openService.accept(service.url);
+```
+
+```java Android
+client.request(Methods.runtimeGenerateSceneUrl,
+    new JSONObject().put("desktopId", desktopId).put("regionId", regionId), onPorts);
+```
+
+```swift iOS
+try client.request(method: Methods.runtimeGenerateSceneUrl,
+    request: ["desktopId": desktopId, "regionId": regionId], onEvent: onPorts)
+```
+
+```text CLI
+当前 CLI 未提供 generateSceneUrl 命令。由用户态 SDK 获取已有 PortService 的授权地址，再在该用户的浏览器中打开。不能用 ASP 地址替代端口服务地址。
+```
+
+</CodeGroup>

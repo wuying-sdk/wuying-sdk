@@ -1,63 +1,99 @@
+移动端 onCompleted 是宿主 SDKEvent 回调：先处理 error，仅成功终态且 data.turn.state 为 completed 时进入答案读取；onError 为宿主错误回调。数据文件、工作线程及稳定请求标识按 SDK Client 与快速开始准备。
+
 <CodeGroup>
 
 ```ts TypeScript
 const conversations = await client.buildConversationManager(ctx);
-const created = await conversations.createConversation(ctx, {
-  runtimeId, agentId, mode: 'single', name: '我的会话',
+const conversation = await conversations.createConversation(ctx, {
+  runtimeId, agentId, mode: 'single', name: '第一次对话',
 });
-const result = await conversations.sendMessageAndWait(ctx, {
-  runtimeId, conversationId: created.conversationId,
-  text: '你好，请介绍一下你能做什么。', clientCommandId,
+const completed = await conversations.sendMessageAndWait({ ...ctx, timeout: 600_000 }, {
+  runtimeId, conversationId: conversation.conversationId,
+  text: '你好，请只回复一句问候。', clientCommandId,
 });
+if (completed.turn.state !== 'completed') throw new Error('任务未完成');
 ```
 
 ```go Go
-manager, err := client.BuildConversationManager(ctx)
-if err != nil {
-	return err
-}
-created, err := manager.CreateConversation(ctx, model.CreateRequest{
-	RuntimeRef: model.RuntimeRef{RuntimeID: runtimeID},
-	AgentID: agentID, Mode: "single", Name: "我的会话",
+conversations, err := client.BuildConversationManager(ctx)
+if err != nil { return err }
+conversation, err := conversations.CreateConversation(ctx, model.CreateRequest{
+    RuntimeRef: model.RuntimeRef{RuntimeID: runtimeID},
+    AgentID: agentID, Mode: "single", Name: "第一次对话",
 })
-if err != nil {
-	return err
-}
-result, err := manager.SendMessageAndWait(ctx, model.SendRequest{
-	ConversationRef: created.ConversationRef,
-	Text: "你好，请介绍一下你能做什么。", ClientCommandID: commandID,
+if err != nil { return err }
+completed, err := conversations.SendMessageAndWait(ctx, model.SendRequest{
+    ConversationRef: conversation.ConversationRef,
+    Text: "你好，请只回复一句问候。", ClientCommandID: clientCommandID,
 })
-if err != nil {
-	return err
-}
+if err != nil { return err }
+if completed.Turn.State != "completed" { return fmt.Errorf("任务未完成") }
 ```
 
 ```java Java
-ConversationManager manager = client.buildConversationManager(ctx);
+ConversationManager conversations = client.buildConversationManager(ctx);
 CreateRequest create = new CreateRequest();
 create.runtimeId = runtimeId;
 create.agentId = agentId;
 create.mode = "single";
-create.name = "我的会话";
-
-CompletionStage<MessageCompletion> result = manager
-    .createConversation(create, ctx)
-    .thenCompose(created -> {
-        SendRequest send = new SendRequest();
-        send.runtimeId = runtimeId;
-        send.conversationId = created.conversationId;
-        send.text = "你好，请介绍一下你能做什么。";
-        send.clientCommandId = commandId;
-        return manager.sendMessageAndWait(send, ctx);
-    });
+create.name = "第一次对话";
+CreatedConversation conversation = conversations.createConversation(create, ctx)
+    .toCompletableFuture().get();
+SendRequest send = new SendRequest();
+send.runtimeId = runtimeId;
+send.conversationId = conversation.conversationId;
+send.text = "你好，请只回复一句问候。";
+send.clientCommandId = clientCommandId;
+MessageCompletion completed = conversations.sendMessageAndWait(send, ctx)
+    .toCompletableFuture().get();
+if (!"completed".equals(completed.turn.state)) throw new IllegalStateException("任务未完成");
 ```
 
-```sh CLI
-wuying conversations create \
-  --runtime RUNTIME_ID --agent AGENT_ID --name "我的会话"
+```java Android
+JSONObject create = new JSONObject().put("runtimeId", runtimeId)
+    .put("agentId", agentId).put("mode", "single").put("name", "第一次对话");
+client.request(Methods.conversationCreateConversation, create, event -> {
+    if (event.error != null) { onError.accept(event.error); return; }
+    if (!event.terminal) return;
+    try {
+        JSONObject conversation = (JSONObject) event.data;
+        JSONObject send = new JSONObject().put("runtimeId", runtimeId)
+            .put("conversationId", conversation.getString("conversationId"))
+            .put("text", "你好，请只回复一句问候。")
+            .put("clientCommandId", clientCommandId);
+        client.request(Methods.conversationSendMessageAndWait,
+            send, null, null, 600000, onCompleted);
+    } catch (Exception error) { onError.accept(error); }
+});
+```
 
-wuying run --runtime RUNTIME_ID --conversation CONVERSATION_ID \
-  --input-file ./task.txt --client-command-id STABLE_COMMAND_ID
+```swift iOS
+try client.request(method: Methods.conversationCreateConversation, request: [
+    "runtimeId": runtimeId, "agentId": agentId,
+    "mode": "single", "name": "第一次对话"
+]) { event in
+    if let error = event.error { onError(error); return }
+    guard event.terminal, let conversation = event.data as? [String: Any],
+          let conversationId = conversation["conversationId"] as? String else { return }
+    do {
+        try client.request(method: Methods.conversationSendMessageAndWait, request: [
+            "runtimeId": runtimeId, "conversationId": conversationId,
+            "text": "你好，请只回复一句问候。", "clientCommandId": clientCommandId
+        ], timeoutMillis: 600000, onEvent: onCompleted)
+    } catch { onError(error) }
+}
+```
+
+```bash CLI
+set -euo pipefail
+wuying conversations create --profile user \
+  --runtime "$RUNTIME_ID" --agent "$AGENT_ID" --name "第一次对话" \
+  --mutation-id "$CREATE_ID" > conversation.json
+conversationId=$(jq -er '.data.conversationId' conversation.json)
+wuying run --profile user --runtime "$RUNTIME_ID" --conversation "$conversationId" \
+  --text '你好，请只回复一句问候。' --client-command-id "$COMMAND_ID" \
+  --timeout 600000 > completed.json
+jq -e '.data.turn.state == "completed"' completed.json > /dev/null
 ```
 
 </CodeGroup>

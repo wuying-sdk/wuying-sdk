@@ -59,6 +59,14 @@ user.endUserId = endUserId;
 String authCode = admin.getAuthCode(user, ctx).toCompletableFuture().get().authCode;
 ```
 
+```text Android
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
+```text iOS
+当前移动 SDK 没有管理员入口。由受信任后端执行此操作；应用通过自己的认证业务接口调用后端，不在移动端保存 AK/SK。
+```
+
 ```bash CLI
 set -euo pipefail
 jq -n --arg user "$END_USER_ID" '{endUserIds: [$user]}' |
@@ -136,12 +144,14 @@ try client.request(method: Methods.agentListAgents,
 ```
 
 ```bash CLI
+WUYING_AUTH_CODE="$authCode" jq -n \
+  '{authCode: env.WUYING_AUTH_CODE, clientId: env.WUYING_CLIENT_ID} +
+  (if (env.WUYING_LOGIN_REGION_ID // "") != ""
+   then {loginRegionId: env.WUYING_LOGIN_REGION_ID} else {} end)' |
+  wuying auth import --profile user --stdin
 unset WUYING_CREDENTIALS WUYING_ACCESS_KEY_ID WUYING_ACCESS_KEY_SECRET WUYING_ALIYUN_OAUTH_PROFILE
 unset WUYING_ORGANIZATION_ID WUYING_USERNAME WUYING_PASSWORD WUYING_AUTH_CODE
 unset WUYING_LOGIN_TOKEN WUYING_SESSION_ID WUYING_END_USER_ID WUYING_LOGIN_REGION_ID
-WUYING_AUTH_CODE="$authCode" jq -n \
-  '{authCode: env.WUYING_AUTH_CODE, clientId: env.WUYING_CLIENT_ID}' |
-  wuying auth import --profile user --stdin
 wuying runtimes list --profile user
 wuying agents list --profile user --runtime "$RUNTIME_ID"
 ```
@@ -163,7 +173,7 @@ const conversations = await client.buildConversationManager(ctx);
 const conversation = await conversations.createConversation(ctx, {
   runtimeId, agentId, mode: 'single', name: '第一次对话',
 });
-const completed = await conversations.sendMessageAndWait({ timeout: 600_000 }, {
+const completed = await conversations.sendMessageAndWait({ ...ctx, timeout: 600_000 }, {
   runtimeId, conversationId: conversation.conversationId,
   text: '你好，请只回复一句问候。', clientCommandId,
 });

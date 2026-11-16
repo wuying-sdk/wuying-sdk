@@ -3,18 +3,26 @@ title: "代码示例"
 description: "从选择运行环境、发送任务和订阅消息开始，再运行同版本的完整 Demo。"
 ---
 
-以下 TypeScript 核心片段使用已初始化的同账号 Client、ctx 及用户选定的 runtimeId。浏览器使用原生 IndexedDB；Node 按 [JS 安装指南](/sdk-reference/js)先配置持久化。调用方管理 Context 超时、错误处理和 Client 关闭。
+import DemoAgents from '/snippets/demo-agents.mdx';
+
+
+import DemoRuntimes from '/snippets/demo-runtimes.mdx';
+
+
+import DemoMessages from '/snippets/demo-messages.mdx';
+
+
+以下各语言核心片段使用已初始化的同账号 Client、ctx 及用户选定的 runtimeId。浏览器使用原生 IndexedDB；Node 按 [JS 安装指南](/sdk-reference/js)先配置持久化。调用方管理 Context 超时、错误处理和 Client 关闭。
 
 ## 1. 查询执行环境与智能体
 
 先显示 Runtime 目录，用户选定实际 `runtimeId` 后再加载其 Agent。保留投影状态，由界面判断目录是否可用，不自动选第一项。
 
-```ts TypeScript
-const runtimeManager = await client.buildRuntimeManager(ctx);
-const runtimes = await runtimeManager.listRuntimes(ctx);
-const agents = await client.buildAgentManager(ctx);
-const { items: availableAgents } = await agents.listAgents(ctx, { runtimeId });
-```
+<DemoRuntimes />
+
+用户选定该目录中的实际 runtimeId 后，继续读取该环境的 Agent：
+
+<DemoAgents />
 
 **预期结果：** 返回一页目录 `items`、续查游标 `nextCursor` 以及可用的 `projection`。投影未就绪或已过期时，空数组不足以证明用户没有权限。选定真实 Runtime/Agent 后运行[第一个任务](/getting-started/first-conversation)。
 
@@ -22,18 +30,7 @@ const { items: availableAgents } = await agents.listAgents(ctx, { runtimeId });
 
 把每次回调作为一份分页快照交给界面，按 Message ID 对账；不要把整页消息重复追加。下面取得订阅句柄，页面离开时调用 `unsubscribe()`。`client`、`ctx`、真实 runtimeId / conversationId 已准备好；`render` 和 `showObservationError` 由界面提供。
 
-```ts TypeScript
-const conversations = await client.buildConversationManager(ctx);
-const subscription = await conversations.subscribeMessages(ctx, {
-  runtimeId, conversationId,
-}, {
-  onSnapshot: render,
-  onError: showObservationError,
-});
-
-// 页面离开时
-subscription.unsubscribe();
-```
+<DemoMessages />
 
 **预期结果：** 回调包含 `snapshot.data.items` 和 `snapshot.projection`。列表查询使用 items / nextCursor，订阅事件仍保留 Snapshot 包装。当前 JS 发送流交付 Message/Turn 快照，不能假设它会推送逐 Token 的 `text.delta`。
 

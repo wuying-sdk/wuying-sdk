@@ -3,13 +3,15 @@ title: "读取查询结果"
 description: "列表读取 items，订阅事件和部分详情查询保留同步状态。"
 ---
 
+import DemoAgents from '/snippets/demo-agents.mdx';
+
+
+import DemoSubscribeAgents from '/snippets/demo-subscribe-agents.mdx';
+
+
 列表查询统一从 `items` 读取这一页，从 `nextCursor` 继续查询，无需读取 `result.data`。
 
-```ts
-const agents = await client.buildAgentManager(ctx);
-const result = await agents.listAgents(ctx, { runtimeId });
-const items = result.items;
-```
+<DemoAgents />
 
 部分列表还提供 `projection`，说明当前数据的同步状态。空页可能来自尚未同步完整的目录；`nextCursor` 为 `null` 也不证明同步已经完成。完整续查规则见[列表查询与分页](/domain-model/page)。
 
@@ -17,11 +19,6 @@ const items = result.items;
 
 订阅接口 `subscribe*` 仍发送 `Snapshot`，其中 `data` 是本次订阅到的数据，`projection` 是它的同步状态。部分详情查询也使用这一结构，以对应接口签名为准。
 
-```ts
-const subscription = await agents.subscribeAgents(ctx, { runtimeId }, {
-  onSnapshot: ({ data, projection }) => renderAgents(data, projection),
-  onError: showError,
-});
-```
+<DemoSubscribeAgents />
 
 下一步见[判断数据是否可用](/domain-model/projection)。
