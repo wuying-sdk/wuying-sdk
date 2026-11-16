@@ -357,46 +357,6 @@ interface ListKnowledgeFilesResponse {
     pageSize: number;
 }
 
-/**
- * Internal type surface of the Agent IM message transport (agmsg/v1).
- *
- * Web only: this module must stay free of node builtins, the legacy OpenIM
- * client and the package root entry. Field names and closed value sets follow
- * the frozen wire contract `test/agmsg/protocol/CONTRACT.md`.
- */
-/** Any legal JSON value. `false`, `0`, `""` and `null` are real values, never "missing". */
-type JSONValue = null | boolean | number | string | JSONValue[] | {
-    [key: string]: JSONValue;
-};
-/** Phase of one stream packet. `seq` 1 must be `start`; `end` closes the stream. */
-type StreamPhase = 'start' | 'delta' | 'end';
-/** One opaque stream packet as delivered to the app. `data` is never parsed. */
-interface StreamDeliveryPacket {
-    groupId: string;
-    senderUserId: string;
-    streamId: string;
-    seq: string;
-    phase?: StreamPhase;
-    issuedAtMs?: number;
-    messageId: string;
-    clientMessageId: string;
-    data: JSONValue;
-    /** True when the packet was served from a `stream_history` replay, not a live delivery. */
-    replayed: boolean;
-}
-/** closed 表示接收端已补齐已知结束水位；truncated 明确表示 minSeq 之前的数据已丢失。 */
-type StreamLifecycleStatus = 'closed' | 'truncated' | 'not_found';
-type StreamEvent = {
-    type: 'packet';
-    packet: StreamDeliveryPacket;
-} | {
-    type: 'lifecycle';
-    groupId: string;
-    senderUserId: string;
-    streamId: string;
-    status: StreamLifecycleStatus;
-};
-
 interface ProcessInput {
     conversationId: string;
     source: 'stream' | 'durable';
@@ -573,6 +533,7 @@ interface Integration {
     } | undefined>;
     imGroupAttachment?(scope: Scope, action: 'prepare' | 'attach' | 'query', params: Record<string, unknown>): Promise<unknown>;
     groupSync?: {
+        activate?(scope: Scope, conversationId: string): Promise<void>;
         list(scope: Scope): Promise<GroupSyncState[]>;
         sync(scope: Scope, conversationId: string): Promise<GroupSyncState>;
         syncGroup?(scope: Scope, groupId: string): Promise<GroupSyncState>;
@@ -885,6 +846,7 @@ declare class Service {
     constructor(integration: Integration, factory?: IDBFactory, databaseName?: string);
     private ready;
     private ensureRuntime;
+    private activateConversation;
     query<T>(ctx: Context, req: RuntimeRef & {
         conversationId?: string;
     }, select: (view: View, projection: Projection) => T, purpose?: 'all' | 'summary' | 'catalog' | 'models'): Promise<Snapshot<T>>;
@@ -1037,8 +999,6 @@ declare class ResourceManager$1 implements ResourceManager {
 declare class ConversationManager$1 implements ConversationManager {
     private service;
     private readonly listPagination;
-    listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroup>>;
-    listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<GroupSyncState>>;
     listActiveExecutions(ctx: Context, request: (ConversationRef) & ListOptions): Promise<{
         projection: Projection;
         items: ActiveExecution[];
@@ -1094,16 +1054,6 @@ declare class ConversationManager$1 implements ConversationManager {
         items: Message[];
         nextCursor: string | null;
     }>;
-    listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{
-        items: Group[];
-        nextCursor: string | null;
-    }>;
-    private readListGroupSyncStates;
-    private readListGroups;
-    private readRecentGroups;
-    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
-    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-    subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     constructor(service: Service);
     subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
@@ -1310,13 +1260,9 @@ interface UserConfig {
     directory?: {
         reconcileIntervalMs?: number;
     };
-    /**
-     * 流式回放（replay_v1）观察配置，纯附加：enabled=true 才协商 streamMode；
-     * onEvent 收到未解析的原始流事件（payload 永不进入 durable Inbox/业务解析）。
-     */
+    /** 启用 SDK 内部的业务消息流回放。 */
     streaming?: {
         enabled?: boolean;
-        onEvent?: (event: StreamEvent) => void;
     };
     timeout?: number;
     maxRetries?: number;
@@ -3707,17 +3653,6 @@ interface ConversationManager {
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
     getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
     getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
-    /** 仅列目录同步状态，不下载非热点群历史。 */
-    listGroupSyncStates: ConversationManager$1['listGroupSyncStates'];
-    /** 只读AG目录分页；不连接Runtime、不等待业务Ready、不下载历史。 */
-    listGroups: ConversationManager$1['listGroups'];
-    /** Bounded account activity index. This returns metadata only and opens no Runtime. */
-    listRecentGroups: ConversationManager$1['listRecentGroups'];
-    /** 按业务会话定位当前机器的群；完整接收并应用本轮历史后返回。 */
-    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
-    /** 显式选择分页返回的群，仍验证其属于指定Runtime。 */
-    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-    subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
     listConversationGroups: ConversationManager$1['listConversationGroups'];
     subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
@@ -3958,31 +3893,6 @@ interface ResourceManager {
         url: string;
         expiresAt: Int64;
     }>;
-}
-interface ClientConfig {
-    relayRequestDiagnostics?: boolean;
-    /** 中继发送上限，默认 10 MiB，不影响群消息分页。 */
-    relayMaxDataBytes?: number;
-    clientId: string;
-    /** 新消息链路的Ready策略：默认最近5群，显式全量等待不依赖活动索引。 */
-    readinessMode?: 'legacy' | 'scoped';
-    initialSync?: {
-        readyGroupLimit?: number;
-        waitForAllGroups?: boolean;
-    };
-    /** 低频元数据对账周期，默认30分钟；不影响热点消息Ready。 */
-    directory?: {
-        reconcileIntervalMs?: number;
-    };
-    /**
-     * 流式回放（replay_v1）观察配置，纯附加：
-     * enabled=true 才在 hello 协商 streamMode；onEvent 收到未解析的原始流事件
-     * （packet 为 transient，永不进入 durable Inbox/业务解析）。
-     */
-    streaming?: {
-        enabled?: boolean;
-        onEvent?: (event: StreamEvent) => void;
-    };
 }
 /** Ordinary IM group storage coordinates; never an AGMessage virtual group. */
 type ConversationStorageContext = ConversationRef & {
@@ -4812,12 +4722,8 @@ declare class Client {
     private static normalizeDirectoryPolicy;
     /** 流式回放策略独立复制；observer 集合在订阅点注册，与此策略解耦。 */
     private readonly streamingPolicy?;
-    private readonly streamHandlers;
     private static normalizeStreamingPolicy;
-    /** 单一出口：配置回调 + onStreamEvent 订阅者，逐个隔离异常，晚订阅也能收到事件。 */
     private streamingIntegrationConfig;
-    /** 额外原始流事件出口（可选、只读）：不改任何既有命令语义；未启用 streaming 时直接失败。 */
-    subscribeStreamEvents(handler: (event: StreamEvent) => void): Subscription;
     static create(options: ClientOptions, userConfig?: UserConfig): Client;
     private registerModelOperations;
     static resetInstance(): void;
@@ -4886,4 +4792,4 @@ declare class APIError extends SDKError {
 }
 declare function isRetryable(error: unknown): boolean;
 
-export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientConfig, type ClientOptions, BusinessError as CloudBusinessError, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type Group, type GroupDirectoryPage, type GroupDirectoryQuery, type GroupRef, type GroupSyncState, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, type Resource, ResourceManager$1 as ResourceManager, type ResourceSelection, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type StreamDeliveryPacket, type StreamEvent, type StreamLifecycleStatus, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };
+export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientOptions, BusinessError as CloudBusinessError, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, type Resource, ResourceManager$1 as ResourceManager, type ResourceSelection, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetChannelGroupModelRequest, type SetChannelGroupModelResult, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };

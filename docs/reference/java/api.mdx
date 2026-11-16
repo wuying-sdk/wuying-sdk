@@ -5,7 +5,7 @@ description: "同版本 Java SDK jar 的公开签名；参数说明另见随包�
 
 <Note>本页按所选语言保留原始完整参考，可能包含该语言的业务示例。跨语言操作请使用[快速开始](/getting-started/desktop-to-agent)和[代码示例](/examples/index)中的语言卡片。</Note>
 
-基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿。此清单由 javap 生成，按客户合同排除 internal 实现、引用 internal 类型的装配签名及 @hidden 成员；不是所有 JVM public 字节码成员的清单。
+基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿。由 javap 生成，按客户合同排除 internal 实现、引用 internal 类型的装配签名及 @hidden 成员。
 
 ```java
 Compiled from "Administration.java"
@@ -116,7 +116,6 @@ public final class com.aliyun.wuying.sdk.WuyingClient implements java.lang.AutoC
   public com.aliyun.wuying.sdk.manager.ModelManager buildModelManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.CreditManager buildCreditManager(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> updateLoginCredentials(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(com.aliyun.wuying.sdk.CallContext, java.util.function.Consumer<com.aliyun.wuying.sdk.model.StreamEvent>);
   public void close();
 }
 Compiled from "ClientOptions.java"
@@ -314,9 +313,6 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public com.aliyun.wuying.sdk.model.Subscription subscribeMessages(com.aliyun.wuying.sdk.model.MessageQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Message>>, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeTurn(com.aliyun.wuying.sdk.model.TurnRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Turn>, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeExecutionActivity(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<java.util.List<com.aliyun.wuying.sdk.model.ExecutionActivity>>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.MessageStream sendMessageStream(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.MessageCompletion> sendMessageAndWait(com.aliyun.wuying.sdk.model.SendRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Interaction>> listInteractions(com.aliyun.wuying.sdk.model.InteractionQuery, com.aliyun.wuying.sdk.CallContext);
@@ -325,7 +321,6 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondPermission(com.aliyun.wuying.sdk.model.PermissionRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondQuestion(com.aliyun.wuying.sdk.model.QuestionRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionResponse> respondQuestion(com.aliyun.wuying.sdk.model.QuestionRequest, com.aliyun.wuying.sdk.model.MutationOptions, com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.model.Subscription subscribeGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>> listConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeConversationGroups(com.aliyun.wuying.sdk.model.ConversationGroupQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.SidebarGroup>>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Conversation>> listSidebarConversations(com.aliyun.wuying.sdk.model.SidebarRowsQuery, com.aliyun.wuying.sdk.CallContext);
@@ -355,8 +350,6 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationReadBinding> resolveConversationRead(com.aliyun.wuying.sdk.model.ConversationReadQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationHistory> listConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeConversationHistory(com.aliyun.wuying.sdk.model.ConversationHistoryQuery, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.ConversationHistory>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Group>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncGroup(com.aliyun.wuying.sdk.model.GroupRef, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeLiveProcess(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.LiveProcessSnapshot>, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "ConversationManager.java"
@@ -2875,231 +2868,5 @@ public class com.aliyun.wuying.sdk.model.WyDrivePage extends com.aliyun.wuying.s
   public long usedSize;
   public boolean capacityNotEnough;
   public com.aliyun.wuying.sdk.model.WyDrivePage();
-}
-Compiled from "AgMessageClient.java"
-public final class com.aliyun.wuying.sdk.transport.AgMessageClient implements java.lang.AutoCloseable {
-  public com.aliyun.wuying.sdk.transport.AgMessageClient(com.aliyun.wuying.sdk.transport.AgMessageConfig, com.aliyun.wuying.sdk.transport.AgMessageClient$CredentialProvider, com.aliyun.wuying.sdk.transport.TransportStore);
-  public java.util.concurrent.CompletionStage<java.lang.Void> connect(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.lang.Void> waitReady(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.lang.Void> waitRelayReady(com.aliyun.wuying.sdk.CallContext);
-  public java.lang.String userId();
-  public java.lang.String clientInstanceId();
-  public java.util.Map<java.lang.String, java.lang.Object> linkState();
-  public java.lang.String linkState(java.lang.String);
-  public com.aliyun.wuying.sdk.model.Subscription onStatus(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
-  public com.aliyun.wuying.sdk.model.Subscription onLinkState(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
-  public com.aliyun.wuying.sdk.model.Subscription onError(java.util.function.Consumer<com.aliyun.wuying.sdk.model.BusinessException>);
-  public com.aliyun.wuying.sdk.model.Subscription onDurable(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
-  public com.aliyun.wuying.sdk.model.Subscription onTransient(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
-  public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
-  public com.aliyun.wuying.sdk.model.Subscription subscribeStreamEvents(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
-  public com.aliyun.wuying.sdk.model.Subscription onReceived(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
-  public com.aliyun.wuying.sdk.model.Subscription onColdGroupUpdate(java.util.function.Consumer<java.lang.String>);
-  public com.aliyun.wuying.sdk.model.Subscription onRelayRequest(com.aliyun.wuying.sdk.transport.AgMessageClient$RequestHandler);
-  public com.aliyun.wuying.sdk.model.Subscription onRelayMessage(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
-  public com.aliyun.wuying.sdk.model.Subscription onRelayLateResponse(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> createVirtualGroup(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getVirtualGroup(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listVirtualGroups(java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listRecentVirtualGroups(int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> addVirtualGroupMembers(java.lang.String, long, java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> removeVirtualGroupMembers(java.lang.String, long, java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listVirtualGroupMembers(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> updateVirtualGroupProfile(java.lang.String, long, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> closeVirtualGroup(java.lang.String, long, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> auditClosedHistory(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncGroup(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publish(java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publishStream(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> retryPublish(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getPublishState(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> streamList(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> streamState(java.lang.String, java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> streamHistory(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StreamHistoryPage> readStreamHistoryPage(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayRequest(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relaySend(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayRetry(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayCancel(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayGetRequest(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayGetHistory(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayPresence(java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.model.Subscription subscribeGroupSyncStates(java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>);
-  public java.lang.String sessionId();
-  public static boolean isVirtualGroupId(java.lang.String);
-  public static boolean isVirtualConversationId(java.lang.String);
-  public com.aliyun.wuying.sdk.model.Subscription onDurableMessage(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
-  public com.aliyun.wuying.sdk.model.Subscription onTransientMessage(com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler);
-  public com.aliyun.wuying.sdk.model.Subscription onRelayError(java.util.function.Consumer<com.aliyun.wuying.sdk.model.BusinessException>);
-  public java.util.Map<java.lang.String, java.lang.Object> initialSyncProgress();
-  public com.aliyun.wuying.sdk.model.Subscription onInitialSyncProgress(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listDirectoryPage(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listDirectoryGroups(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getDirectoryGroups(java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listDirectoryChanges(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> listGroupChanges(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.lang.Void> retryPendingDurableBatches(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publishDurable(java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publishTransient(java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> publishStreamTransient(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getHistory(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> loadDurableMessage(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> getGroupSyncState(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.lang.Void> waitForGroupDirectory(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<java.util.Map<java.lang.String, java.lang.Object>>> listGroups(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<java.util.Map<java.lang.String, java.lang.Object>>> listGroups(boolean, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getGroup(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> resolveConversationGroup(java.lang.String, java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> resolveConversationGroup(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> readHistoryPage(java.lang.String, java.lang.String, int, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> readHistoryPage(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.lang.Void> refreshGroupDirectory(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.lang.Void> sync(com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> relayBroadcastRequest(java.util.Map<java.lang.String, java.lang.Object>, com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.model.Subscription onRelayBroadcastResponse(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
-  public java.util.concurrent.CompletionStage<java.util.Map<java.lang.String, java.lang.Object>> getDevicePresence(java.lang.String, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<java.util.Map<java.lang.String, java.lang.Object>>> updateDevices(java.util.List<java.lang.String>, com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.model.Subscription onDevicePresence(java.util.function.Consumer<java.util.Map<java.lang.String, java.lang.Object>>);
-  public void close();
-}
-Compiled from "AgMessageClient.java"
-  public void durable(com.aliyun.wuying.sdk.CallContext, com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode);
-  public void transientMessage(com.aliyun.wuying.sdk.CallContext, com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode);
-  public void changed();
-  public void received(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode, long);
-  public void coldGroupUpdate(java.lang.String, java.math.BigInteger, long);
-  public void linkStatus(java.lang.String, java.lang.String);
-  public void error(com.aliyun.wuying.sdk.model.BusinessException);
-  public void relayFrame(com.aliyun.wuying.sdk.CallContext, com.fasterxml.jackson.databind.JsonNode);
-}
-Compiled from "AgMessageClient.java"
-public final class com.aliyun.wuying.sdk.transport.AgMessageClient$Credential {
-  public final java.lang.String userId;
-  public final java.lang.String token;
-  public com.aliyun.wuying.sdk.transport.AgMessageClient$Credential(java.lang.String, java.lang.String);
-  public java.lang.String toString();
-}
-Compiled from "AgMessageClient.java"
-public interface com.aliyun.wuying.sdk.transport.AgMessageClient$CredentialProvider {
-  public abstract com.aliyun.wuying.sdk.transport.AgMessageClient$Credential get(com.aliyun.wuying.sdk.CallContext);
-}
-Compiled from "AgMessageClient.java"
-final class com.aliyun.wuying.sdk.transport.AgMessageClient$InboundExecution {
-}
-Compiled from "AgMessageClient.java"
-public interface com.aliyun.wuying.sdk.transport.AgMessageClient$MessageHandler {
-  public abstract void handle(com.aliyun.wuying.sdk.CallContext, java.util.Map<java.lang.String, java.lang.Object>);
-}
-Compiled from "AgMessageClient.java"
-public interface com.aliyun.wuying.sdk.transport.AgMessageClient$RequestHandler {
-  public abstract java.lang.Object handle(com.aliyun.wuying.sdk.CallContext, java.util.Map<java.lang.String, java.lang.Object>);
-}
-Compiled from "AgMessageClient.java"
-final class com.aliyun.wuying.sdk.transport.AgMessageClient$StreamObserver implements com.aliyun.wuying.sdk.model.Subscription {
-  public void unsubscribe();
-}
-Compiled from "AgMessageConfig.java"
-public final class com.aliyun.wuying.sdk.transport.AgMessageConfig {
-  public final java.net.URI gateway;
-  public final com.aliyun.wuying.sdk.config.SdkConfig sdk;
-  public final com.aliyun.wuying.sdk.transport.AgMessageConfig$Role role;
-  public final com.aliyun.wuying.sdk.transport.AgMessageConfig$ReceiveMode receiveMode;
-  public final boolean disableGroupMessage;
-  public final boolean disableControlRelay;
-  public final boolean acceptSyncRequests;
-  public final boolean durableBatch;
-  public final com.aliyun.wuying.sdk.transport.DurableBatchOptions durableBatchOptions;
-  public final java.lang.String runForm;
-  public static com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder builder(java.lang.String);
-}
-Compiled from "AgMessageConfig.java"
-class com.aliyun.wuying.sdk.transport.AgMessageConfig$1 {
-}
-Compiled from "AgMessageConfig.java"
-public final class com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder {
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder sdk(com.aliyun.wuying.sdk.config.SdkConfig);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder role(com.aliyun.wuying.sdk.transport.AgMessageConfig$Role);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder receiveMode(com.aliyun.wuying.sdk.transport.AgMessageConfig$ReceiveMode);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder runForm(java.lang.String);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder disableGroupMessage(boolean);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder disableControlRelay(boolean);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder durableBatch(boolean);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder durableBatch(com.aliyun.wuying.sdk.transport.DurableBatchOptions);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig$Builder acceptSyncRequests(boolean);
-  public com.aliyun.wuying.sdk.transport.AgMessageConfig build();
-}
-Compiled from "AgMessageConfig.java"
-public final class com.aliyun.wuying.sdk.transport.AgMessageConfig$ReceiveMode extends java.lang.Enum<com.aliyun.wuying.sdk.transport.AgMessageConfig$ReceiveMode> {
-  public static final com.aliyun.wuying.sdk.transport.AgMessageConfig$ReceiveMode FULL;
-  public static final com.aliyun.wuying.sdk.transport.AgMessageConfig$ReceiveMode PUBLISH_ONLY;
-  public static com.aliyun.wuying.sdk.transport.AgMessageConfig$ReceiveMode[] values();
-  public static com.aliyun.wuying.sdk.transport.AgMessageConfig$ReceiveMode valueOf(java.lang.String);
-}
-Compiled from "AgMessageConfig.java"
-public final class com.aliyun.wuying.sdk.transport.AgMessageConfig$Role extends java.lang.Enum<com.aliyun.wuying.sdk.transport.AgMessageConfig$Role> {
-  public static final com.aliyun.wuying.sdk.transport.AgMessageConfig$Role HUMAN;
-  public static final com.aliyun.wuying.sdk.transport.AgMessageConfig$Role MACHINE;
-  public static com.aliyun.wuying.sdk.transport.AgMessageConfig$Role[] values();
-  public static com.aliyun.wuying.sdk.transport.AgMessageConfig$Role valueOf(java.lang.String);
-}
-Compiled from "DurableBatchOptions.java"
-public final class com.aliyun.wuying.sdk.transport.DurableBatchOptions {
-  public final int waitMs;
-  public final int maxItems;
-  public final int maxRequestBytes;
-  public final int maxQueuedItems;
-  public final int maxQueuedBytes;
-  public final int maxGroups;
-  public final int maxInFlightGroups;
-  public final int maxRetriesPerConnection;
-  public final int retryInitialBackoffMs;
-  public final int retryMaxBackoffMs;
-  public final int claimLeaseMs;
-  public static com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder builder();
-}
-Compiled from "DurableBatchOptions.java"
-class com.aliyun.wuying.sdk.transport.DurableBatchOptions$1 {
-}
-Compiled from "DurableBatchOptions.java"
-public final class com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder {
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder waitMs(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder maxItems(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder maxRequestBytes(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder maxQueuedItems(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder maxQueuedBytes(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder maxGroups(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder maxInFlightGroups(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder maxRetriesPerConnection(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder retryInitialBackoffMs(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder retryMaxBackoffMs(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions$Builder claimLeaseMs(int);
-  public com.aliyun.wuying.sdk.transport.DurableBatchOptions build();
-}
-Compiled from "SqliteTransportStore.java"
-public final class com.aliyun.wuying.sdk.transport.SqliteTransportStore implements com.aliyun.wuying.sdk.transport.TransportStore {
-  public com.aliyun.wuying.sdk.transport.SqliteTransportStore(java.nio.file.Path);
-  public <T> T transaction(com.aliyun.wuying.sdk.CallContext, java.util.function.Function<com.aliyun.wuying.sdk.transport.TransportStore$Transaction, T>);
-  public void close();
-}
-Compiled from "SqliteTransportStore.java"
-class com.aliyun.wuying.sdk.transport.SqliteTransportStore$1 implements com.aliyun.wuying.sdk.transport.TransportStore$Transaction {
-  public byte[] get(java.lang.String, java.lang.String);
-  public void put(java.lang.String, java.lang.String, byte[]);
-  public void remove(java.lang.String, java.lang.String);
-  public java.util.Map<java.lang.String, byte[]> scan(java.lang.String, java.lang.String);
-}
-Compiled from "TransportStore.java"
-public interface com.aliyun.wuying.sdk.transport.TransportStore extends java.lang.AutoCloseable {
-  public abstract <T> T transaction(com.aliyun.wuying.sdk.CallContext, java.util.function.Function<com.aliyun.wuying.sdk.transport.TransportStore$Transaction, T>);
-  public abstract void close();
-}
-Compiled from "TransportStore.java"
-public interface com.aliyun.wuying.sdk.transport.TransportStore$Transaction {
-  public abstract byte[] get(java.lang.String, java.lang.String);
-  public abstract void put(java.lang.String, java.lang.String, byte[]);
-  public abstract void remove(java.lang.String, java.lang.String);
-  public abstract java.util.Map<java.lang.String, byte[]> scan(java.lang.String, java.lang.String);
 }
 ```

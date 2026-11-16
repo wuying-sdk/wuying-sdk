@@ -351,36 +351,6 @@ func(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.
 
 [模型操作、完整参数与能力边界](/api-reference/executions/list-execution-activity) · [Go DTO 参考](/reference/go/api)
 
-<a id="listgroupsyncstates" />
-
-## Methods.conversationListGroupSyncStates
-
-`Methods.conversationListGroupSyncStates` → `conversation.listGroupSyncStates`
-
-**模式：** `call`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ListGroupSyncStates
-func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.GroupSyncState], error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/sync/list-group-sync-states) · [Go DTO 参考](/reference/go/api)
-
-<a id="listgroups" />
-
-## Methods.conversationListGroups
-
-`Methods.conversationListGroups` → `conversation.listGroups`
-
-**模式：** `call`。**请求类型：** `m.GroupDirectoryQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.ListGroups
-func(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.Group], error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/sync/list-groups) · [Go DTO 参考](/reference/go/api)
-
 <a id="listinteractions" />
 
 ## Methods.conversationListInteractions
@@ -756,21 +726,6 @@ func(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[[]m.Exec
 
 [模型操作、完整参数与能力边界](/api-reference/executions/subscribe-execution-activity) · [Go DTO 参考](/reference/go/api)
 
-<a id="subscribegroupsyncstates" />
-
-## Methods.conversationSubscribeGroupSyncStates
-
-`Methods.conversationSubscribeGroupSyncStates` → `conversation.subscribeGroupSyncStates`
-
-**模式：** `subscribe`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.SubscribeGroupSyncStates
-func(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/sync/subscribe-group-sync-states) · [Go DTO 参考](/reference/go/api)
-
 <a id="subscribeinteractions" />
 
 ## Methods.conversationSubscribeInteractions
@@ -875,36 +830,6 @@ func(ctx context.Context, r m.TurnRef, o m.SubscriptionListener[*m.Turn]) (m.Sub
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/turns/subscribe-turn) · [Go DTO 参考](/reference/go/api)
-
-<a id="syncconversation" />
-
-## Methods.conversationSyncConversation
-
-`Methods.conversationSyncConversation` → `conversation.syncConversation`
-
-**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.SyncConversation
-func(ctx context.Context, r m.ConversationRef) (m.GroupSyncState, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/sync/sync-conversation) · [Go DTO 参考](/reference/go/api)
-
-<a id="syncgroup" />
-
-## Methods.conversationSyncGroup
-
-`Methods.conversationSyncGroup` → `conversation.syncGroup`
-
-**模式：** `call`。**请求类型：** `m.GroupRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.SyncGroup
-func(ctx context.Context, r m.GroupRef) (m.GroupSyncState, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/sync/sync-group) · [Go DTO 参考](/reference/go/api)
 
 <a id="unarchiveconversation" />
 

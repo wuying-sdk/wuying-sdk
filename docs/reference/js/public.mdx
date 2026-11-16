@@ -578,16 +578,6 @@ buildResourceManager(_context: Context): Promise<ResourceManager>;
 buildCreditManager(_context: ExecutionContext): Promise<CreditManager>;
 ```
 
-<a id="entry-3a46921218eac4be" />
-
-### Client.subscribeStreamEvents
-
-类别：模型操作。[按模型查看操作](/api-reference/client/subscribe-stream-events)。
-
-```ts
-subscribeStreamEvents(handler: (event: StreamEvent) => void): Subscription;
-```
-
 <a id="entry-e2e546d6d28afc25" />
 
 ### Client.buildAspManager
@@ -838,26 +828,6 @@ accessKeyID(): string;
 accessKeySecret(): string;
 ```
 
-<a id="entry-8ab8bce35509a55d" />
-
-### ConversationManager.listRecentGroups
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/list-recent-groups)。
-
-```ts
-listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroup>>;
-```
-
-<a id="entry-0f0db7444a400b02" />
-
-### ConversationManager.listGroupSyncStates
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/list-group-sync-states)。
-
-```ts
-listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<GroupSyncState>>;
-```
-
 <a id="entry-b378e04b6046680b" />
 
 ### ConversationManager.listActiveExecutions
@@ -956,46 +926,6 @@ listConversationGroups(ctx: Context, request: (ConversationGroupQuery) & ListOpt
 
 ```ts
 listConversationHistory(ctx: Context, request: (ConversationHistoryQuery) & ListOptions): Promise<{ projection: Projection; conversation?: Conversation; members: Member[]; turnItems: Item[]; turns: Turn[]; activities: ExecutionActivity[]; presentations: MessagePresentation[]; items: Message[]; nextCursor: string | null; }>;
-```
-
-<a id="entry-7e68a88c5fb15df5" />
-
-### ConversationManager.listGroups
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
-
-```ts
-listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: Group[]; nextCursor: string | null; }>;
-```
-
-<a id="entry-07942c3adc076ee1" />
-
-### ConversationManager.syncConversation
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/sync-conversation)。
-
-```ts
-syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
-```
-
-<a id="entry-757a6a7471e36b1d" />
-
-### ConversationManager.syncGroup
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/sync-group)。
-
-```ts
-syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-```
-
-<a id="entry-9678b7fbc7e7f35e" />
-
-### ConversationManager.subscribeGroupSyncStates
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/subscribe-group-sync-states)。
-
-```ts
-subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
 ```
 
 <a id="entry-bf0301b0eb366e26" />
@@ -2516,66 +2446,6 @@ getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageF
 
 ```ts
 getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
-```
-
-<a id="entry-1703b655de9ecb2b" />
-
-### ConversationManager.listGroupSyncStates
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/list-group-sync-states)。
-
-```ts
-listGroupSyncStates(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<Page<GroupSyncState>>;
-```
-
-<a id="entry-24dcfec126a44c61" />
-
-### ConversationManager.listGroups
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/list-groups)。
-
-```ts
-listGroups(ctx: Context, request: (GroupDirectoryQuery) & ListOptions): Promise<{ items: Group[]; nextCursor: string | null; }>;
-```
-
-<a id="entry-d2729e61e542e632" />
-
-### ConversationManager.listRecentGroups
-
-类别：模型操作。[按模型查看操作](/api-reference/conversations/list-recent-groups)。
-
-```ts
-listRecentGroups(ctx: Context, request?: ListOptions): Promise<Page<RecentGroup>>;
-```
-
-<a id="entry-3ddcb13ebf30b43c" />
-
-### ConversationManager.syncConversation
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/sync-conversation)。
-
-```ts
-syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
-```
-
-<a id="entry-69ba2de8f4e79057" />
-
-### ConversationManager.syncGroup
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/sync-group)。
-
-```ts
-syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-```
-
-<a id="entry-11b6c701f1ed84a4" />
-
-### ConversationManager.subscribeGroupSyncStates
-
-类别：模型操作。[按模型查看操作](/api-reference/sync/subscribe-group-sync-states)。
-
-```ts
-subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
 ```
 
 <a id="entry-6cbb39fcb14ad4c3" />

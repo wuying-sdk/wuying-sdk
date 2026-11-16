@@ -4,7 +4,7 @@ sidebarTitle: "ConversationManager"
 description: "Java 公开成员及重载。"
 ---
 
-此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员与移动桥接接口按其原生配置使用。
 
 ## createConversation
 
@@ -227,23 +227,6 @@ public com.aliyun.wuying.sdk.model.Subscription subscribeExecutionActivity(com.a
 
 [查看操作或完整契约](/api-reference/executions/subscribe-execution-activity)
 
-## listGroupSyncStates
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.GroupSyncState>> listGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/sync/list-group-sync-states)
-
-## syncConversation
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncConversation(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/sync/sync-conversation)
-
 ## sendMessageStream
 
 ```java
@@ -293,14 +276,6 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Interact
 ```
 
 [查看操作或完整契约](/api-reference/interactions/question)
-
-## subscribeGroupSyncStates
-
-```java
-public com.aliyun.wuying.sdk.model.Subscription subscribeGroupSyncStates(com.aliyun.wuying.sdk.model.RuntimeRef, java.util.function.Consumer<com.aliyun.wuying.sdk.model.GroupSyncState>, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/sync/subscribe-group-sync-states)
 
 ## listConversationGroups
 
@@ -512,22 +487,6 @@ public com.aliyun.wuying.sdk.model.Subscription subscribeConversationHistory(com
 ```
 
 [查看操作或完整契约](/api-reference/messages/subscribe-conversation-history)
-
-## listGroups
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Group>> listGroups(com.aliyun.wuying.sdk.model.GroupDirectoryQuery, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/sync/list-groups)
-
-## syncGroup
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GroupSyncState> syncGroup(com.aliyun.wuying.sdk.model.GroupRef, com.aliyun.wuying.sdk.CallContext);
-```
-
-[查看操作或完整契约](/api-reference/sync/sync-group)
 
 ## subscribeLiveProcess
 

@@ -5,9 +5,7 @@ description: "同版本 Go 根入口、config、manager 与 model 公共包的�
 
 <Note>本页按所选语言保留原始完整参考，可能包含该语言的业务示例。跨语言操作请使用[快速开始](/getting-started/desktop-to-agent)和[代码示例](/examples/index)中的语言卡片。</Note>
 
-基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加默认桌面创建草稿。
-
-## .
+基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿。由 go doc 生成。
 
 ```go
 package wuying // import "github.com/aliyun/wuying-sdk-go"
@@ -70,10 +68,6 @@ func (c *Client) Start(ctx context.Context, r *model.DesktopOperationRequest) (*
 
 func (c *Client) Stop(ctx context.Context, r *model.DesktopOperationRequest) (*model.DesktopOperationResponse, error)
 
-func (c *Client) SubscribeStreamEvents(ctx context.Context, handler agmessage.StreamHandler) (model.Subscription, error)
-    OnStreamEvent在既有Client上增加不透明事件订阅，不改变SendMessageStream的业务命令语义。
-    需先在UserConfig.Streaming中启用；可在建立Runtime前注册，回调不得长时间阻塞。
-
 func (c *Client) Wait(ctx context.Context, r *model.WaitDesktopsRequest) (*model.WaitDesktopsResponse, error)
     Wait observes only requested resources. Events are produced by signed,
     bounded DescribeDesktops reads.
@@ -95,11 +89,7 @@ func (o ClientOptions) GoString() string
 
 func (o ClientOptions) String() string
 
-```
 
-## ./config
-
-```go
 package config // import "github.com/aliyun/wuying-sdk-go/config"
 
 
@@ -165,15 +155,14 @@ type InitialSyncConfig struct {
 
 type StreamingConfig struct {
 	Enabled bool
-	OnEvent agmessage.StreamHandler
 }
-    StreamingConfig由宿主显式启用；OnEvent接收原样数据，不经过AG正文解析器。
+    StreamingConfig enables internal business-message stream replay.
 
 func StreamingPolicy(c Config) StreamingConfig
     StreamingPolicy是可选配置能力，不扩展既有Config必选接口，兼容自定义配置实现。
 
 type UserConfig struct {
-	// Streaming仅启用不透明流式事件；不会改变原消息投影或中继配置。
+	// Streaming enables business stream updates consumed internally by the SDK.
 	Streaming *StreamingConfig
 	// RelayMaxDataBytes 为中继请求/响应的本地发送上限；0 默认 10 MiB，只可调小。落库仍限 1 MiB。
 	RelayMaxDataBytes int
@@ -230,11 +219,7 @@ type UserConfig struct {
     UserConfig holds user-facing SDK configuration. Pass nil to NewClient to use
     all defaults.
 
-```
 
-## ./manager
-
-```go
 package manager // import "github.com/aliyun/wuying-sdk-go/manager"
 
 
@@ -378,12 +363,6 @@ func (a *ConversationManager) ListConversations(ctx context.Context, r m.Convers
 func (a *ConversationManager) ListExecutionActivity(ctx context.Context, r m.ConversationRef, opts ...m.ListOptions) (m.Page[m.ExecutionActivity], error)
     ListExecutionActivity returns one page. Use NextCursor for continuation.
 
-func (a *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.GroupSyncState], error)
-    ListGroupSyncStates returns one page. Use NextCursor for continuation.
-
-func (a *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.Group], error)
-    ListGroups returns one page. Use NextCursor for continuation.
-
 func (a *ConversationManager) ListInteractions(ctx context.Context, r m.InteractionQuery, opts ...m.ListOptions) (m.Page[m.Interaction], error)
     ListInteractions returns one page. Use NextCursor for continuation.
 
@@ -439,9 +418,6 @@ func (a *ConversationManager) SubscribeConversations(ctx context.Context, r m.Co
 
 func (a *ConversationManager) SubscribeExecutionActivity(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[[]m.ExecutionActivity]) (m.Subscription, error)
 
-func (a *ConversationManager) SubscribeGroupSyncStates(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
-    OnGroupSyncState订阅后立即获得已有状态，不要求业务方理解或维护内部seq。
-
 func (a *ConversationManager) SubscribeInteractions(ctx context.Context, r m.InteractionQuery, o m.SubscriptionListener[[]m.Interaction]) (m.Subscription, error)
 
 func (a *ConversationManager) SubscribeLiveProcess(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.LiveProcessSnapshot]) (m.Subscription, error)
@@ -455,12 +431,6 @@ func (a *ConversationManager) SubscribeMutation(ctx context.Context, r m.Mutatio
 func (a *ConversationManager) SubscribeSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
 
 func (a *ConversationManager) SubscribeTurn(ctx context.Context, r m.TurnRef, o m.SubscriptionListener[*m.Turn]) (m.Subscription, error)
-
-func (a *ConversationManager) SyncConversation(ctx context.Context, r m.ConversationRef) (m.GroupSyncState, error)
-    SyncConversation按业务会话定位唯一群，等待本轮历史完整接收和应用；取消只结束当前调用等待。
-
-func (a *ConversationManager) SyncGroup(ctx context.Context, r m.GroupRef) (m.GroupSyncState, error)
-    SyncGroup按 groupId 显式同步单个群，适合从目录分页拿到 groupId 后调用。
 
 func (a *ConversationManager) UnarchiveConversation(ctx context.Context, r m.ConversationRef) (m.ConversationRef, error)
 
@@ -819,11 +789,7 @@ type UpdateAgentInstanceRequest struct {
 }
     UpdateAgentInstanceRequest is the request for UpdateAgentInstance.
 
-```
 
-## ./model
-
-```go
 package model // import "github.com/aliyun/wuying-sdk-go/model"
 
 Package model defines the unified public business contracts.
@@ -2891,5 +2857,6 @@ type WyDrivePage struct {
 	UsedSize          int64 `json:"usedSize"`
 	CapacityNotEnough bool  `json:"capacityNotEnough"`
 }
+
 
 ```

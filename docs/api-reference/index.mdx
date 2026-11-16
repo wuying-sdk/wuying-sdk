@@ -4,7 +4,7 @@ sidebarTitle: "接口目录"
 description: "按云资源、AI 能力、存储能力与计量查找当前 SDK 公开操作。"
 ---
 
-当前共收录 **303 项公开操作**，包含业务操作、CLI 命令与高级集成入口。业务能力与 Docs 使用相同的四类划分；Client 与认证单列。消息回执和消息流在 Message 下，写入结果在 Conversation 下，订阅句柄在 Client 下。
+当前共收录 **156 项公开操作**，包含业务操作、CLI 命令与高级集成入口。业务能力与 Docs 使用相同的四类划分；Client 与认证单列。消息回执和消息流在 Message 下，写入结果在 Conversation 下，订阅句柄在 Client 下。
 
 [全量覆盖与来源](/api-reference/coverage/index) · [按语言查看](/sdk-reference/index)
 
@@ -14,7 +14,7 @@ CLI 专属命令见 [CLI Reference](/reference/cli/public)。Android / iOS 应�
 
 | 模型或用途 | 目录入口数 |
 |---|---:|
-| [Client](/api-reference/client/create) | 15 |
+| [Client](/api-reference/client/create) | 14 |
 | ↳ [Subscription](/api-reference/subscriptions/close) | 2 |
 
 ## 云资源
@@ -31,7 +31,7 @@ CLI 专属命令见 [CLI Reference](/reference/cli/public)。Android / iOS 应�
 | 模型或用途 | 目录入口数 |
 |---|---:|
 | [Agent](/api-reference/agents/get-agent-model-catalog) | 7 |
-| [Conversation](/api-reference/conversations/archive) | 17 |
+| [Conversation](/api-reference/conversations/archive) | 16 |
 | ↳ [Mutation](/api-reference/receipts/get-mutation) | 2 |
 | [Member](/api-reference/members/add) | 7 |
 | [Config](/api-reference/configuration/get) | 5 |
@@ -63,11 +63,4 @@ CLI 专属命令见 [CLI Reference](/reference/cli/public)。Android / iOS 应�
 |---|---:|
 | [Credit](/api-reference/credits/describe-credit-package-agents) | 4 |
 
-## 高级集成与排障
-
-| 模型或用途 | 目录入口数 |
-|---|---:|
-| [会话同步](/api-reference/sync/list-group-sync-states) | 5 |
-| [Transport](/api-reference/transport/add-virtual-group-members) | 140 |
-
-高级接口用于[会话同步与底层通信排障](/api-reference/advanced/index)，普通应用优先通过 Client 与 Manager 集成。目录父项数量包含子项，不能将父项与子项重复相加。目录入口含少量初始化与选择说明页，数量不等于独立业务操作数。方法名、签名和语言差异来自当前源码声明；分类不新增 Manager、认证权限或未交付能力。
+SDK 内部负责消息传输与历史同步，客户通过 Client 与业务 Manager 集成。目录父项数量包含子项，不能将父项与子项重复相加。目录入口含少量初始化与选择说明页，数量不等于独立业务操作数。方法名、签名和语言差异来自当前源码声明；分类不新增 Manager、认证权限或未交付能力。

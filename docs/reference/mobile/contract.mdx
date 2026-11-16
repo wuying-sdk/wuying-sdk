@@ -37,7 +37,7 @@ Android / iOS 应用优先使用各自的 [Client](/reference/android/client) / 
 
 ## 方法与请求
 
-两端各提供 113 个 `Methods` 常量，经 `Client.request` 分发到七个 Manager。各方法页面明确列出 `call`、`observe` 或流模式以及是否接受 MutationOptions。
+两端各提供 107 个 `Methods` 常量，经 `Client.request` 分发到七个 Manager。各方法页面明确列出 `call`、`observe` 或流模式以及是否接受 MutationOptions。
 
 ```json
 {
@@ -74,9 +74,9 @@ Android / iOS 应用优先使用各自的 [Client](/reference/android/client) / 
 
 ## 版本与验证范围
 
-本文使用 **RuntimeManager 首版未提交草稿**：基础提交 `05bd99ec05afb4550ea96708c3b01970ae004d03` 加本次源码变更。完整身份是覆盖清单中的源码归档 SHA-256，不是旧提交原始制品。Android/iOS 清单来自该归档，逐文件校验哈希，两个平台各 113 个方法常量与 Go mobile 清单完全一致。
+本文使用 **RuntimeManager 首版未提交草稿**：基础提交 `05bd99ec05afb4550ea96708c3b01970ae004d03` 加本次源码变更。完整身份是覆盖清单中的源码归档 SHA-256，不是旧提交原始制品。Android/iOS 清单来自该归档，逐文件校验哈希，两个平台各 107 个方法常量与 Go mobile 清单完全一致。
 
-方法清单覆盖不代表任意 AAR/XCFramework 已包含这些入口。当前文档未提供公共移动包坐标，也未将原生制品放入站点。请按实际交付的制品哈希、平台架构与版本核对；历史 98 个入口的设备测试不能替代新增至 113 个入口的验证。iOS 原生构建及真实登录、双端收发、授权撤回和后台恢复需对应设备与制品验收。
+方法清单覆盖不代表任意 AAR/XCFramework 已包含这些入口。当前文档未提供公共移动包坐标，也未将原生制品放入站点。请按实际交付的制品哈希、平台架构与版本核对；历史 98 个入口的设备测试不能替代新增至 107 个入口的验证。iOS 原生构建及真实登录、双端收发、授权撤回和后台恢复需对应设备与制品验收。
 
 [Android 安装与初始化](/sdk-reference/android) · [iOS 安装与初始化](/sdk-reference/ios) · [全量覆盖口径](/api-reference/coverage/index)
 

@@ -62,17 +62,6 @@ interface ConversationManager {
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
     getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
     getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
-    /** 仅列目录同步状态，不下载非热点群历史。 */
-    listGroupSyncStates: ConversationManager$1['listGroupSyncStates'];
-    /** 只读AG目录分页；不连接Runtime、不等待业务Ready、不下载历史。 */
-    listGroups: ConversationManager$1['listGroups'];
-    /** Bounded account activity index. This returns metadata only and opens no Runtime. */
-    listRecentGroups: ConversationManager$1['listRecentGroups'];
-    /** 按业务会话定位当前机器的群；完整接收并应用本轮历史后返回。 */
-    syncConversation(ctx: Context, req: ConversationRef): Promise<GroupSyncState>;
-    /** 显式选择分页返回的群，仍验证其属于指定Runtime。 */
-    syncGroup(ctx: Context, req: GroupRef): Promise<GroupSyncState>;
-    subscribeGroupSyncStates(ctx: Context, req: RuntimeRef, handler: (state: GroupSyncState) => void): Promise<Subscription>;
     createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
     listConversationGroups: ConversationManager$1['listConversationGroups'];
     subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;

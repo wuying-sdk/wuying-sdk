@@ -4,7 +4,7 @@ sidebarTitle: "ConversationManager"
 description: "Go 公开成员及重载。"
 ---
 
-此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员、传输与移动桥接接口按其原生配置使用。
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员与移动桥接接口按其原生配置使用。
 
 ## AddMember
 
@@ -189,22 +189,6 @@ func (receiver *ConversationManager) ListExecutionActivity(ctx context.Context, 
 ```
 
 [查看操作或完整契约](/api-reference/executions/list-execution-activity)
-
-## ListGroupSyncStates
-
-```go
-func (receiver *ConversationManager) ListGroupSyncStates(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.GroupSyncState], error)
-```
-
-[查看操作或完整契约](/api-reference/sync/list-group-sync-states)
-
-## ListGroups
-
-```go
-func (receiver *ConversationManager) ListGroups(ctx context.Context, q m.GroupDirectoryQuery) (m.Page[m.Group], error)
-```
-
-[查看操作或完整契约](/api-reference/sync/list-groups)
 
 ## ListInteractions
 
@@ -406,14 +390,6 @@ func (receiver *ConversationManager) SubscribeExecutionActivity(ctx context.Cont
 
 [查看操作或完整契约](/api-reference/executions/subscribe-execution-activity)
 
-## SubscribeGroupSyncStates
-
-```go
-func (receiver *ConversationManager) SubscribeGroupSyncStates(ctx context.Context, r m.RuntimeRef, h func(m.GroupSyncState)) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/sync/subscribe-group-sync-states)
-
 ## SubscribeInteractions
 
 ```go
@@ -469,22 +445,6 @@ func (receiver *ConversationManager) SubscribeTurn(ctx context.Context, r m.Turn
 ```
 
 [查看操作或完整契约](/api-reference/turns/subscribe-turn)
-
-## SyncConversation
-
-```go
-func (receiver *ConversationManager) SyncConversation(ctx context.Context, r m.ConversationRef) (m.GroupSyncState, error)
-```
-
-[查看操作或完整契约](/api-reference/sync/sync-conversation)
-
-## SyncGroup
-
-```go
-func (receiver *ConversationManager) SyncGroup(ctx context.Context, r m.GroupRef) (m.GroupSyncState, error)
-```
-
-[查看操作或完整契约](/api-reference/sync/sync-group)
 
 ## UnarchiveConversation
 
