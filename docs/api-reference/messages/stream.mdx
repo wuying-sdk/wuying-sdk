@@ -1,10 +1,16 @@
 ---
 title: "sendMessageStream"
 sidebarTitle: "sendMessageStream"
-description: "完整公开接口 · Message"
+description: "向会话发送消息并返回可消费的消息流，供应用逐步展示任务输出。"
 ---
 
 `sendMessageStream` · Message
+
+## 接口用途
+
+向会话发送消息并返回可消费的消息流，供应用逐步展示任务输出。
+
+## 使用说明
 
 当前 JS 流交付 message / turn 快照，不承诺 text.delta 或 text.replace。保存受理身份；停止本地消费可退出迭代或使用 ctx.signal 结束等待，stream.cancel() 会请求远端取消，仍需核对终态。
 

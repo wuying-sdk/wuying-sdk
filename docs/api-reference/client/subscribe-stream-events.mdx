@@ -1,10 +1,16 @@
 ---
 title: "subscribeStreamEvents"
 sidebarTitle: "subscribeStreamEvents"
-description: "完整公开接口 · Client"
+description: "订阅当前连接收到的原始流事件，供需要自行处理传输事件的集成使用。"
 ---
 
 `subscribeStreamEvents` · Client
+
+## 接口用途
+
+订阅当前连接收到的原始流事件，供需要自行处理传输事件的集成使用。
+
+## 使用说明
 
 只读订阅已启用的原始流事件；不赋予执行控制权，不替代消息与 Turn 的业务快照。
 
@@ -66,4 +72,4 @@ interface Subscription {
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 
-[模型与能力边界](/domain-model/01-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)
+[模型与能力边界](/getting-started/initialize-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

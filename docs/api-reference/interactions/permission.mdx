@@ -1,10 +1,16 @@
 ---
 title: "respondPermission"
 sidebarTitle: "respondPermission"
-description: "完整公开接口 · Interaction"
+description: "提交用户对权限审批的明确选择，供远端任务按实际授权继续或拒绝执行。"
 ---
 
 `respondPermission` · Interaction
+
+## 接口用途
+
+提交用户对权限审批的明确选择，供远端任务按实际授权继续或拒绝执行。
+
+## 使用说明
 
 只提交用户明确选择的真实 optionId，携带当前 expectedVersion；pending 后继续核对，禁止自动批准。
 

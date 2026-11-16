@@ -1,10 +1,16 @@
 ---
 title: "subscribeCommand"
 sidebarTitle: "subscribeCommand"
-description: "完整公开接口 · Runtime"
+description: "根据原执行回执继续订阅远程脚本结果，供断线后恢复读取而不重复执行脚本。"
 ---
 
 `subscribeCommand` · Runtime
+
+## 接口用途
+
+根据原执行回执继续订阅远程脚本结果，供断线后恢复读取而不重复执行脚本。
+
+## 使用说明
 
 按原 regionId、desktopIds、invokeId 恢复只读订阅，不重新执行命令。
 

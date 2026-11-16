@@ -1,10 +1,16 @@
 ---
 title: "PublishDurable"
 sidebarTitle: "PublishDurable"
-description: "完整公开接口 · Transport"
+description: "向指定群提交持久消息，返回受理信息供后续核对落盘状态。"
 ---
 
 `PublishDurable` · Transport
+
+## 接口用途
+
+向指定群提交持久消息，返回受理信息供后续核对落盘状态。
+
+## 使用说明
 
 PublishDurable hands one durable message to IM. Success proves the first
 Kafka broker acknowledged it (state=accepted), not that OTS assigned a seq

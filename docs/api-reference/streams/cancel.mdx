@@ -1,10 +1,16 @@
 ---
 title: "cancel"
 sidebarTitle: "cancel"
-description: "完整公开接口 · MessageStream"
+description: "请求取消消息流对应的远端任务，供用户主动停止该轮执行。"
 ---
 
 `cancel` · MessageStream
+
+## 接口用途
+
+请求取消消息流对应的远端任务，供用户主动停止该轮执行。
+
+## 使用说明
 
 该操作会请求远端取消，不能当作只停止本地迭代；继续核对真实 Turn 终态。
 

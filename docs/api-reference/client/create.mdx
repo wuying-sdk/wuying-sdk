@@ -5,6 +5,10 @@ description: "选择用户态或服务端签名入口，再创建对应身份的
 
 import ClientInitialization from '/snippets/client-initialization.mdx';
 
+## 接口用途
+
+创建指定管理员或无影用户身份的根 Client，作为各领域 Manager 的统一调用入口。
+
 Client 是 SDK 的调用入口。先按[授权与认证](/integration/01-auth-and-lifecycle)确定调用身份：用户态使用 AuthCode、完整登录态或组织账号密码；服务端签名云 API 使用对应的签名 Client。
 
 ## 用户态参数

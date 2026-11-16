@@ -1,10 +1,16 @@
 ---
 title: "subscribeMessages"
 sidebarTitle: "subscribeMessages"
-description: "完整公开接口 · Message"
+description: "订阅会话消息及后续变化，供应用实时更新消息列表。"
 ---
 
 `subscribeMessages` · Message
+
+## 接口用途
+
+订阅会话消息及后续变化，供应用实时更新消息列表。
+
+## 使用说明
 
 按 Message ID 更新 data.items，保留 projection；停止订阅时退订，不能把快照当文本增量追加。
 

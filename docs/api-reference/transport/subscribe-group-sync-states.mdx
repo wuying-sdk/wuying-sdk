@@ -1,10 +1,16 @@
 ---
 title: "SubscribeGroupSyncStates"
 sidebarTitle: "SubscribeGroupSyncStates"
-description: "完整公开接口 · Transport"
+description: "订阅群同步状态变化，供应用展示同步进度并判断数据覆盖情况。"
 ---
 
 `SubscribeGroupSyncStates` · Transport
+
+## 接口用途
+
+订阅群同步状态变化，供应用展示同步进度并判断数据覆盖情况。
+
+## 使用说明
 
 OnGroupSyncState注册时立即重放当前状态；回调应保持短小，不在回调内同步等待另一个任务。
 

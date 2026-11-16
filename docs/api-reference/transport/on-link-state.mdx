@@ -1,10 +1,16 @@
 ---
 title: "OnLinkState"
 sidebarTitle: "OnLinkState"
-description: "完整公开接口 · Transport"
+description: "注册指定链路状态回调，供应用跟踪消息链路和中继链路变化。"
 ---
 
 `OnLinkState` · Transport
+
+## 接口用途
+
+注册指定链路状态回调，供应用跟踪消息链路和中继链路变化。
+
+## 使用说明
 
 OnLinkState registers an observer for one link and returns its unsubscribe
 function. SubscriptionListener panics never affect the client.

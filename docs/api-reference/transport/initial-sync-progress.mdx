@@ -1,10 +1,16 @@
 ---
 title: "InitialSyncProgress"
 sidebarTitle: "InitialSyncProgress"
-description: "完整公开接口 · Transport"
+description: "读取首次同步的进度，供应用区分连接就绪与历史同步完成。"
 ---
 
 `InitialSyncProgress` · Transport
+
+## 接口用途
+
+读取首次同步的进度，供应用区分连接就绪与历史同步完成。
+
+## 使用说明
 
 InitialSyncProgress 返回线程安全的副本，不把Ready误当成所有群历史已同步完。
 

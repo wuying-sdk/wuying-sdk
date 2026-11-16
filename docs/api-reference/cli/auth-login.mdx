@@ -1,10 +1,16 @@
 ---
 title: "auth login"
 sidebarTitle: "auth login"
-description: "完整公开接口 · CLI"
+description: "使用组织账号密码建立无影用户登录态，供后续 CLI 命令访问用户资源。"
 ---
 
 `auth login` · CLI
+
+## 接口用途
+
+使用组织账号密码建立无影用户登录态，供后续 CLI 命令访问用户资源。
+
+## 使用说明
 
 通过 stdin 的 organizationId、username、password 登录无影用户态。成功后仅保存 LoginToken/sessionId/endUserId；不保存密码，失败保留原凭据；LOGIN_CHALLENGE_REQUIRED 退出 4，当前不承接后续挑战。
 

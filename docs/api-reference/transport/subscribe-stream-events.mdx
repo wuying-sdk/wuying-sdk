@@ -1,10 +1,16 @@
 ---
 title: "SubscribeStreamEvents"
 sidebarTitle: "SubscribeStreamEvents"
-description: "完整公开接口 · Transport"
+description: "订阅当前连接收到的原始流事件，供需要自行处理传输事件的集成使用。"
 ---
 
 `SubscribeStreamEvents` · Transport
+
+## 接口用途
+
+订阅当前连接收到的原始流事件，供需要自行处理传输事件的集成使用。
+
+## 使用说明
 
 SubscribeStreamEvents registers the single opaque stream outlet and returns its
 unsubscribe function. The original transient handler still receives the

@@ -1,10 +1,16 @@
 ---
 title: "ListVirtualGroupsV1"
 sidebarTitle: "ListVirtualGroupsV1"
-description: "完整公开接口 · Transport"
+description: "分页查询服务端筛选后的虚拟群目录，供应用按授权和会话条件加载群列表。"
 ---
 
 `ListVirtualGroupsV1` · Transport
+
+## 接口用途
+
+分页查询服务端筛选后的虚拟群目录，供应用按授权和会话条件加载群列表。
+
+## 使用说明
 
 ListVirtualGroupsV1 读取一页由服务端筛选的目录。conversationId 是 AG 原始
 会话 ID，不是 agc_；带会话过滤时必须同时给出 controllerUserId，避免跨设备

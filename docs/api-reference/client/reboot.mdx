@@ -1,10 +1,16 @@
 ---
 title: "reboot"
 sidebarTitle: "reboot"
-description: "完整公开接口 · Client"
+description: "重启指定云桌面，用于需要重新启动操作系统的资源管理场景。"
 ---
 
 `reboot` · Client
+
+## 接口用途
+
+重启指定云桌面，用于需要重新启动操作系统的资源管理场景。
+
+## 使用说明
 
 重启。两种身份均支持；osUpdate 仅用于关机/重启，不适用字段会被拒绝。 当前公开在根 Client，不是 RuntimeManager 方法；JS/TypeScript、Go、服务端 Java 和 CLI 有入口；Android/iOS 移动清单没有对应入口。返回值是受理信息，不是完成状态；写请求不自动重试。共享 DTO 不表示所有字段都适用于本操作。clientToken 仅用于支持的用户态操作，管理员态不接受。
 

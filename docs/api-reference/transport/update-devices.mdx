@@ -1,10 +1,16 @@
 ---
 title: "UpdateDevices"
 sidebarTitle: "UpdateDevices"
-description: "完整公开接口 · Transport"
+description: "替换当前监测的授权设备集合，供应用持续接收这些设备的在线状态。"
 ---
 
 `UpdateDevices` · Transport
+
+## 接口用途
+
+替换当前监测的授权设备集合，供应用持续接收这些设备的在线状态。
+
+## 使用说明
 
 UpdateDevices atomically replaces the whole monitored list only after IM
 authorizes every target. A failed replacement leaves the previous list intact.

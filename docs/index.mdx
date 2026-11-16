@@ -1,6 +1,7 @@
 ---
 title: "Wuying SDK 简介"
-sidebarTitle: "概览"
+sidebarTitle: "介绍"
+icon: "house"
 description: "无影对外集成能力的统一入口，面向资源管理、资源内操作系统操作与 Agent 集成。"
 ---
 
@@ -42,13 +43,30 @@ SDK 按四类能力提供集成入口：
 
 Android / iOS 需先安装配套原生制品，在工作线程初始化，并使用应用私有、按账号隔离的数据库文件；安装入口：[Android](/sdk-reference/android) / [iOS](/sdk-reference/ios)。
 
-构造成功不等于在线认证通过；接下来执行[只读验证](/getting-started/initialize-client#5-验证在线身份与授权)，再[创建会话并发送第一个任务](/getting-started/first-conversation)。调用方处理错误，退出登录时关闭 Client。
+构造成功不等于在线认证通过；接下来执行[只读验证](/getting-started/initialize-client#验证在线身份与授权)，再[创建会话并发送第一个任务](/getting-started/first-conversation)。调用方处理错误，退出登录时关闭 Client。
 
 <Note>
 上面的示例使用用户票据；服务端签名 Client 的初始化见[认证指南](/integration/01-auth-and-lifecycle)。已有登录态的初始化示例与各语言字段对应关系见[初始化 Client](/getting-started/initialize-client)。
 </Note>
 
 更多集成入口：[浏览器 ASP 桌面](/guides/asp-desktop) · [管理员 OAuth](/guides/administrator-oauth) · [DeepSeek Harness](/guides/deepseek-harness)。
+
+## 选择一个快速示例
+
+<CardGroup cols={2}>
+  <Card title="创建桌面并对话" icon="message" href="/getting-started/desktop-to-agent">
+    创建并分配桌面，取 AuthCode，再用用户态 Client 发送消息和读取答案。
+  </Card>
+  <Card title="连接 ASP 画面" icon="desktop" href="/getting-started/asp">
+    用 Node 或 CLI 打开浏览器播放器，交互操作云桌面。
+  </Card>
+  <Card title="远程脚本启动应用" icon="terminal" href="/getting-started/remote-script">
+    执行 PowerShell 脚本，启动桌面中的记事本。
+  </Card>
+  <Card title="连接桌面内服务" icon="plug" href="/getting-started/port-service">
+    脚本启动 HTTP 服务，经端口服务发送消息并收到回应。
+  </Card>
+</CardGroup>
 
 ## 当前接入指南
 
@@ -71,7 +89,7 @@ Android / iOS 需先安装配套原生制品，在工作线程初始化，并使
 
 | 对象 | 你用它做什么 |
 |---|---|
-| [Client](/domain-model/01-client) | 持有身份、连接与数据配置，取得各领域 Manager |
+| [Client](/getting-started/initialize-client) | 持有身份、连接与数据配置，取得各领域 Manager |
 | [Runtime](/domain-model/02-runtime-agent) | 明确选择在哪里执行 |
 | [Agent](/domain-model/agent) | 选择由哪个 Agent 执行 |
 | [Conversation](/domain-model/03-conversation) | 组织一次业务会话，复用后续轮次 |

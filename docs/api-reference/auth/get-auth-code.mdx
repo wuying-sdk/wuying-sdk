@@ -1,10 +1,16 @@
 ---
 title: "getAuthCode"
 sidebarTitle: "getAuthCode"
-description: "完整公开接口 · Auth"
+description: "为已验证映射的无影用户申请 AuthCode，供该用户初始化用户态 Client。"
 ---
 
 `getAuthCode` · Auth
+
+## 接口用途
+
+为已验证映射的无影用户申请 AuthCode，供该用户初始化用户态 Client。
+
+## 使用说明
 
 在受信任后端申请用户票据；先验证真实用户映射和授权。签发新 AuthCode 可能使同一用户旧票失效，不自动反复申请或记录票据正文。
 
@@ -45,4 +51,4 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.GetAuthC
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 
-[模型与能力边界](/domain-model/01-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)
+[模型与能力边界](/getting-started/initialize-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

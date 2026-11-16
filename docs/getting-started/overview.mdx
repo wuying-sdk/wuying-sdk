@@ -7,7 +7,7 @@ description: "选择 Go、Java、JS 或 CLI，准备身份、运行环境与独�
 
 无影 SDK 是无影对外集成能力的统一入口，面向资源管理、资源内操作系统操作与 Agent 集成等场景。整体能力范围见[SDK 简介](/index)。
 
-本指南从当前已交付的 Agent 接入流程开始：发现已授权的执行环境和 Agent，管理业务会话，发送任务，并消费消息、执行过程、附件与交互。其他资源与系统操作按各自已交付的公开接口接入，具体范围见 [SDK Reference](/sdk-reference/index)。
+完成安装和身份准备后，按业务选择下面的四个快速示例；具体接口和语言支持见 [SDK Reference](/sdk-reference/index)。
 
 ## 选择接入方式
 
@@ -27,10 +27,18 @@ description: "选择 Go、Java、JS 或 CLI，准备身份、运行环境与独�
 3. 使用同版本公开查询选出 Runtime 和 Agent，保留返回的真实 ID 与可用性信息。先确认投影就绪，再判断目录是否为空。
 4. 在目标 OS/CPU 上安装依赖并先跑默认帮助/只读检查。Windows/Linux/macOS 的支持范围与实际验证范围分别记录。
 
-认证材料由宿主安全注入，不能把本示例的变量名当作凭据；不要把真实 token 放进源码、URL 或公开 Issue。具体接线见 [Client](/domain-model/01-client) 与 [认证指南](/integration/01-auth-and-lifecycle)。
+认证材料由宿主安全注入，不能把本示例的变量名当作凭据；不要把真实 token 放进源码、URL 或公开 Issue。具体接线见 [Client](/getting-started/initialize-client) 与 [认证指南](/integration/01-auth-and-lifecycle)。
 
 ## 你将使用的核心对象
 
 Client 管理身份与连接；Runtime/Agent 指定执行位置和执行者；Conversation 聚合 Member、Message 与 Turn；Interaction 承载审批或问答；Attachment/Workspace 处理文件上下文。Manager 只是这些对象的公开操作入口。
 
 接下来：[安装 SDK](/domain-model/language-bindings) → [第一次会话](/getting-started/first-conversation) → [按任务查用法](/guides/index)。
+
+
+## 选择快速示例
+
+- [创建桌面并完成 Agent 对话](/getting-started/desktop-to-agent)：管理员创建桌面、取 AuthCode，再用用户态 Client 发送消息并读取答案。
+- [连接 ASP 画面](/getting-started/asp)：用 Node 或 CLI 打开交互桌面。
+- [远程脚本启动应用](/getting-started/remote-script)：在 Windows 桌面启动记事本并核对结果。
+- [连接桌面内服务](/getting-started/port-service)：启动 HTTP 服务，经端口服务完成一次消息交互。

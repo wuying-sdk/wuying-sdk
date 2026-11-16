@@ -1,10 +1,16 @@
 ---
 title: "auth import"
 sidebarTitle: "auth import"
-description: "完整公开接口 · CLI"
+description: "从标准输入导入本地凭据配置，供后续 CLI 命令使用指定身份。"
 ---
 
 `auth import` · CLI
+
+## 接口用途
+
+从标准输入导入本地凭据配置，供后续 CLI 命令使用指定身份。
+
+## 使用说明
 
 通过 stdin 导入凭据。当前只支持 POSIX 私有 0600 明文文件，Windows 不支持持久导入；这不是钥匙串，也不验证在线身份。
 

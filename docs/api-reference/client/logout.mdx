@@ -1,10 +1,16 @@
 ---
 title: "logout"
 sidebarTitle: "logout"
-description: "完整公开接口 · Client"
+description: "结束当前 Client 的本地登录生命周期并释放连接，不撤销云端已受理任务。"
 ---
 
 `logout` · Client
+
+## 接口用途
+
+结束当前 Client 的本地登录生命周期并释放连接，不撤销云端已受理任务。
+
+## 使用说明
 
 释放当前本地身份与连接；不会调用云端注销接口，也不等于取消远端任务。
 
@@ -39,4 +45,4 @@ public java.util.concurrent.CompletionStage<java.lang.Void> logout(com.aliyun.wu
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 
-[模型与能力边界](/domain-model/01-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)
+[模型与能力边界](/getting-started/initialize-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

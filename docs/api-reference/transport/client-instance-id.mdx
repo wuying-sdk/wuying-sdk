@@ -1,10 +1,16 @@
 ---
 title: "ClientInstanceID"
 sidebarTitle: "ClientInstanceID"
-description: "完整公开接口 · Transport"
+description: "读取当前传输 Client 的稳定实例标识，供链路关联和诊断使用。"
 ---
 
 `ClientInstanceID` · Transport
+
+## 接口用途
+
+读取当前传输 Client 的稳定实例标识，供链路关联和诊断使用。
+
+## 使用说明
 
 ClientInstanceID returns the stable per-instance id declared in hello. It is
 empty until the store was read.

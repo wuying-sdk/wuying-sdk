@@ -1,10 +1,16 @@
 ---
 title: "Connect"
 sidebarTitle: "Connect"
-description: "完整公开接口 · Transport"
+description: "建立传输连接并等待规定的就绪条件，供后续群消息或中继调用使用。"
 ---
 
 `Connect` · Transport
+
+## 接口用途
+
+建立传输连接并等待规定的就绪条件，供后续群消息或中继调用使用。
+
+## 使用说明
 
 Connect starts the client lifecycle and returns once the group message link
 reached ready. The ctx only limits this caller's wait, including initial

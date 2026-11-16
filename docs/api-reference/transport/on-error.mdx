@@ -1,10 +1,16 @@
 ---
 title: "OnError"
 sidebarTitle: "OnError"
-description: "完整公开接口 · Transport"
+description: "注册本地传输错误回调，供应用展示或记录经过处理的链路错误。"
 ---
 
 `OnError` · Transport
+
+## 接口用途
+
+注册本地传输错误回调，供应用展示或记录经过处理的链路错误。
+
+## 使用说明
 
 OnError registers a local-error observer and returns its unsubscribe
 function. Errors are sanitized and never contain the token.

@@ -1,10 +1,16 @@
 ---
 title: "stageAttachment"
 sidebarTitle: "stageAttachment"
-description: "完整公开接口 · Attachment"
+description: "上传并暂存真实文件到会话附件目标，供发送消息时引用返回的附件标识。"
 ---
 
 `stageAttachment` · Attachment
+
+## 接口用途
+
+上传并暂存真实文件到会话附件目标，供发送消息时引用返回的附件标识。
+
+## 使用说明
 
 file 必须是真实文件字节（JS Blob）；返回 attachmentId 后在同一会话发送中引用，本地路径字符串不等于已上传。
 

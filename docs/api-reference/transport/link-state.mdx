@@ -1,10 +1,16 @@
 ---
 title: "LinkState"
 sidebarTitle: "LinkState"
-description: "完整公开接口 · Transport"
+description: "读取指定传输链路的当前状态，供应用分别展示消息与中继连接情况。"
 ---
 
 `LinkState` · Transport
+
+## 接口用途
+
+读取指定传输链路的当前状态，供应用分别展示消息与中继连接情况。
+
+## 使用说明
 
 LinkState returns the current state of one link. The states are observable
 independently; the group message link never waits for the control relay.

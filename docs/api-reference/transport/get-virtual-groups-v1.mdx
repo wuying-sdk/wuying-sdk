@@ -1,10 +1,16 @@
 ---
 title: "GetVirtualGroupsV1"
 sidebarTitle: "GetVirtualGroupsV1"
-description: "完整公开接口 · Transport"
+description: "按指定标识批量读取虚拟群信息，供应用核对群目录的当前状态。"
 ---
 
 `GetVirtualGroupsV1` · Transport
+
+## 接口用途
+
+按指定标识批量读取虚拟群信息，供应用核对群目录的当前状态。
+
+## 使用说明
 
 GetVirtualGroupsV1 批量读取群摘要，用于变化复核与对账；不存在的群通过
 unavailable 明确返回，权限失败不会退化成旧缓存。

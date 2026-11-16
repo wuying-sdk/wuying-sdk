@@ -2,14 +2,61 @@
 title: "SDK Client"
 sidebarTitle: "SDK Client"
 icon: "plug"
-description: "完成服务端与用户端身份选择，用 TypeScript、Go、Java、Android、iOS 或 CLI 初始化用户态连接。"
+description: "了解 Client 与 Manager 的关系，按管理员或无影用户身份创建 Client，并管理连接、订阅和账号生命周期。"
 ---
 
 import ClientInitialization from '/snippets/client-initialization.mdx';
 
-先阅读[授权与认证](/integration/01-auth-and-lifecycle)，确定是服务端签名云 API，还是代表某个用户调用业务。服务端签名 Client 的初始化在认证指南中；本页说明**用户态 Client**，无论它运行在用户端还是代用户执行的后端。
+Client 是当前身份访问无影 SDK 的根入口，提供各领域 Manager，管理连接与用户态本地数据。先按[授权与认证](/integration/01-auth-and-lifecycle)选择管理员或无影用户身份；运行在服务端的用户态 Client 仍使用该用户的权限。
 
-## 1. 安装并准备配置
+## Client 与 Manager
+
+Manager 是从根 Client 取得的业务操作入口，复用其身份、连接和生命周期。取得 RuntimeManager 或 ConversationManager 不会创建另一个账号或独立登录会话。
+
+| 任务 | JS | Go | Java | CLI |
+|---|---|---|---|---|
+| 建立根入口 | Client.create | NewClient | new WuyingClient | 由命令建立会话 |
+| 取得环境目录与云资源 | buildRuntimeManager | BuildRuntimeManager | buildRuntimeManager | runtimes |
+| 取得 Agent 目录 | buildAgentManager | BuildAgentManager | buildAgentManager | agents |
+| 取得会话业务 | buildConversationManager | BuildConversationManager | buildConversationManager | conversations / messages / turns |
+| 取得资源业务 | buildResourceManager | BuildResourceManager | buildResourceManager | run --attach（部分能力） |
+| 释放身份生命周期 | close | Close | close | 当前命令退出；auth logout 仅本地凭据处理 |
+
+
+Android / iOS 使用原生 `Client.request` 和公开 Methods 常量，具体调用见 [Android](/sdk-reference/android) / [iOS](/sdk-reference/ios)。CLI 由每条命令管理连接和 profile。
+
+## 管理员：创建 Client
+
+AK/SK 代表 aliuid 维度的管理员权限，只在受信任服务端使用。下面的变量由宿主安全注入；完整语言环境见[安装与语言绑定](/domain-model/language-bindings)。
+
+<CodeGroup>
+
+```ts Node.js / TypeScript
+import { Client } from '@aliyun/wuying-sdk';
+
+const admin = Client.create({ accessKeyID, accessKeySecret });
+```
+
+```go Go
+admin, err := wuying.NewClient(wuying.ClientOptions{
+    AccessKeyID: accessKeyID, AccessKeySecret: accessKeySecret,
+}, nil)
+if err != nil { return err }
+```
+
+```java Java
+WuyingClient admin = new WuyingClient(
+    ClientOptions.builder().accessKey(accessKeyId, accessKeySecret).build()
+);
+```
+
+</CodeGroup>
+
+Node / CLI 还可使用 [OAuth 或可续期凭据](/guides/administrator-oauth)。云端按实际授权校验每项操作；管理员 Client 与无影用户态 Client 的可用操作分别见 [API Reference](/api-reference/index)。Android / iOS 当前没有管理员签名入口。
+
+## 用户态：准备配置
+
+用户态支持 AuthCode、完整 LoginToken 登录组合，或组织账号密码（JS / Go / Java / CLI）。下面分别展示创建方式，只选其中一种。
 
 按[语言安装指南](/domain-model/language-bindings)安装同版本交付包，准备以下输入：
 
@@ -22,7 +69,7 @@ import ClientInitialization from '/snippets/client-initialization.mdx';
 
 浏览器需要真实 IndexedDB；Node 按 [Node 持久化配置](/sdk-reference/js#node-持久化)先安装 shim、保留补丁并完成初始化。下面的短例不代替这些运行环境准备。JS 示例服务于应用当前登录用户；不能用全局单例混接其他用户的凭据和数据。
 
-## 2. 使用 AuthCode 创建 Client
+## 使用 AuthCode 创建用户态 Client
 
 下面只展示核心初始化语句。`authCode`、`clientId` 与数据文件来自上面的配置；Go 的 `dataFile` 是绝对文件路径字符串，Java 为 `Path`，Android / iOS 为应用私有目录中的绝对数据库文件路径字符串。CLI 由宿主注入对应环境变量。完整类型与可选项见[初始化接口](/api-reference/client/create)。
 
@@ -32,7 +79,7 @@ Go / Java / Android / iOS 的数据库父目录应为当前用户私有并预先
 
 Android / iOS 在工作线程初始化和关闭；默认回调分别交付到主 Looper / 主队列。Android 使用配套双 AAR，最低 API 23；iOS 使用带 XCFramework 的 Swift Package，最低 iOS 13。安装与原生类型分别见 [Android](/sdk-reference/android) / [iOS](/sdk-reference/ios)。
 
-## 3. 已有登录态时，使用完整组合
+## 使用 LoginToken 创建用户态 Client
 
 如果宿主已有当前用户的有效登录态，可以使用 `loginToken + sessionId + endUserId`，按需附带 `loginRegionId`，替代 AuthCode。**AuthCode、登录态和组织账号密码三条路径选择一种**，不同时填入两套凭据。
 
@@ -54,7 +101,7 @@ const client = Client.create({
 
 这些字段属于同一用户、同一登录上下文；不能拼接不同账号的票据，不能拿用户名显示文案或桌面 ID 代替。原始凭据只经宿主的安全链路注入，不输出到日志或公开示例。
 
-## 4. 使用组织账号密码登录
+## 使用组织账号密码创建用户态 Client
 
 JS / Go / Java 可由根 Client 接收当前无影用户的组织 ID、用户名和密码。以下变量由宿主安全注入；`organizationId` 是登录标识，不是 `officeSiteId`。先按上文配置 clientId 和私有数据位置。
 
@@ -87,7 +134,7 @@ CLI 中 `secret-provider` 代表宿主自己的秘密注入命令，其 stdout �
 
 SDK 负责换票和续期，密码每个 Client 生命周期只提交一次，不自动重试。MFA、SSO、改密等挑战返回 `LOGIN_CHALLENGE_REQUIRED`（CLI 退出 4），当前版本不承接挑战流程；登录失败不覆盖 CLI 原有凭据。密码模式的登录端点仅接受 HTTPS。登录与后续调用使用同一获授权 clientId。Android / iOS 当前移动配置清单仍只支持 AuthCode 或 LoginToken。
 
-## 5. 验证在线身份与授权
+## 验证在线身份与授权
 
 构造成功说明拿到了本地 Client 对象，不能证明在线认证或资源授权已通过。使用创建出的 Client，建立目录 Manager 并执行只读查询：
 
@@ -98,10 +145,18 @@ const { items: runtimes, nextCursor } = await runtimeManager.listRuntimes(ctx);
 
 返回当前身份下的一页 Runtime；通过 nextCursor 继续查询，见[列表查询与分页](/domain-model/page)。目录未加载或认证失败会报错，不返回伪造空页。查询成功不代表获得全部资源权限。Go、Java 和 Node 的完整初始化与只读验证源码见[代码示例](/examples/index)；Android / iOS 通过 `Client.request` 与 `Methods.runtimeSubscribeRuntimes` 订阅目录，见[移动端契约](/reference/mobile/contract)。
 
-## 6. 结束或更换身份
+## 订阅、关闭与账号切换
 
 应用持有并复用当前登录上下文的 Client，页面只释放自己的订阅；退出账号时退订后关闭 Client：JS `await client.close()`，Go `client.Close()`，Java `client.close()` 或 try-with-resources，Android `client.close()`，iOS `try client.close()`；移动端关闭放在工作线程。更换身份必须关闭旧 Client 并使用隔离数据位置；关闭本地连接不等于注销云端登录态或取消远端任务。
 
+本地生命周期是：创建 Client → 取得 Manager → 查询和订阅业务 → 页面退出释放所属订阅 → 账号退出关闭 Client。CLI 的 `auth status` 检查本地配置，在线身份使用 `doctor` 核对。
+
 宿主负责提供初始身份、处理账号切换；SDK 管理已建立用户态的换票、续期和连接，不另起竞争的刷新器。JS 的 `updateLoginCredentials` 只适用于通过登录态初始化、且身份和登录地域不变的 Client，详见[语言指南](/sdk-reference/js)。
+
+## 调用期限与取消
+
+Context / CallContext / context.Context 控制本地调用期限、取消和可选追踪元数据。普通请求与长流按本语言合同设置期限；本地等待结束不能解释成远端任务已取消。取消订阅、关闭 Client、取消 Turn 是三种独立操作。
+
+精确超时范围与关闭语义见 [SDK Reference](/sdk-reference/index)；用户态续期和存储边界见[授权与认证](/integration/01-auth-and-lifecycle)。
 
 接下来：[选择环境并发送第一个任务](/getting-started/first-conversation) · [查看认证与生命周期边界](/integration/01-auth-and-lifecycle)

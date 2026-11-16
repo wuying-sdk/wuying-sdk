@@ -1,10 +1,16 @@
 ---
 title: "SyncGroup"
 sidebarTitle: "SyncGroup"
-description: "完整公开接口 · Transport"
+description: "同步指定群的投影和历史消息，供应用补齐该群的本地数据。"
 ---
 
 `SyncGroup` · Transport
+
+## 接口用途
+
+同步指定群的投影和历史消息，供应用补齐该群的本地数据。
+
+## 使用说明
 
 SyncGroup refreshes one group from the entry: it re-reads the group
 projection (membership/generation/watermark) and backfills its durable

@@ -1,10 +1,16 @@
 ---
 title: "sendMessageAndWait"
 sidebarTitle: "sendMessageAndWait"
-description: "完整公开接口 · Message"
+description: "向会话发送消息并等待本轮执行结果，供应用处理完成、取消或中断终态。"
 ---
 
 `sendMessageAndWait` · Message
+
+## 接口用途
+
+向会话发送消息并等待本轮执行结果，供应用处理完成、取消或中断终态。
+
+## 使用说明
 
 Context 应覆盖任务等待时长；核对执行终态及最终展示覆盖。超时按原请求/Turn 查询，不换 clientCommandId 重发。
 

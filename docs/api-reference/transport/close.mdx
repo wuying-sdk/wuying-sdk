@@ -1,10 +1,16 @@
 ---
 title: "Close"
 sidebarTitle: "Close"
-description: "完整公开接口 · Transport"
+description: "关闭传输 Client，停止本地重连、连接和待处理等待，供应用结束消息传输生命周期。"
 ---
 
 `Close` · Transport
+
+## 接口用途
+
+关闭传输 Client，停止本地重连、连接和待处理等待，供应用结束消息传输生命周期。
+
+## 使用说明
 
 Close stops the client: reconnect is cancelled, the socket is closed and
 every pending waiter fails. Close is idempotent.

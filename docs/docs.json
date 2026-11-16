@@ -31,22 +31,24 @@
             "group": "开始使用",
             "pages": [
               "index",
-              "integration/01-auth-and-lifecycle",
-              "getting-started/initialize-client",
               {
                 "group": "快速开始",
                 "pages": [
-                  "getting-started/overview",
-                  "getting-started/first-conversation"
+                  "getting-started/desktop-to-agent",
+                  "getting-started/asp",
+                  "getting-started/remote-script",
+                  "getting-started/port-service"
                 ]
-              }
+              },
+              "integration/01-auth-and-lifecycle",
+              "getting-started/initialize-client",
+              "support/contact"
             ]
           },
           {
             "group": "领域模型",
             "pages": [
               "domain-model/00-overview",
-              "domain-model/01-client",
               {
                 "group": "云资源",
                 "pages": [

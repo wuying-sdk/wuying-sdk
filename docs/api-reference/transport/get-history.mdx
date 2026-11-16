@@ -1,10 +1,16 @@
 ---
 title: "GetHistory"
 sidebarTitle: "GetHistory"
-description: "完整公开接口 · Transport"
+description: "读取指定群的持久消息历史，供应用按原序号核对历史记录。"
 ---
 
 `GetHistory` · Transport
+
+## 接口用途
+
+读取指定群的持久消息历史，供应用按原序号核对历史记录。
+
+## 使用说明
 
 GetHistory reads durable records after afterSeq without invoking any
 handler. The SDK's automatic backfill feeds the local inbox instead.

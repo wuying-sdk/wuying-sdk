@@ -1,0 +1,47 @@
+"""Demo HTTP service: open the page, enter a message, and receive a reply."""
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import json
+import sys
+
+PAGE = b'''<!doctype html><meta charset="utf-8"><title>Wuying port demo</title>
+<h1>Wuying port demo</h1><input id="message" value="Hello Wuying">
+<button id="send">Send</button><pre id="reply"></pre>
+<script>
+document.getElementById('send').onclick = async () => {
+  const response = await fetch(location.href, {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({message: document.getElementById('message').value})
+  });
+  document.getElementById('reply').textContent = JSON.stringify(await response.json());
+};
+</script>'''
+
+class Handler(BaseHTTPRequestHandler):
+    def log_message(self, *_):
+        pass  # Access URLs may contain authorization parameters.
+
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(PAGE)
+
+    def do_POST(self):
+        length = int(self.headers.get('Content-Length', '0'))
+        if length < 1 or length > 4096:
+            self.send_error(413)
+            return
+        try:
+            message = json.loads(self.rfile.read(length))['message']
+            if not isinstance(message, str):
+                raise ValueError('message must be a string')
+        except (ValueError, KeyError, TypeError):
+            self.send_error(400)
+            return
+        body = json.dumps({'reply': 'Wuying: ' + message}).encode()
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(body)
+
+HTTPServer(('127.0.0.1', int(sys.argv[1])), Handler).serve_forever()

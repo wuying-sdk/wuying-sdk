@@ -1,10 +1,16 @@
 ---
 title: "StartWithData"
 sidebarTitle: "StartWithData"
-description: "完整公开接口 · Mobile"
+description: "随移动端附件暂存调用传入文件字节，在返回前复制字节，供原生宿主安全交接附件数据。"
 ---
 
 `StartWithData` · Mobile
+
+## 接口用途
+
+随移动端附件暂存调用传入文件字节，在返回前复制字节，供原生宿主安全交接附件数据。
+
+## 使用说明
 
 StartWithData copies attachment bytes synchronously before returning. Only the
 two attachment staging methods accept bytes. Maximum 16MiB per call, 32MiB total.

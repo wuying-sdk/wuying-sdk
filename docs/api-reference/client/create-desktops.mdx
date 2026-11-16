@@ -1,10 +1,16 @@
 ---
 title: "create"
 sidebarTitle: "create"
-description: "完整公开接口 · Client"
+description: "根据办公网络、桌面模板和用户分配信息创建云桌面，返回桌面与订单标识。"
 ---
 
 `create` · Client
+
+## 接口用途
+
+根据办公网络、桌面模板和用户分配信息创建云桌面，返回桌面与订单标识。
+
+## 使用说明
 
 AK/SK 管理员态创建云桌面；服务端按真实权限处理。保留创建返回的订单/桌面身份后再 wait，未知结果时不能通过重复 create 恢复。此实例方法不同于初始化 Client 的静态工厂。
 

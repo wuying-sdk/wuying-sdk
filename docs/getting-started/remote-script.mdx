@@ -1,0 +1,55 @@
+---
+title: "通过脚本启动桌面应用"
+sidebarTitle: "远程脚本启动应用"
+description: "使用管理员 RuntimeManager.runCommand 在 Windows 云桌面启动记事本，并核对远程脚本结果。"
+---
+
+目标：不用 Agent 对话，直接通过脚本在 Windows 云桌面启动记事本。
+
+## 准备
+
+先创建[管理员 Client](/getting-started/initialize-client#管理员创建-client)。目标桌面已开机，提供真实 `desktopId` 与 `regionId`；本例使用支持 PowerShell 的 Windows 桌面。
+
+将[脚本等待函数](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/quickstart/run-script.mjs.txt)保存为 `run-script.mjs`。它调用 `runCommand`、保存受理回执、等待 `completed` 并检查逐桌面成功结果，最后释放本地订阅；不重新执行未知结果的脚本。
+
+## 启动应用
+
+```js Node.js
+import { runScript } from './run-script.mjs';
+
+const runtimes = await admin.buildRuntimeManager(ctx);
+const results = await runScript(runtimes, {
+  regionId, desktopIds: [desktopId], type: 'RunPowerShellScript',
+  commandContent: 'Start-Process notepad.exe -PassThru | Select-Object Id, ProcessName',
+});
+console.log(results[0].output);
+```
+
+预期脚本结果：桌面状态为 `Success`，退出码为字符串 `"0"`，输出包含新进程的 ID 与名称。等待函数只在所有目标桌面都成功时返回；调用失败或脚本失败按错误处理。
+
+应用能否出现在当前桌面画面中，取决于脚本执行身份和 Windows 交互会话。部署方应确认命令进入目标用户的桌面会话；SDK 不自动提升权限或把系统会话切换为当前用户。通过[ASP 示例](/getting-started/asp)连接同一桌面，核对记事本窗口是否可见；脚本成功与窗口可见分别验证。
+
+## CLI
+
+把同样的请求保存为 `launch-app.json`：
+
+```json
+{
+  "regionId": "cn-hangzhou",
+  "desktopIds": ["YOUR_DESKTOP_ID"],
+  "type": "RunPowerShellScript",
+  "commandContent": "Start-Process notepad.exe -PassThru | Select-Object Id, ProcessName"
+}
+```
+
+```sh
+wuying runtimes run-command --profile admin --request-file launch-app.json --timeout 600000 --output jsonl
+```
+
+替换实际地域和桌面。此处 `admin` profile 使用管理员 AK/SK 或已配置的 OAuth。关注 accepted 回执和 completed 的 `allSucceeded`；不要将 accepted 当成启动完成。
+
+## 恢复和清理
+
+保留回执中的 `invokeId`；断线后用 [`subscribeCommand`](/api-reference/runtimes/subscribe-command)读取原结果，不自动重发 `Start-Process`。关闭 Client 或停止本地订阅不关闭已启动的记事本；演示结束可在桌面中正常关闭应用。
+
+完整脚本类型、权限、事件和超时说明见[远程脚本](/domain-model/remote-script)。

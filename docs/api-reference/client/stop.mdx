@@ -1,10 +1,16 @@
 ---
 title: "stop"
 sidebarTitle: "stop"
-description: "完整公开接口 · Client"
+description: "关闭指定云桌面，按当前身份支持的选项提交关机请求。"
 ---
 
 `stop` · Client
+
+## 接口用途
+
+关闭指定云桌面，按当前身份支持的选项提交关机请求。
+
+## 使用说明
 
 关机。两种身份均支持；stoppedMode 仅管理员态可用，osUpdate 可显式传 false。 当前公开在根 Client，不是 RuntimeManager 方法；JS/TypeScript、Go、服务端 Java 和 CLI 有入口；Android/iOS 移动清单没有对应入口。返回值是受理信息，不是完成状态；写请求不自动重试。共享 DTO 不表示所有字段都适用于本操作。clientToken 仅用于支持的用户态操作，管理员态不接受。
 

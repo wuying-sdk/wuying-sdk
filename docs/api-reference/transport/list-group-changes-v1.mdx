@@ -1,10 +1,16 @@
 ---
 title: "ListGroupChangesV1"
 sidebarTitle: "ListGroupChangesV1"
-description: "完整公开接口 · Transport"
+description: "分页读取群目录的增量变化，供应用按游标维护目录并处理基线重置。"
 ---
 
 `ListGroupChangesV1` · Transport
+
+## 接口用途
+
+分页读取群目录的增量变化，供应用按游标维护目录并处理基线重置。
+
+## 使用说明
 
 ListGroupChangesV1 读取一页增量变化。空 cursor 建立新基线；resetRequired
 表示游标失效，调用方应保留旧基线并安排低频全量对账，而不是把它当空页面。

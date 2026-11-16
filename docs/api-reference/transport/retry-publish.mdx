@@ -1,10 +1,16 @@
 ---
 title: "RetryPublish"
 sidebarTitle: "RetryPublish"
-description: "完整公开接口 · Transport"
+description: "使用原消息标识恢复不确定的消息提交，供应用核对或重驱动同一条消息。"
 ---
 
 `RetryPublish` · Transport
+
+## 接口用途
+
+使用原消息标识恢复不确定的消息提交，供应用核对或重驱动同一条消息。
+
+## 使用说明
 
 RetryPublish re-drives an unknown or overloaded publish through its frozen handle. It
 first re-checks the server state and re-sends the same clientMessageId with

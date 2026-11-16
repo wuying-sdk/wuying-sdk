@@ -1,10 +1,16 @@
 ---
 title: "GetPublishState"
 sidebarTitle: "GetPublishState"
-description: "完整公开接口 · Transport"
+description: "查询原 clientMessageId 的提交状态，供结果不确定时核对受理与持久化事实。"
 ---
 
 `GetPublishState` · Transport
+
+## 接口用途
+
+查询原 clientMessageId 的提交状态，供结果不确定时核对受理与持久化事实。
+
+## 使用说明
 
 GetPublishState answers what is provable about one clientMessageId. It
 distinguishes not_accepted / accepted / persisted / unknown. Unknown is

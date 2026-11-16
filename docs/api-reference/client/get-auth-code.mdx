@@ -1,10 +1,16 @@
 ---
 title: "getAuthCode"
 sidebarTitle: "getAuthCode"
-description: "完整公开接口 · Client"
+description: "为已验证映射的无影用户申请 AuthCode，供该用户初始化用户态 Client。"
 ---
 
 `getAuthCode` · Client
+
+## 接口用途
+
+为已验证映射的无影用户申请 AuthCode，供该用户初始化用户态 Client。
+
+## 使用说明
 
 AK/SK 管理员态为已经核验映射的用户申请 AuthCode；不能在用户态 Client 调用，不能将取票接口开放为任意用户代签。凭据仅交给目标用户，不记录票据正文。
 
@@ -78,4 +84,4 @@ interface GetAuthCodeResponse {
 
 [Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
 
-[模型与能力边界](/domain-model/01-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)
+[模型与能力边界](/getting-started/initialize-client) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

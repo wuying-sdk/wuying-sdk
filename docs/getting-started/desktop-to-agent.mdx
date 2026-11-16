@@ -1,0 +1,91 @@
+---
+title: "创建桌面并完成 Agent 对话"
+sidebarTitle: "创建桌面并对话"
+description: "管理员创建并分配桌面、申请 AuthCode，用户初始化 Client 后发送消息并读取 Agent 答案。"
+---
+
+这条流程连接两种身份：**管理员 Client 创建资源和申请用户票据，用户态 Client 访问已授权桌面中的 Agent**。
+
+## 准备
+
+按[安装指南](/getting-started/overview)安装 SDK。办公网络 `officeSiteId`、桌面模板 `bundleId`、地域 `regionId` 由管理员提供；`endUserId` 是后端已验证映射的无影用户。模板中需要预装并运行配套 Gateway 与 Agent，创建桌面不会自动部署它们。
+
+管理员密钥只保留在后端。下面的用户代码可以运行在浏览器；在 Node 运行用户态 Client 时，先完成[持久化配置](/sdk-reference/js#node-持久化)。
+
+## 1. 服务端创建桌面并申请 AuthCode
+
+```ts Node.js / TypeScript
+import { Client } from '@aliyun/wuying-sdk';
+
+const admin = Client.create({ accessKeyID, accessKeySecret });
+const created = await admin.create({ timeout: 600_000 }, {
+  regionId, officeSiteId, bundleId, amount: 1, endUserIds: [endUserId],
+}, { wait: true });
+const desktopId = created.desktopIds[0];
+await admin.start(ctx, { regionId, desktopIds: [desktopId] });
+const { authCode } = await admin.getAuthCode(ctx, { endUserId });
+```
+
+`wait: true` 等待桌面创建就绪；该状态可能是 Running 或 Stopped，所以随后显式开机。开机受理仍不代表 Agent 在线。保留 `created` 中的桌面、订单和请求标识；创建会产生真实资源，未知结果时核对原请求，不重复创建。
+
+通过已认证的业务链路，将 `authCode`、`desktopId` 和地域交给目标用户。`clientId` 使用平台授权的接入标识；AuthCode 短效，临近初始化时申请，不把 AK/SK 一起交给用户。
+
+## 2. 用户初始化 Client 并选择执行者
+
+```ts TypeScript
+const client = Client.create({ authCode }, { clientId });
+const runtimeManager = await client.buildRuntimeManager(ctx);
+const { items: runtimes, nextCursor } = await runtimeManager.listRuntimes(ctx);
+const agents = await client.buildAgentManager(ctx);
+const { items: availableAgents } = await agents.listAgents(ctx, { runtimeId });
+```
+
+从 `runtimes` 中选择与新桌面对应的在线 Runtime，再用它的真实 `runtimeId` 查询 Agent，并选择一个可用的 `agentId`。桌面 ID、Runtime ID 和 Agent ID 分别承担不同职责，不直接互换；对应关系由接入方核对。存在 `nextCursor` 时继续[分页](/domain-model/page)，不能将第一页当成全量目录，也不默认选择第一项。
+
+新桌面尚未出现在目录或 Agent 未就绪时，先核对资源启动、授权和 Gateway / Agent 部署，等待其上线后继续，不再创建第二台桌面。
+
+## 3. 创建会话、发送消息并等待结果
+
+```ts TypeScript
+const conversations = await client.buildConversationManager(ctx);
+const conversation = await conversations.createConversation(ctx, {
+  runtimeId, agentId, mode: 'single', name: '第一次对话',
+});
+const completed = await conversations.sendMessageAndWait({ timeout: 600_000 }, {
+  runtimeId, conversationId: conversation.conversationId,
+  text: '你好，请只回复一句问候。', clientCommandId,
+});
+if (completed.turn.state !== 'completed') throw new Error('任务未完成');
+```
+
+`clientCommandId` 是发送前由应用生成并保存的本次请求标识。真实业务应在首次建会前生成、保存并通过 `MutationOptions` 传入 `mutationId`；短例省略了这组选项。结果不确定时，沿用原标识查询回执，不在失败后生成新标识重建。`sendMessageAndWait` 返回执行结果，不直接返回答案字符串。
+
+## 4. 读取 Agent 答案
+
+下面在消息分页中定位**本轮 Agent 消息**，然后读取其答案。不能拿本次发送的用户消息当成 Agent 回答。
+
+```ts TypeScript
+const ref = { runtimeId, conversationId: conversation.conversationId };
+let cursor: string | undefined;
+let reply;
+do {
+  const page = await conversations.listMessages(ctx, { ...ref, cursor });
+  reply = page.items.find(message =>
+    message.turnId === completed.turn.turnId && message.sender.actor.kind === 'agent');
+  cursor = page.nextCursor ?? undefined;
+} while (!reply && cursor);
+if (!reply) throw new Error('Agent 答案尚未同步，请按原轮次继续读取');
+const { data: view } = await conversations.getMessagePresentation(ctx, {
+  ...ref, messageId: reply.messageId,
+});
+if (view?.answer.state !== 'final' || view.answer.coverage.state !== 'complete') {
+  throw new Error('答案尚未完整同步，请继续读取原消息');
+}
+const answer = view.answer.blocks
+  .filter(block => block.kind === 'text').map(block => block.text).join('\n');
+console.log(answer);
+```
+
+预期结果：任务轮次为 completed，消息答案为 final 且覆盖完整，输出 Agent 的问候。若触发审批或问答，按[交互指南](/guides/interactions)提交用户选择；断线或超时继续核对原轮次，不换请求标识重发。
+
+结束时 `await client.close()`、`await admin.close()`；关闭 Client 不会释放桌面。示例资源用完后由管理员按实际需要[释放桌面](/api-reference/client/delete)。完整调用前提和其他语言见 [SDK Client](/getting-started/initialize-client)及[会话示例](/getting-started/first-conversation)。

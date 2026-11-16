@@ -1,0 +1,88 @@
+---
+title: "启动服务并通过端口服务交互"
+sidebarTitle: "连接桌面内服务"
+description: "远程脚本在 Windows 桌面启动 HTTP 服务，通过已配置的端口服务地址打开页面，发送消息并收到回应。"
+---
+
+这条流程把两项能力连起来：**管理员用远程脚本启动桌面内服务，无影用户通过端口服务访问它**。
+
+## 准备
+
+- 一台已开机的 Windows 云桌面，已安装可通过 `python.exe` 调用的 Python 3。
+- 管理员 `admin` Client，以及能访问同一桌面的用户态 `client`。
+- 桌面已配置指向 `127.0.0.1:8080` 的 **HTTP PortService Feature**，支持 GET / POST；8080 当前未被占用。
+- 平台提供该 Feature 的真实 `featureId`，用于从返回结果中选择正确服务。
+
+端口映射由平台预先配置；当前 SDK 通过 `generateSceneUrl` 获取已有配置的访问地址，不创建端口映射。若配置使用其它监听地址或端口，请同步修改下面的服务和配置；没有此 Feature 时先完成配置，不能仅启动脚本就推定能从外部访问。
+
+下载[消息服务源码](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/quickstart/echo-server.py.txt)，保存为 `echo-server.py`；下载[脚本等待函数](https://github.com/wuying-sdk/wuying-sdk/raw/refs/heads/main/docs/downloads/examples/quickstart/run-script.mjs.txt)，保存为 `run-script.mjs`。文件放在本地 Node demo 的同一目录。
+
+## 1. 用脚本启动服务
+
+下面把 Python 源码随远程脚本写入目标桌面，再启动进程并验证本机响应。桌面 ID 与地域使用已确认的真实值。
+
+```js Node.js
+import { readFile } from 'node:fs/promises';
+import { runScript } from './run-script.mjs';
+
+const code = await readFile(new URL('./echo-server.py', import.meta.url));
+const encoded = code.toString('base64');
+const runtimes = await admin.buildRuntimeManager(ctx);
+const results = await runScript(runtimes, {
+  regionId, desktopIds: [desktopId], type: 'RunPowerShellScript',
+  commandContent: `
+$ErrorActionPreference = 'Stop'
+if (Get-NetTCPConnection -LocalPort 8080 -State Listen -ErrorAction SilentlyContinue) {
+  throw 'Port 8080 is already in use'
+}
+$path = Join-Path $env:TEMP 'wuying-echo-demo.py'
+[IO.File]::WriteAllBytes($path, [Convert]::FromBase64String('${encoded}'))
+$server = Start-Process python.exe -ArgumentList ('"{0}" 8080' -f $path) -PassThru
+Write-Output "Demo PID: $($server.Id)"
+$ready = $false
+for ($i = 0; $i -lt 20; $i++) {
+  if ($server.HasExited) { throw 'Demo service exited' }
+  try {
+    $reply = Invoke-RestMethod 'http://127.0.0.1:8080/' -Method Post -ContentType 'application/json' -Body '{"message":"ready-check"}' -TimeoutSec 1
+    if ($reply.reply -eq 'Wuying: ready-check') { $ready = $true; break }
+  } catch { Start-Sleep -Milliseconds 250 }
+}
+if (-not $ready) { throw 'Demo service is not ready' }
+`,
+});
+console.log(results[0].output);
+```
+
+预期结果：脚本成功，输出服务 PID，本机 HTTP 探测收到 `Wuying: ready-check`。保存 PID 供演示结束时关闭服务；脚本失败则先处理目标环境问题，不继续假定端口访问成功。
+
+## 2. 用户取得端口服务地址
+
+这段在已经初始化用户态 Client 的浏览器应用中运行。`featureId` 是上面预配置服务的真实标识，不使用第一个不明用途的地址。
+
+```ts TypeScript / 浏览器
+const runtimeManager = await client.buildRuntimeManager(ctx);
+const result = await runtimeManager.generateSceneUrl(ctx, { desktopId, regionId });
+const service = result?.items.find(item => item.feature.featureId === featureId);
+if (!service) throw new Error('未取得目标端口服务的访问地址');
+window.open(service.url, '_blank', 'noopener,noreferrer');
+```
+
+地址有时效，不持久化或公开分享其中的授权参数。这里使用 Feature 返回的原始访问地址，不自行拼接主机名、端口或 token。如果返回的是授权/跳转入口，先在授权浏览器中完成进入服务的流程；不能把任意场景 URL 当作免鉴权的 HTTP API。
+
+## 3. 完成一次消息交互
+
+浏览器打开 **Wuying port demo** 页面后，在输入框中填写 `Hello Wuying`，点击 **Send**。
+
+页面向当前服务地址发出 POST 请求，预期显示：
+
+```json
+{"reply":"Wuying: Hello Wuying"}
+```
+
+这条响应证明一次消息已通过端口服务到达桌面内的 Python 服务并返回。只取得 URL、本机端口探测成功或打开登录页，都不代表外部交互已经完成。服务页面使用同源请求，保留浏览器的实际授权上下文，不假设额外开放 CORS。
+
+## 4. 清理
+
+演示结束后用同一管理员脚本入口对保存的服务 PID 执行 `Stop-Process -Id <实际PID>`，核对后删除临时 `wuying-echo-demo.py`，再关闭各自的 Client。只关闭浏览器或 Client 不会自动停止 Python 服务。
+
+示例使用 Python 标准库 HTTPServer 演示消息交互；正式服务按自己的部署和访问策略运行。完整接口见[端口服务](/domain-model/port-service)及 [`generateSceneUrl`](/api-reference/runtimes/generate-scene-url)。

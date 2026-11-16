@@ -1,10 +1,16 @@
 ---
 title: "createConversation"
 sidebarTitle: "createConversation"
-description: "完整公开接口 · Conversation"
+description: "在指定 Runtime 中创建单 Agent 或多成员会话，作为后续消息和任务的业务容器。"
 ---
 
 `createConversation` · Conversation
+
+## 接口用途
+
+在指定 Runtime 中创建单 Agent 或多成员会话，作为后续消息和任务的业务容器。
+
+## 使用说明
 
 req 明确 runtimeId 和 mode：single 使用 agentId，group 使用真实成员信息；mutationId 由宿主在发起前生成并保存。结果未知时查询原请求，不能换 ID 重建。
 

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <rect x="1" y="1" width="238" height="238" rx="16" fill="#fff7ed" stroke="#ea580c" stroke-dasharray="6 6"/>
+  <g fill="none" stroke="#ea580c" stroke-width="3" stroke-linejoin="round">
+    <path d="M90 74h60a12 12 0 0 1 12 12v33a12 12 0 0 1-12 12h-26l-20 16v-16H90a12 12 0 0 1-12-12V86a12 12 0 0 1 12-12Z"/>
+    <path d="M97 100h46M97 112h30"/>
+  </g>
+  <g text-anchor="middle" font-family="system-ui, sans-serif">
+    <text x="120" y="179" fill="#9a3412" font-size="16">团队联系二维码</text>
+    <text x="120" y="204" fill="#78716c" font-size="14">待补充</text>
+  </g>
+</svg>

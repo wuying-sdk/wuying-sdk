@@ -1,10 +1,16 @@
 ---
 title: "listRuntimes"
 sidebarTitle: "listRuntimes"
-description: "完整公开接口 · Runtime"
+description: "分页查询当前用户可访问的 Runtime，供应用发现和选择执行环境。"
 ---
 
 `listRuntimes` · Runtime
+
+## 接口用途
+
+分页查询当前用户可访问的 Runtime，供应用发现和选择执行环境。
+
+## 使用说明
 
 返回 Runtime 分页列表，读取 items 和 nextCursor；目录未加载或认证失败会报错，不用空数组隐藏错误。
 

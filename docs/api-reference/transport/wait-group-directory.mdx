@@ -1,10 +1,16 @@
 ---
 title: "WaitGroupDirectory"
 sidebarTitle: "WaitGroupDirectory"
-description: "完整公开接口 · Transport"
+description: "等待群目录读取所需的连接就绪条件，供目录查询独立于消息历史同步。"
 ---
 
 `WaitGroupDirectory` · Transport
+
+## 接口用途
+
+等待群目录读取所需的连接就绪条件，供目录查询独立于消息历史同步。
+
+## 使用说明
 
 WaitGroupDirectory 只等待群消息链路完成鉴权，不触发目录扫描，也不等待
 首个群的消息 Ready。业务目录查询可据此独立于消息初始化。

@@ -1,10 +1,16 @@
 ---
 title: "auth oauth"
 sidebarTitle: "auth oauth"
-description: "完整公开接口 · CLI"
+description: "通过官方阿里云 OAuth profile 配置管理员凭据来源，供 CLI 调用签名管理能力。"
 ---
 
 `auth oauth` · CLI
+
+## 接口用途
+
+通过官方阿里云 OAuth profile 配置管理员凭据来源，供 CLI 调用签名管理能力。
+
+## 使用说明
 
 使用明确的官方阿里云 OAuth profile 取得管理员签名凭据；--reuse 复用已有配置，--no-input 必须搭配 --reuse。无影只保存引用，官方 provider 拥有令牌和续期。它不产生无影用户 LoginToken，成功解析凭据也不证明资源权限。详见[管理员 OAuth 指南](/guides/administrator-oauth)。
 
