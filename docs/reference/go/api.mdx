@@ -3,7 +3,7 @@ title: "Go 公共 API 参考"
 description: "同版本 Go 根入口、config、manager 与 model 公共包的完整签名。"
 ---
 
-当前基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加 Runtime 首版未提交草稿；实际来源由归档哈希确定。
+基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加默认桌面创建草稿。
 
 ## .
 
@@ -1279,9 +1279,9 @@ type CreateDesktopsRequest struct {
 	AutoPay        *bool
 	AutoRenew      *bool
 }
-    CreateDesktopsRequest supports template-based ECD CreateDesktops
-    (2020-09-30). Nil billing flags preserve the service defaults; explicit
-    false is transmitted.
+    CreateDesktopsRequest supports ECD CreateDesktops; zero resource fields
+    select a 4c8g Windows Server 2025 system template. Nil billing flags
+    preserve the service defaults; explicit false is transmitted.
 
 type CreateDesktopsResponse struct {
 	DesktopIDs []string `json:"DesktopId"`

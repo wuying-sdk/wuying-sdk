@@ -1,18 +1,26 @@
 ---
 title: "create"
 sidebarTitle: "create"
-description: "根据办公网络、桌面模板和用户分配信息创建云桌面，返回桌面与订单标识。"
+description: "创建云桌面，可使用默认的4核8GiB Windows Server 2025配置，也可显式指定模板和用户分配。"
 ---
 
 `create` · Client
 
 ## 接口用途
 
-根据办公网络、桌面模板和用户分配信息创建云桌面，返回桌面与订单标识。
+创建云桌面，可使用默认的4核8GiB Windows Server 2025配置，也可显式指定模板和用户分配。
 
 ## 使用说明
 
 AK/SK 管理员态创建云桌面；服务端按真实权限处理。保留创建返回的订单/桌面身份后再 wait，未知结果时不能通过重复 create 恢复。此实例方法不同于初始化 Client 的静态工厂。
+
+## 默认创建
+
+不指定资源参数时，默认上海（cn-shanghai）、服务端默认办公网络、1台4核8GiB Windows Server 2025的可用系统模板。Node 可直接调用 `await admin.create()`；Go 使用 `admin.Create(ctx, nil)`，Java 使用 `admin.create(ctx)`，CLI 使用 `wuying desktops create --profile admin`。
+
+SDK 使用签名 DescribeBundles 遍历目录并核对系统、CPU、MiB 内存、镜像和库存状态；优先简体中文，多个匹配项按 BundleId 稳定选择，磁盘沿用系统模板。无匹配项返回 UNSUPPORTED，目录异常或游标重复返回 PROTOCOL_ERROR；最多100页、每页100项。此路径还需要 DescribeBundles 读取权限。
+
+默认模板路径使用系统策略 system-all-enabled-policy，数量为1；未指定计费字段保留服务端默认值。显式 bundleId 不查询默认模板目录；其他显式参数仍可覆盖。省略等待选项仍只返回受理结果，需就绪时传 wait=true；默认网络由服务端按当前账号解析，SDK 不保存账号专属网络 ID。未指定 endUserIds 不自动分配普通用户。完整流程见[创建桌面并对话](/getting-started/desktop-to-agent)。
 
 ## 语言与授权
 
@@ -30,7 +38,7 @@ AK/SK 管理员态创建云桌面；服务端按真实权限处理。保留创�
 ### JavaScript / TypeScript · Client
 
 ```ts
-create(context: ExecutionContext, request: CreateDesktopsRequest, options?: DesktopCreateOptions): Promise<CreateDesktopsResponse>;
+create(context?: ExecutionContext, request?: CreateDesktopsRequest, options?: DesktopCreateOptions): Promise<CreateDesktopsResponse>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go.Client
@@ -42,6 +50,7 @@ func (receiver *Client) Create(ctx context.Context, r *model.CreateDesktopsReque
 ### Java · com.aliyun.wuying.sdk.WuyingClient
 
 ```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreateDesktopsResponse> create(com.aliyun.wuying.sdk.CallContext);
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreateDesktopsResponse> create(com.aliyun.wuying.sdk.model.CreateDesktopsRequest, com.aliyun.wuying.sdk.CallContext);
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreateDesktopsResponse> create(com.aliyun.wuying.sdk.model.CreateDesktopsRequest, com.aliyun.wuying.sdk.model.DesktopCreateOptions, com.aliyun.wuying.sdk.CallContext);
 ```
@@ -67,9 +76,9 @@ interface ExecutionContext {
 }
 
 interface CreateDesktopsRequest {
-    regionId: string;
-    officeSiteId: string;
-    bundleId: string;
+    regionId?: string;
+    officeSiteId?: string;
+    bundleId?: string;
     policyGroupId?: string;
     desktopName?: string;
     amount?: number;

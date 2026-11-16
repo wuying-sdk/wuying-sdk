@@ -22,7 +22,7 @@ For an ephemeral user Client, set `WUYING_CREDENTIALS` to that JSON, or supply a
 AuthCode or an imported login tuple. Later user commands use the SDK's existing login/refresh owner.
 Passwords are submitted once per Client lifetime; an explicit retry creates a new Client. Use the
 same clientId when importing/exchanging and consuming a login tuple. Endpoint overrides for this
-mode must use HTTPS. See the [unified login contract](/domain-model/02-runtime-agent#组织-id用户名和密码登录).
+mode must use HTTPS. See the [unified login contract](/getting-started/initialize-client).
 
 `wuying` lets humans and terminal Agents delegate natural-language tasks to an Agent
 on an authorized Wuying remote desktop. It uses the public `@aliyun/wuying-sdk` root
@@ -214,8 +214,10 @@ credential rotation can require fresh login; local streaming history is not pers
 ### Desktop provisioning and basic operations
 
 `desktops create/wait/start/stop/reboot/reset/delete` and `auth code` call the
-SDK's public root Client. Supply exactly one of `--request-file <path>` or
-`--stdin`; the JSON object is at most 64 KiB and uses the SDK's camelCase fields.
+SDK's public root Client. `desktops create` may omit both input options to use
+the SDK defaults. For an explicit request, and for all other commands in this group,
+supply exactly one of `--request-file <path>` or `--stdin`; empty file paths are
+invalid. The JSON object is at most 64 KiB and uses the SDK's camelCase fields.
 The SDK owns permission checks, protocol selection, signing and resource waiting;
 the CLI does not implement POP calls or a second resource state store.
 
@@ -480,3 +482,12 @@ Read [CONTRACT.md](/integration/04-errors-and-operations) for ownership and comp
 列表查询统一使用 `limit` / `cursor`，返回 `items` / `nextCursor`，默认每页 50 项，最多 100 项。详见[列表分页](https://wuying-sdk.mintlify.app/domain-model/page)。
 
 会话读取统一使用 `conversations get --runtime <id> --conversation <id>`；默认 cache，可通过 `--consistency refresh` 刷新。订阅统一使用 SDK 的 `subscribe*` 或脚本结果命令 `runtimes subscribe-command`；返回 Subscription，通过 unsubscribe() 停止本地订阅。
+
+
+### 默认创建桌面
+
+```sh
+wuying desktops create --profile admin
+```
+
+不提供请求文件时由根 SDK 使用默认配置：上海、当前账号默认办公网络、4核8GiB Windows Server 2025 可用系统模板、1台。需要创建就绪结果时增加 `--wait`；显式请求 JSON 仍可覆盖默认项。无 endUserIds 时不自动分配普通用户。模板目录读取需要管理员的 DescribeBundles 权限，无匹配项不改用其他系统或规格。

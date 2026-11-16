@@ -4678,11 +4678,11 @@ interface AdministrativeCredentials {
 /** Called before every administrative RPC, including status/result observation. */
 type AdministrativeCredentialProvider = (context: ExecutionContext) => Promise<AdministrativeCredentials>;
 
-/** Template-based ECD CreateDesktops (2020-09-30). Omitted billing fields keep server defaults. */
+/** ECD CreateDesktops; omitted resource fields select the default 4c8g Windows Server 2025 template. */
 interface CreateDesktopsRequest {
-    regionId: string;
-    officeSiteId: string;
-    bundleId: string;
+    regionId?: string;
+    officeSiteId?: string;
+    bundleId?: string;
     policyGroupId?: string;
     desktopName?: string;
     amount?: number;
@@ -4838,7 +4838,7 @@ declare class Client {
     delete(ctx: ExecutionContext, request: DesktopOperationRequest): Promise<DesktopOperationResponse>;
     private desktopOperation;
     private administration?;
-    create(context: ExecutionContext, request: CreateDesktopsRequest, options?: DesktopCreateOptions): Promise<CreateDesktopsResponse>;
+    create(context?: ExecutionContext, request?: CreateDesktopsRequest, options?: DesktopCreateOptions): Promise<CreateDesktopsResponse>;
     wait(context: ExecutionContext, request: WaitDesktopsRequest): Promise<WaitDesktopsResponse>;
     getAuthCode(context: ExecutionContext, request: GetAuthCodeParams): Promise<GetAuthCodeResponse>;
     private checkUser;

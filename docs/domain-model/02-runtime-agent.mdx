@@ -31,6 +31,34 @@ const { items: runtimes } = await runtimeManager.listRuntimes(ctx);
 
 `listRuntimes` 返回 `items` 和 `nextCursor`，当前页中的每项都是 `Runtime`。认证或目录加载失败会报错，不当作空页；更多资源通过 [分页](/domain-model/page) 继续查询。`subscribeRuntimes` 仍订阅同一目录并携带同步状态，不自动选择第一项，也不把 IM 在线状态当成云桌面电源状态。
 
+## 默认创建桌面
+
+管理员可直接创建默认桌面，不必传办公网络或模板 ID：
+
+<CodeGroup>
+
+```ts Node.js / TypeScript
+const created = await admin.create();
+```
+
+```go Go
+created, err := admin.Create(ctx, nil)
+```
+
+```java Java
+CompletionStage<CreateDesktopsResponse> created = admin.create(ctx);
+```
+
+```sh CLI
+wuying desktops create --profile admin
+```
+
+</CodeGroup>
+
+默认上海、当前账号默认办公网络、1台 4核8GiB Windows Server 2025 的可用系统模板。SDK 按云端目录匹配，不写死账号网络或镜像 ID；没有匹配项时明确报错。默认模板路径使用平台系统策略；模板磁盘配置以所选系统模板为准，计费保留云端默认值。可以用 regionId、officeSiteId、bundleId 等显式覆盖。
+
+上面的调用不等待就绪，也不自动分配普通用户；完整的用户分配、等待和 AuthCode 对话见[创建桌面并对话](/getting-started/desktop-to-agent)。参数、权限与模板选择规则见 [`create`](/api-reference/client/create-desktops)。
+
 ## 云桌面基础管理
 
 `regionId` 和 `desktopId` 来自宿主已确认的真实云桌面资源信息。它们不能由 runtimeId、Agent ID 或显示名拼接得到。

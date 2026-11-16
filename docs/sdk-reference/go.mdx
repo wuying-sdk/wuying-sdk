@@ -99,3 +99,8 @@ Client 是对外根入口；通过 `BuildAgentManager` 和 `BuildConversationMan
 ## 列表分页
 
 列表统一使用 limit/cursor，读取 items/nextCursor；默认每页50项，最多100项。完整规则见[列表查询与分页](/domain-model/page)。
+
+
+## 默认创建桌面
+
+默认创建无需指定办公网络和模板：Node `await admin.create()`；Go `admin.Create(ctx, nil)`；Java `admin.create(ctx)`；CLI `wuying desktops create --profile admin`。默认上海、当前账号默认办公网络、4核8GiB Windows Server 2025可用系统模板。省略等待选项返回受理结果；目标用户分配仍需明确 endUserIds。详细规则见[创建接口](/api-reference/client/create-desktops)。

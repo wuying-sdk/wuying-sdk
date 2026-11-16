@@ -3,7 +3,7 @@ title: "Java 公共 API 参考"
 description: "同版本 Java SDK jar 的公开签名；参数说明另见随包离线 Javadoc。"
 ---
 
-当前基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加 Runtime 首版未提交草稿；由验证产物 javap 生成。
+当前基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加默认桌面创建未提交草稿；由验证产物 javap 生成，排除 internal 实现包。
 
 ```java
 Compiled from "Administration.java"
@@ -89,6 +89,9 @@ public interface com.aliyun.wuying.sdk.Credential extends java.lang.AutoCloseabl
   public abstract java.lang.String getLoginRegionId();
   public abstract void close();
 }
+Compiled from "DefaultDesktopCreate.java"
+final class com.aliyun.wuying.sdk.DefaultDesktopCreate {
+}
 Compiled from "DesktopOperations.java"
 final class com.aliyun.wuying.sdk.DesktopOperations {
 }
@@ -107,6 +110,7 @@ public final class com.aliyun.wuying.sdk.WuyingClient implements java.lang.AutoC
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> reboot(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> reset(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DesktopOperationResponse> delete(com.aliyun.wuying.sdk.model.DesktopOperationRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreateDesktopsResponse> create(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreateDesktopsResponse> create(com.aliyun.wuying.sdk.model.CreateDesktopsRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreateDesktopsResponse> create(com.aliyun.wuying.sdk.model.CreateDesktopsRequest, com.aliyun.wuying.sdk.model.DesktopCreateOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WaitDesktopsResponse> wait(com.aliyun.wuying.sdk.model.WaitDesktopsRequest, com.aliyun.wuying.sdk.CallContext);

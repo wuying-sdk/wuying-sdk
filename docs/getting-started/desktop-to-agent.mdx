@@ -8,21 +8,21 @@ description: "管理员创建并分配桌面、申请 AuthCode，用户初始化
 
 ## 准备
 
-按[安装指南](/getting-started/overview)安装 SDK。办公网络 `officeSiteId`、桌面模板 `bundleId`、地域 `regionId` 由管理员提供；`endUserId` 是后端已验证映射的无影用户。模板中需要预装并运行配套 Gateway 与 Agent，创建桌面不会自动部署它们。
+按[安装指南](/getting-started/overview)安装 SDK。默认在上海使用当前账号的默认办公网络，选择 4核8GiB、Windows Server 2025 的可用系统模板，无需提供办公网络或模板 ID；`endUserId` 是后端已验证映射的无影用户。默认系统模板不承诺预装特定 Gateway 与 Agent；继续对话前应完成配套部署并确认在线。已有预装镜像时，可通过 bundleId 显式选择它。
 
 管理员密钥只保留在后端。下面的用户代码可以运行在浏览器；在 Node 运行用户态 Client 时，先完成[持久化配置](/sdk-reference/js#node-持久化)。
 
 ## 1. 服务端创建桌面并申请 AuthCode
 
+只创建一台默认桌面时，一行 `await admin.create()` 即可。它返回受理结果；本例还需要分配给目标用户并等待就绪，因此仅保留 `endUserIds` 和 `wait`。`ctx` 是覆盖创建等待过程的调用上下文，默认资源地域为 `cn-shanghai`。
+
 ```ts Node.js / TypeScript
 import { Client } from '@aliyun/wuying-sdk';
 
 const admin = Client.create({ accessKeyID, accessKeySecret });
-const created = await admin.create({ timeout: 600_000 }, {
-  regionId, officeSiteId, bundleId, amount: 1, endUserIds: [endUserId],
-}, { wait: true });
+const created = await admin.create(ctx, { endUserIds: [endUserId] }, { wait: true });
 const desktopId = created.desktopIds[0];
-await admin.start(ctx, { regionId, desktopIds: [desktopId] });
+await admin.start(ctx, { regionId: 'cn-shanghai', desktopIds: [desktopId] });
 const { authCode } = await admin.getAuthCode(ctx, { endUserId });
 ```
 
