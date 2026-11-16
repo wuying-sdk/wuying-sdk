@@ -271,6 +271,18 @@
                   "reference/go/public",
                   "reference/go/api"
                 ]
+              },
+              {
+                "group": "移动桥接（高级）",
+                "pages": [
+                  "api-reference/mobile/cancel",
+                  "api-reference/mobile/close",
+                  "api-reference/mobile/is-done",
+                  "api-reference/mobile/new-client",
+                  "api-reference/mobile/start",
+                  "api-reference/mobile/start-error",
+                  "api-reference/mobile/start-with-data"
+                ]
               }
             ]
           },
@@ -388,6 +400,21 @@
                 ]
               },
               {
+                "group": "命令用途与选项",
+                "pages": [
+                  "api-reference/cli/auth-import",
+                  "api-reference/cli/auth-login",
+                  "api-reference/cli/auth-logout",
+                  "api-reference/cli/auth-oauth",
+                  "api-reference/cli/auth-status",
+                  "api-reference/cli/codex-install",
+                  "api-reference/cli/doctor",
+                  "api-reference/cli/interactions-respond",
+                  "api-reference/cli/run",
+                  "api-reference/cli/turns-wait"
+                ]
+              },
+              {
                 "group": "命令",
                 "pages": [
                   "reference/cli/classes/agents",
@@ -447,7 +474,14 @@
                   "api-reference/client/logout",
                   "api-reference/client/refresh-login",
                   "api-reference/client/subscribe-stream-events",
-                  "api-reference/client/update-login-credentials"
+                  "api-reference/client/update-login-credentials",
+                  {
+                    "group": "Subscription",
+                    "pages": [
+                      "api-reference/subscriptions/close",
+                      "api-reference/subscriptions/unsubscribe"
+                    ]
+                  }
                 ]
               },
               {
@@ -559,7 +593,14 @@
                   "api-reference/conversations/subscribe-group",
                   "api-reference/conversations/subscribe-sidebar-conversations",
                   "api-reference/conversations/unarchive-conversation",
-                  "api-reference/conversations/unsubscribe-group"
+                  "api-reference/conversations/unsubscribe-group",
+                  {
+                    "group": "Mutation",
+                    "pages": [
+                      "api-reference/receipts/get-mutation",
+                      "api-reference/receipts/subscribe-mutation"
+                    ]
+                  }
                 ]
               },
               {
@@ -599,7 +640,24 @@
                   "api-reference/messages/stream",
                   "api-reference/messages/subscribe",
                   "api-reference/messages/subscribe-conversation-history",
-                  "api-reference/messages/wait"
+                  "api-reference/messages/wait",
+                  {
+                    "group": "CommandReceipt",
+                    "pages": [
+                      "api-reference/receipts/get-command-receipt",
+                      "api-reference/receipts/subscribe-command-receipt"
+                    ]
+                  },
+                  {
+                    "group": "MessageStream",
+                    "pages": [
+                      "api-reference/streams/accepted",
+                      "api-reference/streams/cancel",
+                      "api-reference/streams/close",
+                      "api-reference/streams/next",
+                      "api-reference/streams/result"
+                    ]
+                  }
                 ]
               },
               {
@@ -740,68 +798,11 @@
             ]
           },
           {
-            "group": "集成辅助接口",
+            "group": "高级集成与排障",
             "pages": [
+              "api-reference/advanced/index",
               {
-                "group": "CLI",
-                "pages": [
-                  "api-reference/cli/auth-import",
-                  "api-reference/cli/auth-login",
-                  "api-reference/cli/auth-logout",
-                  "api-reference/cli/auth-oauth",
-                  "api-reference/cli/auth-status",
-                  "api-reference/cli/codex-install",
-                  "api-reference/cli/doctor",
-                  "api-reference/cli/interactions-respond",
-                  "api-reference/cli/run",
-                  "api-reference/cli/turns-wait"
-                ]
-              },
-              {
-                "group": "Mobile",
-                "pages": [
-                  "api-reference/mobile/cancel",
-                  "api-reference/mobile/close",
-                  "api-reference/mobile/is-done",
-                  "api-reference/mobile/new-client",
-                  "api-reference/mobile/start",
-                  "api-reference/mobile/start-error",
-                  "api-reference/mobile/start-with-data"
-                ]
-              },
-              {
-                "group": "超时后查询原结果",
-                "pages": [
-                  "api-reference/receipts/get-command-receipt",
-                  "api-reference/receipts/subscribe-command-receipt"
-                ]
-              },
-              {
-                "group": "跟踪一次写入结果",
-                "pages": [
-                  "api-reference/receipts/get-mutation",
-                  "api-reference/receipts/subscribe-mutation"
-                ]
-              },
-              {
-                "group": "处理发送流中的更新",
-                "pages": [
-                  "api-reference/streams/accepted",
-                  "api-reference/streams/cancel",
-                  "api-reference/streams/close",
-                  "api-reference/streams/next",
-                  "api-reference/streams/result"
-                ]
-              },
-              {
-                "group": "订阅数据变化",
-                "pages": [
-                  "api-reference/subscriptions/close",
-                  "api-reference/subscriptions/unsubscribe"
-                ]
-              },
-              {
-                "group": "查看会话同步进度",
+                "group": "会话同步",
                 "pages": [
                   "api-reference/sync/list-group-sync-states",
                   "api-reference/sync/list-groups",

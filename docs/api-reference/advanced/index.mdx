@@ -1,0 +1,16 @@
+---
+title: "高级集成与排障"
+sidebarTitle: "高级集成与排障"
+description: "仅在需要定位会话同步或定制底层通信时使用，普通接入优先通过 Client 与 Manager。"
+---
+
+普通应用从 [SDK Client](/getting-started/initialize-client) 和业务 Manager 开始。这里收录的是进阶同步与传输接口，阅读它们不代表需要自行维护另一套业务连接或会话状态。
+
+| 入口 | 解决什么问题 | 使用边界 |
+|---|---|---|
+| [会话同步](/api-reference/sync/list-group-sync-states) | 查看历史消息数据的同步状态，定位缺失或延迟，按需请求同步 | 同步完成不表示 Agent 任务完成；任务状态查看 Turn |
+| [Transport](/api-reference/transport/ag-message-client-connect) | 底层连接、群消息、中继请求与同步 | 定制底层集成时使用，遵守对应语言的配置与生命周期，不绕过授权 |
+
+日常接入中的结果处理仍在对应对象下：Message 的 [CommandReceipt](/api-reference/receipts/get-command-receipt) 查询原消息命令、[MessageStream](/api-reference/streams/next) 读取执行更新；Conversation 的 [Mutation](/api-reference/receipts/get-mutation) 跟踪支持该机制的写入；Client 的 [Subscription](/api-reference/subscriptions/unsubscribe) 释放本地订阅。
+
+消息命令或写入超时后，先保留原请求身份并查询结果，不凭超时认定失败或自动重复提交。停止本地订阅也不等于取消远端任务。详见[错误与恢复](/domain-model/12-errors-examples)。

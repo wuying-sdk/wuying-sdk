@@ -5,6 +5,20 @@ description: "Android 与 iOS 共用的方法、认证、JSON 数据、取消和
 
 Android 的 Java 包装和 iOS 的 Swift 包装复用 Go mobile 的唯一方法清单和根 Client；原生层负责数据转换、回调派发与本地句柄，不维护第二套会话、授权或路由状态。
 
+## 底层移动桥接
+
+Android / iOS 应用优先使用各自的 [Client](/reference/android/client) / [Client](/reference/ios/client) 和 Methods 常量。下面是 Go mobile 提供给原生包装层的桥接接口，供定制或排查包装层时查阅，不是另一套业务模型，也不是服务端 Java SDK 的接口。
+
+| 接口 | 用途 |
+|---|---|
+| [NewClient](/api-reference/mobile/new-client) | 创建底层移动 Client |
+| [Start](/api-reference/mobile/start) | 按方法名与 JSON 请求启动调用、订阅或流 |
+| [StartWithData](/api-reference/mobile/start-with-data) | 为支持的附件暂存调用传入文件字节 |
+| [Cancel](/api-reference/mobile/cancel) | 停止当前本地操作，不请求取消远端任务 |
+| [IsDone](/api-reference/mobile/is-done) | 检查本地操作是否结束 |
+| [StartError](/api-reference/mobile/start-error) | 读取操作启动阶段的错误 |
+| [Close](/api-reference/mobile/close) | 关闭底层 Client，停止本地回调并释放资源 |
+
 ## 认证与配置
 
 移动应用属于用户端。配置选择后端签发的 `authCode`，或完整的 `loginToken/sessionId/endUserId`；服务端 AK/SK 不进入移动应用。真实用户与资源授权仍由服务端校验。认证路径见[授权与认证](/integration/01-auth-and-lifecycle)。
