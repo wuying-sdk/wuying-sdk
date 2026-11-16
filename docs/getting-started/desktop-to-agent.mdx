@@ -22,11 +22,10 @@ import { Client } from '@aliyun/wuying-sdk';
 const admin = Client.create({ accessKeyID, accessKeySecret });
 const created = await admin.create(ctx, { endUserIds: [endUserId] }, { wait: true });
 const desktopId = created.desktopIds[0];
-await admin.start(ctx, { regionId: 'cn-shanghai', desktopIds: [desktopId] });
 const { authCode } = await admin.getAuthCode(ctx, { endUserId });
 ```
 
-`wait: true` 等待桌面创建就绪；该状态可能是 Running 或 Stopped，所以随后显式开机。开机受理仍不代表 Agent 在线。保留 `created` 中的桌面、订单和请求标识；创建会产生真实资源，未知结果时核对原请求，不重复创建。
+桌面创建后默认开机，无需再次调用 `start`。`wait: true` 等待创建完成；继续对话前，仍需确认 Gateway 与 Agent 已部署并上线。保留 `created` 中的桌面、订单和请求标识；创建会产生真实资源，未知结果时核对原请求，不重复创建。
 
 通过已认证的业务链路，将 `authCode`、`desktopId` 和地域交给目标用户。`clientId` 使用平台授权的接入标识；AuthCode 短效，临近初始化时申请，不把 AK/SK 一起交给用户。
 
