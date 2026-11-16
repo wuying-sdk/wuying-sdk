@@ -10,13 +10,17 @@ description: "管理员创建并分配桌面、申请 AuthCode，用户初始化
 
 按[安装指南](/getting-started/overview)安装 SDK。默认在上海使用当前账号的默认办公网络，选择 4核8GiB、Windows Server 2025 的可用系统模板，无需提供办公网络或模板 ID；`endUserId` 是后端已验证映射的无影用户。默认系统模板不承诺预装特定 Gateway 与 Agent；继续对话前应完成配套部署并确认在线。已有预装镜像时，可通过 bundleId 显式选择它。
 
-管理员密钥只保留在后端。下面的用户代码可以运行在浏览器；在 Node 运行用户态 Client 时，先完成[持久化配置](/sdk-reference/js#node-持久化)。
+每一步可切换语言，按同一种语言顺序执行；服务端提供 Node.js / TypeScript、Go、Java、CLI 示例，用户端另含 Android、iOS。移动端没有管理员签名入口，复用第一步后端签发的 AuthCode，不在应用中放 AK/SK。
+
+下文只列核心调用。按[SDK Client](/getting-started/initialize-client)准备导入、当前身份独占的数据文件和认证配置；Go 片段位于返回 error 的函数内，Java 的等待语句位于工作线程。`ctx` 覆盖本流程的等待预算。浏览器使用真实 IndexedDB；Node 用户态先完成[持久化配置](/sdk-reference/js#node-持久化)。CLI 使用 Bash、jq 与已配置的 `admin` profile，`user` profile 单独存放当前用户凭据；示例文件放在私有目录，不开启 shell 跟踪。
 
 ## 1. 服务端创建桌面并申请 AuthCode
 
 只创建一台默认桌面时，一行 `await admin.create()` 即可。它返回受理结果；本例还需要分配给目标用户并等待就绪，因此仅保留 `endUserIds` 和 `wait`。`ctx` 是覆盖创建等待过程的调用上下文，默认资源地域为 `cn-shanghai`。
 
-```ts Node.js / TypeScript
+<CodeGroup>
+
+```ts TypeScript
 import { Client } from '@aliyun/wuying-sdk';
 
 const admin = Client.create({ accessKeyID, accessKeySecret });
@@ -25,11 +29,56 @@ const desktopId = created.desktopIds[0];
 const { authCode } = await admin.getAuthCode(ctx, { endUserId });
 ```
 
+```go Go
+admin, err := wuying.NewClient(wuying.ClientOptions{
+    AccessKeyID: accessKeyID, AccessKeySecret: accessKeySecret,
+}, nil)
+if err != nil { return err }
+created, err := admin.Create(ctx, &model.CreateDesktopsRequest{
+    EndUserIDs: []string{endUserID},
+}, model.DesktopCreateOptions{Wait: true})
+if err != nil { return err }
+desktopID := created.DesktopIDs[0]
+ticket, err := admin.GetAuthCode(ctx, &model.GetAuthCodeRequest{EndUserID: endUserID})
+if err != nil { return err }
+authCode := ticket.AuthCode
+```
+
+```java Java
+WuyingClient admin = new WuyingClient(
+    ClientOptions.builder().accessKey(accessKeyId, accessKeySecret).build());
+CreateDesktopsRequest request = new CreateDesktopsRequest();
+request.endUserIds = Collections.singletonList(endUserId);
+DesktopCreateOptions options = new DesktopCreateOptions();
+options.wait = true;
+CreateDesktopsResponse created = admin.create(request, options, ctx)
+    .toCompletableFuture().get();
+String desktopId = created.desktopIds.get(0);
+GetAuthCodeParams user = new GetAuthCodeParams();
+user.endUserId = endUserId;
+String authCode = admin.getAuthCode(user, ctx).toCompletableFuture().get().authCode;
+```
+
+```bash CLI
+set -euo pipefail
+jq -n --arg user "$END_USER_ID" '{endUserIds: [$user]}' |
+  wuying desktops create --profile admin --stdin --wait --timeout 600000 > created.json
+desktopId=$(jq -er '.data.desktopIds[0]' created.json)
+authCode=$(jq -n --arg user "$END_USER_ID" '{endUserId: $user}' |
+  wuying auth code --profile admin --stdin | jq -er '.data.authCode')
+```
+
+</CodeGroup>
+
 桌面创建后默认开机，无需再次调用 `start`。`wait: true` 等待创建完成；继续对话前，仍需确认 Gateway 与 Agent 已部署并上线。保留 `created` 中的桌面、订单和请求标识；创建会产生真实资源，未知结果时核对原请求，不重复创建。
 
 通过已认证的业务链路，将 `authCode`、`desktopId` 和地域交给目标用户。`clientId` 使用平台授权的接入标识；AuthCode 短效，临近初始化时申请，不把 AK/SK 一起交给用户。
 
 ## 2. 用户初始化 Client 并选择执行者
+
+`runtimeId` / `RUNTIME_ID` 由用户从 Runtime 目录选定，再查询该环境的 Agent；下面查询语句在该标识已选定后执行。Android / iOS 在工作线程初始化；`onRuntimes`、`onAgents` 为宿主的事件回调，先处理 `event.error`，再从成功终态 `event.data.items` 读取当前页及 `nextCursor`。
+
+<CodeGroup>
 
 ```ts TypeScript
 const client = Client.create({ authCode }, { clientId });
@@ -39,11 +88,75 @@ const agents = await client.buildAgentManager(ctx);
 const { items: availableAgents } = await agents.listAgents(ctx, { runtimeId });
 ```
 
+```go Go
+client, err := wuying.NewClient(wuying.ClientOptions{AuthCode: authCode},
+    &config.UserConfig{ClientID: clientID, DataPath: dataFile})
+if err != nil { return err }
+runtimeManager, err := client.BuildRuntimeManager(ctx)
+if err != nil { return err }
+runtimes, err := runtimeManager.ListRuntimes(ctx)
+if err != nil { return err }
+agents, err := client.BuildAgentManager(ctx)
+if err != nil { return err }
+availableAgents, err := agents.ListAgents(ctx, model.RuntimeRef{RuntimeID: runtimeID})
+if err != nil { return err }
+```
+
+```java Java
+WuyingClient client = new WuyingClient(
+    ClientOptions.builder().authCode(authCode).build(),
+    SdkConfig.builder().clientId(clientId).dataPath(dataFile).build());
+RuntimeManager runtimeManager = client.buildRuntimeManager(ctx);
+Page<Runtime> runtimes = runtimeManager.listRuntimes(ctx).toCompletableFuture().get();
+AgentManager agents = client.buildAgentManager(ctx);
+RuntimeRef runtime = new RuntimeRef();
+runtime.runtimeId = runtimeId;
+Page<Agent> availableAgents = agents.listAgents(runtime, ctx).toCompletableFuture().get();
+```
+
+```java Android
+JSONObject config = new JSONObject()
+    .put("authCode", authCode).put("clientId", clientId).put("dataPath", dataFile);
+Client client = AndroidClient.connect(config);
+client.request(Methods.runtimeListRuntimes, new JSONObject(), onRuntimes);
+client.request(Methods.agentListAgents,
+    new JSONObject().put("runtimeId", runtimeId), onAgents);
+```
+
+```swift iOS
+import WuyingSDK
+
+let engine = try GoEngine(configuration: [
+    "authCode": authCode, "clientId": clientId, "dataPath": dataFile
+])
+let client = Client(engine: engine)
+try client.request(method: Methods.runtimeListRuntimes, onEvent: onRuntimes)
+try client.request(method: Methods.agentListAgents,
+    request: ["runtimeId": runtimeId], onEvent: onAgents)
+```
+
+```bash CLI
+unset WUYING_CREDENTIALS WUYING_ACCESS_KEY_ID WUYING_ACCESS_KEY_SECRET WUYING_ALIYUN_OAUTH_PROFILE
+unset WUYING_ORGANIZATION_ID WUYING_USERNAME WUYING_PASSWORD WUYING_AUTH_CODE
+unset WUYING_LOGIN_TOKEN WUYING_SESSION_ID WUYING_END_USER_ID WUYING_LOGIN_REGION_ID
+WUYING_AUTH_CODE="$authCode" jq -n \
+  '{authCode: env.WUYING_AUTH_CODE, clientId: env.WUYING_CLIENT_ID}' |
+  wuying auth import --profile user --stdin
+wuying runtimes list --profile user
+wuying agents list --profile user --runtime "$RUNTIME_ID"
+```
+
+</CodeGroup>
+
 从 `runtimes` 中选择与新桌面对应的在线 Runtime，再用它的真实 `runtimeId` 查询 Agent，并选择一个可用的 `agentId`。桌面 ID、Runtime ID 和 Agent ID 分别承担不同职责，不直接互换；对应关系由接入方核对。存在 `nextCursor` 时继续[分页](/domain-model/page)，不能将第一页当成全量目录，也不默认选择第一项。
 
 新桌面尚未出现在目录或 Agent 未就绪时，先核对资源启动、授权和 Gateway / Agent 部署，等待其上线后继续，不再创建第二台桌面。
 
 ## 3. 创建会话、发送消息并等待结果
+
+移动端在创建成功回调中发送消息。`onCompleted` 是宿主的 `SDKEvent` 回调：先处理 `event.error`；仅在成功终态且 `event.data.turn.state` 为 `completed` 时，将 `event.data` 作为第四步的 `completed`。`onError` 为宿主错误回调；Android 使用 `Consumer<Exception>`，iOS 使用 `(Error) -> Void`。CLI 的 `CREATE_ID`、`COMMAND_ID` 同样由宿主提前生成并保存。
+
+<CodeGroup>
 
 ```ts TypeScript
 const conversations = await client.buildConversationManager(ctx);
@@ -57,11 +170,98 @@ const completed = await conversations.sendMessageAndWait({ timeout: 600_000 }, {
 if (completed.turn.state !== 'completed') throw new Error('任务未完成');
 ```
 
+```go Go
+conversations, err := client.BuildConversationManager(ctx)
+if err != nil { return err }
+conversation, err := conversations.CreateConversation(ctx, model.CreateRequest{
+    RuntimeRef: model.RuntimeRef{RuntimeID: runtimeID},
+    AgentID: agentID, Mode: "single", Name: "第一次对话",
+})
+if err != nil { return err }
+completed, err := conversations.SendMessageAndWait(ctx, model.SendRequest{
+    ConversationRef: conversation.ConversationRef,
+    Text: "你好，请只回复一句问候。", ClientCommandID: clientCommandID,
+})
+if err != nil { return err }
+if completed.Turn.State != "completed" { return fmt.Errorf("任务未完成") }
+```
+
+```java Java
+ConversationManager conversations = client.buildConversationManager(ctx);
+CreateRequest create = new CreateRequest();
+create.runtimeId = runtimeId;
+create.agentId = agentId;
+create.mode = "single";
+create.name = "第一次对话";
+CreatedConversation conversation = conversations.createConversation(create, ctx)
+    .toCompletableFuture().get();
+SendRequest send = new SendRequest();
+send.runtimeId = runtimeId;
+send.conversationId = conversation.conversationId;
+send.text = "你好，请只回复一句问候。";
+send.clientCommandId = clientCommandId;
+MessageCompletion completed = conversations.sendMessageAndWait(send, ctx)
+    .toCompletableFuture().get();
+if (!"completed".equals(completed.turn.state)) throw new IllegalStateException("任务未完成");
+```
+
+```java Android
+JSONObject create = new JSONObject().put("runtimeId", runtimeId)
+    .put("agentId", agentId).put("mode", "single").put("name", "第一次对话");
+client.request(Methods.conversationCreateConversation, create, event -> {
+    if (event.error != null) { onError.accept(event.error); return; }
+    if (!event.terminal) return;
+    try {
+        JSONObject conversation = (JSONObject) event.data;
+        JSONObject send = new JSONObject().put("runtimeId", runtimeId)
+            .put("conversationId", conversation.getString("conversationId"))
+            .put("text", "你好，请只回复一句问候。")
+            .put("clientCommandId", clientCommandId);
+        client.request(Methods.conversationSendMessageAndWait,
+            send, null, null, 600000, onCompleted);
+    } catch (Exception error) { onError.accept(error); }
+});
+```
+
+```swift iOS
+try client.request(method: Methods.conversationCreateConversation, request: [
+    "runtimeId": runtimeId, "agentId": agentId,
+    "mode": "single", "name": "第一次对话"
+]) { event in
+    if let error = event.error { onError(error); return }
+    guard event.terminal, let conversation = event.data as? [String: Any],
+          let conversationId = conversation["conversationId"] as? String else { return }
+    do {
+        try client.request(method: Methods.conversationSendMessageAndWait, request: [
+            "runtimeId": runtimeId, "conversationId": conversationId,
+            "text": "你好，请只回复一句问候。", "clientCommandId": clientCommandId
+        ], timeoutMillis: 600000, onEvent: onCompleted)
+    } catch { onError(error) }
+}
+```
+
+```bash CLI
+wuying conversations create --profile user \
+  --runtime "$RUNTIME_ID" --agent "$AGENT_ID" --name "第一次对话" \
+  --mutation-id "$CREATE_ID" > conversation.json
+conversationId=$(jq -er '.data.conversationId' conversation.json)
+wuying run --profile user --runtime "$RUNTIME_ID" --conversation "$conversationId" \
+  --text '你好，请只回复一句问候。' --client-command-id "$COMMAND_ID" \
+  --timeout 600000 > completed.json
+jq -e '.data.turn.state == "completed"' completed.json > /dev/null
+```
+
+</CodeGroup>
+
 `clientCommandId` 是发送前由应用生成并保存的本次请求标识。真实业务应在首次建会前生成、保存并通过 `MutationOptions` 传入 `mutationId`；短例省略了这组选项。结果不确定时，沿用原标识查询回执，不在失败后生成新标识重建。`sendMessageAndWait` 返回执行结果，不直接返回答案字符串。
 
 ## 4. 读取 Agent 答案
 
-下面在消息分页中定位**本轮 Agent 消息**，然后读取其答案。不能拿本次发送的用户消息当成 Agent 回答。
+TypeScript 通过消息分页定位本轮 Agent 消息；其他 SDK 从完成轮次的 `messageIds` 读取展示。两种方式都核对 Turn、Agent 发送者与答案完整性，不能把本次用户消息当作 Agent 回答。CLI 的 `run` 已按当前轮次收集 `answers`，直接核对覆盖状态后读取。
+
+Android / iOS 的 `onAnswer` 是宿主的文本展示回调。没有收到完整答案时，保持等待并按原轮次继续读取或订阅，不把空结果当作成功；页面退出时取消本地 Request，账号退出时在工作线程关闭 Client。
+
+<CodeGroup>
 
 ```ts TypeScript
 const ref = { runtimeId, conversationId: conversation.conversationId };
@@ -85,6 +285,116 @@ const answer = view.answer.blocks
 console.log(answer);
 ```
 
+```go Go
+answered := false
+for _, messageID := range completed.Turn.MessageIDs {
+    result, err := conversations.GetMessagePresentation(ctx, model.PresentationQuery{
+        ConversationRef: conversation.ConversationRef,
+        MessageID: messageID, Consistency: "refresh",
+    })
+    if err != nil { return err }
+    view := result.Data
+    if view == nil || view.Message.TurnID != completed.Turn.TurnID ||
+        view.Message.Sender.Actor.Kind != "agent" { continue }
+    if view.Answer.State != "final" || view.Answer.Coverage.State != "complete" {
+        return fmt.Errorf("答案尚未完整同步，请继续读取原消息")
+    }
+    for _, block := range view.Answer.Blocks {
+        if block.Kind == "text" { fmt.Print(block.Text) }
+    }
+    answered = true
+}
+if !answered { return fmt.Errorf("Agent 答案尚未同步，请继续读取原轮次") }
+```
+
+```java Java
+boolean answered = false;
+for (String messageId : completed.turn.messageIds) {
+    PresentationQuery query = new PresentationQuery();
+    query.runtimeId = runtimeId;
+    query.conversationId = conversation.conversationId;
+    query.messageId = messageId;
+    query.consistency = "refresh";
+    MessagePresentation view = conversations.getMessagePresentation(query, ctx)
+        .toCompletableFuture().get().data;
+    if (view == null || !completed.turn.turnId.equals(view.message.turnId)
+        || !"agent".equals(view.message.sender.actor.kind)) continue;
+    if (!"final".equals(view.answer.state) || !"complete".equals(view.answer.coverage.state))
+        throw new IllegalStateException("答案尚未完整同步，请继续读取原消息");
+    for (Block block : view.answer.blocks)
+        if ("text".equals(block.kind)) System.out.print(block.text);
+    answered = true;
+}
+if (!answered) throw new IllegalStateException("Agent 答案尚未同步，请继续读取原轮次");
+```
+
+```java Android
+JSONObject turn = completed.getJSONObject("turn");
+if (!"completed".equals(turn.getString("state"))) throw new IllegalStateException("任务未完成");
+JSONArray ids = turn.getJSONArray("messageIds");
+for (int i = 0; i < ids.length(); i++) {
+    JSONObject query = new JSONObject().put("runtimeId", runtimeId)
+        .put("conversationId", turn.getString("conversationId"))
+        .put("messageId", ids.getString(i)).put("consistency", "refresh");
+    client.request(Methods.conversationGetMessagePresentation, query, event -> {
+        if (event.error != null) { onError.accept(event.error); return; }
+        if (!event.terminal) return;
+        try {
+            JSONObject view = ((JSONObject) event.data).getJSONObject("data");
+            JSONObject message = view.getJSONObject("message");
+            if (!turn.getString("turnId").equals(message.optString("turnId")) ||
+                !"agent".equals(message.getJSONObject("sender").getJSONObject("actor").optString("kind"))) return;
+            JSONObject answer = view.getJSONObject("answer");
+            if (!"final".equals(answer.optString("state")) ||
+                !"complete".equals(answer.getJSONObject("coverage").optString("state"))) return;
+            JSONArray blocks = answer.getJSONArray("blocks");
+            StringBuilder text = new StringBuilder();
+            for (int j = 0; j < blocks.length(); j++) {
+                JSONObject block = blocks.getJSONObject(j);
+                if ("text".equals(block.optString("kind"))) text.append(block.optString("text"));
+            }
+            onAnswer.accept(text.toString());
+        } catch (Exception error) { onError.accept(error); }
+    });
+}
+```
+
+```swift iOS
+guard let turn = completed["turn"] as? [String: Any],
+      turn["state"] as? String == "completed",
+      let conversationId = turn["conversationId"] as? String,
+      let turnId = turn["turnId"] as? String,
+      let ids = turn["messageIds"] as? [String] else { return }
+for messageId in ids {
+    try client.request(method: Methods.conversationGetMessagePresentation, request: [
+        "runtimeId": runtimeId, "conversationId": conversationId,
+        "messageId": messageId, "consistency": "refresh"
+    ]) { event in
+        if let error = event.error { onError(error); return }
+        guard event.terminal, let result = event.data as? [String: Any],
+              let view = result["data"] as? [String: Any],
+              let message = view["message"] as? [String: Any], message["turnId"] as? String == turnId,
+              let sender = message["sender"] as? [String: Any],
+              let actor = sender["actor"] as? [String: Any], actor["kind"] as? String == "agent",
+              let answer = view["answer"] as? [String: Any], answer["state"] as? String == "final",
+              let coverage = answer["coverage"] as? [String: Any], coverage["state"] as? String == "complete",
+              let blocks = answer["blocks"] as? [[String: Any]] else { return }
+        onAnswer(blocks.filter { $0["kind"] as? String == "text" }
+            .compactMap { $0["text"] as? String }.joined())
+    }
+}
+```
+
+```bash CLI
+jq -e '.data.resultCoverage == "complete" and
+  ([.data.answers[] | select(.state == "final" and .coverage.state == "complete")] | length > 0)' \
+  completed.json > /dev/null
+jq -r '.data.answers[] | select(.state == "final" and .coverage.state == "complete") |
+  .blocks[] | select(.kind == "text") | .text' completed.json
+```
+
+</CodeGroup>
+
 预期结果：任务轮次为 completed，消息答案为 final 且覆盖完整，输出 Agent 的问候。若触发审批或问答，按[交互指南](/guides/interactions)提交用户选择；断线或超时继续核对原轮次，不换请求标识重发。
 
-结束时 `await client.close()`、`await admin.close()`；关闭 Client 不会释放桌面。示例资源用完后由管理员按实际需要[释放桌面](/api-reference/client/delete)。完整调用前提和其他语言见 [SDK Client](/getting-started/initialize-client)及[会话示例](/getting-started/first-conversation)。
+结束时关闭使用的 Client：TypeScript 调用 `await client.close()` / `await admin.close()`，Go 调用 `Close()`，Java / Android 调用 `close()`，iOS 调用 `try client.close()`；CLI 由当前命令释放连接。关闭 Client 不会释放桌面。示例资源用完后由管理员按实际需要[释放桌面](/api-reference/client/delete)。完整调用前提和其他语言见 [SDK Client](/getting-started/initialize-client)及[会话示例](/getting-started/first-conversation)。

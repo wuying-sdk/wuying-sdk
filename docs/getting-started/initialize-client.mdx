@@ -31,7 +31,7 @@ AK/SK 代表 aliuid 维度的管理员权限，只在受信任服务端使用。
 
 <CodeGroup>
 
-```ts Node.js / TypeScript
+```ts TypeScript
 import { Client } from '@aliyun/wuying-sdk';
 
 const admin = Client.create({ accessKeyID, accessKeySecret });
@@ -50,7 +50,14 @@ WuyingClient admin = new WuyingClient(
 );
 ```
 
+```bash CLI
+jq -n '{accessKeyID: env.WUYING_ACCESS_KEY_ID, accessKeySecret: env.WUYING_ACCESS_KEY_SECRET}' |
+  wuying auth import --profile admin --stdin
+```
+
 </CodeGroup>
+
+CLI 使用 Bash 和 jq，将安全注入的 AK/SK 保存到私有 `admin` profile；后续命令带 `--profile admin`，由命令建立管理员 Client。`auth import` 不验证在线权限。
 
 Node / CLI 还可使用 [OAuth 或可续期凭据](/guides/administrator-oauth)。云端按实际授权校验每项操作；管理员 Client 与无影用户态 Client 的可用操作分别见 [API Reference](/api-reference/index)。Android / iOS 当前没有管理员签名入口。
 
@@ -83,6 +90,8 @@ Android / iOS 在工作线程初始化和关闭；默认回调分别交付到主
 
 如果宿主已有当前用户的有效登录态，可以使用 `loginToken + sessionId + endUserId`，按需附带 `loginRegionId`，替代 AuthCode。**AuthCode、登录态和组织账号密码三条路径选择一种**，不同时填入两套凭据。
 
+<CodeGroup>
+
 ```ts TypeScript
 import { Client } from '@aliyun/wuying-sdk';
 
@@ -90,6 +99,48 @@ const client = Client.create({
   loginToken, sessionId, endUserId,
 }, { clientId });
 ```
+
+```go Go
+client, err := wuying.NewClient(wuying.ClientOptions{
+    LoginToken: loginToken, SessionID: sessionID, EndUserID: endUserID,
+}, &config.UserConfig{ClientID: clientID, DataPath: dataFile})
+if err != nil { return err }
+```
+
+```java Java
+WuyingClient client = new WuyingClient(
+    ClientOptions.builder().loginToken(loginToken).sessionId(sessionId).endUserId(endUserId).build(),
+    SdkConfig.builder().clientId(clientId).dataPath(dataFile).build()
+);
+```
+
+```java Android
+JSONObject config = new JSONObject()
+    .put("loginToken", loginToken).put("sessionId", sessionId).put("endUserId", endUserId)
+    .put("clientId", clientId).put("dataPath", dataFile);
+Client client = AndroidClient.connect(config);
+```
+
+```swift iOS
+import WuyingSDK
+
+let engine = try GoEngine(configuration: [
+    "loginToken": loginToken, "sessionId": sessionId, "endUserId": endUserId,
+    "clientId": clientId, "dataPath": dataFile
+])
+let client = Client(engine: engine)
+```
+
+```bash CLI
+jq -n '{loginToken: env.WUYING_LOGIN_TOKEN, sessionId: env.WUYING_SESSION_ID,
+  endUserId: env.WUYING_END_USER_ID, clientId: env.WUYING_CLIENT_ID}' |
+  wuying auth import --profile user --stdin
+```
+
+</CodeGroup>
+
+CLI 将同一份登录组合保存到当前用户的私有 `user` profile，后续命令使用 `--profile user`；导入成功不代表在线认证通过。环境凭据优先于 profile，切换身份前先清理另一身份的认证环境变量，不能同时注入管理员 AK/SK、AuthCode 和 LoginToken。
+
 
 | 语言 | 登录态字段 |
 |---|---|
