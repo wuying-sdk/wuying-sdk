@@ -452,7 +452,6 @@
                   "api-reference/client/build-runtime-manager",
                   "api-reference/client/build-skill-manager",
                   "api-reference/client/close",
-                  "api-reference/client/get-auth-code",
                   "api-reference/client/logout",
                   "api-reference/client/update-login-credentials",
                   {
@@ -474,6 +473,7 @@
                 "pages": [
                   "api-reference/client/create-desktops",
                   "api-reference/client/delete",
+                  "api-reference/client/get-auth-code",
                   "api-reference/client/reboot",
                   "api-reference/client/reset",
                   "api-reference/client/start",

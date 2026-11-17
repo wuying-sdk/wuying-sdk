@@ -14,6 +14,7 @@ Runtime 是无影的执行环境模型。SDK 提供环境目录、云桌面基�
 |---|---|---|
 | 查询和订阅环境目录、读取宿主能力 | `client.buildRuntimeManager`；Go 为 `BuildRuntimeManager` | 用户态 |
 | 创建云桌面、等待创建完成 | 根 Client 的 `create` / `wait` | AK/SK 管理员态 |
+| 为目标用户申请 AuthCode，衔接用户态接入 | 根 Client 的 [`getAuthCode`](/api-reference/client/get-auth-code)；CLI 为 `wuying auth code` | AK/SK 管理员态 |
 | 开机、关机、重启 | 根 Client 的 `start` / `stop` / `reboot` | 用户态或 AK/SK 管理员态 |
 | 重置系统 | 根 Client 的 `reset` | 两种身份均支持，镜像参数规则不同 |
 | 释放云桌面 | 根 Client 的 `delete` | 仅 AK/SK 管理员态 |
