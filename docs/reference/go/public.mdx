@@ -1318,16 +1318,6 @@ func (receiver *ResourceManager) DiscardDraftAttachments(ctx context.Context, r 
 func (receiver *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
 ```
 
-<a id="entry-5ba83416975a605b" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/get-conversation-resources)。
-
-```go
-func (receiver *ResourceManager) GetConversationResources(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ResourceSelection], error)
-```
-
 <a id="entry-9b24f7172c4a0e97" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetDraftAttachmentPreview
@@ -1358,16 +1348,6 @@ func (receiver *ResourceManager) GetImGroupAttachmentOperation(ctx context.Conte
 func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
 ```
 
-<a id="entry-990096554fdbc61d" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ListResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/list-resources)。
-
-```go
-func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
-```
-
 <a id="entry-175cf5691e706458" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ListWorkspaces
@@ -1376,16 +1356,6 @@ func (receiver *ResourceManager) ListResources(ctx context.Context, r m.Resource
 
 ```go
 func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
-```
-
-<a id="entry-11c32d186f4713b3" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.SetConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/set-conversation-resources)。
-
-```go
-func (receiver *ResourceManager) SetConversationResources(ctx context.Context, r m.ResourceRequest) (m.ResourceSelection, error)
 ```
 
 <a id="entry-a3569ba176484abf" />
@@ -1406,26 +1376,6 @@ func (receiver *ResourceManager) StageAttachment(ctx context.Context, r m.StageA
 
 ```go
 func (receiver *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
-```
-
-<a id="entry-4a33428c3fafb8d0" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.SubscribeConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-conversation-resources)。
-
-```go
-func (receiver *ResourceManager) SubscribeConversationResources(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ResourceSelection]) (m.Subscription, error)
-```
-
-<a id="entry-ec7750adb11b2969" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.SubscribeResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-resources)。
-
-```go
-func (receiver *ResourceManager) SubscribeResources(ctx context.Context, r m.ResourceQuery, o m.SubscriptionListener[[]m.Resource]) (m.Subscription, error)
 ```
 
 <a id="entry-8e4c6be8be093363" />

@@ -89,9 +89,8 @@
                   "domain-model/11-cloud-capabilities",
                   "domain-model/model",
                   {
-                    "group": "资源",
+                    "group": "附件与工作空间",
                     "pages": [
-                      "domain-model/08-resource-attachment",
                       {
                         "group": "附件",
                         "pages": [
@@ -660,17 +659,6 @@
                 "group": "Model",
                 "pages": [
                   "api-reference/models/get"
-                ]
-              },
-              {
-                "group": "Resource",
-                "pages": [
-                  "api-reference/resources/selection",
-                  "api-reference/resources/get-conversation-resources",
-                  "api-reference/resources/list-resources",
-                  "api-reference/resources/set-conversation-resources",
-                  "api-reference/resources/subscribe-conversation-resources",
-                  "api-reference/resources/subscribe-resources"
                 ]
               },
               {

@@ -22,14 +22,6 @@ listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string
 
 [查看操作或完整契约](/api-reference/workspaces/list)
 
-## listResources
-
-```ts
-listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; }) & ListOptions): Promise<Page<Resource> & { projection: Projection; }>;
-```
-
-[查看操作或完整契约](/api-reference/resources/list-resources)
-
 ## attachImGroupFile
 
 ```ts
@@ -85,38 +77,6 @@ createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Work
 ```
 
 [查看操作或完整契约](/api-reference/workspaces/create)
-
-## subscribeResources
-
-```ts
-subscribeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
-```
-
-[查看操作或完整契约](/api-reference/resources/subscribe-resources)
-
-## getConversationResources
-
-```ts
-getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
-```
-
-[查看操作或完整契约](/api-reference/resources/get-conversation-resources)
-
-## subscribeConversationResources
-
-```ts
-subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
-```
-
-[查看操作或完整契约](/api-reference/resources/subscribe-conversation-resources)
-
-## setConversationResources
-
-```ts
-setConversationResources(ctx: Context, req: ConversationRef & { resourceIds: string[]; expectedVersion: string; }): Promise<{ resourceIds: string[]; revision: string; writeVersion: string | undefined; conversationId: string; runtimeId: string; }>;
-```
-
-[查看操作或完整契约](/api-reference/resources/set-conversation-resources)
 
 ## stageAttachment
 
@@ -221,46 +181,6 @@ createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Work
 ```
 
 [查看操作或完整契约](/api-reference/workspaces/create)
-
-## listResources
-
-```ts
-listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; }) & ListOptions): Promise<Page<Resource> & { projection: Projection; }>;
-```
-
-[查看操作或完整契约](/api-reference/resources/list-resources)
-
-## subscribeResources
-
-```ts
-subscribeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
-```
-
-[查看操作或完整契约](/api-reference/resources/subscribe-resources)
-
-## subscribeConversationResources
-
-```ts
-subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
-```
-
-[查看操作或完整契约](/api-reference/resources/subscribe-conversation-resources)
-
-## getConversationResources
-
-```ts
-getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
-```
-
-[查看操作或完整契约](/api-reference/resources/get-conversation-resources)
-
-## setConversationResources
-
-```ts
-setConversationResources(ctx: Context, req: ConversationRef & { resourceIds: string[]; expectedVersion: string; }): Promise<ResourceSelection>;
-```
-
-[查看操作或完整契约](/api-reference/resources/set-conversation-resources)
 
 ## stageAttachment
 

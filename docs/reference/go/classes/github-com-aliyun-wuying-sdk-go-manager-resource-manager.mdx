@@ -54,14 +54,6 @@ func (receiver *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.At
 
 [查看操作或完整契约](/api-reference/attachments/access)
 
-## GetConversationResources
-
-```go
-func (receiver *ResourceManager) GetConversationResources(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ResourceSelection], error)
-```
-
-[查看操作或完整契约](/api-reference/resources/get-conversation-resources)
-
 ## GetDraftAttachmentPreview
 
 ```go
@@ -86,14 +78,6 @@ func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.D
 
 [查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
 
-## ListResources
-
-```go
-func (receiver *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
-```
-
-[查看操作或完整契约](/api-reference/resources/list-resources)
-
 ## ListWorkspaces
 
 ```go
@@ -101,14 +85,6 @@ func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.Workspa
 ```
 
 [查看操作或完整契约](/api-reference/workspaces/list)
-
-## SetConversationResources
-
-```go
-func (receiver *ResourceManager) SetConversationResources(ctx context.Context, r m.ResourceRequest) (m.ResourceSelection, error)
-```
-
-[查看操作或完整契约](/api-reference/resources/set-conversation-resources)
 
 ## StageAttachment
 
@@ -125,19 +101,3 @@ func (receiver *ResourceManager) StageDraftAttachment(ctx context.Context, r m.S
 ```
 
 [查看操作或完整契约](/api-reference/drafts/stage-draft-attachment)
-
-## SubscribeConversationResources
-
-```go
-func (receiver *ResourceManager) SubscribeConversationResources(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ResourceSelection]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/resources/subscribe-conversation-resources)
-
-## SubscribeResources
-
-```go
-func (receiver *ResourceManager) SubscribeResources(ctx context.Context, r m.ResourceQuery, o m.SubscriptionListener[[]m.Resource]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/resources/subscribe-resources)

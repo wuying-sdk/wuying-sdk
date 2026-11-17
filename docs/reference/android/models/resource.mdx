@@ -96,23 +96,6 @@ func(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, erro
 
 [模型操作、完整参数与能力边界](/api-reference/attachments/access) · [Go DTO 参考](/reference/go/api)
 
-<a id="getconversationresources" />
-
-## Methods.resourceGetConversationResources
-
-`Methods.resourceGetConversationResources` → `resource.getConversationResources`
-
-**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
-
-```go
-*ResourceManager.GetConversationResources
-func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ResourceSelection], error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/resources/get-conversation-resources) · [Go DTO 参考](/reference/go/api)
-
 <a id="getdraftattachmentpreview" />
 
 ## Methods.resourceGetDraftAttachmentPreview
@@ -158,23 +141,6 @@ func(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmen
 
 [模型操作、完整参数与能力边界](/api-reference/drafts/list-draft-attachments) · [Go DTO 参考](/reference/go/api)
 
-<a id="listresources" />
-
-## Methods.resourceListResources
-
-`Methods.resourceListResources` → `resource.listResources`
-
-**模式：** `call`。**请求类型：** `m.ResourceQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
-
-```go
-*ResourceManager.ListResources
-func(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/resources/list-resources) · [Go DTO 参考](/reference/go/api)
-
 <a id="listworkspaces" />
 
 ## Methods.resourceListWorkspaces
@@ -189,23 +155,6 @@ func(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.Workspac
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/workspaces/list) · [Go DTO 参考](/reference/go/api)
-
-<a id="setconversationresources" />
-
-## Methods.resourceSetConversationResources
-
-`Methods.resourceSetConversationResources` → `resource.setConversationResources`
-
-**模式：** `call`。**请求类型：** `m.ResourceRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
-
-```go
-*ResourceManager.SetConversationResources
-func(ctx context.Context, r m.ResourceRequest) (m.ResourceSelection, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/resources/set-conversation-resources) · [Go DTO 参考](/reference/go/api)
 
 <a id="stageattachment" />
 
@@ -236,37 +185,3 @@ func(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, 
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/drafts/stage-draft-attachment) · [Go DTO 参考](/reference/go/api)
-
-<a id="subscribeconversationresources" />
-
-## Methods.resourceSubscribeConversationResources
-
-`Methods.resourceSubscribeConversationResources` → `resource.subscribeConversationResources`
-
-**模式：** `subscribe`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
-
-```go
-*ResourceManager.SubscribeConversationResources
-func(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ResourceSelection]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/resources/subscribe-conversation-resources) · [Go DTO 参考](/reference/go/api)
-
-<a id="subscriberesources" />
-
-## Methods.resourceSubscribeResources
-
-`Methods.resourceSubscribeResources` → `resource.subscribeResources`
-
-**模式：** `subscribe`。**请求类型：** `m.ResourceQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-<Warning>当前通用资源目录或绑定集成不支持；保留声明用于核对合同，调用须处理 UNSUPPORTED。</Warning>
-
-```go
-*ResourceManager.SubscribeResources
-func(ctx context.Context, r m.ResourceQuery, o m.SubscriptionListener[[]m.Resource]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/resources/subscribe-resources) · [Go DTO 参考](/reference/go/api)

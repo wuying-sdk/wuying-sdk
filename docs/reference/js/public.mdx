@@ -1688,16 +1688,6 @@ listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{
 listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
 ```
 
-<a id="entry-f4b5984b4a2124c2" />
-
-### ResourceManager.listResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/list-resources)。
-
-```ts
-listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; }) & ListOptions): Promise<Page<Resource> & { projection: Projection; }>;
-```
-
 <a id="entry-f1ef13b6872a6745" />
 
 ### ResourceManager.attachImGroupFile
@@ -1766,46 +1756,6 @@ getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; 
 
 ```ts
 createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
-```
-
-<a id="entry-f1ecd7cd633919dc" />
-
-### ResourceManager.subscribeResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-resources)。
-
-```ts
-subscribeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
-```
-
-<a id="entry-7b608baf37b263d1" />
-
-### ResourceManager.getConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/get-conversation-resources)。
-
-```ts
-getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
-```
-
-<a id="entry-236606edd32b5dc6" />
-
-### ResourceManager.subscribeConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-conversation-resources)。
-
-```ts
-subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
-```
-
-<a id="entry-7277e2ddbfbe60dc" />
-
-### ResourceManager.setConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/set-conversation-resources)。
-
-```ts
-setConversationResources(ctx: Context, req: ConversationRef & { resourceIds: string[]; expectedVersion: string; }): Promise<{ resourceIds: string[]; revision: string; writeVersion: string | undefined; conversationId: string; runtimeId: string; }>;
 ```
 
 <a id="entry-18867b9701fa14c6" />
@@ -3076,56 +3026,6 @@ listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string
 
 ```ts
 createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
-```
-
-<a id="entry-a5011f516e1673bd" />
-
-### ResourceManager.listResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/list-resources)。
-
-```ts
-listResources(ctx: Context, request: (RuntimeRef & { kind?: Resource["kind"]; }) & ListOptions): Promise<Page<Resource> & { projection: Projection; }>;
-```
-
-<a id="entry-3142d808c368eb83" />
-
-### ResourceManager.subscribeResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-resources)。
-
-```ts
-subscribeResources(ctx: Context, req: RuntimeRef & { kind?: Resource["kind"]; }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
-```
-
-<a id="entry-0187a0579bdb7f95" />
-
-### ResourceManager.subscribeConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/subscribe-conversation-resources)。
-
-```ts
-subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
-```
-
-<a id="entry-1542c224bd6ba529" />
-
-### ResourceManager.getConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/get-conversation-resources)。
-
-```ts
-getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
-```
-
-<a id="entry-cc28f3cfa1d92bcb" />
-
-### ResourceManager.setConversationResources
-
-类别：模型操作。[按模型查看操作](/api-reference/resources/set-conversation-resources)。
-
-```ts
-setConversationResources(ctx: Context, req: ConversationRef & { resourceIds: string[]; expectedVersion: string; }): Promise<ResourceSelection>;
 ```
 
 <a id="entry-3939a28ab8582358" />

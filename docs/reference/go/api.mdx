@@ -583,8 +583,6 @@ func (a *ResourceManager) DiscardDraftAttachments(ctx context.Context, r m.Draft
 
 func (a *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
 
-func (a *ResourceManager) GetConversationResources(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ResourceSelection], error)
-
 func (a *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
 
 func (a *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
@@ -592,21 +590,12 @@ func (a *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m
 func (a *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
     ListDraftAttachments returns one page. Use NextCursor for continuation.
 
-func (a *ResourceManager) ListResources(ctx context.Context, r m.ResourceQuery, opts ...m.ListOptions) (m.Page[m.Resource], error)
-    ListResources returns one page. Use NextCursor for continuation.
-
 func (a *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
     ListWorkspaces returns one page. Use NextCursor for continuation.
-
-func (a *ResourceManager) SetConversationResources(ctx context.Context, r m.ResourceRequest) (m.ResourceSelection, error)
 
 func (a *ResourceManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
 
 func (a *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
-
-func (a *ResourceManager) SubscribeConversationResources(ctx context.Context, r m.ConversationRef, o m.SubscriptionListener[m.ResourceSelection]) (m.Subscription, error)
-
-func (a *ResourceManager) SubscribeResources(ctx context.Context, r m.ResourceQuery, o m.SubscriptionListener[[]m.Resource]) (m.Subscription, error)
 
 type RuntimeManager struct {
 	// Has unexported fields.
@@ -864,7 +853,6 @@ type AgentCapabilities struct {
 	Group       Capability `json:"group"`
 	ModelConfig Capability `json:"modelConfig"`
 	Cancel      Capability `json:"cancel"`
-	Resources   Capability `json:"resources"`
 }
 
 type AgentFotaUpdate struct {
@@ -1110,7 +1098,6 @@ type ConversationCapabilities struct {
 	Send      Capability `json:"send"`
 	Configure Capability `json:"configure"`
 	Members   Capability `json:"members"`
-	Resources Capability `json:"resources"`
 }
 
 type ConversationGroupQuery struct {
@@ -2393,37 +2380,6 @@ type RenameRequest struct {
 	Name string `json:"name"`
 }
 
-type Resource struct {
-	ResourceID   string `json:"resourceId"`
-	RuntimeID    string `json:"runtimeId"`
-	Kind         string `json:"kind"`
-	Name         string `json:"name"`
-	Availability string `json:"availability"`
-	Revision     string `json:"revision"`
-	Capabilities struct {
-		Attach  Capability `json:"attach"`
-		Preview Capability `json:"preview"`
-	} `json:"capabilities"`
-}
-
-type ResourceQuery struct {
-	RuntimeRef
-	Kind string `json:"kind,omitempty"`
-}
-
-type ResourceRequest struct {
-	ConversationRef
-	ResourceIDs     []string `json:"resourceIds"`
-	ExpectedVersion string   `json:"expectedVersion"`
-}
-
-type ResourceSelection struct {
-	ConversationRef
-	ResourceIDs  []string `json:"resourceIds"`
-	Revision     string   `json:"revision"`
-	WriteVersion string   `json:"writeVersion,omitempty"`
-}
-
 type ResponsibilityPatch struct {
 	Mode string `json:"mode"`
 	Text string `json:"text,omitempty"`
@@ -2451,7 +2407,6 @@ type Runtime struct {
 type RuntimeCapabilities struct {
 	AgentQuery         Capability `json:"agentQuery"`
 	ConversationCreate Capability `json:"conversationCreate"`
-	ResourceQuery      Capability `json:"resourceQuery"`
 }
 
 type RuntimeCommandEvent struct {

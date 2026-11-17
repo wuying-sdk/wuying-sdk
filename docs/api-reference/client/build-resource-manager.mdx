@@ -1,14 +1,14 @@
 ---
 title: "buildResourceManager"
 sidebarTitle: "buildResourceManager"
-description: "取得 ResourceManager，处理会话资源、附件、草稿和工作空间操作。"
+description: "获取附件与工作空间操作入口，复用当前 Client 的身份和生命周期。"
 ---
 
 `buildResourceManager` · Client
 
 ## 接口用途
 
-取得 ResourceManager，处理会话资源、附件、草稿和工作空间操作。
+获取附件与工作空间操作入口，复用当前 Client 的身份和生命周期。
 
 ## 使用说明
 
@@ -81,16 +81,6 @@ interface ResourceManager {
     createWorkspace(ctx: Context, req: RuntimeRef & {
         name: string;
     }): Promise<Workspace>;
-    listResources: ResourceManager$1['listResources'];
-    subscribeResources(ctx: Context, req: RuntimeRef & {
-        kind?: Resource['kind'];
-    }, observer: SubscriptionListener<Resource[]>): Promise<Subscription>;
-    subscribeConversationResources(ctx: Context, req: ConversationRef, observer: SubscriptionListener<ResourceSelection>): Promise<Subscription>;
-    getConversationResources(ctx: Context, req: ConversationRef): Promise<Snapshot<ResourceSelection>>;
-    setConversationResources(ctx: Context, req: ConversationRef & {
-        resourceIds: string[];
-        expectedVersion: string;
-    }): Promise<ResourceSelection>;
     stageAttachment(ctx: Context, req: ConversationRef & {
         file: Blob;
         name: string;
