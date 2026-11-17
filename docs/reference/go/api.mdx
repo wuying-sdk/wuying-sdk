@@ -530,7 +530,9 @@ type ResourceManager struct {
 
 func NewResourceManager(s *business.Service) *ResourceManager
 
-func (a *ResourceManager) AttachImGroupFile(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+func (a *ResourceManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
+    AttachCloudFile imports a cloud file as an attachment. Reuse the original
+    UUID and file after an unknown result.
 
 func (a *ResourceManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
 
@@ -543,8 +545,6 @@ func (a *ResourceManager) DiscardDraftAttachments(ctx context.Context, r m.Draft
 func (a *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
 
 func (a *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
-
-func (a *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
 
 func (a *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
     ListDraftAttachments returns one page. Use NextCursor for continuation.
@@ -863,6 +863,22 @@ const (
 	AgentStatusError    AgentStatus = "error"
 	AgentStatusUnknown  AgentStatus = "unknown"
 )
+type AttachCloudFileRequest struct {
+	ConversationRef
+	ClientCommandID string       `json:"clientCommandId"`
+	File            CloudFileRef `json:"file"`
+}
+    AttachCloudFileRequest uses one stable UUID and exact scope/file for
+    recovery.
+
+type Attachment struct {
+	AttachmentID string `json:"attachmentId"`
+	Name         string `json:"name"`
+	Mime         string `json:"mime"`
+	Size         Int64  `json:"size"`
+	Kind         string `json:"kind,omitempty"`
+}
+
 type AttachmentAccess struct {
 	URL       string `json:"url"`
 	ExpiresAt string `json:"expiresAt"`
@@ -951,6 +967,15 @@ type CloudBusinessError struct {
     BusinessError represents a business logic error from the API.
 
 func (e *CloudBusinessError) Error() string
+
+type CloudFileRef struct {
+	RegionID           string `json:"regionId"`
+	DriveID            string `json:"driveId"`
+	FileID             string `json:"fileId"`
+	StorageEnvironment string `json:"storageEnvironment,omitempty"`
+}
+    CloudFileRef identifies a completed file in the cloud drive of this
+    conversation.
 
 type CommandDesktopResult struct {
 	DesktopID          string `json:"desktopId"`
@@ -1627,27 +1652,6 @@ type HostCapabilities struct {
 	Voice           Capability `json:"voice"`
 	Plugins         Capability `json:"plugins"`
 	Clipboard       Capability `json:"clipboard"`
-}
-
-type IMGroupAttachmentResult struct {
-	ConversationRef
-	SchemaVersion int    `json:"schemaVersion"`
-	OperationID   string `json:"operationId"`
-	State         string `json:"state"`
-	AttachmentID  string `json:"attachmentId,omitempty"`
-	Name          string `json:"name,omitempty"`
-	Mime          string `json:"mime,omitempty"`
-	Size          Int64  `json:"size,omitempty"`
-	Kind          string `json:"kind,omitempty"`
-}
-
-type IMGroupFileRequest struct {
-	ConversationRef
-	OperationID        string `json:"operationId"`
-	RegionID           string `json:"regionId"`
-	DriveID            string `json:"driveId"`
-	FileID             string `json:"fileId"`
-	StorageEnvironment string `json:"storageEnvironment,omitempty"`
 }
 
 type InputPart struct {

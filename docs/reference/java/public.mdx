@@ -2242,24 +2242,14 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspac
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspace> createWorkspace(com.aliyun.wuying.sdk.model.CreateWorkspaceRequest, com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-76143389ff6a05d5" />
+<a id="entry-2f4a6b163369d565" />
 
-### com.aliyun.wuying.sdk.manager.ResourceManager.attachImGroupFile
+### com.aliyun.wuying.sdk.manager.ResourceManager.attachCloudFile
 
-类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-im-group-file)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupAttachmentResult> attachImGroupFile(com.aliyun.wuying.sdk.model.IMGroupFileRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-ee92bb2c23fc21f8" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.getImGroupAttachmentOperation
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/get-im-group-attachment-operation)。
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
 
 ```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupAttachmentResult> getImGroupAttachmentOperation(com.aliyun.wuying.sdk.model.IMGroupFileRequest, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Attachment> attachCloudFile(com.aliyun.wuying.sdk.model.AttachCloudFileRequest, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-e65c8d12c331d17e" />
@@ -2557,6 +2547,26 @@ public com.aliyun.wuying.sdk.model.AgentRef();
 public com.aliyun.wuying.sdk.model.ApproveFotaUpdateRequest();
 ```
 
+<a id="entry-51068f4cfe808d39" />
+
+### com.aliyun.wuying.sdk.model.AttachCloudFileRequest.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.AttachCloudFileRequest();
+```
+
+<a id="entry-7a3a393fcee2f564" />
+
+### com.aliyun.wuying.sdk.model.Attachment.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.Attachment();
+```
+
 <a id="entry-f1153182257bcef4" />
 
 ### com.aliyun.wuying.sdk.model.AttachmentAccess.constructor
@@ -2827,6 +2837,16 @@ public com.aliyun.wuying.sdk.model.ClientConfig$InitialSyncValue();
 
 ```java
 public com.aliyun.wuying.sdk.model.ClientConfig$StreamingValue();
+```
+
+<a id="entry-057df743c5793ab7" />
+
+### com.aliyun.wuying.sdk.model.CloudFileRef.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```java
+public com.aliyun.wuying.sdk.model.CloudFileRef();
 ```
 
 <a id="entry-3b4733fb8bbf6f6f" />
@@ -3857,26 +3877,6 @@ public com.aliyun.wuying.sdk.model.HeaderActions();
 
 ```java
 public com.aliyun.wuying.sdk.model.HostCapabilities();
-```
-
-<a id="entry-ca51106f23746d13" />
-
-### com.aliyun.wuying.sdk.model.IMGroupAttachmentResult.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public com.aliyun.wuying.sdk.model.IMGroupAttachmentResult();
-```
-
-<a id="entry-b043f9058b3cbb7f" />
-
-### com.aliyun.wuying.sdk.model.IMGroupFileRequest.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```java
-public com.aliyun.wuying.sdk.model.IMGroupFileRequest();
 ```
 
 <a id="entry-ae9aa81d8cf175aa" />

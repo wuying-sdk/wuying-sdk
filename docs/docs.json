@@ -644,9 +644,8 @@
                 "group": "Attachment",
                 "pages": [
                   "api-reference/attachments/access",
-                  "api-reference/attachments/attach-im-group-file",
+                  "api-reference/attachments/attach-cloud-file",
                   "api-reference/attachments/discard",
-                  "api-reference/attachments/get-im-group-attachment-operation",
                   "api-reference/attachments/prepare-conversation-attachment-target",
                   "api-reference/attachments/stage"
                 ]

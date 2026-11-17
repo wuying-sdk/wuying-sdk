@@ -400,8 +400,7 @@ public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.ali
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspace> createWorkspace(com.aliyun.wuying.sdk.model.CreateWorkspaceRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupAttachmentResult> attachImGroupFile(com.aliyun.wuying.sdk.model.IMGroupFileRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.IMGroupAttachmentResult> getImGroupAttachmentOperation(com.aliyun.wuying.sdk.model.IMGroupFileRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Attachment> attachCloudFile(com.aliyun.wuying.sdk.model.AttachCloudFileRequest, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "RuntimeManager.java"
 public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliyun.wuying.sdk.manager.BaseManager {
@@ -566,6 +565,21 @@ public class com.aliyun.wuying.sdk.model.ApproveFotaUpdateRequest {
   public java.lang.String regionId;
   public com.aliyun.wuying.sdk.model.ApproveFotaUpdateRequest();
 }
+Compiled from "AttachCloudFileRequest.java"
+public class com.aliyun.wuying.sdk.model.AttachCloudFileRequest extends com.aliyun.wuying.sdk.model.ConversationRef {
+  public java.lang.String clientCommandId;
+  public com.aliyun.wuying.sdk.model.CloudFileRef file;
+  public com.aliyun.wuying.sdk.model.AttachCloudFileRequest();
+}
+Compiled from "Attachment.java"
+public class com.aliyun.wuying.sdk.model.Attachment {
+  public java.lang.String attachmentId;
+  public java.lang.String name;
+  public java.lang.String mime;
+  public java.lang.String size;
+  public java.lang.String kind;
+  public com.aliyun.wuying.sdk.model.Attachment();
+}
 Compiled from "AttachmentAccess.java"
 public class com.aliyun.wuying.sdk.model.AttachmentAccess {
   public java.lang.String url;
@@ -682,6 +696,14 @@ public class com.aliyun.wuying.sdk.model.ClientConfig$StreamingValue {
   public java.lang.Boolean enabled;
   public java.lang.Object onEvent;
   public com.aliyun.wuying.sdk.model.ClientConfig$StreamingValue();
+}
+Compiled from "CloudFileRef.java"
+public class com.aliyun.wuying.sdk.model.CloudFileRef {
+  public java.lang.String regionId;
+  public java.lang.String driveId;
+  public java.lang.String fileId;
+  public java.lang.String storageEnvironment;
+  public com.aliyun.wuying.sdk.model.CloudFileRef();
 }
 Compiled from "CommandDesktopResult.java"
 public final class com.aliyun.wuying.sdk.model.CommandDesktopResult {
@@ -1495,27 +1517,6 @@ public class com.aliyun.wuying.sdk.model.HostCapabilities extends com.aliyun.wuy
   public com.aliyun.wuying.sdk.model.Capability plugins;
   public com.aliyun.wuying.sdk.model.Capability clipboard;
   public com.aliyun.wuying.sdk.model.HostCapabilities();
-}
-Compiled from "IMGroupAttachmentResult.java"
-public class com.aliyun.wuying.sdk.model.IMGroupAttachmentResult extends com.aliyun.wuying.sdk.model.ConversationRef {
-  public java.lang.Object schemaVersion;
-  public java.lang.String operationId;
-  public java.lang.String state;
-  public java.lang.String attachmentId;
-  public java.lang.String name;
-  public java.lang.String mime;
-  public java.lang.String size;
-  public java.lang.String kind;
-  public com.aliyun.wuying.sdk.model.IMGroupAttachmentResult();
-}
-Compiled from "IMGroupFileRequest.java"
-public class com.aliyun.wuying.sdk.model.IMGroupFileRequest extends com.aliyun.wuying.sdk.model.ConversationRef {
-  public java.lang.String operationId;
-  public java.lang.String regionId;
-  public java.lang.String driveId;
-  public java.lang.String fileId;
-  public java.lang.String storageEnvironment;
-  public com.aliyun.wuying.sdk.model.IMGroupFileRequest();
 }
 Compiled from "InitKnowledgeFileDownloadTasksRequest.java"
 public class com.aliyun.wuying.sdk.model.InitKnowledgeFileDownloadTasksRequest {

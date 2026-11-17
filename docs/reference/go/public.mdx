@@ -1198,14 +1198,14 @@ func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, 
 func (receiver *CreditManager) DescribeCreditUsageInfo(ctx context.Context, r *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
 ```
 
-<a id="entry-3b92c2975794b98f" />
+<a id="entry-960ebe505f58968c" />
 
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.AttachImGroupFile
+### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.AttachCloudFile
 
-类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-im-group-file)。
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
 
 ```go
-func (receiver *ResourceManager) AttachImGroupFile(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+func (receiver *ResourceManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
 ```
 
 <a id="entry-d649cc3745d0ea4f" />
@@ -1266,16 +1266,6 @@ func (receiver *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.At
 
 ```go
 func (receiver *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
-```
-
-<a id="entry-275682567fb4a617" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetImGroupAttachmentOperation
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/get-im-group-attachment-operation)。
-
-```go
-func (receiver *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
 ```
 
 <a id="entry-e1df4346778360ae" />

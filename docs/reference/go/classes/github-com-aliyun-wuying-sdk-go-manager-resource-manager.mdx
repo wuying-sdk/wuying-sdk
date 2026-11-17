@@ -6,13 +6,13 @@ description: "Go 公开成员及重载。"
 
 此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员与移动桥接接口按其原生配置使用。
 
-## AttachImGroupFile
+## AttachCloudFile
 
 ```go
-func (receiver *ResourceManager) AttachImGroupFile(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
+func (receiver *ResourceManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
 ```
 
-[查看操作或完整契约](/api-reference/attachments/attach-im-group-file)
+[查看操作或完整契约](/api-reference/attachments/attach-cloud-file)
 
 ## CommitDraftAttachments
 
@@ -61,14 +61,6 @@ func (receiver *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, 
 ```
 
 [查看操作或完整契约](/api-reference/drafts/get-draft-attachment-preview)
-
-## GetImGroupAttachmentOperation
-
-```go
-func (receiver *ResourceManager) GetImGroupAttachmentOperation(ctx context.Context, r m.IMGroupFileRequest) (m.IMGroupAttachmentResult, error)
-```
-
-[查看操作或完整契约](/api-reference/attachments/get-im-group-attachment-operation)
 
 ## ListDraftAttachments
 

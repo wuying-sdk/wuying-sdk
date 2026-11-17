@@ -57,8 +57,7 @@ interface Context {
 }
 
 interface ResourceManager {
-    attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
-    getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+    attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
     stageDraftAttachment(ctx: Context, req: DraftRef & {
         file: Blob;
         name: string;

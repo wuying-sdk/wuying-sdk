@@ -1,0 +1,89 @@
+---
+title: "attachCloudFile"
+sidebarTitle: "attachCloudFile"
+description: "将当前会话云盘中已上传的文件导入为会话附件，并支持通过原请求恢复结果。"
+---
+
+`attachCloudFile` · Attachment
+
+## 接口用途
+
+将当前会话云盘中已上传的文件导入为会话附件，并支持通过原请求恢复结果。
+
+## 使用说明
+
+导入当前会话关联云盘中已完成的普通文件（1..10MiB），返回 Attachment，可将 attachmentId 用于同会话发送消息。第一次调用前保存 UUID clientCommandId、runtimeId、conversationId 和完整 file 引用；结果未知时以同一请求再次调用，Gateway 复用原持久回执和附件。SDK 不自动循环重试，不重新上传文件或发送消息。更换文件或存储环境须作为新的明确操作；不要在结果未知时更换请求标识。file 仅包含 regionId、driveId、fileId 和可选 storageEnvironment（online/pre）；不接受 URL、任意云盘/知识库文件或客户端文件属性。导入的 clientCommandId 不用于 getCommandReceipt，导入恢复继续调用 attachCloudFile；消息发送未知时使用发送请求的独立标识查询消息回执。原有 Gateway 认证、文件校验与幂等 owner 不变。
+
+## 语言与授权
+
+| 语言 | 公开入口 | 状态 |
+|---|---|---|
+| JavaScript / TypeScript | `ResourceManager.attachCloudFile` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.ResourceManager.AttachCloudFile` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.ResourceManager.attachCloudFile` | 已公开声明，需核对环境能力 |
+| CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
+| Android | [`Methods.resourceAttachCloudFile`](/reference/android/models/resource#attachcloudfile) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.resourceAttachCloudFile`](/reference/ios/models/resource#attachcloudfile) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+
+使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
+
+## 完整公开签名
+
+### JavaScript / TypeScript · ResourceManager
+
+```ts
+attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
+```
+
+### Go · github.com/aliyun/wuying-sdk-go/manager.ResourceManager
+
+```go
+func (receiver *ResourceManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
+```
+
+### Java · com.aliyun.wuying.sdk.manager.ResourceManager
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Attachment> attachCloudFile(com.aliyun.wuying.sdk.model.AttachCloudFileRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+## TypeScript 参数与结果结构
+
+以下结构直接摘自同版本声明；继承的身份字段一并列出。嵌套类型与完整数据字段见[类型声明](/reference/js/types)，Go / Java 以各自真实 DTO 为准。
+
+```ts
+interface Context {
+    signal?: AbortSignal;
+    timeout?: number;
+    traceId?: string;
+}
+
+interface AttachCloudFileRequest extends ConversationRef {
+    clientCommandId: string;
+    file: CloudFileRef;
+}
+
+interface ConversationRef extends RuntimeRef {
+    conversationId: string;
+}
+
+interface RuntimeRef {
+    runtimeId: string;
+}
+
+interface Attachment {
+    attachmentId: string;
+    name: string;
+    mime: string;
+    size: Int64;
+    kind?: 'image' | 'text' | 'file' | 'folder';
+}
+```
+
+## 结果、错误与生命周期
+
+以本语言签名中的实际返回包装为准。快照保留投影；订阅结束释放订阅；本地超时不代表远端未执行或已取消。涉及消息、交互与配置写入时，按原身份和实际回执核对结果。
+
+[Go 原始签名](/reference/go/api) · [Java 原始签名](/reference/java/api) · [JS 原始类型](/reference/js/types) · [CLI 命令说明](/reference/cli/commands)
+
+[模型与能力边界](/domain-model/attachment) · [错误与恢复](/domain-model/12-errors-examples) · [完整覆盖清单](/api-reference/coverage/index)

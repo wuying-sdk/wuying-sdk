@@ -1628,24 +1628,14 @@ listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{
 listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
 ```
 
-<a id="entry-f1ef13b6872a6745" />
+<a id="entry-32e83934a601c806" />
 
-### ResourceManager.attachImGroupFile
+### ResourceManager.attachCloudFile
 
-类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-im-group-file)。
-
-```ts
-attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
-```
-
-<a id="entry-bf45094df07c97c1" />
-
-### ResourceManager.getImGroupAttachmentOperation
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/get-im-group-attachment-operation)。
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
 
 ```ts
-getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
 ```
 
 <a id="entry-433a060457ea0286" />
@@ -2848,24 +2838,14 @@ respondQuestion(ctx: Context, req: ConversationRef & { interactionId: string; ex
 getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
 ```
 
-<a id="entry-e5b81e5573dd689d" />
+<a id="entry-9e49ebb5c926d8c3" />
 
-### ResourceManager.attachImGroupFile
+### ResourceManager.attachCloudFile
 
-类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-im-group-file)。
-
-```ts
-attachImGroupFile(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
-```
-
-<a id="entry-9b6bc45a67e7522c" />
-
-### ResourceManager.getImGroupAttachmentOperation
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/get-im-group-attachment-operation)。
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
 
 ```ts
-getImGroupAttachmentOperation(ctx: Context, req: IMGroupFileRequest): Promise<IMGroupAttachmentResult>;
+attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
 ```
 
 <a id="entry-f25fb930ed66dc64" />
