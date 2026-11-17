@@ -778,16 +778,6 @@ func (receiver *ConversationManager) GetMessageFiles(ctx context.Context, r m.Me
 func (receiver *ConversationManager) GetMessagePresentation(ctx context.Context, r m.PresentationQuery) (m.Snapshot[*m.MessagePresentation], error)
 ```
 
-<a id="entry-793675b1c537a0f5" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetMutation
-
-类别：模型操作。[按模型查看操作](/api-reference/receipts/get-mutation)。
-
-```go
-func (receiver *ConversationManager) GetMutation(ctx context.Context, r m.MutationRef) (m.Snapshot[m.MutationStatus], error)
-```
-
 <a id="entry-c1809aff2dec73c4" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.GetQuestionResponseReceipt
@@ -1146,16 +1136,6 @@ func (receiver *ConversationManager) SubscribeMembers(ctx context.Context, r m.M
 
 ```go
 func (receiver *ConversationManager) SubscribeMessages(ctx context.Context, r m.MessageQuery, o m.SubscriptionListener[m.Page[m.Message]]) (m.Subscription, error)
-```
-
-<a id="entry-6be330c2d742bfa1" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ConversationManager.SubscribeMutation
-
-类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-mutation)。
-
-```go
-func (receiver *ConversationManager) SubscribeMutation(ctx context.Context, r m.MutationRef, o m.SubscriptionListener[m.MutationStatus]) (m.Subscription, error)
 ```
 
 <a id="entry-80ac9ea025033168" />

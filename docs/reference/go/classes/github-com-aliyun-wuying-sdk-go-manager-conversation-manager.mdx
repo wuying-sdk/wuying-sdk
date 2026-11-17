@@ -126,14 +126,6 @@ func (receiver *ConversationManager) GetMessagePresentation(ctx context.Context,
 
 [查看操作或完整契约](/api-reference/messages/presentation)
 
-## GetMutation
-
-```go
-func (receiver *ConversationManager) GetMutation(ctx context.Context, r m.MutationRef) (m.Snapshot[m.MutationStatus], error)
-```
-
-[查看操作或完整契约](/api-reference/receipts/get-mutation)
-
 ## GetQuestionResponseReceipt
 
 ```go
@@ -421,14 +413,6 @@ func (receiver *ConversationManager) SubscribeMessages(ctx context.Context, r m.
 ```
 
 [查看操作或完整契约](/api-reference/messages/subscribe)
-
-## SubscribeMutation
-
-```go
-func (receiver *ConversationManager) SubscribeMutation(ctx context.Context, r m.MutationRef, o m.SubscriptionListener[m.MutationStatus]) (m.Subscription, error)
-```
-
-[查看操作或完整契约](/api-reference/receipts/subscribe-mutation)
 
 ## SubscribeSidebarConversations
 

@@ -5,7 +5,7 @@ description: "同版本 Java SDK jar 的公开签名；参数说明另见随包�
 
 <Note>本页按所选语言保留原始完整参考，可能包含该语言的业务示例。跨语言操作请使用[快速开始](/getting-started/desktop-to-agent)和[代码示例](/examples/index)中的语言卡片。</Note>
 
-基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿。由 javap 生成，按客户合同排除 internal 实现、引用 internal 类型的装配签名及 @hidden 成员。
+基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿；按客户合同排除 internal 及 @hidden 装配签名。
 
 ```java
 Compiled from "Administration.java"
@@ -342,8 +342,6 @@ public final class com.aliyun.wuying.sdk.manager.ConversationManager extends com
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MemberSnapshot>> getMemberSnapshot(com.aliyun.wuying.sdk.model.MemberSnapshotQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.CommandReceipt>> getCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.model.Subscription subscribeCommandReceipt(com.aliyun.wuying.sdk.model.CommandReceiptRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.CommandReceipt>, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.MutationStatus>> getMutation(com.aliyun.wuying.sdk.model.MutationRef, com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.model.Subscription subscribeMutation(com.aliyun.wuying.sdk.model.MutationRef, com.aliyun.wuying.sdk.model.SubscriptionListener<com.aliyun.wuying.sdk.model.MutationStatus>, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.CommandReceipt>> getQuestionResponseReceipt(com.aliyun.wuying.sdk.model.QuestionResponseRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.InteractionRefresh> refreshPendingInteractions(com.aliyun.wuying.sdk.model.ConversationRef, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ConversationReadBinding> resolveConversationRead(com.aliyun.wuying.sdk.model.ConversationReadQuery, com.aliyun.wuying.sdk.CallContext);
@@ -2089,21 +2087,6 @@ Compiled from "MutationOptions.java"
 public class com.aliyun.wuying.sdk.model.MutationOptions {
   public java.lang.String mutationId;
   public com.aliyun.wuying.sdk.model.MutationOptions();
-}
-Compiled from "MutationRef.java"
-public class com.aliyun.wuying.sdk.model.MutationRef extends com.aliyun.wuying.sdk.model.ConversationRef {
-  public java.lang.String mutationId;
-  public com.aliyun.wuying.sdk.model.MutationRef();
-}
-Compiled from "MutationStatus.java"
-public class com.aliyun.wuying.sdk.model.MutationStatus extends com.aliyun.wuying.sdk.model.MutationRef {
-  public java.lang.String state;
-  public java.lang.Object result;
-  public java.lang.String errorCode;
-  public java.lang.String failureEffect;
-  public java.lang.String traceId;
-  public java.lang.Boolean retryable;
-  public com.aliyun.wuying.sdk.model.MutationStatus();
 }
 Compiled from "OperationTask.java"
 public class com.aliyun.wuying.sdk.model.OperationTask {

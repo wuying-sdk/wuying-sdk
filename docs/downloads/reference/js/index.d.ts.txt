@@ -598,7 +598,7 @@ type CommandResult = {
 } | {
     state: 'failed';
     code: ErrorCode$1;
-    failureEffect?: MutationStatus['failureEffect'];
+    failureEffect?: CommandReceipt['failureEffect'];
     retryable?: boolean;
 };
 interface CommandPort {
@@ -752,8 +752,10 @@ declare class Operations {
     recover(scope: Scope): Promise<void>;
     private mutationKey;
     private mutationResult;
-    lookup(scope: Scope, req: Omit<MutationRef, 'conversationId'> & {
+    lookup(scope: Scope, req: {
+        runtimeId: string;
         conversationId?: string;
+        mutationId: string;
     }, question?: QuestionResponseRef): Promise<CommandReceipt>;
     private pause;
     close(): void;
@@ -887,8 +889,6 @@ declare class Service {
     getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
     getCommandReceipt(ctx: Context, req: CommandReceiptRef): Promise<Snapshot<CommandReceipt>>;
     subscribeCommandReceipt(ctx: Context, req: CommandReceiptRef, observer: SubscriptionListener<CommandReceipt>): Promise<Subscription>;
-    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-    subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
     close(): Promise<void>;
 }
 
@@ -1080,8 +1080,6 @@ declare class ConversationManager$1 implements ConversationManager {
     getMemberSnapshot(ctx: Context, req: ConversationRef & {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<MemberSnapshot>>;
-    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
-    subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
     private conversations;
     private readListConversations;
     subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
@@ -3515,17 +3513,6 @@ interface MemberCandidate extends AgentRef {
 interface MutationOptions {
     mutationId: string;
 }
-interface MutationRef extends ConversationRef {
-    mutationId: string;
-}
-interface MutationStatus<T = unknown> extends MutationRef {
-    state: 'pending' | 'succeeded' | 'failed' | 'unknown';
-    result?: T;
-    errorCode?: ErrorCode$1;
-    failureEffect?: 'none' | 'partial' | 'unknown';
-    retryable?: boolean;
-    traceId?: string;
-}
 interface AgentModelCatalog {
     models: Model[];
     defaultModelId?: string;
@@ -3579,8 +3566,6 @@ interface ConversationManager {
     getMemberSnapshot(ctx: Context, req: ConversationRef & {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<MemberSnapshot>>;
-    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-    subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
     listConversations: ConversationManager$1['listConversations'];
     getConversation(ctx: Context, req: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
     subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;
@@ -4609,4 +4594,4 @@ declare class APIError extends SDKError {
 }
 declare function isRetryable(error: unknown): boolean;
 
-export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientOptions, BusinessError as CloudBusinessError, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, ResourceManager$1 as ResourceManager, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };
+export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientOptions, BusinessError as CloudBusinessError, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type MutationOptions, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, ResourceManager$1 as ResourceManager, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };

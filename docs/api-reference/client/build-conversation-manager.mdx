@@ -100,8 +100,6 @@ interface ConversationManager {
     getMemberSnapshot(ctx: Context, req: ConversationRef & {
         consistency?: 'cache' | 'refresh';
     }): Promise<Snapshot<MemberSnapshot>>;
-    getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-    subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
     listConversations: ConversationManager$1['listConversations'];
     getConversation(ctx: Context, req: ConversationRef & ReadOptions): Promise<Snapshot<Conversation | undefined>>;
     subscribeConversations(ctx: Context, req: ConversationQuery, observer: SubscriptionListener<Page<Conversation>>): Promise<Subscription>;

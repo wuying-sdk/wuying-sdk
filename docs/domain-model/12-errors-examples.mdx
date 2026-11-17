@@ -19,7 +19,7 @@ description: "区分未提交、结果未知与已受理，避免超时后重复
 
 ## 尚不能确认是否受理
 
-支持 MutationOptions 的方法使用[写入结果跟踪](/domain-model/mutation)；消息命令使用[原命令回执](/domain-model/command-receipt)。不要换一个新 ID 重新提交相同业务意图，也不要把 retryable=true 直接理解为允许重试写入。
+支持回执的写操作统一使用[原命令回执](/domain-model/command-receipt)。不要换一个新 ID 重新提交相同业务意图，也不要把 retryable=true 直接理解为允许重试写入。
 
 普通错误对象的 not_started 可能只是默认值。只有明确的写前拒绝或服务端未受理证据，才能据此判断没有产生副作用。
 

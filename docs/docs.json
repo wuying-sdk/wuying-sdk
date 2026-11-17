@@ -162,7 +162,6 @@
           {
             "group": "失败与恢复",
             "pages": [
-              "domain-model/mutation",
               "domain-model/command-receipt",
               "domain-model/12-errors-examples"
             ]
@@ -544,10 +543,10 @@
                   "api-reference/conversations/subscribe-sidebar-conversations",
                   "api-reference/conversations/unarchive-conversation",
                   {
-                    "group": "Mutation",
+                    "group": "CommandReceipt",
                     "pages": [
-                      "api-reference/receipts/get-mutation",
-                      "api-reference/receipts/subscribe-mutation"
+                      "api-reference/receipts/get-command-receipt",
+                      "api-reference/receipts/subscribe-command-receipt"
                     ]
                   }
                 ]
@@ -588,13 +587,6 @@
                   "api-reference/messages/subscribe",
                   "api-reference/messages/subscribe-conversation-history",
                   "api-reference/messages/wait",
-                  {
-                    "group": "CommandReceipt",
-                    "pages": [
-                      "api-reference/receipts/get-command-receipt",
-                      "api-reference/receipts/subscribe-command-receipt"
-                    ]
-                  },
                   {
                     "group": "MessageStream",
                     "pages": [

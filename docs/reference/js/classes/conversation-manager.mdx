@@ -230,22 +230,6 @@ getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" |
 
 [查看操作或完整契约](/api-reference/members/get-member-snapshot)
 
-## getMutation
-
-```ts
-getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
-```
-
-[查看操作或完整契约](/api-reference/receipts/get-mutation)
-
-## subscribeMutation
-
-```ts
-subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
-```
-
-[查看操作或完整契约](/api-reference/receipts/subscribe-mutation)
-
 ## subscribeConversations
 
 ```ts
@@ -661,22 +645,6 @@ getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" |
 ```
 
 [查看操作或完整契约](/api-reference/members/get-member-snapshot)
-
-## getMutation
-
-```ts
-getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-```
-
-[查看操作或完整契约](/api-reference/receipts/get-mutation)
-
-## subscribeMutation
-
-```ts
-subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
-```
-
-[查看操作或完整契约](/api-reference/receipts/subscribe-mutation)
 
 ## listConversations
 

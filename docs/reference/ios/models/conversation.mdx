@@ -231,21 +231,6 @@ func(ctx context.Context, r m.PresentationQuery) (m.Snapshot[*m.MessagePresentat
 
 [模型操作、完整参数与能力边界](/api-reference/messages/presentation) · [Go DTO 参考](/reference/go/api)
 
-<a id="getmutation" />
-
-## Methods.conversationGetMutation
-
-`Methods.conversationGetMutation` → `conversation.getMutation`
-
-**模式：** `call`。**请求类型：** `m.MutationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.GetMutation
-func(ctx context.Context, r m.MutationRef) (m.Snapshot[m.MutationStatus], error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/receipts/get-mutation) · [Go DTO 参考](/reference/go/api)
-
 <a id="getquestionresponsereceipt" />
 
 ## Methods.conversationGetQuestionResponseReceipt
@@ -785,21 +770,6 @@ func(ctx context.Context, r m.MessageQuery, o m.SubscriptionListener[m.Page[m.Me
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/messages/subscribe) · [Go DTO 参考](/reference/go/api)
-
-<a id="subscribemutation" />
-
-## Methods.conversationSubscribeMutation
-
-`Methods.conversationSubscribeMutation` → `conversation.subscribeMutation`
-
-**模式：** `subscribe`。**请求类型：** `m.MutationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.SubscribeMutation
-func(ctx context.Context, r m.MutationRef, o m.SubscriptionListener[m.MutationStatus]) (m.Subscription, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/receipts/subscribe-mutation) · [Go DTO 参考](/reference/go/api)
 
 <a id="subscribesidebarconversations" />
 

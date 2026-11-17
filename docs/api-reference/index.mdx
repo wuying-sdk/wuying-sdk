@@ -4,7 +4,7 @@ sidebarTitle: "接口目录"
 description: "按云资源、AI 能力、存储能力与计量查找当前 SDK 公开操作。"
 ---
 
-当前共收录 **148 项公开操作**，包含业务操作、CLI 命令与高级集成入口。业务能力与 Docs 使用相同的四类划分；Client 与认证单列。消息回执和消息流在 Message 下，写入结果在 Conversation 下，订阅句柄在 Client 下。
+当前共收录 **146 项公开操作**，包含业务操作、CLI 命令与高级集成入口。业务能力与 Docs 使用相同的四类划分；Client 与认证单列。操作回执统一放在 Conversation 下，消息流在 Message 下，订阅句柄在 Client 下。
 
 [全量覆盖与来源](/api-reference/coverage/index) · [按语言查看](/sdk-reference/index)
 
@@ -32,11 +32,10 @@ CLI 专属命令见 [CLI Reference](/reference/cli/public)。Android / iOS 应�
 |---|---:|
 | [Agent](/api-reference/agents/get-agent-model-catalog) | 7 |
 | [Conversation](/api-reference/conversations/archive) | 16 |
-| ↳ [Mutation](/api-reference/receipts/get-mutation) | 2 |
+| ↳ [CommandReceipt](/api-reference/receipts/get-command-receipt) | 2 |
 | [Member](/api-reference/members/add) | 7 |
 | [Config](/api-reference/configuration/get) | 5 |
-| [Message](/api-reference/messages/detail) | 18 |
-| ↳ [CommandReceipt](/api-reference/receipts/get-command-receipt) | 2 |
+| [Message](/api-reference/messages/detail) | 16 |
 | ↳ [MessageStream](/api-reference/streams/accepted) | 5 |
 | [Turn](/api-reference/turns/cancel) | 4 |
 | [Execution](/api-reference/executions/cancel-execution) | 6 |

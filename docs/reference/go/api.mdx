@@ -338,8 +338,6 @@ func (a *ConversationManager) GetMessageFiles(ctx context.Context, r m.MessageFi
 
 func (a *ConversationManager) GetMessagePresentation(ctx context.Context, r m.PresentationQuery) (m.Snapshot[*m.MessagePresentation], error)
 
-func (a *ConversationManager) GetMutation(ctx context.Context, r m.MutationRef) (m.Snapshot[m.MutationStatus], error)
-
 func (a *ConversationManager) GetQuestionResponseReceipt(ctx context.Context, r m.QuestionResponseRef) (m.Snapshot[m.CommandReceipt], error)
 
 func (a *ConversationManager) GetTurn(ctx context.Context, r m.TurnRef) (m.Snapshot[*m.Turn], error)
@@ -421,8 +419,6 @@ func (a *ConversationManager) SubscribeLiveProcess(ctx context.Context, r m.Conv
 func (a *ConversationManager) SubscribeMembers(ctx context.Context, r m.MemberQuery, o m.SubscriptionListener[[]m.Member]) (m.Subscription, error)
 
 func (a *ConversationManager) SubscribeMessages(ctx context.Context, r m.MessageQuery, o m.SubscriptionListener[m.Page[m.Message]]) (m.Subscription, error)
-
-func (a *ConversationManager) SubscribeMutation(ctx context.Context, r m.MutationRef, o m.SubscriptionListener[m.MutationStatus]) (m.Subscription, error)
 
 func (a *ConversationManager) SubscribeSidebarConversations(ctx context.Context, r m.SidebarRowsQuery, o m.SubscriptionListener[m.Page[m.Conversation]]) (m.Subscription, error)
 
@@ -2062,20 +2058,6 @@ type ModelCatalogQuery struct {
 
 type MutationOptions struct {
 	MutationID string `json:"mutationId"`
-}
-
-type MutationRef struct {
-	ConversationRef
-	MutationID string `json:"mutationId"`
-}
-
-type MutationStatus struct {
-	MutationRef
-	State         string `json:"state"`
-	Result        any    `json:"result,omitempty"`
-	ErrorCode     string `json:"errorCode,omitempty"`
-	FailureEffect string `json:"failureEffect,omitempty"`
-	TraceID       string `json:"traceId,omitempty"`
 }
 
 type NetworkError struct {

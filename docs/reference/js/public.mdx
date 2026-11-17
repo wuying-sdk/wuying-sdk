@@ -1098,26 +1098,6 @@ getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snaps
 getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<MemberSnapshot>>;
 ```
 
-<a id="entry-1014e110495e3467" />
-
-### ConversationManager.getMutation
-
-类别：模型操作。[按模型查看操作](/api-reference/receipts/get-mutation)。
-
-```ts
-getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus<unknown>>>;
-```
-
-<a id="entry-81e824fb9c1573b2" />
-
-### ConversationManager.subscribeMutation
-
-类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-mutation)。
-
-```ts
-subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
-```
-
 <a id="entry-8f07e129732230e1" />
 
 ### ConversationManager.subscribeConversations
@@ -2536,26 +2516,6 @@ listMemberCandidates(ctx: Context, request: (ConversationRef) & ListOptions): Pr
 
 ```ts
 getMemberSnapshot(ctx: Context, req: ConversationRef & { consistency?: "cache" | "refresh"; }): Promise<Snapshot<MemberSnapshot>>;
-```
-
-<a id="entry-2970883b6d5c0fd0" />
-
-### ConversationManager.getMutation
-
-类别：模型操作。[按模型查看操作](/api-reference/receipts/get-mutation)。
-
-```ts
-getMutation(ctx: Context, req: MutationRef): Promise<Snapshot<MutationStatus>>;
-```
-
-<a id="entry-f3da075d79bc5357" />
-
-### ConversationManager.subscribeMutation
-
-类别：模型操作。[按模型查看操作](/api-reference/receipts/subscribe-mutation)。
-
-```ts
-subscribeMutation(ctx: Context, req: MutationRef, observer: SubscriptionListener<MutationStatus>): Promise<Subscription>;
 ```
 
 <a id="entry-000bfcde0967e74c" />
