@@ -664,7 +664,6 @@
                 "group": "Workspace",
                 "pages": [
                   "api-reference/workspaces/create",
-                  "api-reference/workspaces/get-conversation-storage-context",
                   "api-reference/workspaces/list"
                 ]
               }

@@ -325,8 +325,6 @@ func (a *ConversationManager) GetConversationConfig(ctx context.Context, r m.Con
 
 func (a *ConversationManager) GetConversationHeaderMetadata(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ConversationHeaderMetadata], error)
 
-func (a *ConversationManager) GetConversationStorageContext(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, error)
-
 func (a *ConversationManager) GetMemberSnapshot(ctx context.Context, r m.MemberSnapshotQuery) (m.Snapshot[m.MemberSnapshot], error)
 
 func (a *ConversationManager) GetMessageDetail(ctx context.Context, r m.MessageDetailQuery) (m.Snapshot[*m.MessageDetail], error)

@@ -7,7 +7,7 @@ Workspace 定位授权执行环境中的工作空间引用，为会话提供工�
 
 ## 模型与关联
 
-`Workspace` / `WorkspacePage` 描述公开工作空间，`ConversationHeaderMetadata` / `ConversationStorageContext` 描述会话可读的工作区信息。
+`Workspace` 描述公开工作空间，列表通过 items / nextCursor 分页；`ConversationHeaderMetadata` 提供会话相关的工作区展示信息。
 
 会话可按能力引用 workspaceId；云文件属于 [WyDrive](/domain-model/wy-drive)，消息产物见 [MessageCloudFile](/domain-model/message-cloud-file)，不是 Workspace 的同义对象。
 
@@ -20,7 +20,6 @@ Workspace 定位授权执行环境中的工作空间引用，为会话提供工�
 - [`listWorkspaces`](/api-reference/workspaces/list)
 - [`createWorkspace`](/api-reference/workspaces/create)
 - [`getConversationHeaderMetadata`](/api-reference/conversations/get-conversation-header-metadata)
-- [`getConversationStorageContext`](/api-reference/workspaces/get-conversation-storage-context)
 
 ## 使用边界
 

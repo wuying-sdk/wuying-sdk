@@ -1058,16 +1058,6 @@ steerTurn(ctx: Context, req: ConversationRef & { turnId: string; text: string; c
 setConversationPinned(ctx: Context, req: ConversationRef & { pinned: boolean; }, options?: MutationOptions): Promise<ConversationRef>;
 ```
 
-<a id="entry-5b46e15aa76b6c37" />
-
-### ConversationManager.getConversationStorageContext
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/get-conversation-storage-context)。
-
-```ts
-getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
-```
-
 <a id="entry-5e82edc61a48c644" />
 
 ### ConversationManager.getConversationHeaderMetadata
@@ -2296,16 +2286,6 @@ prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise
 
 ```ts
 getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
-```
-
-<a id="entry-bd4ab4ff7178d31e" />
-
-### ConversationManager.getConversationStorageContext
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/get-conversation-storage-context)。
-
-```ts
-getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
 ```
 
 <a id="entry-6cbb39fcb14ad4c3" />

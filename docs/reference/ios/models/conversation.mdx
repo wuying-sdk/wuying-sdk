@@ -156,21 +156,6 @@ func(ctx context.Context, r m.ConversationRef) (m.Snapshot[m.ConversationHeaderM
 
 [模型操作、完整参数与能力边界](/api-reference/conversations/get-conversation-header-metadata) · [Go DTO 参考](/reference/go/api)
 
-<a id="getconversationstoragecontext" />
-
-## Methods.conversationGetConversationStorageContext
-
-`Methods.conversationGetConversationStorageContext` → `conversation.getConversationStorageContext`
-
-**模式：** `call`。**请求类型：** `m.ConversationRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ConversationManager.GetConversationStorageContext
-func(ctx context.Context, r m.ConversationRef) (m.ConversationStorageContext, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/workspaces/get-conversation-storage-context) · [Go DTO 参考](/reference/go/api)
-
 <a id="getmembersnapshot" />
 
 ## Methods.conversationGetMemberSnapshot

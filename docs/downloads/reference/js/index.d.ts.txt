@@ -1072,7 +1072,6 @@ declare class ConversationManager$1 implements ConversationManager {
     setConversationPinned(ctx: Context, req: ConversationRef & {
         pinned: boolean;
     }, options?: MutationOptions): Promise<ConversationRef>;
-    getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
     getConversationHeaderMetadata(ctx: Context, req: ConversationRef): Promise<Snapshot<ConversationHeaderMetadata>>;
     private readListMemberCandidates;
     getMemberSnapshot(ctx: Context, req: ConversationRef & {
@@ -3505,7 +3504,6 @@ interface ConversationManager {
     subscribeLiveProcess(ctx: Context, req: ConversationRef, observer: SubscriptionListener<LiveProcessSnapshot>): Promise<Subscription>;
     prepareConversationAttachmentTarget(ctx: Context, req: ConversationRef): Promise<ConversationAttachmentTarget>;
     getMessageFiles(ctx: Context, req: MessageFilesQuery): Promise<Snapshot<MessageFilesResult>>;
-    getConversationStorageContext(ctx: Context, req: ConversationRef): Promise<ConversationStorageContext>;
     createConversation(ctx: Context, req: CreateRequest, options?: MutationOptions): Promise<CreatedConversation>;
     listConversationGroups: ConversationManager$1['listConversationGroups'];
     subscribeConversationGroups(ctx: Context, req: ConversationGroupQuery, observer: SubscriptionListener<Page<SidebarGroup>>): Promise<Subscription>;
