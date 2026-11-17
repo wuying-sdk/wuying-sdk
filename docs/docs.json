@@ -542,6 +542,16 @@
                   "api-reference/conversations/subscribe-sidebar-conversations",
                   "api-reference/conversations/unarchive-conversation",
                   {
+                    "group": "Config",
+                    "pages": [
+                      "api-reference/configuration/get",
+                      "api-reference/configuration/get-composer-capabilities",
+                      "api-reference/configuration/set-conversation-config-option",
+                      "api-reference/configuration/subscribe-conversation-config",
+                      "api-reference/configuration/update"
+                    ]
+                  },
+                  {
                     "group": "CommandReceipt",
                     "pages": [
                       "api-reference/receipts/get-command-receipt",
@@ -560,16 +570,6 @@
                   "api-reference/members/remove",
                   "api-reference/members/subscribe-members",
                   "api-reference/members/update"
-                ]
-              },
-              {
-                "group": "Config",
-                "pages": [
-                  "api-reference/configuration/get",
-                  "api-reference/configuration/get-composer-capabilities",
-                  "api-reference/configuration/set-conversation-config-option",
-                  "api-reference/configuration/subscribe-conversation-config",
-                  "api-reference/configuration/update"
                 ]
               },
               {
