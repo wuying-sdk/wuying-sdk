@@ -1628,16 +1628,6 @@ cancel(ctx?: Context): Promise<{ state: "requested" | "cancelled" | "already_fin
 getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
 ```
 
-<a id="entry-14401c78b5b02bd2" />
-
-### ModelManager.setChannelGroupModel
-
-类别：模型操作。[按模型查看操作](/api-reference/models/set-channel-group-model)。
-
-```ts
-setChannelGroupModel(ctx: ExecutionContext, req: SetChannelGroupModelRequest, ...opts: CallOption[]): Promise<SetChannelGroupModelResult | null>;
-```
-
 <a id="entry-396a23bb8cbb5f69" />
 
 ### ModelManager.buildModelManager
@@ -3286,14 +3276,4 @@ entUninstallSkills(ctx: ExecutionContext, req: EntUninstallSkillsRequest): Promi
 
 ```ts
 getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
-```
-
-<a id="entry-2c0163612b521b93" />
-
-### ModelManager.setChannelGroupModel
-
-类别：模型操作。[按模型查看操作](/api-reference/models/set-channel-group-model)。
-
-```ts
-setChannelGroupModel(ctx: ExecutionContext, req: SetChannelGroupModelRequest, ...opts: CallOption[]): Promise<SetChannelGroupModelResult | null>;
 ```

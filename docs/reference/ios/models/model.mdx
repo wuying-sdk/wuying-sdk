@@ -20,18 +20,3 @@ func(ctx context.Context, req *GetModelConfigRequest, opts ...CallOption) (*mode
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/models/get) · [Go DTO 参考](/reference/go/api)
-
-<a id="setchannelgroupmodel" />
-
-## Methods.modelSetChannelGroupModel
-
-`Methods.modelSetChannelGroupModel` → `model.setChannelGroupModel`
-
-**模式：** `call`。**请求类型：** `*manager.SetChannelGroupModelRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ModelManager.SetChannelGroupModel
-func(ctx context.Context, req *SetChannelGroupModelRequest, opts ...CallOption) (*model.SetChannelGroupModelResult, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/models/set-channel-group-model) · [Go DTO 参考](/reference/go/api)

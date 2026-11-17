@@ -394,7 +394,6 @@ final class com.aliyun.wuying.sdk.manager.ListPagination$Numbered<T> {
 Compiled from "ModelManager.java"
 public final class com.aliyun.wuying.sdk.manager.ModelManager extends com.aliyun.wuying.sdk.manager.BaseManager {
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ModelConfig> getAgentInstanceModelConfig(com.aliyun.wuying.sdk.model.GetModelConfigRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.SetChannelGroupModelResult> setChannelGroupModel(com.aliyun.wuying.sdk.model.SetChannelGroupModelRequest, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "ResourceManager.java"
 public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.aliyun.wuying.sdk.manager.BaseManager {
@@ -2484,19 +2483,6 @@ public class com.aliyun.wuying.sdk.model.Sender {
   public java.lang.String memberId;
   public java.lang.String displayName;
   public com.aliyun.wuying.sdk.model.Sender();
-}
-Compiled from "SetChannelGroupModelRequest.java"
-public class com.aliyun.wuying.sdk.model.SetChannelGroupModelRequest {
-  public java.lang.String agentInstanceId;
-  public java.lang.String groupId;
-  public java.lang.String providerName;
-  public java.lang.String llmCode;
-  public com.aliyun.wuying.sdk.model.SetChannelGroupModelRequest();
-}
-Compiled from "SetChannelGroupModelResult.java"
-public class com.aliyun.wuying.sdk.model.SetChannelGroupModelResult {
-  public boolean success;
-  public com.aliyun.wuying.sdk.model.SetChannelGroupModelResult();
 }
 Compiled from "SetSkillEnabledRequest.java"
 public class com.aliyun.wuying.sdk.model.SetSkillEnabledRequest {

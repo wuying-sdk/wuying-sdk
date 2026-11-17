@@ -659,8 +659,7 @@
               {
                 "group": "Model",
                 "pages": [
-                  "api-reference/models/get",
-                  "api-reference/models/set-channel-group-model"
+                  "api-reference/models/get"
                 ]
               },
               {

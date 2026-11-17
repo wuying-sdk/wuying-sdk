@@ -209,7 +209,7 @@ type UserConfig struct {
 	SalesEndpoint string
 
 	// AccessKeyID is the Alibaba Cloud access key ID for AK/SK signed API calls.
-	// Required for Model Config APIs (GetAgentInstanceModelConfig, SetChannelGroupModel).
+	// Required for Model Config APIs (GetAgentInstanceModelConfig).
 	AccessKeyID string
 
 	// AccessKeySecret is the Alibaba Cloud access key secret for AK/SK signed API calls.
@@ -565,23 +565,6 @@ func (m *ModelManager) GetAgentInstanceModelConfig(ctx context.Context, req *Get
             // handle result or error
         }))
 
-func (m *ModelManager) SetChannelGroupModel(ctx context.Context, req *SetChannelGroupModelRequest, opts ...CallOption) (*model.SetChannelGroupModelResult, error)
-    SetChannelGroupModel sets the model for a channel group. Supports both sync
-    and async modes via CallOption.
-
-    Sync usage:
-
-        result, err := mgr.SetChannelGroupModel(ctx, &manager.SetChannelGroupModelRequest{
-            AgentInstanceId: "inst-xxx", GroupId: "grp-xxx", ProviderName: "bailian", LlmCode: "qwen3.5-plus",
-        })
-
-    Async usage:
-
-        mgr.SetChannelGroupModel(ctx, req, manager.WithAsync(func(result interface{}, err error) {
-            res := result.(*model.SetChannelGroupModelResult)
-            // handle result or error
-        }))
-
 type ResourceManager struct {
 	// Has unexported fields.
 }
@@ -700,14 +683,6 @@ func (m *RuntimeManager) UpdateAgentInstance(ctx context.Context, req *UpdateAge
         mgr.UpdateAgentInstance(ctx, req, manager.WithAsync(func(result interface{}, err error) {
             // handle result or error
         }))
-
-type SetChannelGroupModelRequest struct {
-	AgentInstanceId string `json:"agent_instance_id"` // Required: agent instance ID
-	GroupId         string `json:"group_id"`          // Required: group ID (AgentIM session ID)
-	ProviderName    string `json:"provider_name"`     // Required: model provider ID, e.g. "bailian"
-	LlmCode         string `json:"llm_code"`          // Required: model ID, e.g. "qwen3.5-plus"
-}
-    SetChannelGroupModelRequest is the request for SetChannelGroupModel.
 
 type SetSkillEnabledRequest struct {
 	RuntimeId  string   `json:"runtime_id,omitempty"` // Agent 的 RuntimeId（优先使用）
@@ -2574,17 +2549,6 @@ type ServerError struct {
     ServerError represents a server-side error (5xx).
 
 func (e *ServerError) Error() string
-
-type SetChannelGroupModelRequest struct {
-	ChannelGroupId string `json:"channel_group_id"`
-	ModelId        string `json:"model_id"`
-}
-    SetChannelGroupModelRequest is the request for setting channel group model.
-
-type SetChannelGroupModelResult struct {
-	Success bool `json:"success"`
-}
-    SetChannelGroupModelResult is the result of setting channel group model.
 
 type SidebarFilter struct {
 	RuntimeID  string `json:"runtimeId,omitempty"`
