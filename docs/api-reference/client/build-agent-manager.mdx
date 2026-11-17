@@ -60,7 +60,6 @@ interface AgentManager extends Pick<CloudResources, 'describeWyDrives' | 'descri
     listAgents: AgentManager$1['listAgents'];
     subscribeAgents(ctx: Context, req: RuntimeRef, observer: SubscriptionListener<Agent[]>): Promise<Subscription>;
     listAgentModels: AgentManager$1['listAgentModels'];
-    listAgentProducts: AgentManager$1['listAgentProducts'];
     getExpertDirectory(ctx: Context, req: RuntimeRef & {
         primaryAgentId: string;
     }): Promise<Snapshot<ExpertDirectory>>;

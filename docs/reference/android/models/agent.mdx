@@ -141,21 +141,6 @@ func(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.Model],
 
 [模型操作、完整参数与能力边界](/api-reference/agents/models) · [Go DTO 参考](/reference/go/api)
 
-<a id="listagentproducts" />
-
-## Methods.agentListAgentProducts
-
-`Methods.agentListAgentProducts` → `agent.listAgentProducts`
-
-**模式：** `call`。**请求类型：** `m.RuntimeRef`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*AgentManager.ListAgentProducts
-func(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.ProductPage, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/agents/list-agent-products) · [Go DTO 参考](/reference/go/api)
-
 <a id="listagents" />
 
 ## Methods.agentListAgents

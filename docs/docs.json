@@ -519,7 +519,6 @@
                   "api-reference/agents/get-agent-model-catalog",
                   "api-reference/agents/get-expert-directory",
                   "api-reference/agents/list",
-                  "api-reference/agents/list-agent-products",
                   "api-reference/agents/list-experts",
                   "api-reference/agents/models",
                   "api-reference/agents/subscribe-agents"

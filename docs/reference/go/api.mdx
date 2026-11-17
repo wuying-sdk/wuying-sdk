@@ -256,9 +256,6 @@ func (a *AgentManager) ListAgentKnowledgeSpaces(ctx context.Context, r m.ListAge
 func (a *AgentManager) ListAgentModels(ctx context.Context, r m.AgentRef, opts ...m.ListOptions) (m.Page[m.Model], error)
     ListAgentModels returns one page. Use NextCursor for continuation.
 
-func (a *AgentManager) ListAgentProducts(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.ProductPage, error)
-    ListAgentProducts returns one page. Use NextCursor for continuation.
-
 func (a *AgentManager) ListAgents(ctx context.Context, r m.RuntimeRef, opts ...m.ListOptions) (m.Page[m.Agent], error)
     ListAgents returns one page. Use NextCursor for continuation.
 
@@ -2169,22 +2166,6 @@ func (p *ProcessPayload) SetText(v string)
     boundaries.
 
 func (p *ProcessPayload) UnmarshalJSON(raw []byte) error
-
-type Product struct {
-	ProductID   string   `json:"productId"`
-	InstanceIDs []string `json:"instanceIds"`
-	State       string   `json:"state"`
-}
-
-type ProductCatalog struct {
-	Products []Product `json:"products"`
-	Complete bool      `json:"complete"`
-}
-
-type ProductPage struct {
-	Page[Product]
-	Complete bool `json:"complete"`
-}
 
 type Projection struct {
 	ControlReady    *bool  `json:"controlReady,omitempty"`

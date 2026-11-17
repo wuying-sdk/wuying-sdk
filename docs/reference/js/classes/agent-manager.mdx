@@ -30,14 +30,6 @@ listExperts(ctx: Context, request: (RuntimeRef & { primaryAgentId: string; }) & 
 
 [查看操作或完整契约](/api-reference/agents/list-experts)
 
-## listAgentProducts
-
-```ts
-listAgentProducts(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<{ projection: Projection; items: { productId: string; instanceIds: string[]; state: "available" | "unavailable" | "unknown"; }[]; nextCursor: string | null; complete: boolean; }>;
-```
-
-[查看操作或完整契约](/api-reference/agents/list-agent-products)
-
 ## describeWyDrives
 
 ```ts
@@ -149,14 +141,6 @@ listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<M
 ```
 
 [查看操作或完整契约](/api-reference/agents/models)
-
-## listAgentProducts
-
-```ts
-listAgentProducts(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<{ projection: Projection; items: { productId: string; instanceIds: string[]; state: "available" | "unavailable" | "unknown"; }[]; nextCursor: string | null; complete: boolean; }>;
-```
-
-[查看操作或完整契约](/api-reference/agents/list-agent-products)
 
 ## getExpertDirectory
 

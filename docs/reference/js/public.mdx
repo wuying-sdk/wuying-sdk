@@ -48,16 +48,6 @@ listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<M
 listExperts(ctx: Context, request: (RuntimeRef & { primaryAgentId: string; }) & ListOptions): Promise<Page<Expert> & { projection: Projection; }>;
 ```
 
-<a id="entry-9f060e6d341ce45a" />
-
-### AgentManager.listAgentProducts
-
-类别：模型操作。[按模型查看操作](/api-reference/agents/list-agent-products)。
-
-```ts
-listAgentProducts(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<{ projection: Projection; items: { productId: string; instanceIds: string[]; state: "available" | "unavailable" | "unknown"; }[]; nextCursor: string | null; complete: boolean; }>;
-```
-
 <a id="entry-cea5d90fbe57f6ef" />
 
 ### AgentManager.describeWyDrives
@@ -2186,16 +2176,6 @@ subscribeAgents(ctx: Context, req: RuntimeRef, observer: SubscriptionListener<Ag
 
 ```ts
 listAgentModels(ctx: Context, request: (AgentRef) & ListOptions): Promise<Page<Model & AgentRef> & { projection: Projection; }>;
-```
-
-<a id="entry-66b443f1dc7ecb4a" />
-
-### AgentManager.listAgentProducts
-
-类别：模型操作。[按模型查看操作](/api-reference/agents/list-agent-products)。
-
-```ts
-listAgentProducts(ctx: Context, request: (RuntimeRef) & ListOptions): Promise<{ projection: Projection; items: { productId: string; instanceIds: string[]; state: "available" | "unavailable" | "unknown"; }[]; nextCursor: string | null; complete: boolean; }>;
 ```
 
 <a id="entry-5d6f42ec77dc48d3" />
