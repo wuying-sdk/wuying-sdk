@@ -5,7 +5,7 @@ description: "同版本 Java SDK jar 的公开签名；参数说明另见随包�
 
 <Note>本页按所选语言保留原始完整参考，可能包含该语言的业务示例。跨语言操作请使用[快速开始](/getting-started/desktop-to-agent)和[代码示例](/examples/index)中的语言卡片。</Note>
 
-基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿；按客户合同排除 internal 及 @hidden 装配签名。
+基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿。由 javap 生成，按客户合同排除 internal 实现、引用 internal 类型的装配签名及 @hidden 成员。
 
 ```java
 Compiled from "Administration.java"
@@ -113,7 +113,6 @@ public final class com.aliyun.wuying.sdk.WuyingClient implements java.lang.AutoC
   public com.aliyun.wuying.sdk.manager.ConversationManager buildConversationManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.ResourceManager buildResourceManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.SkillManager buildSkillManager(com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.manager.ModelManager buildModelManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.CreditManager buildCreditManager(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> updateLoginCredentials(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.CallContext);
   public void close();
@@ -390,10 +389,6 @@ public class com.aliyun.wuying.sdk.manager.ListPagination$Cursor {
 }
 Compiled from "ListPagination.java"
 final class com.aliyun.wuying.sdk.manager.ListPagination$Numbered<T> {
-}
-Compiled from "ModelManager.java"
-public final class com.aliyun.wuying.sdk.manager.ModelManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.ModelConfig> getAgentInstanceModelConfig(com.aliyun.wuying.sdk.model.GetModelConfigRequest, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "ResourceManager.java"
 public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.aliyun.wuying.sdk.manager.BaseManager {
@@ -1435,14 +1430,6 @@ public class com.aliyun.wuying.sdk.model.GetDownloadUrlRequest {
   public java.lang.String productType;
   public com.aliyun.wuying.sdk.model.GetDownloadUrlRequest();
 }
-Compiled from "GetModelConfigRequest.java"
-public class com.aliyun.wuying.sdk.model.GetModelConfigRequest {
-  public java.lang.String agentInstanceId;
-  public java.lang.String agentProvider;
-  public java.lang.String agentPlatform;
-  public java.lang.String channelSessionId;
-  public com.aliyun.wuying.sdk.model.GetModelConfigRequest();
-}
 Compiled from "Group.java"
 public class com.aliyun.wuying.sdk.model.Group {
   public java.lang.String runtimeId;
@@ -1533,12 +1520,6 @@ public class com.aliyun.wuying.sdk.model.IMGroupFileRequest extends com.aliyun.w
   public java.lang.String fileId;
   public java.lang.String storageEnvironment;
   public com.aliyun.wuying.sdk.model.IMGroupFileRequest();
-}
-Compiled from "InferenceMetadata.java"
-public class com.aliyun.wuying.sdk.model.InferenceMetadata {
-  public java.util.List<java.lang.String> requestModality;
-  public java.util.List<java.lang.String> responseModality;
-  public com.aliyun.wuying.sdk.model.InferenceMetadata();
 }
 Compiled from "InitKnowledgeFileDownloadTasksRequest.java"
 public class com.aliyun.wuying.sdk.model.InitKnowledgeFileDownloadTasksRequest {
@@ -1818,19 +1799,6 @@ public class com.aliyun.wuying.sdk.model.LiveProcessSnapshot$LiveProgressValue {
   public java.lang.String generation;
   public java.lang.String revision;
   public com.aliyun.wuying.sdk.model.LiveProcessSnapshot$LiveProgressValue();
-}
-Compiled from "LlmInfo.java"
-public class com.aliyun.wuying.sdk.model.LlmInfo {
-  public java.lang.String llmCode;
-  public java.lang.String name;
-  public java.lang.String description;
-  public java.lang.String publishedTime;
-  public java.util.List<java.lang.String> features;
-  public java.lang.String riskType;
-  public com.aliyun.wuying.sdk.model.InferenceMetadata inferenceMetadata;
-  public java.util.Map<java.lang.String, java.lang.Object> modelInfo;
-  public java.util.List<com.aliyun.wuying.sdk.model.PriceRange> prices;
-  public com.aliyun.wuying.sdk.model.LlmInfo();
 }
 Compiled from "LoginCredentials.java"
 public final class com.aliyun.wuying.sdk.model.LoginCredentials {
@@ -2117,24 +2085,6 @@ public class com.aliyun.wuying.sdk.model.ModelCatalogQuery extends com.aliyun.wu
   public java.lang.String consistency;
   public com.aliyun.wuying.sdk.model.ModelCatalogQuery();
 }
-Compiled from "ModelConfig.java"
-public class com.aliyun.wuying.sdk.model.ModelConfig {
-  public java.lang.String modelTemplateId;
-  public java.lang.String modelTemplateName;
-  public java.lang.String defaultModel;
-  public java.lang.String channelSessionModel;
-  public java.util.List<com.aliyun.wuying.sdk.model.ModelProvider> modelProviderList;
-  public com.aliyun.wuying.sdk.model.ModelConfig();
-}
-Compiled from "ModelProvider.java"
-public class com.aliyun.wuying.sdk.model.ModelProvider {
-  public java.lang.String modelProviderTemplateId;
-  public java.lang.String providerName;
-  public java.lang.String name;
-  public java.lang.String providerAvatarUrl;
-  public java.util.List<com.aliyun.wuying.sdk.model.LlmInfo> llmInfoList;
-  public com.aliyun.wuying.sdk.model.ModelProvider();
-}
 Compiled from "MutationOptions.java"
 public class com.aliyun.wuying.sdk.model.MutationOptions {
   public java.lang.String mutationId;
@@ -2229,19 +2179,6 @@ public class com.aliyun.wuying.sdk.model.PresentationQuery extends com.aliyun.wu
   public int limit;
   public java.lang.String consistency;
   public com.aliyun.wuying.sdk.model.PresentationQuery();
-}
-Compiled from "PriceItem.java"
-public class com.aliyun.wuying.sdk.model.PriceItem {
-  public java.lang.String priceName;
-  public java.lang.String price;
-  public java.lang.String priceUnit;
-  public com.aliyun.wuying.sdk.model.PriceItem();
-}
-Compiled from "PriceRange.java"
-public class com.aliyun.wuying.sdk.model.PriceRange {
-  public java.lang.String rangeName;
-  public java.util.List<com.aliyun.wuying.sdk.model.PriceItem> prices;
-  public com.aliyun.wuying.sdk.model.PriceRange();
 }
 Compiled from "ProcessPayload.java"
 public class com.aliyun.wuying.sdk.model.ProcessPayload {

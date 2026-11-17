@@ -598,16 +598,6 @@ buildAspManager(context: ExecutionContext): Promise<AspManager>;
 buildSkillManager(context: ExecutionContext): Promise<SkillManager>;
 ```
 
-<a id="entry-872533de4696d613" />
-
-### Client.buildModelManager
-
-类别：模型操作。[按模型查看操作](/api-reference/client/build-model-manager)。
-
-```ts
-buildModelManager(context: ExecutionContext): Promise<ModelManager>;
-```
-
 <a id="entry-06298aa869bb69cf" />
 
 ### Client.getAuthCodeCredential
@@ -1616,26 +1606,6 @@ debug(msg: string, ...args: unknown[]): void;
 
 ```ts
 cancel(ctx?: Context): Promise<{ state: "requested" | "cancelled" | "already_finished"; }>;
-```
-
-<a id="entry-f3c946d63c095b0c" />
-
-### ModelManager.getAgentInstanceModelConfig
-
-类别：模型操作。[按模型查看操作](/api-reference/models/get)。
-
-```ts
-getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
-```
-
-<a id="entry-396a23bb8cbb5f69" />
-
-### ModelManager.buildModelManager
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```ts
-buildModelManager(ctx: ExecutionContext, container: ServiceContainer): Promise<ModelManager>;
 ```
 
 <a id="entry-bbc754d0b5d32bf0" />
@@ -3166,14 +3136,4 @@ entInstallSkills(ctx: ExecutionContext, req: EntInstallSkillsRequest): Promise<O
 
 ```ts
 entUninstallSkills(ctx: ExecutionContext, req: EntUninstallSkillsRequest): Promise<OperationTask[]>;
-```
-
-<a id="entry-24220ab1d4dfe5db" />
-
-### ModelManager.getAgentInstanceModelConfig
-
-类别：模型操作。[按模型查看操作](/api-reference/models/get)。
-
-```ts
-getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
 ```

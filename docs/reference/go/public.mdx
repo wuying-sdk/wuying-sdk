@@ -48,16 +48,6 @@ func (receiver *Client) BuildConversationManager(ctx context.Context) (*manager.
 func (receiver *Client) BuildCreditManager(ctx context.Context) (*manager.CreditManager, error)
 ```
 
-<a id="entry-c44fd9bfe7ca41c0" />
-
-### github.com/aliyun/wuying-sdk-go.Client.BuildModelManager
-
-类别：模型操作。[按模型查看操作](/api-reference/client/build-model-manager)。
-
-```go
-func (receiver *Client) BuildModelManager(ctx context.Context) (*manager.ModelManager, error)
-```
-
 <a id="entry-e1447b7c626ad912" />
 
 ### github.com/aliyun/wuying-sdk-go.Client.BuildResourceManager
@@ -456,16 +446,6 @@ func NewConversationManager(s *business.Service) *ConversationManager
 
 ```go
 func NewCreditManager(sc *container.ServiceContainer) *CreditManager
-```
-
-<a id="entry-390bc027d1fae88b" />
-
-### github.com/aliyun/wuying-sdk-go/manager.NewModelManager
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```go
-func NewModelManager(sc *container.ServiceContainer) *ModelManager
 ```
 
 <a id="entry-427f76554846eba8" />
@@ -1246,16 +1226,6 @@ func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, 
 
 ```go
 func (receiver *CreditManager) DescribeCreditUsageInfo(ctx context.Context, r *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
-```
-
-<a id="entry-aee3ea40c5362b2a" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ModelManager.GetAgentInstanceModelConfig
-
-类别：模型操作。[按模型查看操作](/api-reference/models/get)。
-
-```go
-func (receiver *ModelManager) GetAgentInstanceModelConfig(ctx context.Context, req *GetModelConfigRequest, opts ...CallOption) (*model.ModelConfig, error)
 ```
 
 <a id="entry-3b92c2975794b98f" />

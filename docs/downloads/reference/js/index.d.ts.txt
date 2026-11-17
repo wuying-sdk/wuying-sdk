@@ -1927,55 +1927,6 @@ interface DescribeCreditUsageInfoRequest$1 {
 }
 
 /**
- * Model 配置模型定义
- * 对应 Go 版本: model/model_config.go
- */
-/** Agent 实例的模型配置。 */
-interface ModelConfig {
-    modelTemplateId: string;
-    modelTemplateName: string;
-    defaultModel: string;
-    channelSessionModel: string;
-    modelProviderList: ModelProvider[];
-}
-/** 模型提供商信息。 */
-interface ModelProvider {
-    modelProviderTemplateId: string;
-    providerName: string;
-    name: string;
-    providerAvatarUrl: string;
-    llmInfoList: LlmInfo[];
-}
-/** 单个 LLM 模型信息。 */
-interface LlmInfo {
-    llmCode: string;
-    name: string;
-    description: string;
-    publishedTime: string;
-    features: string[];
-    riskType: string;
-    inferenceMetadata?: InferenceMetadata;
-    modelInfo?: Record<string, unknown>;
-    prices: PriceRange[];
-}
-/** 模型推理模态信息。 */
-interface InferenceMetadata {
-    requestModality: string[];
-    responseModality: string[];
-}
-/** 价格区间组。 */
-interface PriceRange {
-    rangeName: string;
-    prices: PriceItem[];
-}
-/** 单条价格条目。 */
-interface PriceItem {
-    priceName: string;
-    price: string;
-    priceUnit: string;
-}
-
-/**
  * Desktop（桌面/FOTA 升级）模型定义
  * 对应 Go 版本: model/desktop.go
  */
@@ -2525,8 +2476,6 @@ interface Container {
     skillService(): SkillService;
     creditRouter(): CreditRouter;
     creditService(): CreditService;
-    modelRouter(): ModelRouter;
-    modelService(): ModelService;
     desktopRouter(): DesktopRouter;
     desktopService(): DesktopService;
     streamRoutes(): StreamRoutes;
@@ -2578,12 +2527,6 @@ interface CreditService {
     describeCreditPackageAgents(ctx: ExecutionContext, agentType: string, agentIds: string[], fillAgent: boolean): Promise<CreditPackageAgent[]>;
     describeCreditUsageInfo(ctx: ExecutionContext, req: DescribeCreditUsageInfoRequest$1): Promise<CreditUsageInfo>;
 }
-interface ModelRouter {
-    getAgentInstanceModelConfig(ctx: ExecutionContext, agentInstanceId: string, agentProvider: string, agentPlatform: string, channelSessionId: string): Promise<ModelConfig | null>;
-}
-interface ModelService {
-    getAgentInstanceModelConfig(ctx: ExecutionContext, agentInstanceId: string, agentProvider: string, agentPlatform: string, channelSessionId: string): Promise<ModelConfig | null>;
-}
 interface DesktopRouter {
     describeDesktops(ctx: ExecutionContext, desktopIds: string[], queryFotaUpdate: boolean, protocolType: string, maxResults: number, nextToken: string, regionId?: string): Promise<DesktopList>;
     approveFotaUpdate(ctx: ExecutionContext, desktopId: string, appVersion: string, uuid: string, targetStatus: string, regionId?: string): Promise<void>;
@@ -2625,8 +2568,6 @@ declare class ServiceContainer implements Container {
     private _salesClientsByRegion;
     private creditRouterInstance;
     private creditSvcInstance;
-    private modelRouterInstance;
-    private modelSvcInstance;
     private desktopRouterInstance;
     private desktopSvcInstance;
     private passwordClient?;
@@ -2643,8 +2584,6 @@ declare class ServiceContainer implements Container {
     salesClientForRegion(regionId: string): AnonymousClient;
     creditRouter(): CreditRouter;
     creditService(): CreditService;
-    modelRouter(): ModelRouter;
-    modelService(): ModelService;
     desktopRouter(): DesktopRouter;
     desktopService(): DesktopService;
     streamRoutes(): StreamRoutes;
@@ -4333,39 +4272,6 @@ declare class SkillManager {
     entUninstallSkills(ctx: ExecutionContext, req: EntUninstallSkillsRequest): Promise<OperationTask[]>;
 }
 
-/**
- * Model Manager
- * 对应 Go 版本: manager/model_manager.go
- */
-
-/** GetAgentInstanceModelConfig 请求参数 */
-interface GetModelConfigRequest {
-    /** 必填：Agent 实例 ID */
-    agentInstanceId: string;
-    /** Agent 类型，默认 "OpenClaw" */
-    agentProvider?: string;
-    /** Agent 平台，默认 "ENTERPRISE" */
-    agentPlatform?: string;
-    /** 可选：会话组 ID（AgentIM session ID） */
-    channelSessionId?: string;
-}
-declare class ModelManager {
-    private container;
-    static buildModelManager(ctx: ExecutionContext, container: ServiceContainer): Promise<ModelManager>;
-    private constructor();
-    /**
-     * 获取 Agent 实例的模型配置
-     * 支持同步和异步模式（通过 CallOption）
-     *
-     * 同步用法：
-     *   const config = await mgr.getAgentInstanceModelConfig(ctx, { agentInstanceId: 'inst-xxx' });
-     *
-     * 异步用法：
-     *   mgr.getAgentInstanceModelConfig(ctx, req, WithAsync((result, err) => { ... }));
-     */
-    getAgentInstanceModelConfig(ctx: ExecutionContext, req: GetModelConfigRequest, ...opts: CallOption[]): Promise<ModelConfig | null>;
-}
-
 interface CreditPackageQuery {
     agentType: string;
     agentIds: string[];
@@ -4620,7 +4526,6 @@ declare class Client {
     private credential;
     private container;
     private _skillManager;
-    private _modelManager;
     private _aspManager;
     private loginOptions;
     private updatingCredentials;
@@ -4643,7 +4548,6 @@ declare class Client {
     constructor(options: ClientOptions, userConfig?: UserConfig);
     buildAspManager(context: ExecutionContext): Promise<AspManager>;
     buildSkillManager(context: ExecutionContext): Promise<SkillManager>;
-    buildModelManager(context: ExecutionContext): Promise<ModelManager>;
     getAuthCodeCredential(): AuthCodeCredential;
     close(): Promise<void>;
     logout(): Promise<void>;
@@ -4705,4 +4609,4 @@ declare class APIError extends SDKError {
 }
 declare function isRetryable(error: unknown): boolean;
 
-export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientOptions, BusinessError as CloudBusinessError, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type GetModelConfigRequest, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InferenceMetadata, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type LlmInfo, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type ModelConfig, ModelManager, type ModelProvider, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type PriceItem, type PriceRange, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, ResourceManager$1 as ResourceManager, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };
+export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientOptions, BusinessError as CloudBusinessError, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type HostCapabilities, type IMGroupAttachmentResult, type IMGroupFileRequest, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type MutationOptions, type MutationRef, type MutationStatus, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type ProcessPayload, type ProductCatalog, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, ResourceManager$1 as ResourceManager, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };

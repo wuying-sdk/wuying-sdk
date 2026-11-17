@@ -39,8 +39,6 @@ func (c *Client) BuildConversationManager(ctx context.Context) (*manager.Convers
 
 func (c *Client) BuildCreditManager(ctx context.Context) (*manager.CreditManager, error)
 
-func (c *Client) BuildModelManager(ctx context.Context) (*manager.ModelManager, error)
-
 func (c *Client) BuildResourceManager(ctx context.Context) (*manager.ResourceManager, error)
 
 func (c *Client) BuildRuntimeManager(ctx context.Context) (*manager.RuntimeManager, error)
@@ -209,11 +207,9 @@ type UserConfig struct {
 	SalesEndpoint string
 
 	// AccessKeyID is the Alibaba Cloud access key ID for AK/SK signed API calls.
-	// Required for Model Config APIs (GetAgentInstanceModelConfig).
 	AccessKeyID string
 
 	// AccessKeySecret is the Alibaba Cloud access key secret for AK/SK signed API calls.
-	// Required for Model Config APIs.
 	AccessKeySecret string
 }
     UserConfig holds user-facing SDK configuration. Pass nil to NewClient to use
@@ -508,14 +504,6 @@ type GetAgentStatusRequest struct {
 	AgentID string `json:"agent_id"`
 }
 
-type GetModelConfigRequest struct {
-	AgentInstanceId  string `json:"agent_instance_id"`            // Required: agent instance ID
-	AgentProvider    string `json:"agent_provider,omitempty"`     // Required: agent type, default "OpenClaw"
-	AgentPlatform    string `json:"agent_platform,omitempty"`     // Optional: ENTERPRISE / JVS / ENTERPRISE_JVS, default "ENTERPRISE"
-	ChannelSessionId string `json:"channel_session_id,omitempty"` // Optional: group ID (AgentIM session ID)
-}
-    GetModelConfigRequest is the request for GetAgentInstanceModelConfig.
-
 type ListAgentAuthedSkillsRequest struct {
 	RuntimeId     string `json:"runtime_id"`               // Required: Agent 的 RuntimeId
 	AgentPlatform string `json:"agent_platform,omitempty"` // Optional: e.g. "ENTERPRISE", "ENTERPRISE_JVS"
@@ -542,28 +530,6 @@ type ListSkillsRequest struct {
 	PageSize     int32    `json:"page_size,omitempty"`     // Optional: page size
 	PageNumber   int32    `json:"page_number,omitempty"`   // Optional: page number
 }
-
-type ModelManager struct {
-	// Has unexported fields.
-}
-    ModelManager provides model-config-related APIs.
-
-func NewModelManager(sc *container.ServiceContainer) *ModelManager
-
-func (m *ModelManager) GetAgentInstanceModelConfig(ctx context.Context, req *GetModelConfigRequest, opts ...CallOption) (*model.ModelConfig, error)
-    GetAgentInstanceModelConfig retrieves the model configuration for an agent
-    instance. Supports both sync and async modes via CallOption.
-
-    Sync usage:
-
-        config, err := mgr.GetAgentInstanceModelConfig(ctx, &manager.GetModelConfigRequest{AgentInstanceId: "inst-xxx"})
-
-    Async usage:
-
-        mgr.GetAgentInstanceModelConfig(ctx, req, manager.WithAsync(func(result interface{}, err error) {
-            config := result.(*model.ModelConfig)
-            // handle result or error
-        }))
 
 type ResourceManager struct {
 	// Has unexported fields.
@@ -1600,11 +1566,6 @@ type GetDownloadUrlRequest struct {
 	ProductType  string `json:"productType,omitempty"`
 }
 
-type GetModelConfigRequest struct {
-	AgentInstanceId string `json:"agent_instance_id"`
-}
-    GetModelConfigRequest is the request for getting model configuration.
-
 type Group struct {
 	RuntimeID            string `json:"runtimeId,omitempty"` // 仅在当前已授权目录中唯一关联时提供。
 	GroupID              string `json:"groupId"`
@@ -1695,12 +1656,6 @@ type IMGroupFileRequest struct {
 	FileID             string `json:"fileId"`
 	StorageEnvironment string `json:"storageEnvironment,omitempty"`
 }
-
-type InferenceMetadata struct {
-	RequestModality  []string `json:"request_modality"`
-	ResponseModality []string `json:"response_modality"`
-}
-    InferenceMetadata contains modality information for a model.
 
 type InputPart struct {
 	Kind         string `json:"kind"`
@@ -1895,19 +1850,6 @@ type LiveProgress struct {
 	Generation string `json:"generation"`
 	Revision   Int64  `json:"revision"`
 }
-
-type LlmInfo struct {
-	LlmCode           string                 `json:"llm_code"`
-	Name              string                 `json:"name"`
-	Description       string                 `json:"description"`
-	PublishedTime     string                 `json:"published_time"`
-	Features          []string               `json:"features"`
-	RiskType          string                 `json:"risk_type"`
-	InferenceMetadata *InferenceMetadata     `json:"inference_metadata"`
-	ModelInfo         map[string]interface{} `json:"model_info"`
-	Prices            []PriceRange           `json:"prices"`
-}
-    LlmInfo represents a single LLM model info.
 
 type Member struct {
 	Configuration *MemberConfiguration `json:"configuration,omitempty"`
@@ -2118,24 +2060,6 @@ type ModelCatalogQuery struct {
 	Consistency string `json:"consistency,omitempty"`
 }
 
-type ModelConfig struct {
-	ModelTemplateId     string          `json:"model_template_id"`
-	ModelTemplateName   string          `json:"model_template_name"`
-	DefaultModel        string          `json:"default_model"`
-	ChannelSessionModel string          `json:"channel_session_model"`
-	ModelProviderList   []ModelProvider `json:"model_provider_list"`
-}
-    ModelConfig represents the model configuration for an agent instance.
-
-type ModelProvider struct {
-	ModelProviderTemplateId string    `json:"model_provider_template_id"`
-	ProviderName            string    `json:"provider_name"`
-	Name                    string    `json:"name"`
-	ProviderAvatarUrl       string    `json:"provider_avatar_url"`
-	LlmInfoList             []LlmInfo `json:"llm_info_list"`
-}
-    ModelProvider represents a model provider in the model config.
-
 type MutationOptions struct {
 	MutationID string `json:"mutationId"`
 }
@@ -2242,19 +2166,6 @@ type PresentationQuery struct {
 	Limit       int    `json:"limit,omitempty"`
 	Consistency string `json:"consistency,omitempty"`
 }
-
-type PriceItem struct {
-	PriceName string `json:"price_name"`
-	Price     string `json:"price"`
-	PriceUnit string `json:"price_unit"`
-}
-    PriceItem represents a single price entry.
-
-type PriceRange struct {
-	RangeName string      `json:"range_name"`
-	Prices    []PriceItem `json:"prices"`
-}
-    PriceRange represents a price range group.
 
 type ProcessPayload struct {
 	Kind          string  `json:"kind"`
