@@ -6,12 +6,25 @@ description: "按云资源、AI 能力、存储能力与计量查找无影 SDK �
 
 无影 SDK 对外按四类能力组织。先确定你要接入哪种能力，再查看对应模型和公开方法。
 
+<picture className="dark:hidden">
+  <source media="(max-width: 640px)" srcSet="/assets/capability-map-mobile-light.svg" />
+  <img src="/assets/capability-map-light.svg" alt="无影 SDK 能力地图：Client 统一入口，连接云资源、AI 能力、存储能力和计量四类能力。" />
+</picture>
+<picture className="hidden dark:block">
+  <source media="(max-width: 640px)" srcSet="/assets/capability-map-mobile-dark.svg" />
+  <img src="/assets/capability-map-dark.svg" alt="无影 SDK 能力地图：Client 统一入口，连接云资源、AI 能力、存储能力和计量四类能力。" />
+</picture>
+
+<Accordion title="查看能力与模型入口">
+
 | 能力分类 | 包含的模型 | 可以做什么 |
 |---|---|---|
 | 云资源 | [Runtime](/domain-model/02-runtime-agent)、[ASP 流化](/domain-model/asp)、[远程脚本](/domain-model/remote-script)、[端口服务](/domain-model/port-service) | 查询和管理资源、执行系统脚本、接入桌面画面或资源内服务 |
 | AI 能力 | [Agent](/domain-model/agent)、[Conversation](/domain-model/03-conversation)、[Skill](/domain-model/11-cloud-capabilities)、[Model](/domain-model/model) | 调用 Agent、管理会话、使用技能、配置模型 |
 | 存储能力 | [WyDrive](/domain-model/wy-drive)、[KnowledgeSpace](/domain-model/knowledge-space) | 查询云盘文件、知识空间及知识文件 |
 | 计量 | [Credit](/domain-model/credit) | 查询套餐与用量 |
+
+</Accordion>
 
 这是能力分类，不是所有能力都使用同一种认证或支持全部平台。每个模型页说明当前版本的具体接口和限制。Client 是共享调用入口，初始化见 [Client](/getting-started/initialize-client)。
 
