@@ -3,6 +3,12 @@ title: "更新记录"
 description: "查看文档变化、当前参考基线与升级入口。"
 ---
 
+## 2026-11-18：拆分附件与工作空间入口
+
+- 附件及草稿附件统一由 AttachmentManager 提供，工作空间查询和创建由 WorkspaceManager 提供。
+- Client 提供 buildAttachmentManager / buildWorkspaceManager；移动端按 attachment.* / workspace.* 调用，不保留旧 ResourceManager 入口。
+- 原有方法参数、结果、分页及底层请求协议不变。SDK 源码仍为本地草稿，使用前需重新构建制品。
+
 ## 2026-11-17：收敛会话存储查询
 
 - getConversationStorageContext 不再作为客户 SDK 方法公开，各语言和移动端入口同步移除。

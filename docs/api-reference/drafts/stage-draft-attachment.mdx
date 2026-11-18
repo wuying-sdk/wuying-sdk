@@ -18,30 +18,30 @@ description: "将真实文件暂存到消息草稿，供用户发送消息前准
 
 | 语言 | 公开入口 | 状态 |
 |---|---|---|
-| JavaScript / TypeScript | `ResourceManager.stageDraftAttachment` | 已公开声明，需核对环境能力 |
-| Go | `github.com/aliyun/wuying-sdk-go/manager.ResourceManager.StageDraftAttachment` | 已公开声明，需核对环境能力 |
-| Java | `com.aliyun.wuying.sdk.manager.ResourceManager.stageDraftAttachment` | 已公开声明，需核对环境能力 |
+| JavaScript / TypeScript | `AttachmentManager.stageDraftAttachment` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.StageDraftAttachment` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.AttachmentManager.stageDraftAttachment` | 已公开声明，需核对环境能力 |
 | CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
-| Android | [`Methods.resourceStageDraftAttachment`](/reference/android/models/resource#stagedraftattachment) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
-| iOS | [`Methods.resourceStageDraftAttachment`](/reference/ios/models/resource#stagedraftattachment) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| Android | [`Methods.attachmentStageDraftAttachment`](/reference/android/models/attachment#stagedraftattachment) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.attachmentStageDraftAttachment`](/reference/ios/models/attachment#stagedraftattachment) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
 
 使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
 
 ## 完整公开签名
 
-### JavaScript / TypeScript · ResourceManager
+### JavaScript / TypeScript · AttachmentManager
 
 ```ts
 stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; uploadId: string; }): Promise<StagedAttachment>;
 ```
 
-### Go · github.com/aliyun/wuying-sdk-go/manager.ResourceManager
+### Go · github.com/aliyun/wuying-sdk-go/manager.AttachmentManager
 
 ```go
-func (receiver *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
+func (receiver *AttachmentManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
 ```
 
-### Java · com.aliyun.wuying.sdk.manager.ResourceManager
+### Java · com.aliyun.wuying.sdk.manager.AttachmentManager
 
 ```java
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageDraftAttachment(com.aliyun.wuying.sdk.model.StageDraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);

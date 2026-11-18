@@ -18,30 +18,30 @@ description: "把草稿暂存附件提交到目标会话，供后续消息引用
 
 | 语言 | 公开入口 | 状态 |
 |---|---|---|
-| JavaScript / TypeScript | `ResourceManager.commitDraftAttachments` | 已公开声明，需核对环境能力 |
-| Go | `github.com/aliyun/wuying-sdk-go/manager.ResourceManager.CommitDraftAttachments` | 已公开声明，需核对环境能力 |
-| Java | `com.aliyun.wuying.sdk.manager.ResourceManager.commitDraftAttachments` | 已公开声明，需核对环境能力 |
+| JavaScript / TypeScript | `AttachmentManager.commitDraftAttachments` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.CommitDraftAttachments` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.AttachmentManager.commitDraftAttachments` | 已公开声明，需核对环境能力 |
 | CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
-| Android | [`Methods.resourceCommitDraftAttachments`](/reference/android/models/resource#commitdraftattachments) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
-| iOS | [`Methods.resourceCommitDraftAttachments`](/reference/ios/models/resource#commitdraftattachments) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| Android | [`Methods.attachmentCommitDraftAttachments`](/reference/android/models/attachment#commitdraftattachments) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.attachmentCommitDraftAttachments`](/reference/ios/models/attachment#commitdraftattachments) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
 
 使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
 
 ## 完整公开签名
 
-### JavaScript / TypeScript · ResourceManager
+### JavaScript / TypeScript · AttachmentManager
 
 ```ts
 commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; attachmentIds: string[]; }): Promise<CommittedAttachment[]>;
 ```
 
-### Go · github.com/aliyun/wuying-sdk-go/manager.ResourceManager
+### Go · github.com/aliyun/wuying-sdk-go/manager.AttachmentManager
 
 ```go
-func (receiver *ResourceManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
+func (receiver *AttachmentManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
 ```
 
-### Java · com.aliyun.wuying.sdk.manager.ResourceManager
+### Java · com.aliyun.wuying.sdk.manager.AttachmentManager
 
 ```java
 public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CommittedAttachment>> commitDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);

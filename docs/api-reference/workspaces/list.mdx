@@ -12,36 +12,36 @@ description: "分页查询授权范围内的工作空间，供应用选择任务
 
 ## 使用说明
 
-返回 WorkspacePage 快照；工作空间引用不是任意文件树或操作系统写权限。
+返回分页 items / nextCursor，并保留当前工作空间与父级引用等元数据；工作空间引用不是任意文件树或操作系统写权限。
 
 ## 语言与授权
 
 | 语言 | 公开入口 | 状态 |
 |---|---|---|
-| JavaScript / TypeScript | `ResourceManager.listWorkspaces` | 已公开声明，需核对环境能力 |
-| Go | `github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ListWorkspaces` | 已公开声明，需核对环境能力 |
-| Java | `com.aliyun.wuying.sdk.manager.ResourceManager.listWorkspaces` | 已公开声明，需核对环境能力 |
+| JavaScript / TypeScript | `WorkspaceManager.listWorkspaces` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.WorkspaceManager.ListWorkspaces` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.WorkspaceManager.listWorkspaces` | 已公开声明，需核对环境能力 |
 | CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
-| Android | [`Methods.resourceListWorkspaces`](/reference/android/models/resource#listworkspaces) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
-| iOS | [`Methods.resourceListWorkspaces`](/reference/ios/models/resource#listworkspaces) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| Android | [`Methods.workspaceListWorkspaces`](/reference/android/models/workspace#listworkspaces) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.workspaceListWorkspaces`](/reference/ios/models/workspace#listworkspaces) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
 
 使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
 
 ## 完整公开签名
 
-### JavaScript / TypeScript · ResourceManager
+### JavaScript / TypeScript · WorkspaceManager
 
 ```ts
 listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
 ```
 
-### Go · github.com/aliyun/wuying-sdk-go/manager.ResourceManager
+### Go · github.com/aliyun/wuying-sdk-go/manager.WorkspaceManager
 
 ```go
-func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
+func (receiver *WorkspaceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
 ```
 
-### Java · com.aliyun.wuying.sdk.manager.ResourceManager
+### Java · com.aliyun.wuying.sdk.manager.WorkspaceManager
 
 ```java
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);

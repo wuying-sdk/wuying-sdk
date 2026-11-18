@@ -28,6 +28,16 @@ func NewClient(opts ClientOptions, cfg *config.UserConfig) (*Client, error)
 func (receiver *Client) BuildAgentManager(ctx context.Context) (*manager.AgentManager, error)
 ```
 
+<a id="entry-1dd16a44b2238bed" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildAttachmentManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-attachment-manager)。
+
+```go
+func (receiver *Client) BuildAttachmentManager(ctx context.Context) (*manager.AttachmentManager, error)
+```
+
 <a id="entry-a39526c9212d1862" />
 
 ### github.com/aliyun/wuying-sdk-go.Client.BuildConversationManager
@@ -48,16 +58,6 @@ func (receiver *Client) BuildConversationManager(ctx context.Context) (*manager.
 func (receiver *Client) BuildCreditManager(ctx context.Context) (*manager.CreditManager, error)
 ```
 
-<a id="entry-e1447b7c626ad912" />
-
-### github.com/aliyun/wuying-sdk-go.Client.BuildResourceManager
-
-类别：模型操作。[按模型查看操作](/api-reference/client/build-resource-manager)。
-
-```go
-func (receiver *Client) BuildResourceManager(ctx context.Context) (*manager.ResourceManager, error)
-```
-
 <a id="entry-9270aac7fc299201" />
 
 ### github.com/aliyun/wuying-sdk-go.Client.BuildRuntimeManager
@@ -76,6 +76,16 @@ func (receiver *Client) BuildRuntimeManager(ctx context.Context) (*manager.Runti
 
 ```go
 func (receiver *Client) BuildSkillManager(ctx context.Context) (*manager.SkillManager, error)
+```
+
+<a id="entry-a07c699e6b249c40" />
+
+### github.com/aliyun/wuying-sdk-go.Client.BuildWorkspaceManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-workspace-manager)。
+
+```go
+func (receiver *Client) BuildWorkspaceManager(ctx context.Context) (*manager.WorkspaceManager, error)
 ```
 
 <a id="entry-aee088f327e24612" />
@@ -428,6 +438,16 @@ func CallOptionsFrom(opts []CallOption) func(result interface{}, err error)
 func NewAgentManager(s *business.Service) *AgentManager
 ```
 
+<a id="entry-40deb99bc81acb58" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewAttachmentManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewAttachmentManager(s *business.Service) *AttachmentManager
+```
+
 <a id="entry-e745ffba5c7095c9" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.NewConversationManager
@@ -448,16 +468,6 @@ func NewConversationManager(s *business.Service) *ConversationManager
 func NewCreditManager(sc *container.ServiceContainer) *CreditManager
 ```
 
-<a id="entry-427f76554846eba8" />
-
-### github.com/aliyun/wuying-sdk-go/manager.NewResourceManager
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```go
-func NewResourceManager(s *business.Service) *ResourceManager
-```
-
 <a id="entry-7e15c8fecf00c225" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.NewRuntimeManager
@@ -476,6 +486,16 @@ func NewRuntimeManager(sc *container.ServiceContainer, service *business.Service
 
 ```go
 func NewSkillManager(sc *container.ServiceContainer) *SkillManager
+```
+
+<a id="entry-cbce14b44a5c64e9" />
+
+### github.com/aliyun/wuying-sdk-go/manager.NewWorkspaceManager
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```go
+func NewWorkspaceManager(s *business.Service) *WorkspaceManager
 ```
 
 <a id="entry-b321f43007fa12f1" />
@@ -616,6 +636,96 @@ func (receiver *AgentManager) ListKnowledgeFiles(ctx context.Context, r m.ListKn
 
 ```go
 func (receiver *AgentManager) SubscribeAgents(ctx context.Context, r m.RuntimeRef, o m.SubscriptionListener[[]m.Agent]) (m.Subscription, error)
+```
+
+<a id="entry-9b569e9b6cc1fa8b" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.AttachCloudFile
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
+
+```go
+func (receiver *AttachmentManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
+```
+
+<a id="entry-25d0ffec534563d5" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.CommitDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
+
+```go
+func (receiver *AttachmentManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
+```
+
+<a id="entry-b45b0d1473cca6c0" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.DiscardAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
+
+```go
+func (receiver *AttachmentManager) DiscardAttachment(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
+```
+
+<a id="entry-c05fe2fb08b8ab03" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.DiscardDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
+
+```go
+func (receiver *AttachmentManager) DiscardDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
+```
+
+<a id="entry-8e6a9593d9386475" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.GetAttachmentAccess
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
+
+```go
+func (receiver *AttachmentManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
+```
+
+<a id="entry-e1cfab9630f9ed83" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.GetDraftAttachmentPreview
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
+
+```go
+func (receiver *AttachmentManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
+```
+
+<a id="entry-41e46bf7ffff9e6d" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.ListDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
+
+```go
+func (receiver *AttachmentManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
+```
+
+<a id="entry-ef63fb6c2681e9ff" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.StageAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
+
+```go
+func (receiver *AttachmentManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
+```
+
+<a id="entry-bc0bfd6f6ed52dec" />
+
+### github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.StageDraftAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
+
+```go
+func (receiver *AttachmentManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
 ```
 
 <a id="entry-bcd0d7c5e8fd2193" />
@@ -1188,116 +1298,6 @@ func (receiver *CreditManager) DescribeCreditPackageAgents(ctx context.Context, 
 func (receiver *CreditManager) DescribeCreditUsageInfo(ctx context.Context, r *DescribeCreditUsageInfoRequest, opts ...CallOption) (*model.CreditUsageInfo, error)
 ```
 
-<a id="entry-960ebe505f58968c" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.AttachCloudFile
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
-
-```go
-func (receiver *ResourceManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
-```
-
-<a id="entry-d649cc3745d0ea4f" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.CommitDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
-
-```go
-func (receiver *ResourceManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
-```
-
-<a id="entry-03e4218ded1c0de7" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.CreateWorkspace
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
-
-```go
-func (receiver *ResourceManager) CreateWorkspace(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
-```
-
-<a id="entry-3da1160927425f26" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.DiscardAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
-
-```go
-func (receiver *ResourceManager) DiscardAttachment(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
-```
-
-<a id="entry-e28e09a35b1b423e" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.DiscardDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
-
-```go
-func (receiver *ResourceManager) DiscardDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
-```
-
-<a id="entry-92217952ce73bb66" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetAttachmentAccess
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
-
-```go
-func (receiver *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
-```
-
-<a id="entry-9b24f7172c4a0e97" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetDraftAttachmentPreview
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
-
-```go
-func (receiver *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
-```
-
-<a id="entry-e1df4346778360ae" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ListDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
-
-```go
-func (receiver *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
-```
-
-<a id="entry-175cf5691e706458" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.ListWorkspaces
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
-
-```go
-func (receiver *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
-```
-
-<a id="entry-a3569ba176484abf" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.StageAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
-
-```go
-func (receiver *ResourceManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
-```
-
-<a id="entry-3409a81d4ecc67f7" />
-
-### github.com/aliyun/wuying-sdk-go/manager.ResourceManager.StageDraftAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
-
-```go
-func (receiver *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
-```
-
 <a id="entry-8e4c6be8be093363" />
 
 ### github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.ApproveFotaUpdate
@@ -1456,6 +1456,26 @@ func (receiver *SkillManager) ListInstalledSkills(ctx context.Context, req *List
 
 ```go
 func (receiver *SkillManager) SetSkillEnabled(ctx context.Context, req *SetSkillEnabledRequest, opts ...CallOption) ([]*model.OperationTask, error)
+```
+
+<a id="entry-685181faf39d55e1" />
+
+### github.com/aliyun/wuying-sdk-go/manager.WorkspaceManager.CreateWorkspace
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
+
+```go
+func (receiver *WorkspaceManager) CreateWorkspace(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
+```
+
+<a id="entry-eb80ac68f588824d" />
+
+### github.com/aliyun/wuying-sdk-go/manager.WorkspaceManager.ListWorkspaces
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
+
+```go
+func (receiver *WorkspaceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
 ```
 
 <a id="entry-9c7990ebdacd216b" />

@@ -18,30 +18,30 @@ description: "将当前会话云盘中已上传的文件导入为会话附件，
 
 | 语言 | 公开入口 | 状态 |
 |---|---|---|
-| JavaScript / TypeScript | `ResourceManager.attachCloudFile` | 已公开声明，需核对环境能力 |
-| Go | `github.com/aliyun/wuying-sdk-go/manager.ResourceManager.AttachCloudFile` | 已公开声明，需核对环境能力 |
-| Java | `com.aliyun.wuying.sdk.manager.ResourceManager.attachCloudFile` | 已公开声明，需核对环境能力 |
+| JavaScript / TypeScript | `AttachmentManager.attachCloudFile` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.AttachCloudFile` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.AttachmentManager.attachCloudFile` | 已公开声明，需核对环境能力 |
 | CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
-| Android | [`Methods.resourceAttachCloudFile`](/reference/android/models/resource#attachcloudfile) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
-| iOS | [`Methods.resourceAttachCloudFile`](/reference/ios/models/resource#attachcloudfile) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| Android | [`Methods.attachmentAttachCloudFile`](/reference/android/models/attachment#attachcloudfile) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.attachmentAttachCloudFile`](/reference/ios/models/attachment#attachcloudfile) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
 
 使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
 
 ## 完整公开签名
 
-### JavaScript / TypeScript · ResourceManager
+### JavaScript / TypeScript · AttachmentManager
 
 ```ts
 attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
 ```
 
-### Go · github.com/aliyun/wuying-sdk-go/manager.ResourceManager
+### Go · github.com/aliyun/wuying-sdk-go/manager.AttachmentManager
 
 ```go
-func (receiver *ResourceManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
+func (receiver *AttachmentManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
 ```
 
-### Java · com.aliyun.wuying.sdk.manager.ResourceManager
+### Java · com.aliyun.wuying.sdk.manager.AttachmentManager
 
 ```java
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Attachment> attachCloudFile(com.aliyun.wuying.sdk.model.AttachCloudFileRequest, com.aliyun.wuying.sdk.CallContext);

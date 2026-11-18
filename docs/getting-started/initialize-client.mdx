@@ -22,7 +22,8 @@ Manager 是从根 Client 取得的业务操作入口，复用其身份、连接�
 | 取得环境目录与云资源 | buildRuntimeManager | BuildRuntimeManager | buildRuntimeManager | runtimes |
 | 取得 Agent 目录 | buildAgentManager | BuildAgentManager | buildAgentManager | agents |
 | 取得会话业务 | buildConversationManager | BuildConversationManager | buildConversationManager | conversations / messages / turns |
-| 取得资源业务 | buildResourceManager | BuildResourceManager | buildResourceManager | run --attach（部分能力） |
+| 取得附件与草稿附件 | buildAttachmentManager | BuildAttachmentManager | buildAttachmentManager | run --attach（部分能力） |
+| 取得工作空间 | buildWorkspaceManager | BuildWorkspaceManager | buildWorkspaceManager | 当前无独立入口 |
 | 释放身份生命周期 | close | Close | close | 当前命令退出；auth logout 仅本地凭据处理 |
 
 

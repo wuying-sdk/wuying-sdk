@@ -1,14 +1,14 @@
 ---
-title: "buildResourceManager"
-sidebarTitle: "buildResourceManager"
-description: "获取附件与工作空间操作入口，复用当前 Client 的身份和生命周期。"
+title: "buildAttachmentManager"
+sidebarTitle: "buildAttachmentManager"
+description: "获取会话附件与草稿附件操作入口，复用当前 Client 的身份和生命周期。"
 ---
 
-`buildResourceManager` · Client
+`buildAttachmentManager` · Client
 
 ## 接口用途
 
-获取附件与工作空间操作入口，复用当前 Client 的身份和生命周期。
+获取会话附件与草稿附件操作入口，复用当前 Client 的身份和生命周期。
 
 ## 使用说明
 
@@ -18,9 +18,9 @@ description: "获取附件与工作空间操作入口，复用当前 Client 的�
 
 | 语言 | 公开入口 | 状态 |
 |---|---|---|
-| JavaScript / TypeScript | `Client.buildResourceManager` | 已公开声明，需核对环境能力 |
-| Go | `github.com/aliyun/wuying-sdk-go.Client.BuildResourceManager` | 已公开声明，需核对环境能力 |
-| Java | `com.aliyun.wuying.sdk.WuyingClient.buildResourceManager` | 已公开声明，需核对环境能力 |
+| JavaScript / TypeScript | `Client.buildAttachmentManager` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go.Client.BuildAttachmentManager` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.WuyingClient.buildAttachmentManager` | 已公开声明，需核对环境能力 |
 | CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
 
 使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
@@ -30,19 +30,19 @@ description: "获取附件与工作空间操作入口，复用当前 Client 的�
 ### JavaScript / TypeScript · Client
 
 ```ts
-buildResourceManager(_context: Context): Promise<ResourceManager>;
+buildAttachmentManager(_context: Context): Promise<AttachmentManager>;
 ```
 
 ### Go · github.com/aliyun/wuying-sdk-go.Client
 
 ```go
-func (receiver *Client) BuildResourceManager(ctx context.Context) (*manager.ResourceManager, error)
+func (receiver *Client) BuildAttachmentManager(ctx context.Context) (*manager.AttachmentManager, error)
 ```
 
 ### Java · com.aliyun.wuying.sdk.WuyingClient
 
 ```java
-public com.aliyun.wuying.sdk.manager.ResourceManager buildResourceManager(com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.manager.AttachmentManager buildAttachmentManager(com.aliyun.wuying.sdk.CallContext);
 ```
 
 ## TypeScript 参数与结果结构
@@ -56,14 +56,14 @@ interface Context {
     traceId?: string;
 }
 
-interface ResourceManager {
+interface AttachmentManager {
     attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
     stageDraftAttachment(ctx: Context, req: DraftRef & {
         file: Blob;
         name: string;
         uploadId: string;
     }): Promise<StagedAttachment>;
-    listDraftAttachments: ResourceManager$1['listDraftAttachments'];
+    listDraftAttachments: AttachmentManager$1['listDraftAttachments'];
     commitDraftAttachments(ctx: Context, req: DraftRef & {
         conversationId: string;
         attachmentIds: string[];
@@ -76,10 +76,6 @@ interface ResourceManager {
     getDraftAttachmentPreview(ctx: Context, req: DraftRef & {
         attachmentId: string;
     }): Promise<Snapshot<AttachmentPreview>>;
-    listWorkspaces: ResourceManager$1['listWorkspaces'];
-    createWorkspace(ctx: Context, req: RuntimeRef & {
-        name: string;
-    }): Promise<Workspace>;
     stageAttachment(ctx: Context, req: ConversationRef & {
         file: Blob;
         name: string;

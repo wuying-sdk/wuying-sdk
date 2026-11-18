@@ -5,7 +5,7 @@ description: "附件、审批、问答、工作空间与产物：职责、模型
 
 ## 附件的生命周期
 
-选择文件 → 校验本地可读和产品大小/类型限制 → ResourceManager.stageAttachment → 收到 attachmentId → 在同一 Conversation 的 SendRequest.attachmentIds 中引用 → 订阅真实消息与远端执行。尚未提交的附件需要丢弃时用 discardAttachment，不直接修改 SDK 存储。
+选择文件 → 校验本地可读和产品大小/类型限制 → AttachmentManager.stageAttachment → 收到 attachmentId → 在同一 Conversation 的 SendRequest.attachmentIds 中引用 → 订阅真实消息与远端执行。尚未提交的附件需要丢弃时用 discardAttachment，不直接修改 SDK 存储。
 
 | 步骤 | 验收点 |
 |---|---|

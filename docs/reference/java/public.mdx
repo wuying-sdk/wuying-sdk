@@ -594,14 +594,24 @@ public com.aliyun.wuying.sdk.manager.AgentManager buildAgentManager(com.aliyun.w
 public com.aliyun.wuying.sdk.manager.ConversationManager buildConversationManager(com.aliyun.wuying.sdk.CallContext);
 ```
 
-<a id="entry-ad9e8d60aad1a98a" />
+<a id="entry-2f4500c409a10553" />
 
-### com.aliyun.wuying.sdk.WuyingClient.buildResourceManager
+### com.aliyun.wuying.sdk.WuyingClient.buildAttachmentManager
 
-类别：模型操作。[按模型查看操作](/api-reference/client/build-resource-manager)。
+类别：模型操作。[按模型查看操作](/api-reference/client/build-attachment-manager)。
 
 ```java
-public com.aliyun.wuying.sdk.manager.ResourceManager buildResourceManager(com.aliyun.wuying.sdk.CallContext);
+public com.aliyun.wuying.sdk.manager.AttachmentManager buildAttachmentManager(com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-c876323a3ee026d7" />
+
+### com.aliyun.wuying.sdk.WuyingClient.buildWorkspaceManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-workspace-manager)。
+
+```java
+public com.aliyun.wuying.sdk.manager.WorkspaceManager buildWorkspaceManager(com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-2df42783f479612d" />
@@ -1521,6 +1531,97 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AgentModelCatalog>> getAgentModelCatalog(com.aliyun.wuying.sdk.model.ModelCatalogQuery, com.aliyun.wuying.sdk.CallContext);
 ```
 
+<a id="entry-2ad9ee82816a3b9c" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.stageAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageAttachment(com.aliyun.wuying.sdk.model.StageAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-ad3da1742548bcaa" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.discardAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardAttachment(com.aliyun.wuying.sdk.model.AttachmentRef, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-f9c459b1956c0e4d" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.getAttachmentAccess
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.AttachmentAccess> getAttachmentAccess(com.aliyun.wuying.sdk.model.AttachmentAccessRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-97a9356db28ed38b" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.stageDraftAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageDraftAttachment(com.aliyun.wuying.sdk.model.StageDraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-92b4c92a5dd2778a" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.listDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-30e0174a4e4527bc" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.commitDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
+
+```java
+public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CommittedAttachment>> commitDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-600240db8dc9d53d" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.discardDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-0ff07963e2e5b88a" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.getDraftAttachmentPreview
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AttachmentPreview>> getDraftAttachmentPreview(com.aliyun.wuying.sdk.model.DraftPreviewRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-ca1563754d896ec5" />
+
+### com.aliyun.wuying.sdk.manager.AttachmentManager.attachCloudFile
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Attachment> attachCloudFile(com.aliyun.wuying.sdk.model.AttachCloudFileRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
 <a id="entry-0338097fbf1b586d" />
 
 ### com.aliyun.wuying.sdk.manager.ConversationManager.createConversation
@@ -2130,118 +2231,6 @@ public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUs
 public com.aliyun.wuying.sdk.manager.ListPagination$Cursor();
 ```
 
-<a id="entry-6e51ba9cb1b514d5" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.stageAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageAttachment(com.aliyun.wuying.sdk.model.StageAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-8c085af9ebbbe75c" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.discardAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardAttachment(com.aliyun.wuying.sdk.model.AttachmentRef, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-fd0e8bc70a5d39aa" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.getAttachmentAccess
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.AttachmentAccess> getAttachmentAccess(com.aliyun.wuying.sdk.model.AttachmentAccessRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-f80c316927cb00b3" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.stageDraftAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageDraftAttachment(com.aliyun.wuying.sdk.model.StageDraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-41c7f334523e0698" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.listDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-b8df984d6f778a2e" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.commitDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
-
-```java
-public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CommittedAttachment>> commitDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-48c58d8fe00c953b" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.discardDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-a8b03246d3ec21fc" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.getDraftAttachmentPreview
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AttachmentPreview>> getDraftAttachmentPreview(com.aliyun.wuying.sdk.model.DraftPreviewRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-245d87762a216b7b" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.listWorkspaces
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-0bfface69c3e745e" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.createWorkspace
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspace> createWorkspace(com.aliyun.wuying.sdk.model.CreateWorkspaceRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
-<a id="entry-2f4a6b163369d565" />
-
-### com.aliyun.wuying.sdk.manager.ResourceManager.attachCloudFile
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
-
-```java
-public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Attachment> attachCloudFile(com.aliyun.wuying.sdk.model.AttachCloudFileRequest, com.aliyun.wuying.sdk.CallContext);
-```
-
 <a id="entry-e65c8d12c331d17e" />
 
 ### com.aliyun.wuying.sdk.manager.RuntimeManager.updateAgentInstance
@@ -2405,6 +2394,27 @@ public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk
 
 ```java
 public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.OperationTask>> entUninstallSkills(com.aliyun.wuying.sdk.model.EntUninstallSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-90eeb024e7ae5f86" />
+
+### com.aliyun.wuying.sdk.manager.WorkspaceManager.listWorkspaces
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+```
+
+<a id="entry-d9e42105b200e6f4" />
+
+### com.aliyun.wuying.sdk.manager.WorkspaceManager.createWorkspace
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
+
+```java
+public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspace> createWorkspace(com.aliyun.wuying.sdk.model.CreateWorkspaceRequest, com.aliyun.wuying.sdk.CallContext);
 ```
 
 <a id="entry-bd78772898951f80" />

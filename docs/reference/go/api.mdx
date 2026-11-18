@@ -35,17 +35,19 @@ func NewClient(opts ClientOptions, cfg *config.UserConfig) (*Client, error)
 
 func (c *Client) BuildAgentManager(ctx context.Context) (*manager.AgentManager, error)
 
+func (c *Client) BuildAttachmentManager(ctx context.Context) (*manager.AttachmentManager, error)
+
 func (c *Client) BuildConversationManager(ctx context.Context) (*manager.ConversationManager, error)
 
 func (c *Client) BuildCreditManager(ctx context.Context) (*manager.CreditManager, error)
-
-func (c *Client) BuildResourceManager(ctx context.Context) (*manager.ResourceManager, error)
 
 func (c *Client) BuildRuntimeManager(ctx context.Context) (*manager.RuntimeManager, error)
     BuildRuntimeManager permits a reserved user-mode entry; execution remains
     administrator-only.
 
 func (c *Client) BuildSkillManager(ctx context.Context) (*manager.SkillManager, error)
+
+func (c *Client) BuildWorkspaceManager(ctx context.Context) (*manager.WorkspaceManager, error)
 
 func (c *Client) Close() error
 
@@ -280,6 +282,33 @@ type ApproveFotaUpdateRequest struct {
 	RegionId string `json:"region_id,omitempty"`
 }
     ApproveFotaUpdateRequest is the request for ApproveFotaUpdate.
+
+type AttachmentManager struct {
+	// Has unexported fields.
+}
+
+func NewAttachmentManager(s *business.Service) *AttachmentManager
+
+func (a *AttachmentManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
+    AttachCloudFile imports a cloud file as an attachment. Reuse the original
+    UUID and file after an unknown result.
+
+func (a *AttachmentManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
+
+func (a *AttachmentManager) DiscardAttachment(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
+
+func (a *AttachmentManager) DiscardDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
+
+func (a *AttachmentManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
+
+func (a *AttachmentManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
+
+func (a *AttachmentManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
+    ListDraftAttachments returns one page. Use NextCursor for continuation.
+
+func (a *AttachmentManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
+
+func (a *AttachmentManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
 
 type CallOption func(*callOptions)
     CallOption configures a single API call.
@@ -522,38 +551,6 @@ type ListSkillsRequest struct {
 	PageNumber   int32    `json:"page_number,omitempty"`   // Optional: page number
 }
 
-type ResourceManager struct {
-	// Has unexported fields.
-}
-
-func NewResourceManager(s *business.Service) *ResourceManager
-
-func (a *ResourceManager) AttachCloudFile(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
-    AttachCloudFile imports a cloud file as an attachment. Reuse the original
-    UUID and file after an unknown result.
-
-func (a *ResourceManager) CommitDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
-
-func (a *ResourceManager) CreateWorkspace(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
-
-func (a *ResourceManager) DiscardAttachment(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
-
-func (a *ResourceManager) DiscardDraftAttachments(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
-
-func (a *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
-
-func (a *ResourceManager) GetDraftAttachmentPreview(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
-
-func (a *ResourceManager) ListDraftAttachments(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
-    ListDraftAttachments returns one page. Use NextCursor for continuation.
-
-func (a *ResourceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
-    ListWorkspaces returns one page. Use NextCursor for continuation.
-
-func (a *ResourceManager) StageAttachment(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
-
-func (a *ResourceManager) StageDraftAttachment(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
-
 type RuntimeManager struct {
 	// Has unexported fields.
 }
@@ -709,6 +706,17 @@ type UpdateAgentInstanceRequest struct {
 	SimpleModelType   string `json:"simple_model_type,omitempty"`   // Optional: model type
 }
     UpdateAgentInstanceRequest is the request for UpdateAgentInstance.
+
+type WorkspaceManager struct {
+	// Has unexported fields.
+}
+
+func NewWorkspaceManager(s *business.Service) *WorkspaceManager
+
+func (a *WorkspaceManager) CreateWorkspace(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
+
+func (a *WorkspaceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
+    ListWorkspaces returns one page. Use NextCursor for continuation.
 
 
 package model // import "github.com/aliyun/wuying-sdk-go/model"

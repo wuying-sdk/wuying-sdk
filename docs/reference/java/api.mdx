@@ -5,7 +5,7 @@ description: "同版本 Java SDK jar 的公开签名；参数说明另见随包�
 
 <Note>本页按所选语言保留原始完整参考，可能包含该语言的业务示例。跨语言操作请使用[快速开始](/getting-started/desktop-to-agent)和[代码示例](/examples/index)中的语言卡片。</Note>
 
-基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿。由 javap 生成，按客户合同排除 internal 实现、引用 internal 类型的装配签名及 @hidden 成员。
+基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿；按客户合同排除 internal 及 @hidden 装配签名。
 
 ```java
 Compiled from "Administration.java"
@@ -111,7 +111,8 @@ public final class com.aliyun.wuying.sdk.WuyingClient implements java.lang.AutoC
   public java.util.concurrent.CompletionStage<java.lang.Void> logout(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.AgentManager buildAgentManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.ConversationManager buildConversationManager(com.aliyun.wuying.sdk.CallContext);
-  public com.aliyun.wuying.sdk.manager.ResourceManager buildResourceManager(com.aliyun.wuying.sdk.CallContext);
+  public com.aliyun.wuying.sdk.manager.AttachmentManager buildAttachmentManager(com.aliyun.wuying.sdk.CallContext);
+  public com.aliyun.wuying.sdk.manager.WorkspaceManager buildWorkspaceManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.SkillManager buildSkillManager(com.aliyun.wuying.sdk.CallContext);
   public com.aliyun.wuying.sdk.manager.CreditManager buildCreditManager(com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.lang.Void> updateLoginCredentials(com.aliyun.wuying.sdk.config.ClientOptions, com.aliyun.wuying.sdk.CallContext);
@@ -247,6 +248,19 @@ public final class com.aliyun.wuying.sdk.manager.AgentManager extends com.aliyun
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.Expert>> listExperts(com.aliyun.wuying.sdk.model.ExpertQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AgentModelCatalog>> getAgentModelCatalog(com.aliyun.wuying.sdk.model.ModelCatalogQuery, com.aliyun.wuying.sdk.CallContext);
+}
+Compiled from "AttachmentManager.java"
+public final class com.aliyun.wuying.sdk.manager.AttachmentManager extends com.aliyun.wuying.sdk.manager.BaseManager {
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageAttachment(com.aliyun.wuying.sdk.model.StageAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardAttachment(com.aliyun.wuying.sdk.model.AttachmentRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.AttachmentAccess> getAttachmentAccess(com.aliyun.wuying.sdk.model.AttachmentAccessRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageDraftAttachment(com.aliyun.wuying.sdk.model.StageDraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CommittedAttachment>> commitDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AttachmentPreview>> getDraftAttachmentPreview(com.aliyun.wuying.sdk.model.DraftPreviewRequest, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Attachment> attachCloudFile(com.aliyun.wuying.sdk.model.AttachCloudFileRequest, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "BaseManager.java"
 abstract class com.aliyun.wuying.sdk.manager.BaseManager {
@@ -385,22 +399,6 @@ public class com.aliyun.wuying.sdk.manager.ListPagination$Cursor {
 Compiled from "ListPagination.java"
 final class com.aliyun.wuying.sdk.manager.ListPagination$Numbered<T> {
 }
-Compiled from "ResourceManager.java"
-public final class com.aliyun.wuying.sdk.manager.ResourceManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageAttachment(com.aliyun.wuying.sdk.model.StageAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardAttachment(com.aliyun.wuying.sdk.model.AttachmentRef, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.AttachmentAccess> getAttachmentAccess(com.aliyun.wuying.sdk.model.AttachmentAccessRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StagedAttachment> stageDraftAttachment(com.aliyun.wuying.sdk.model.StageDraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.DraftAttachmentPage> listDraftAttachments(com.aliyun.wuying.sdk.model.DraftRef, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.CommittedAttachment>> commitDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.StateResult> discardDraftAttachments(com.aliyun.wuying.sdk.model.DraftAttachmentRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Snapshot<com.aliyun.wuying.sdk.model.AttachmentPreview>> getDraftAttachmentPreview(com.aliyun.wuying.sdk.model.DraftPreviewRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspace> createWorkspace(com.aliyun.wuying.sdk.model.CreateWorkspaceRequest, com.aliyun.wuying.sdk.CallContext);
-  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Attachment> attachCloudFile(com.aliyun.wuying.sdk.model.AttachCloudFileRequest, com.aliyun.wuying.sdk.CallContext);
-}
 Compiled from "RuntimeManager.java"
 public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliyun.wuying.sdk.manager.BaseManager {
   public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest, com.aliyun.wuying.sdk.CallContext);
@@ -427,6 +425,12 @@ public final class com.aliyun.wuying.sdk.manager.SkillManager extends com.aliyun
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.OperationTask>> setSkillEnabled(com.aliyun.wuying.sdk.model.SetSkillEnabledRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.OperationTask>> entInstallSkills(com.aliyun.wuying.sdk.model.EntInstallSkillsRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<java.util.List<com.aliyun.wuying.sdk.model.OperationTask>> entUninstallSkills(com.aliyun.wuying.sdk.model.EntUninstallSkillsRequest, com.aliyun.wuying.sdk.CallContext);
+}
+Compiled from "WorkspaceManager.java"
+public final class com.aliyun.wuying.sdk.manager.WorkspaceManager extends com.aliyun.wuying.sdk.manager.BaseManager {
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.WorkspaceList> listWorkspaces(com.aliyun.wuying.sdk.model.WorkspaceQuery, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
+  public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Workspace> createWorkspace(com.aliyun.wuying.sdk.model.CreateWorkspaceRequest, com.aliyun.wuying.sdk.CallContext);
 }
 Compiled from "WyDriveFilesPageRequest.java"
 final class com.aliyun.wuying.sdk.manager.WyDriveFilesPageRequest extends com.aliyun.wuying.sdk.model.DescribeWyDriveFilesRequest {

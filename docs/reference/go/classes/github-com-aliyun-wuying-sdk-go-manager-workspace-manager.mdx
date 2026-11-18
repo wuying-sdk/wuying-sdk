@@ -1,0 +1,23 @@
+---
+title: "WorkspaceManager"
+sidebarTitle: "WorkspaceManager"
+description: "Go 公开成员及重载。"
+---
+
+此页按本语言的公开声明列出成员。完整调用前提与认证方式见[SDK Client](/getting-started/initialize-client)；通过根 Client 取得 Manager，不实例化需要内部实现参数的辅助构造。语言专属的管理员与移动桥接接口按其原生配置使用。
+
+## CreateWorkspace
+
+```go
+func (receiver *WorkspaceManager) CreateWorkspace(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
+```
+
+[查看操作或完整契约](/api-reference/workspaces/create)
+
+## ListWorkspaces
+
+```go
+func (receiver *WorkspaceManager) ListWorkspaces(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
+```
+
+[查看操作或完整契约](/api-reference/workspaces/list)

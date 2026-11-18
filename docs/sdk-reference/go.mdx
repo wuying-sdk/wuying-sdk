@@ -80,7 +80,7 @@ Client 是对外根入口；通过 `BuildAgentManager` 和 `BuildConversationMan
 | 分页历史 | ListMessages | MessageQuery，Page.Items / NextCursor |
 | 订阅历史 | SubscribeMessages | model.SubscriptionListener，结束 Unsubscribe |
 | 提交/流式/等待 | SendMessage / SendMessageStream / SendMessageAndWait | SendRequest，受理与终态分开 |
-| 附件 | ResourceManager.StageAttachment / GetAttachmentAccess | 对应请求 DTO，不套用 JS File |
+| 附件 | AttachmentManager.StageAttachment / GetAttachmentAccess | 对应请求 DTO，不套用 JS File |
 | 审批/问答 | RespondPermission / RespondQuestion | 当前 Interaction ID、ExpectedVersion 及真实选项/答案 |
 
 完整签名、DTO 字段、注释由同版本公共 Go package 生成到 [Go API 参考](/reference/go/api)。没有该方法或返回 UNSUPPORTED 时，以 SDK 和远端能力为准，不调用内部 package。

@@ -1,6 +1,6 @@
 ---
-title: "ResourceManager"
-sidebarTitle: "ResourceManager"
+title: "AttachmentManager"
+sidebarTitle: "AttachmentManager"
 description: "Android · 当前移动绑定的完整方法列表。"
 ---
 
@@ -8,14 +8,14 @@ description: "Android · 当前移动绑定的完整方法列表。"
 
 <a id="attachcloudfile" />
 
-## Methods.resourceAttachCloudFile
+## Methods.attachmentAttachCloudFile
 
-`Methods.resourceAttachCloudFile` → `resource.attachCloudFile`
+`Methods.attachmentAttachCloudFile` → `attachment.attachCloudFile`
 
 **模式：** `call`。**请求类型：** `m.AttachCloudFileRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.AttachCloudFile
+*AttachmentManager.AttachCloudFile
 func(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
 ```
 
@@ -23,44 +23,29 @@ func(ctx context.Context, r m.AttachCloudFileRequest) (m.Attachment, error)
 
 <a id="commitdraftattachments" />
 
-## Methods.resourceCommitDraftAttachments
+## Methods.attachmentCommitDraftAttachments
 
-`Methods.resourceCommitDraftAttachments` → `resource.commitDraftAttachments`
+`Methods.attachmentCommitDraftAttachments` → `attachment.commitDraftAttachments`
 
 **模式：** `call`。**请求类型：** `m.DraftAttachmentRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.CommitDraftAttachments
+*AttachmentManager.CommitDraftAttachments
 func(ctx context.Context, r m.DraftAttachmentRequest) ([]m.CommittedAttachment, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/drafts/commit-draft-attachments) · [Go DTO 参考](/reference/go/api)
 
-<a id="createworkspace" />
-
-## Methods.resourceCreateWorkspace
-
-`Methods.resourceCreateWorkspace` → `resource.createWorkspace`
-
-**模式：** `call`。**请求类型：** `m.CreateWorkspaceRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ResourceManager.CreateWorkspace
-func(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/workspaces/create) · [Go DTO 参考](/reference/go/api)
-
 <a id="discardattachment" />
 
-## Methods.resourceDiscardAttachment
+## Methods.attachmentDiscardAttachment
 
-`Methods.resourceDiscardAttachment` → `resource.discardAttachment`
+`Methods.attachmentDiscardAttachment` → `attachment.discardAttachment`
 
 **模式：** `call`。**请求类型：** `m.AttachmentRef`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.DiscardAttachment
+*AttachmentManager.DiscardAttachment
 func(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
 ```
 
@@ -68,14 +53,14 @@ func(ctx context.Context, r m.AttachmentRef) (m.StateResult, error)
 
 <a id="discarddraftattachments" />
 
-## Methods.resourceDiscardDraftAttachments
+## Methods.attachmentDiscardDraftAttachments
 
-`Methods.resourceDiscardDraftAttachments` → `resource.discardDraftAttachments`
+`Methods.attachmentDiscardDraftAttachments` → `attachment.discardDraftAttachments`
 
 **模式：** `call`。**请求类型：** `m.DraftAttachmentRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.DiscardDraftAttachments
+*AttachmentManager.DiscardDraftAttachments
 func(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
 ```
 
@@ -83,14 +68,14 @@ func(ctx context.Context, r m.DraftAttachmentRequest) (m.StateResult, error)
 
 <a id="getattachmentaccess" />
 
-## Methods.resourceGetAttachmentAccess
+## Methods.attachmentGetAttachmentAccess
 
-`Methods.resourceGetAttachmentAccess` → `resource.getAttachmentAccess`
+`Methods.attachmentGetAttachmentAccess` → `attachment.getAttachmentAccess`
 
 **模式：** `call`。**请求类型：** `m.AttachmentAccessRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.GetAttachmentAccess
+*AttachmentManager.GetAttachmentAccess
 func(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
 ```
 
@@ -98,14 +83,14 @@ func(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, erro
 
 <a id="getdraftattachmentpreview" />
 
-## Methods.resourceGetDraftAttachmentPreview
+## Methods.attachmentGetDraftAttachmentPreview
 
-`Methods.resourceGetDraftAttachmentPreview` → `resource.getDraftAttachmentPreview`
+`Methods.attachmentGetDraftAttachmentPreview` → `attachment.getDraftAttachmentPreview`
 
 **模式：** `call`。**请求类型：** `m.DraftPreviewRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.GetDraftAttachmentPreview
+*AttachmentManager.GetDraftAttachmentPreview
 func(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPreview], error)
 ```
 
@@ -113,44 +98,29 @@ func(ctx context.Context, r m.DraftPreviewRequest) (m.Snapshot[m.AttachmentPrevi
 
 <a id="listdraftattachments" />
 
-## Methods.resourceListDraftAttachments
+## Methods.attachmentListDraftAttachments
 
-`Methods.resourceListDraftAttachments` → `resource.listDraftAttachments`
+`Methods.attachmentListDraftAttachments` → `attachment.listDraftAttachments`
 
 **模式：** `call`。**请求类型：** `m.DraftRef`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.ListDraftAttachments
+*AttachmentManager.ListDraftAttachments
 func(ctx context.Context, r m.DraftRef, opts ...m.ListOptions) (m.DraftAttachmentPage, error)
 ```
 
 [模型操作、完整参数与能力边界](/api-reference/drafts/list-draft-attachments) · [Go DTO 参考](/reference/go/api)
 
-<a id="listworkspaces" />
-
-## Methods.resourceListWorkspaces
-
-`Methods.resourceListWorkspaces` → `resource.listWorkspaces`
-
-**模式：** `call`。**请求类型：** `m.WorkspaceQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*ResourceManager.ListWorkspaces
-func(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
-```
-
-[模型操作、完整参数与能力边界](/api-reference/workspaces/list) · [Go DTO 参考](/reference/go/api)
-
 <a id="stageattachment" />
 
-## Methods.resourceStageAttachment
+## Methods.attachmentStageAttachment
 
-`Methods.resourceStageAttachment` → `resource.stageAttachment`
+`Methods.attachmentStageAttachment` → `attachment.stageAttachment`
 
 **模式：** `call`。**请求类型：** `m.StageAttachmentRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.StageAttachment
+*AttachmentManager.StageAttachment
 func(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error)
 ```
 
@@ -158,14 +128,14 @@ func(ctx context.Context, r m.StageAttachmentRequest) (m.StagedAttachment, error
 
 <a id="stagedraftattachment" />
 
-## Methods.resourceStageDraftAttachment
+## Methods.attachmentStageDraftAttachment
 
-`Methods.resourceStageDraftAttachment` → `resource.stageDraftAttachment`
+`Methods.attachmentStageDraftAttachment` → `attachment.stageDraftAttachment`
 
 **模式：** `call`。**请求类型：** `m.StageDraftAttachmentRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
 
 ```go
-*ResourceManager.StageDraftAttachment
+*AttachmentManager.StageDraftAttachment
 func(ctx context.Context, r m.StageDraftAttachmentRequest) (m.StagedAttachment, error)
 ```
 

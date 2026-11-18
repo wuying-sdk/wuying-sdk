@@ -1,6 +1,6 @@
 ---
-title: "ResourceManager"
-sidebarTitle: "ResourceManager"
+title: "AttachmentManager"
+sidebarTitle: "AttachmentManager"
 description: "JavaScript / TypeScript 公开成员及重载。"
 ---
 
@@ -13,14 +13,6 @@ listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{
 ```
 
 [查看操作或完整契约](/api-reference/drafts/list-draft-attachments)
-
-## listWorkspaces
-
-```ts
-listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
-```
-
-[查看操作或完整契约](/api-reference/workspaces/list)
 
 ## attachCloudFile
 
@@ -62,14 +54,6 @@ getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; 
 
 [查看操作或完整契约](/api-reference/drafts/get-draft-attachment-preview)
 
-## createWorkspace
-
-```ts
-createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
-```
-
-[查看操作或完整契约](/api-reference/workspaces/create)
-
 ## stageAttachment
 
 ```ts
@@ -97,10 +81,10 @@ getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string;
 ## constructor
 
 ```ts
-new new (service: Service): ResourceManager$1;
+new new (service: Service): AttachmentManager$1;
 ```
 
-[查看操作或完整契约](/reference/js/public#entry-b9ca8ae4ef7c0fcf)
+[查看操作或完整契约](/reference/js/public#entry-7e0f887ed8a0ca3b)
 
 ## attachCloudFile
 
@@ -149,22 +133,6 @@ getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; 
 ```
 
 [查看操作或完整契约](/api-reference/drafts/get-draft-attachment-preview)
-
-## listWorkspaces
-
-```ts
-listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
-```
-
-[查看操作或完整契约](/api-reference/workspaces/list)
-
-## createWorkspace
-
-```ts
-createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
-```
-
-[查看操作或完整契约](/api-reference/workspaces/create)
 
 ## stageAttachment
 

@@ -208,6 +208,106 @@ buildAspManager(context: ExecutionContext, container: Container, ...opts: CallOp
 new new (aspService: IAspService, container: Container): AspManager;
 ```
 
+<a id="entry-b454a12acef7b0ba" />
+
+### AttachmentManager.listDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
+
+```ts
+listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{ projection: Projection; items: DraftAttachment[]; nextCursor: string | null; remoteUpload: Capability; draftId: string; runtimeId: string; }>;
+```
+
+<a id="entry-6500c07c16592621" />
+
+### AttachmentManager.attachCloudFile
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
+
+```ts
+attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
+```
+
+<a id="entry-a88be0fa859eb9d5" />
+
+### AttachmentManager.stageDraftAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
+
+```ts
+stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; uploadId: string; }): Promise<StagedAttachment>;
+```
+
+<a id="entry-eefa470f9da742a0" />
+
+### AttachmentManager.commitDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
+
+```ts
+commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; attachmentIds: string[]; }): Promise<CommittedAttachment[]>;
+```
+
+<a id="entry-5e50039c9fa1d6a2" />
+
+### AttachmentManager.discardDraftAttachments
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
+
+```ts
+discardDraftAttachments(ctx: Context, req: DraftRef & { attachmentIds: string[]; }): Promise<{ state: "discarded"; }>;
+```
+
+<a id="entry-56af4108701ba9df" />
+
+### AttachmentManager.getDraftAttachmentPreview
+
+类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
+
+```ts
+getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; }): Promise<Snapshot<{ unavailableReason?: string | undefined; dataUrl?: string | undefined; text?: string | undefined; title?: string | undefined; mime?: string | undefined; attachmentId: string; kind: string; }>>;
+```
+
+<a id="entry-a5fd09ed633c40ab" />
+
+### AttachmentManager.stageAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
+
+```ts
+stageAttachment(ctx: Context, req: ConversationRef & { file: Blob; name: string; }): Promise<{ attachmentId: string; name: string; mime: string; size: string; expiresAt: string | undefined; }>;
+```
+
+<a id="entry-da42a1ac557396bd" />
+
+### AttachmentManager.discardAttachment
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
+
+```ts
+discardAttachment(ctx: Context, req: ConversationRef & { attachmentId: string; }): Promise<{ state: "discarded"; }>;
+```
+
+<a id="entry-ccfd0f85424231aa" />
+
+### AttachmentManager.getAttachmentAccess
+
+类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
+
+```ts
+getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: string; }>;
+```
+
+<a id="entry-7e0f887ed8a0ca3b" />
+
+### AttachmentManager.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (service: Service): AttachmentManager$1;
+```
+
 <a id="entry-9e9a7c1302696bec" />
 
 ### AuthCodeCredential.setTokenRefresher
@@ -548,14 +648,24 @@ buildAgentManager(_context: Context): Promise<AgentManager>;
 buildConversationManager(_context: Context): Promise<ConversationManager>;
 ```
 
-<a id="entry-8b82711cd532b322" />
+<a id="entry-277550cda496b6b4" />
 
-### Client.buildResourceManager
+### Client.buildAttachmentManager
 
-类别：模型操作。[按模型查看操作](/api-reference/client/build-resource-manager)。
+类别：模型操作。[按模型查看操作](/api-reference/client/build-attachment-manager)。
 
 ```ts
-buildResourceManager(_context: Context): Promise<ResourceManager>;
+buildAttachmentManager(_context: Context): Promise<AttachmentManager>;
+```
+
+<a id="entry-4f15032e0e807a43" />
+
+### Client.buildWorkspaceManager
+
+类别：模型操作。[按模型查看操作](/api-reference/client/build-workspace-manager)。
+
+```ts
+buildWorkspaceManager(_context: Context): Promise<WorkspaceManager>;
 ```
 
 <a id="entry-cebad5934bfa0602" />
@@ -1598,126 +1708,6 @@ new new (message: string, cause?: Error): PermissionError;
 new new (message: string, cause?: Error): RateLimitError;
 ```
 
-<a id="entry-025a68cb397b2f2f" />
-
-### ResourceManager.listDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
-
-```ts
-listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{ projection: Projection; items: DraftAttachment[]; nextCursor: string | null; remoteUpload: Capability; draftId: string; runtimeId: string; }>;
-```
-
-<a id="entry-9a2c2b87de247afa" />
-
-### ResourceManager.listWorkspaces
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
-
-```ts
-listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
-```
-
-<a id="entry-32e83934a601c806" />
-
-### ResourceManager.attachCloudFile
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
-
-```ts
-attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
-```
-
-<a id="entry-433a060457ea0286" />
-
-### ResourceManager.stageDraftAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
-
-```ts
-stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; uploadId: string; }): Promise<StagedAttachment>;
-```
-
-<a id="entry-c2dfd0e623632d5f" />
-
-### ResourceManager.commitDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
-
-```ts
-commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; attachmentIds: string[]; }): Promise<CommittedAttachment[]>;
-```
-
-<a id="entry-e4557d29b1ceda7f" />
-
-### ResourceManager.discardDraftAttachments
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
-
-```ts
-discardDraftAttachments(ctx: Context, req: DraftRef & { attachmentIds: string[]; }): Promise<{ state: "discarded"; }>;
-```
-
-<a id="entry-3fc84c32b37ce003" />
-
-### ResourceManager.getDraftAttachmentPreview
-
-类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
-
-```ts
-getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; }): Promise<Snapshot<{ unavailableReason?: string | undefined; dataUrl?: string | undefined; text?: string | undefined; title?: string | undefined; mime?: string | undefined; attachmentId: string; kind: string; }>>;
-```
-
-<a id="entry-83e750c7b48c30ab" />
-
-### ResourceManager.createWorkspace
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
-
-```ts
-createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
-```
-
-<a id="entry-18867b9701fa14c6" />
-
-### ResourceManager.stageAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
-
-```ts
-stageAttachment(ctx: Context, req: ConversationRef & { file: Blob; name: string; }): Promise<{ attachmentId: string; name: string; mime: string; size: string; expiresAt: string | undefined; }>;
-```
-
-<a id="entry-cbf41ef5671db92f" />
-
-### ResourceManager.discardAttachment
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
-
-```ts
-discardAttachment(ctx: Context, req: ConversationRef & { attachmentId: string; }): Promise<{ state: "discarded"; }>;
-```
-
-<a id="entry-6ec4671fa81797d9" />
-
-### ResourceManager.getAttachmentAccess
-
-类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
-
-```ts
-getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: string; }>;
-```
-
-<a id="entry-b9ca8ae4ef7c0fcf" />
-
-### ResourceManager.constructor
-
-类别：类型、配置、构造、回调或辅助入口。
-
-```ts
-new new (service: Service): ResourceManager$1;
-```
-
 <a id="entry-04547221dbb03c47" />
 
 ### RuntimeCommandListener.onEvent
@@ -1996,6 +1986,36 @@ new new (message: string, cause?: Error): TimeoutError;
 
 ```ts
 function WithAsync(callback: AsyncCallback): CallOption;
+```
+
+<a id="entry-fad4246c359fbf94" />
+
+### WorkspaceManager.listWorkspaces
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
+
+```ts
+listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
+```
+
+<a id="entry-c3a0975a53bc3eb4" />
+
+### WorkspaceManager.createWorkspace
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
+
+```ts
+createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
+```
+
+<a id="entry-a5ee8a2f5f81e176" />
+
+### WorkspaceManager.constructor
+
+类别：类型、配置、构造、回调或辅助入口。
+
+```ts
+new new (service: Service): WorkspaceManager$1;
 ```
 
 <a id="entry-ceec6b414388ed9b" />
@@ -2818,9 +2838,9 @@ respondQuestion(ctx: Context, req: ConversationRef & { interactionId: string; ex
 getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snapshot<CommandReceipt>>;
 ```
 
-<a id="entry-9e49ebb5c926d8c3" />
+<a id="entry-b7a2de8e4b8ce61f" />
 
-### ResourceManager.attachCloudFile
+### AttachmentManager.attachCloudFile
 
 类别：模型操作。[按模型查看操作](/api-reference/attachments/attach-cloud-file)。
 
@@ -2828,9 +2848,9 @@ getQuestionResponseReceipt(ctx: Context, req: QuestionResponseRef): Promise<Snap
 attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
 ```
 
-<a id="entry-f25fb930ed66dc64" />
+<a id="entry-0a9940d2e0304660" />
 
-### ResourceManager.stageDraftAttachment
+### AttachmentManager.stageDraftAttachment
 
 类别：模型操作。[按模型查看操作](/api-reference/drafts/stage-draft-attachment)。
 
@@ -2838,9 +2858,9 @@ attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
 stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; uploadId: string; }): Promise<StagedAttachment>;
 ```
 
-<a id="entry-330bd2b2d2e53a71" />
+<a id="entry-b7aefa85ce4ecaf0" />
 
-### ResourceManager.listDraftAttachments
+### AttachmentManager.listDraftAttachments
 
 类别：模型操作。[按模型查看操作](/api-reference/drafts/list-draft-attachments)。
 
@@ -2848,9 +2868,9 @@ stageDraftAttachment(ctx: Context, req: DraftRef & { file: Blob; name: string; u
 listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{ projection: Projection; items: DraftAttachment[]; nextCursor: string | null; remoteUpload: Capability; draftId: string; runtimeId: string; }>;
 ```
 
-<a id="entry-cf18ff833f7f18e7" />
+<a id="entry-d5e8d158330d89f8" />
 
-### ResourceManager.commitDraftAttachments
+### AttachmentManager.commitDraftAttachments
 
 类别：模型操作。[按模型查看操作](/api-reference/drafts/commit-draft-attachments)。
 
@@ -2858,9 +2878,9 @@ listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{
 commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; attachmentIds: string[]; }): Promise<CommittedAttachment[]>;
 ```
 
-<a id="entry-a5b6f45fd6ff2567" />
+<a id="entry-63e6fbfffc190461" />
 
-### ResourceManager.discardDraftAttachments
+### AttachmentManager.discardDraftAttachments
 
 类别：模型操作。[按模型查看操作](/api-reference/drafts/discard-draft-attachments)。
 
@@ -2868,9 +2888,9 @@ commitDraftAttachments(ctx: Context, req: DraftRef & { conversationId: string; a
 discardDraftAttachments(ctx: Context, req: DraftRef & { attachmentIds: string[]; }): Promise<{ state: "discarded"; }>;
 ```
 
-<a id="entry-9a3f2388353bf230" />
+<a id="entry-5b9ada07295de75f" />
 
-### ResourceManager.getDraftAttachmentPreview
+### AttachmentManager.getDraftAttachmentPreview
 
 类别：模型操作。[按模型查看操作](/api-reference/drafts/get-draft-attachment-preview)。
 
@@ -2878,29 +2898,9 @@ discardDraftAttachments(ctx: Context, req: DraftRef & { attachmentIds: string[];
 getDraftAttachmentPreview(ctx: Context, req: DraftRef & { attachmentId: string; }): Promise<Snapshot<AttachmentPreview>>;
 ```
 
-<a id="entry-608bc1f9ceb2095e" />
+<a id="entry-287183fd3d859928" />
 
-### ResourceManager.listWorkspaces
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
-
-```ts
-listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
-```
-
-<a id="entry-d8ab4371b4671779" />
-
-### ResourceManager.createWorkspace
-
-类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
-
-```ts
-createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
-```
-
-<a id="entry-3939a28ab8582358" />
-
-### ResourceManager.stageAttachment
+### AttachmentManager.stageAttachment
 
 类别：模型操作。[按模型查看操作](/api-reference/attachments/stage)。
 
@@ -2908,9 +2908,9 @@ createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Work
 stageAttachment(ctx: Context, req: ConversationRef & { file: Blob; name: string; }): Promise<StagedAttachment>;
 ```
 
-<a id="entry-798b6e74c9daf7f8" />
+<a id="entry-1f70c269e4ba61d5" />
 
-### ResourceManager.discardAttachment
+### AttachmentManager.discardAttachment
 
 类别：模型操作。[按模型查看操作](/api-reference/attachments/discard)。
 
@@ -2918,14 +2918,34 @@ stageAttachment(ctx: Context, req: ConversationRef & { file: Blob; name: string;
 discardAttachment(ctx: Context, req: ConversationRef & { attachmentId: string; }): Promise<{ state: "discarded"; }>;
 ```
 
-<a id="entry-163ca4eaf5e10126" />
+<a id="entry-24b6d840a7b6ecd3" />
 
-### ResourceManager.getAttachmentAccess
+### AttachmentManager.getAttachmentAccess
 
 类别：模型操作。[按模型查看操作](/api-reference/attachments/access)。
 
 ```ts
 getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: Int64; }>;
+```
+
+<a id="entry-ec6041e7af98c92c" />
+
+### WorkspaceManager.listWorkspaces
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/list)。
+
+```ts
+listWorkspaces(ctx: Context, request: (RuntimeRef & { parentWorkspaceId?: string; }) & ListOptions): Promise<{ projection: Projection; items: Workspace[]; nextCursor: string | null; truncated: boolean; parentWorkspaceId?: string | undefined; current: Workspace; }>;
+```
+
+<a id="entry-b9ede05c40f4febd" />
+
+### WorkspaceManager.createWorkspace
+
+类别：模型操作。[按模型查看操作](/api-reference/workspaces/create)。
+
+```ts
+createWorkspace(ctx: Context, req: RuntimeRef & { name: string; }): Promise<Workspace>;
 ```
 
 <a id="entry-d24c33b75c3baa1e" />

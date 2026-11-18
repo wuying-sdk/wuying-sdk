@@ -87,7 +87,7 @@ SDK 管理持久副本和连接；每账号/环境使用独立数据库，应用
 | 业务 | Java 公共入口 | Java 特点 |
 |---|---|---|
 | 构造 | new WuyingClient(options, config) | AutoCloseable 根 Client |
-| Manager | buildRuntimeManager / buildAgentManager / buildConversationManager / buildResourceManager | CallContext 显式传入 |
+| Manager | buildRuntimeManager / buildAgentManager / buildConversationManager / buildAttachmentManager | CallContext 显式传入 |
 | 环境 | listRuntimes(ctx) / listAgents(request, ctx) | 列表查询返回 Page，使用 items / nextCursor |
 | 建会 | createConversation(request, options, ctx) | CreateRequest，MutationOptions.mutationId |
 | 消息 | listMessages / subscribeMessages | 请求在前，ctx 在后；SubscriptionListener 接收 Snapshot |

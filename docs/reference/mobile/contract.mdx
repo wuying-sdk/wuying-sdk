@@ -51,7 +51,7 @@ Android / iOS 应用优先使用各自的 [Client](/reference/android/client) / 
 
 这是信封结构示意，不是每个方法都需要这两个字段。包装器自动生成信封，应用向 `request` 参数传业务对象，**不再嵌套一层 request**。只有标为支持 MutationOptions 的方法才传 `mutationId`；其余省略。字段由对应 Go 移动请求 DTO 决定；新增云管理方法在移动边界使用 camelCase，不能从 Java DTO 字段或 Go 标识机械翻译 JSON。
 
-64 位标识、版本、大小与序号以 JSON 字符串传递；拒绝未知请求字段。附件字节通过 Android `byte[]` / Swift `Data` 传给 `data` 参数，只用于 `resource.stageAttachment` 和 `resource.stageDraftAttachment`；不要放入 JSON。
+64 位标识、版本、大小与序号以 JSON 字符串传递；拒绝未知请求字段。附件字节通过 Android `byte[]` / Swift `Data` 传给 `data` 参数，只用于 `attachment.stageAttachment` 和 `attachment.stageDraftAttachment`；不要放入 JSON。
 
 ## 事件与结果
 

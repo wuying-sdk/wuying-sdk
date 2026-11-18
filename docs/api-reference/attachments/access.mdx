@@ -18,36 +18,36 @@ purpose 明确选择 preview 或 download；访问地址有 expiresAt，过期�
 
 | 语言 | 公开入口 | 状态 |
 |---|---|---|
-| JavaScript / TypeScript | `ResourceManager.getAttachmentAccess` | 已公开声明，需核对环境能力 |
-| Go | `github.com/aliyun/wuying-sdk-go/manager.ResourceManager.GetAttachmentAccess` | 已公开声明，需核对环境能力 |
-| Java | `com.aliyun.wuying.sdk.manager.ResourceManager.getAttachmentAccess` | 已公开声明，需核对环境能力 |
+| JavaScript / TypeScript | `AttachmentManager.getAttachmentAccess` | 已公开声明，需核对环境能力 |
+| Go | `github.com/aliyun/wuying-sdk-go/manager.AttachmentManager.GetAttachmentAccess` | 已公开声明，需核对环境能力 |
+| Java | `com.aliyun.wuying.sdk.manager.AttachmentManager.getAttachmentAccess` | 已公开声明，需核对环境能力 |
 | CLI | 本基线未匹配到相同命名/合同，查语言清单确认替代入口 | — |
-| Android | [`Methods.resourceGetAttachmentAccess`](/reference/android/models/resource#getattachmentaccess) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
-| iOS | [`Methods.resourceGetAttachmentAccess`](/reference/ios/models/resource#getattachmentaccess) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| Android | [`Methods.attachmentGetAttachmentAccess`](/reference/android/models/attachment#getattachmentaccess) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
+| iOS | [`Methods.attachmentGetAttachmentAccess`](/reference/ios/models/attachment#getattachmentaccess) via `Client.request` | 移动 JSON 声明，需配套原生制品与环境能力 |
 
 使用与当前身份相符的 Client，由宿主确认目标资源和访问范围。服务端代用户调用仍遵守用户态身份边界，见[授权与认证](/integration/01-auth-and-lifecycle)。
 
 ## 完整公开签名
 
-### JavaScript / TypeScript · ResourceManager
+### JavaScript / TypeScript · AttachmentManager
 
 ```ts
 getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: string; }>;
 ```
 
-### JavaScript / TypeScript · ResourceManager
+### JavaScript / TypeScript · AttachmentManager
 
 ```ts
 getAttachmentAccess(ctx: Context, req: ConversationRef & { attachmentId: string; purpose: "preview" | "download"; }): Promise<{ url: string; expiresAt: Int64; }>;
 ```
 
-### Go · github.com/aliyun/wuying-sdk-go/manager.ResourceManager
+### Go · github.com/aliyun/wuying-sdk-go/manager.AttachmentManager
 
 ```go
-func (receiver *ResourceManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
+func (receiver *AttachmentManager) GetAttachmentAccess(ctx context.Context, r m.AttachmentAccessRequest) (m.AttachmentAccess, error)
 ```
 
-### Java · com.aliyun.wuying.sdk.manager.ResourceManager
+### Java · com.aliyun.wuying.sdk.manager.AttachmentManager
 
 ```java
 public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.AttachmentAccess> getAttachmentAccess(com.aliyun.wuying.sdk.model.AttachmentAccessRequest, com.aliyun.wuying.sdk.CallContext);

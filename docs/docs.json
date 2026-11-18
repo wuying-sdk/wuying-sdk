@@ -210,14 +210,15 @@
                 "pages": [
                   "reference/js/classes/agent-manager",
                   "reference/js/classes/asp-manager",
+                  "reference/js/classes/attachment-manager",
                   "reference/js/classes/client",
                   "reference/js/classes/conversation-manager",
                   "reference/js/classes/credit-manager",
                   "reference/js/classes/message-stream",
-                  "reference/js/classes/resource-manager",
                   "reference/js/classes/runtime-manager",
                   "reference/js/classes/skill-manager",
-                  "reference/js/classes/subscription"
+                  "reference/js/classes/subscription",
+                  "reference/js/classes/workspace-manager"
                 ]
               },
               {
@@ -245,11 +246,12 @@
                 "pages": [
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-client",
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-agent-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-attachment-manager",
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-conversation-manager",
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-credit-manager",
-                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-resource-manager",
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-runtime-manager",
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-skill-manager",
+                  "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-workspace-manager",
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile",
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile-client",
                   "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile-operation",
@@ -293,11 +295,12 @@
                 "pages": [
                   "reference/java/classes/com-aliyun-wuying-sdk-wuying-client",
                   "reference/java/classes/com-aliyun-wuying-sdk-manager-agent-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-attachment-manager",
                   "reference/java/classes/com-aliyun-wuying-sdk-manager-conversation-manager",
                   "reference/java/classes/com-aliyun-wuying-sdk-manager-credit-manager",
-                  "reference/java/classes/com-aliyun-wuying-sdk-manager-resource-manager",
                   "reference/java/classes/com-aliyun-wuying-sdk-manager-runtime-manager",
                   "reference/java/classes/com-aliyun-wuying-sdk-manager-skill-manager",
+                  "reference/java/classes/com-aliyun-wuying-sdk-manager-workspace-manager",
                   "reference/java/classes/com-aliyun-wuying-sdk-model-message-stream",
                   "reference/java/classes/com-aliyun-wuying-sdk-model-subscription"
                 ]
@@ -326,11 +329,12 @@
                 "group": "模型与方法",
                 "pages": [
                   "reference/android/models/agent",
+                  "reference/android/models/attachment",
                   "reference/android/models/conversation",
                   "reference/android/models/credit",
-                  "reference/android/models/resource",
                   "reference/android/models/runtime",
-                  "reference/android/models/skill"
+                  "reference/android/models/skill",
+                  "reference/android/models/workspace"
                 ]
               },
               {
@@ -357,11 +361,12 @@
                 "group": "模型与方法",
                 "pages": [
                   "reference/ios/models/agent",
+                  "reference/ios/models/attachment",
                   "reference/ios/models/conversation",
                   "reference/ios/models/credit",
-                  "reference/ios/models/resource",
                   "reference/ios/models/runtime",
-                  "reference/ios/models/skill"
+                  "reference/ios/models/skill",
+                  "reference/ios/models/workspace"
                 ]
               },
               {
@@ -446,11 +451,12 @@
                 "pages": [
                   "api-reference/client/create",
                   "api-reference/client/build-agent-manager",
+                  "api-reference/client/build-attachment-manager",
                   "api-reference/client/build-conversation-manager",
                   "api-reference/client/build-credit-manager",
-                  "api-reference/client/build-resource-manager",
                   "api-reference/client/build-runtime-manager",
                   "api-reference/client/build-skill-manager",
+                  "api-reference/client/build-workspace-manager",
                   "api-reference/client/close",
                   "api-reference/client/logout",
                   "api-reference/client/update-login-credentials",

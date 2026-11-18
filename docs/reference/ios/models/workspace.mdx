@@ -1,0 +1,37 @@
+---
+title: "WorkspaceManager"
+sidebarTitle: "WorkspaceManager"
+description: "iOS · 当前移动绑定的完整方法列表。"
+---
+
+通过同一 Client 调用下列 `Methods` 常量。请求与结果沿用 Go 移动 JSON 合同；下面的 Go 签名用于定位 DTO，**不是原生 Java / Swift 签名**。授权、请求封装、事件与取消规则见[移动合同](/reference/mobile/contract)，调用示例见[Client](/reference/ios/client)。
+
+<a id="createworkspace" />
+
+## Methods.workspaceCreateWorkspace
+
+`Methods.workspaceCreateWorkspace` → `workspace.createWorkspace`
+
+**模式：** `call`。**请求类型：** `m.CreateWorkspaceRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*WorkspaceManager.CreateWorkspace
+func(ctx context.Context, r m.CreateWorkspaceRequest) (m.Workspace, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/workspaces/create) · [Go DTO 参考](/reference/go/api)
+
+<a id="listworkspaces" />
+
+## Methods.workspaceListWorkspaces
+
+`Methods.workspaceListWorkspaces` → `workspace.listWorkspaces`
+
+**模式：** `call`。**请求类型：** `m.WorkspaceQuery`。**MutationOptions：** 不支持；省略 `mutationId`。
+
+```go
+*WorkspaceManager.ListWorkspaces
+func(ctx context.Context, r m.WorkspaceQuery, opts ...m.ListOptions) (m.WorkspaceList, error)
+```
+
+[模型操作、完整参数与能力边界](/api-reference/workspaces/list) · [Go DTO 参考](/reference/go/api)

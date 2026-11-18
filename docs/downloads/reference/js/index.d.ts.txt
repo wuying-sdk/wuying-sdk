@@ -892,17 +892,9 @@ declare class Service {
     close(): Promise<void>;
 }
 
-declare class ResourceManager$1 implements ResourceManager {
+declare class WorkspaceManager$1 implements WorkspaceManager {
     private service;
     private readonly listPagination;
-    listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{
-        projection: Projection;
-        items: DraftAttachment[];
-        nextCursor: string | null;
-        remoteUpload: Capability;
-        draftId: string;
-        runtimeId: string;
-    }>;
     listWorkspaces(ctx: Context, request: (RuntimeRef & {
         parentWorkspaceId?: string;
     }) & ListOptions): Promise<{
@@ -912,6 +904,24 @@ declare class ResourceManager$1 implements ResourceManager {
         truncated: boolean;
         parentWorkspaceId?: string | undefined;
         current: Workspace;
+    }>;
+    constructor(service: Service);
+    private readListWorkspaces;
+    createWorkspace(ctx: Context, req: RuntimeRef & {
+        name: string;
+    }): Promise<Workspace>;
+}
+
+declare class AttachmentManager$1 implements AttachmentManager {
+    private service;
+    private readonly listPagination;
+    listDraftAttachments(ctx: Context, request: (DraftRef) & ListOptions): Promise<{
+        projection: Projection;
+        items: DraftAttachment[];
+        nextCursor: string | null;
+        remoteUpload: Capability;
+        draftId: string;
+        runtimeId: string;
     }>;
     constructor(service: Service);
     attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
@@ -941,10 +951,6 @@ declare class ResourceManager$1 implements ResourceManager {
         attachmentId: string;
         kind: string;
     }>>;
-    private readListWorkspaces;
-    createWorkspace(ctx: Context, req: RuntimeRef & {
-        name: string;
-    }): Promise<Workspace>;
     stageAttachment(ctx: Context, req: ConversationRef & {
         file: Blob;
         name: string;
@@ -3690,14 +3696,14 @@ interface GroupSyncState {
     hasUpdates: boolean;
     errorCode?: string;
 }
-interface ResourceManager {
+interface AttachmentManager {
     attachCloudFile(ctx: Context, req: AttachCloudFileRequest): Promise<Attachment>;
     stageDraftAttachment(ctx: Context, req: DraftRef & {
         file: Blob;
         name: string;
         uploadId: string;
     }): Promise<StagedAttachment>;
-    listDraftAttachments: ResourceManager$1['listDraftAttachments'];
+    listDraftAttachments: AttachmentManager$1['listDraftAttachments'];
     commitDraftAttachments(ctx: Context, req: DraftRef & {
         conversationId: string;
         attachmentIds: string[];
@@ -3710,10 +3716,6 @@ interface ResourceManager {
     getDraftAttachmentPreview(ctx: Context, req: DraftRef & {
         attachmentId: string;
     }): Promise<Snapshot<AttachmentPreview>>;
-    listWorkspaces: ResourceManager$1['listWorkspaces'];
-    createWorkspace(ctx: Context, req: RuntimeRef & {
-        name: string;
-    }): Promise<Workspace>;
     stageAttachment(ctx: Context, req: ConversationRef & {
         file: Blob;
         name: string;
@@ -3731,6 +3733,12 @@ interface ResourceManager {
         url: string;
         expiresAt: Int64;
     }>;
+}
+interface WorkspaceManager {
+    listWorkspaces: WorkspaceManager$1['listWorkspaces'];
+    createWorkspace(ctx: Context, req: RuntimeRef & {
+        name: string;
+    }): Promise<Workspace>;
 }
 /** Ordinary IM group storage coordinates; never an AGMessage virtual group. */
 type ConversationStorageContext = ConversationRef & {
@@ -4472,14 +4480,16 @@ declare class Client {
     private gatewayService?;
     private gatewayAgents?;
     private gatewayConversations?;
-    private gatewayResources?;
+    private gatewayAttachments?;
+    private gatewayWorkspaces?;
     private checkOpen;
     private businessAuth;
     private businessService;
     buildRuntimeManager(_context: ExecutionContext): Promise<RuntimeManager>;
     buildAgentManager(_context: Context): Promise<AgentManager>;
     buildConversationManager(_context: Context): Promise<ConversationManager>;
-    buildResourceManager(_context: Context): Promise<ResourceManager>;
+    buildAttachmentManager(_context: Context): Promise<AttachmentManager>;
+    buildWorkspaceManager(_context: Context): Promise<WorkspaceManager>;
     buildCreditManager(_context: ExecutionContext): Promise<CreditManager>;
     private config;
     private credential;
@@ -4568,4 +4578,4 @@ declare class APIError extends SDKError {
 }
 declare function isRetryable(error: unknown): boolean;
 
-export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachCloudFileRequest, type Attachment, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientOptions, BusinessError as CloudBusinessError, type CloudFileRef, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type HostCapabilities, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type MutationOptions, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type ProcessPayload, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, ResourceManager$1 as ResourceManager, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };
+export { APIError, type ActiveExecution, type ActiveExecutionSnapshot, type Actor, type AddJvsFileByOssUrlRequest, type AdministrativeCredentialProvider, type AdministrativeCredentials, type Agent, type AgentAuthedSkill, type AgentFotaUpdate, AgentManager$1 as AgentManager, type AgentModelCatalog, AgentOnlineStatus, type AgentPresentation, type AgentRef, AgentStatus, type ApproveFotaUpdateRequest, AspManager, AspSessionEventType, type AspStreamEventData, type AspStreamOpenType, type AspStreamSession, AspStreamStatus, AspStreamType, type AsyncCallback, type AttachCloudFileRequest, type Attachment, AttachmentManager$1 as AttachmentManager, type AttachmentPreview, AuthCodeCredential, AuthError, AuthType, type Block, type BuildAspManagerResult, BusinessError$1 as BusinessError, type ErrorCode$1 as BusinessErrorCode, type CallOption, CallOptionsFrom, Client, type ClientOptions, BusinessError as CloudBusinessError, type CloudFileRef, type CommandDesktopResult, type CommandReceipt, type CommandReceiptRef, type CommittedAttachment, type ComposerCapabilities, type Config$1 as Config, type Context, type Conversation, type ConversationAttachmentTarget, type ConversationGroupQuery, type ConversationHeaderMetadata, ConversationManager$1 as ConversationManager, type ConversationPresentation, type ConversationQuery, type ConversationRef, type Config as ConversationSettings, type ConversationStorageContext, type Coverage, type CreateDesktopsRequest, type CreateDesktopsResponse, type CreateRequest, type CreatedConversation, type Credential, type DescribeCreditUsageInfoRequest as CreditDescribeCreditUsageInfoRequest, CreditManager, type CreditPackageAgent, type CreditPackageQuery, type CreditTrendItem, type CreditUsageData, type CreditUsageInfo, type CreditUsageInfoItem, type DeleteWyDriveFileRequest, type DescribeCreditPackageAgentsRequest, type DescribeCreditUsageInfoRequest$1 as DescribeCreditUsageInfoRequest, type DescribeJvsFileSyncStatesRequest, type DescribeWyDriveFilesRequest, type DescribeWyDriveFilesResponse, type DescribeWyDrivesRequest, type DescribeWyDrivesResponse, type Desktop, type DesktopCreateOptions, type DesktopList, type DesktopOperationItem, type DesktopOperationRequest, type DesktopOperationResponse, type DownloadFileRef, type DownloadKnowledgeFileResult, type DownloadKnowledgeFilesRequest, type DownloadTask, type DownloadTaskResult, type DownloadUrlInfo, type DraftAttachment, type DraftRef, type DraftSnapshot, type EffectiveConfig, type EntInstallSkillsRequest, type EntInstallSkillsResult, type EntOperationTask, type EntUninstallSkillsRequest, type EntUninstallSkillsResult, ErrorCode, type ExecutionActivity, type ExecutionContext, type ExecutionTiming, type Expert, type ExpertDirectory, type FileTag, type FileTransformEventName, type FotaUpdate, type GenerateSceneUrlItem, type GenerateSceneUrlRequest, type GenerateSceneUrlResponse, type GetAuthCodeParams, type GetAuthCodeResponse, type GetDownloadUrlRequest, type HostCapabilities, type InitKnowledgeFileDownloadTasksRequest, type InputPart, type InstalledSkill, type Int64, type Interaction, type Item, type JvsFileSyncStateEnum, type JvsMsg, type JvsMsgSyncState, type KnowledgeFile, type KnowledgeFileSyncStatus, type KnowledgeSpace, BusinessError as LegacyBusinessError, type ListAgentAuthedSkillsRequest, type ListAgentAuthedSkillsResult, type ListAgentKnowledgeSpacesRequest, type ListCategoriesRequest, type ListInstalledSkillsRequest, type ListKnowledgeFilesRequest, type ListKnowledgeFilesResponse, type ListOptions, type ListSkillsRequest, type LiveProcessItem, type LiveProcessSnapshot, type Logger, type Member, type MemberCandidate, type MemberConfigurationView, type MemberSnapshot, type Message, type MessageAccepted, type MessageCloudFile, type MessageCompletion, type MessageDetail, type MessageFilesPage, type MessageFilesQuery, type MessageFilesResult, type MessagePresentation, type MessageQuery, type MessageStream, type Model, type ModelCapabilities, type MutationOptions, NetworkError, type OperationTask, type Page, PermissionError, PermissionLevel, type PresentationItem, type PresentationQuery, type ProcessPayload, type Projection, ProtocolType, type QuestionResponseRef, RateLimitError, type ReadOptions, type RecentGroup, type ResponsibilityPatch, type RunCommandRequest, type Runtime, type RuntimeCommandEvent, type RuntimeCommandListener, type RuntimeCommandReceipt, type RuntimeCommandSubscription, RuntimeManager, type RuntimeRef, SDKError, type SceneFeatureInfo, type SendRequest, type Sender, ServerError, type SetSkillEnabledRequest, type SidebarFilter, type SidebarGroup, type SidebarRowsQuery, type SkillCategory, type SkillInfo, type SkillItem, SkillManager, type SkillTag, type Snapshot, type StagedAttachment, type StartAspStreamRequest, type StartKnowledgeFileDownloadTasksRequest, type StreamChunk, type SubscribeCommandRequest, type Subscription, type SubscriptionListener, TimeoutError, type Turn, type UninstallSkillInfo, type UpdateAgentInstanceRequest, type UserConfig, type WaitDesktopsRequest, type WaitDesktopsResponse, WithAsync, type Workspace, WorkspaceManager$1 as WorkspaceManager, type WorkspacePage, type WyDrive, type WyDriveFile, executeWithCallback, isRetryable, mergeToInternal };
