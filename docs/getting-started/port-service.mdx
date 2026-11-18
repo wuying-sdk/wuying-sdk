@@ -108,3 +108,4 @@ jq -n --rawfile script start-echo-service.ps1 --arg region "$REGION_ID" --arg de
 演示结束后用同一管理员脚本入口对保存的服务 PID 执行 `Stop-Process -Id <实际PID>`，核对后删除临时 `wuying-echo-demo.py`，再关闭各自的 Client。只关闭浏览器或 Client 不会自动停止 Python 服务。
 
 示例使用 Python 标准库 HTTPServer 演示消息交互；正式服务按自己的部署和访问策略运行。完整接口见[端口服务](/domain-model/port-service)及 [`generateSceneUrl`](/api-reference/runtimes/generate-scene-url)。
+

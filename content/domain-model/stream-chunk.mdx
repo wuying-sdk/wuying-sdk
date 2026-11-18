@@ -1,0 +1,17 @@
+---
+title: "处理发送流中的更新"
+description: "理解发送流实际交付的消息与执行状态。"
+---
+
+发送消息后，`sendMessageStream` 返回的更新会说明消息或执行轮次发生了变化。`StreamChunk` 是这些事件的类型名，不是逐 Token 输出的保证。
+
+| 当前 JS 收到的事件 | 如何处理 |
+|---|---|
+| `message` | 根据消息 ID 更新界面中的对应消息 |
+| `turn` | 更新执行轮次状态，核对是否进入终态 |
+
+声明中的 `text.delta` / `text.replace` 不代表当前 JS 实现已发送这些事件。各语言以本次制品的实际行为为准。
+
+收到受理或一条消息都不等于任务完成；终态见 [Turn](/domain-model/06-turn-items)，完整展示见 [MessagePresentation](/domain-model/message-presentation)。JS 的 `MessageStream.cancel` 会请求远端取消，不能当作单纯的停止本地监听。
+
+[完整类型与语言差异](/sdk-reference/index)

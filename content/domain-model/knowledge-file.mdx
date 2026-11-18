@@ -1,0 +1,25 @@
+---
+title: "KnowledgeFile"
+description: "KnowledgeFile 描述知识空间内的文件及其查询、下载结果。"
+---
+
+KnowledgeFile 描述知识空间内的文件及其查询、下载结果。
+
+## 模型与关联
+
+所属空间见 [KnowledgeSpace](/domain-model/knowledge-space)。文件元数据、同步状态及下载任务结果按对应公开 DTO 使用，不与 WyDriveFile 的标识机械互换。
+
+## 生命周期
+
+在合法空间内查询 → 选择真实文件 → 请求下载 → 按实际任务与访问结果判断是否可用。
+
+## 操作入口
+
+- [`listKnowledgeFiles`](/api-reference/knowledge/list-knowledge-files)
+- [`downloadKnowledgeFiles`](/api-reference/knowledge/download-knowledge-files)
+
+## 使用边界
+
+列表项存在不等于字节已就绪或可被任意用户访问。下载失败、删除及权限变化须如实显示，不通过字符串路径补造文件。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

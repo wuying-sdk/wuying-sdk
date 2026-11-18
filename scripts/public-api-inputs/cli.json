@@ -1,0 +1,992 @@
+{
+  "language": "cli",
+  "source_archive_sha256": "d5f9512e6904053074cc06d4a40e5187163f6bd58d1392e7b39b375c937b56ed",
+  "sdk_source_commit": "05bd99ec05afb4550ea96708c3b01970ae004d03",
+  "source_sha256": "9015db9b9f1598606ae145f52f105fa8d4f098c221a444ac0868561fcafbec0f",
+  "input_sha256": {
+    "main.mjs": "9015db9b9f1598606ae145f52f105fa8d4f098c221a444ac0868561fcafbec0f",
+    "desktops.mjs": "c003e81d16741b0aae5ba3a9d337c5f6b3868a2a808ab5df0fc98eab9e312ce0"
+  },
+  "global_options": [
+    {
+      "flags": "--profile <name>",
+      "description": "Credential and database profile",
+      "required": false,
+      "default": "default"
+    },
+    {
+      "flags": "--data-dir <directory>",
+      "description": "Private CLI data directory (or WUYING_CLI_HOME)",
+      "required": false,
+      "default": null
+    },
+    {
+      "flags": "--output <format>",
+      "description": "json, jsonl, or text",
+      "required": false,
+      "default": "json"
+    },
+    {
+      "flags": "--timeout <milliseconds>",
+      "description": "Local wait deadline; never cancels a remote task",
+      "required": false,
+      "default": "120000"
+    },
+    {
+      "flags": "--no-input",
+      "description": "Never prompt (v0.1 always uses explicit inputs)",
+      "required": false,
+      "default": null
+    }
+  ],
+  "entries": [
+    {
+      "path": [
+        "agents"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": false
+    },
+    {
+      "path": [
+        "agents",
+        "list"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--limit <count>",
+          "description": "Page size (1..100)",
+          "required": false,
+          "default": "50"
+        },
+        {
+          "flags": "--cursor <cursor>",
+          "description": "Opaque nextCursor",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "asp"
+      ],
+      "options": [],
+      "description": "Open an interactive ASP desktop in a local browser.",
+      "leaf": false
+    },
+    {
+      "path": [
+        "asp",
+        "open"
+      ],
+      "options": [
+        {
+          "flags": "--desktop <id>",
+          "description": "Explicit authorized desktop ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--region <id>",
+          "description": "Desktop region",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--viewer-fd <fd>",
+          "description": "Send a one-use viewer handoff only to inherited pipe 3, without opening a system browser",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--embed-origin <origin>",
+          "description": "Explicit local application origin allowed to embed the viewer; requires --viewer-fd 3",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "auth"
+      ],
+      "options": [],
+      "description": "Import credentials without putting secrets in shell arguments.",
+      "leaf": false
+    },
+    {
+      "path": [
+        "auth",
+        "code"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "Obtain a one-use user authCode with AK/SK; stdout contains the credential.",
+      "leaf": true
+    },
+    {
+      "path": [
+        "auth",
+        "import"
+      ],
+      "options": [
+        {
+          "flags": "--stdin",
+          "description": "Read a credential JSON object from stdin",
+          "required": true,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "auth",
+        "login"
+      ],
+      "options": [
+        {
+          "flags": "--stdin",
+          "description": "Read organizationId, username and password JSON; save only the resulting login tuple",
+          "required": true,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "auth",
+        "logout"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "auth",
+        "oauth"
+      ],
+      "options": [
+        {
+          "flags": "--aliyun-profile <name>",
+          "description": "Explicit Alibaba Cloud OAuth profile",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--reuse",
+          "description": "Use an already configured OAuth profile without opening the browser",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "Sign in through Alibaba Cloud OAuth for administrator capabilities.",
+      "leaf": true
+    },
+    {
+      "path": [
+        "auth",
+        "status"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "codex"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": false
+    },
+    {
+      "path": [
+        "codex",
+        "install"
+      ],
+      "options": [
+        {
+          "flags": "--scope <scope>",
+          "description": "user or project",
+          "required": false,
+          "default": "user"
+        },
+        {
+          "flags": "--project-dir <directory>",
+          "description": "Project root for project scope",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "conversations"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": false
+    },
+    {
+      "path": [
+        "conversations",
+        "create"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--agent <id>",
+          "description": "Agent ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--name <name>",
+          "description": "Conversation title",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--mutation-id <id>",
+          "description": "Stable ID for retrying the same create request",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "conversations",
+        "get"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--consistency <mode>",
+          "description": "cache or refresh",
+          "required": false,
+          "default": "cache"
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "conversations",
+        "list"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--limit <count>",
+          "description": "Page size",
+          "required": false,
+          "default": "50"
+        },
+        {
+          "flags": "--cursor <cursor>",
+          "description": "Opaque nextCursor",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "desktops"
+      ],
+      "options": [],
+      "description": "Create and operate explicit desktops through the unified SDK Client.",
+      "leaf": false
+    },
+    {
+      "path": [
+        "desktops",
+        "create"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--wait",
+          "description": "Wait for resource creation to complete",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "desktops",
+        "delete"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "desktops",
+        "reboot"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "desktops",
+        "reset"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "desktops",
+        "start"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "desktops",
+        "stop"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "desktops",
+        "wait"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "doctor"
+      ],
+      "options": [
+        {
+          "flags": "--offline",
+          "description": "Check SDK loading and persistent storage without network requests",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "interactions"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": false
+    },
+    {
+      "path": [
+        "interactions",
+        "list"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--limit <count>",
+          "description": "Page size (1..100)",
+          "required": false,
+          "default": "50"
+        },
+        {
+          "flags": "--cursor <cursor>",
+          "description": "Opaque nextCursor",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "interactions",
+        "refresh"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "interactions",
+        "respond"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--interaction <id>",
+          "description": "Interaction ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--expected-version <version>",
+          "description": "Current interaction writeVersion",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--option <id>",
+          "description": "Permission option ID",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--answer-file <path>",
+          "description": "Question answer JSON: {answers:[...]} or {skip:true}",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "messages"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": false
+    },
+    {
+      "path": [
+        "messages",
+        "get"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--message <id>",
+          "description": "Message ID from the Turn",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--limit <count>",
+          "description": "Process-item page size",
+          "required": false,
+          "default": "50"
+        },
+        {
+          "flags": "--cursor <cursor>",
+          "description": "Opaque nextCursor",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "messages",
+        "list"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--limit <count>",
+          "description": "Page size",
+          "required": false,
+          "default": "50"
+        },
+        {
+          "flags": "--cursor <cursor>",
+          "description": "Opaque nextCursor",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "models"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": false
+    },
+    {
+      "path": [
+        "models",
+        "list"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--agent <id>",
+          "description": "Agent ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--limit <count>",
+          "description": "Page size (1..100)",
+          "required": false,
+          "default": "50"
+        },
+        {
+          "flags": "--cursor <cursor>",
+          "description": "Opaque nextCursor",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "run"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--text <text>",
+          "description": "Task text",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--input-file <path>",
+          "description": "Read UTF-8 task text from a local file",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read task text from stdin",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--attach <path>",
+          "description": "Stage a local attachment (repeatable)",
+          "required": false,
+          "default": "[]"
+        },
+        {
+          "flags": "--client-command-id <id>",
+          "description": "Stable ID for request recovery",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--no-wait",
+          "description": "Return after durable acceptance; remote execution continues",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "Ask the remote desktop Agent to perform a task; no local shell execution.",
+      "leaf": true
+    },
+    {
+      "path": [
+        "runtimes"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": false
+    },
+    {
+      "path": [
+        "runtimes",
+        "list"
+      ],
+      "options": [
+        {
+          "flags": "--limit <count>",
+          "description": "Page size (1..100)",
+          "required": false,
+          "default": "50"
+        },
+        {
+          "flags": "--cursor <cursor>",
+          "description": "Opaque nextCursor",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "runtimes",
+        "run-command"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "Administrator command execution/results; JSONL emits each SDK event.",
+      "leaf": true
+    },
+    {
+      "path": [
+        "runtimes",
+        "subscribe-command"
+      ],
+      "options": [
+        {
+          "flags": "--request-file <path>",
+          "description": "SDK request JSON file (maximum 64 KiB)",
+          "required": false,
+          "default": null
+        },
+        {
+          "flags": "--stdin",
+          "description": "Read SDK request JSON from stdin",
+          "required": false,
+          "default": null
+        }
+      ],
+      "description": "Administrator command execution/results; JSONL emits each SDK event.",
+      "leaf": true
+    },
+    {
+      "path": [
+        "turns"
+      ],
+      "options": [],
+      "description": "",
+      "leaf": false
+    },
+    {
+      "path": [
+        "turns",
+        "cancel"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--turn <id>",
+          "description": "Turn ID",
+          "required": true,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "turns",
+        "status"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--turn <id>",
+          "description": "Turn ID",
+          "required": true,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    },
+    {
+      "path": [
+        "turns",
+        "wait"
+      ],
+      "options": [
+        {
+          "flags": "--runtime <id>",
+          "description": "Explicit authorized Runtime ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--conversation <id>",
+          "description": "Product Conversation ID",
+          "required": true,
+          "default": null
+        },
+        {
+          "flags": "--turn <id>",
+          "description": "Turn ID",
+          "required": true,
+          "default": null
+        }
+      ],
+      "description": "",
+      "leaf": true
+    }
+  ]
+}

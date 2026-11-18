@@ -1,0 +1,114 @@
+---
+title: "Attachment"
+description: "Attachment 管理真实文件字节的暂存、消息引用与短期访问。"
+---
+
+Attachment 管理真实文件字节的暂存、消息引用与短期访问。
+
+## 模型与关联
+
+`Attachment` 是云文件导入后可使用的附件；`StagedAttachment` 是本地文件暂存结果。发送请求引用 attachmentId。`CommittedAttachment` 与 `AttachmentPreview` 按各自接口解释。
+
+会话前上传见 [DraftAttachment](/domain-model/draft)，消息产生的文件摘要见 [MessageCloudFile](/domain-model/message-cloud-file)。
+
+## 生命周期
+
+读取真实字节 → stage → 得到 attachmentId → 在发送中引用 → 按 purpose 获取访问描述。仅在合同允许时 discard 未提交暂存。
+
+通过 Client 的 `buildAttachmentManager`（Go 为 `BuildAttachmentManager`）取得附件入口；会话前的草稿附件也使用同一 AttachmentManager。
+
+## 操作入口
+
+- [`attachCloudFile`](/api-reference/attachments/attach-cloud-file)
+- [`stageAttachment`](/api-reference/attachments/stage)
+- [`discardAttachment`](/api-reference/attachments/discard)
+- [`getAttachmentAccess`](/api-reference/attachments/access)
+
+## 引用已上传的云文件
+
+选择当前会话关联云盘中已完成的普通文件，调用 `attachCloudFile`，得到附件后再发送消息。此入口支持1字节到10MiB的文件；本地文件仍使用 `stageAttachment`，会话前草稿使用 DraftAttachment。
+
+<CodeGroup>
+```ts TypeScript
+const request = {
+  runtimeId, conversationId,
+  clientCommandId: crypto.randomUUID(),
+  file: { regionId, driveId, fileId },
+};
+// 调用前保存 request；超时或断线后使用原 request 再次调用。
+const attachment = await resources.attachCloudFile(ctx, request);
+const messageRequest = {
+  runtimeId, conversationId, clientCommandId: crypto.randomUUID(),
+  text: '请总结这个文件', attachmentIds: [attachment.attachmentId],
+};
+// 发送前另存 messageRequest；它与文件导入是两个独立操作。
+await conversations.sendMessage(ctx, messageRequest);
+```
+
+```go Go
+request := model.AttachCloudFileRequest{
+    ConversationRef: model.ConversationRef{
+        RuntimeRef: model.RuntimeRef{RuntimeID: runtimeID},
+        ConversationID: conversationID,
+    },
+    ClientCommandID: clientCommandID, // 调用前生成并保存 UUID
+    File: model.CloudFileRef{RegionID: regionID, DriveID: driveID, FileID: fileID},
+}
+attachment, err := resources.AttachCloudFile(ctx, request)
+if err != nil { return err }
+// 将 attachment.AttachmentID 放入同会话 SendMessage 请求的 AttachmentIDs。
+```
+
+```java Java
+AttachCloudFileRequest request = new AttachCloudFileRequest();
+request.runtimeId = runtimeId;
+request.conversationId = conversationId;
+request.clientCommandId = clientCommandId; // 调用前生成并保存 UUID
+request.file = new CloudFileRef();
+request.file.regionId = regionId;
+request.file.driveId = driveId;
+request.file.fileId = fileId;
+Attachment attachment = resources.attachCloudFile(request, ctx)
+    .toCompletableFuture().get();
+// 将 attachment.attachmentId 放入同会话发送请求的 attachmentIds。
+```
+
+```java Android
+JSONObject request = new JSONObject()
+    .put("runtimeId", runtimeId).put("conversationId", conversationId)
+    .put("clientCommandId", clientCommandId) // 调用前生成并保存 UUID
+    .put("file", new JSONObject().put("regionId", regionId)
+        .put("driveId", driveId).put("fileId", fileId));
+client.request(Methods.resourceAttachCloudFile, request, listener);
+// 在成功 result 回调中读取 attachmentId，再发起消息发送。
+```
+
+```swift iOS
+let request: [String: Any] = [
+    "runtimeId": runtimeId, "conversationId": conversationId,
+    "clientCommandId": clientCommandId, // 调用前生成并保存 UUID
+    "file": ["regionId": regionId, "driveId": driveId, "fileId": fileId]
+]
+let handle = try client.request(method: Methods.resourceAttachCloudFile,
+    request: request, onEvent: onEvent)
+// 在成功 result 回调中读取 attachmentId，再发起消息发送。
+```
+```sh CLI
+# 当前 CLI 没有独立的云文件附件导入命令。
+# 请使用其他语言卡片中的 SDK 入口完成此步骤。
+```
+</CodeGroup>
+
+CLI 当前没有独立的云文件附件导入命令；以上按各语言的真实公开入口调用。
+
+同一请求标识与文件引用会复用原附件；更换文件、会话绑定或 online/pre 环境会冲突。SDK 每次调用只提交一次导入请求，由 Gateway 的原有持久回执保证幂等。恢复导入不会发送消息，也不能用新的请求标识绕过未知结果。`Attachment` 直接返回 attachmentId、name、mime、size 和可选 kind，调用方无需处理 IM 群或内部回执状态。
+
+file 坐标须来自当前会话有权限访问的关联云盘；不能传任意 URL、个人盘或知识库文件来冒充此来源。精确参数和各语言签名见 [attachCloudFile](/api-reference/attachments/attach-cloud-file)。
+
+## 使用边界
+
+暂存成功不表示消息已发出。discard 不等于删除历史消息、云盘文件或取消 Turn；短期 URL 过期应重新申请，不能永久保存为公开地址。各语言上传 DTO 不同，不能把 JS Blob 机械复制到移动端。
+
+云文件导入结果未知时，使用原请求再次调用 `attachCloudFile`；导入的 `clientCommandId` 不用于 `getCommandReceipt`。消息发送结果未知时，保留原附件，并使用发送请求的独立标识查询消息回执，避免整段重传。恢复规则见 [错误与恢复](/domain-model/12-errors-examples)。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

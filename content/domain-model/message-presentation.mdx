@@ -1,0 +1,26 @@
+---
+title: "MessagePresentation"
+description: "MessagePresentation 将一条消息的最终答案与执行过程分别组织，供界面精确读取。"
+---
+
+MessagePresentation 将一条消息的最终答案与执行过程分别组织，供界面精确读取。
+
+## 模型与关联
+
+返回值关联 Message，并提供 answer、process、snapshotRevision 等展示信息。答案和过程拥有各自的 coverage；过程内容以 PresentationItem 表达。
+
+来源消息见 [Message](/domain-model/05-message)，内容项见 [Item](/domain-model/item)，执行终态见 [Turn](/domain-model/06-turn-items)。
+
+## 生命周期
+
+按真实 messageId 查询 → 分别检查答案与过程覆盖 → 按公开游标继续读取 → 用版本更新已有视图。
+
+## 操作入口
+
+- [`getMessagePresentation`](/api-reference/messages/presentation)
+
+## 使用边界
+
+Turn 结束不自动证明最终答案已经同步完整；partial / unknown 必须保留。不要将实时过程或 Markdown 路径自行变成最终答案与下载产物。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

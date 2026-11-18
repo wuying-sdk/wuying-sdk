@@ -1,0 +1,27 @@
+---
+title: "MessageCloudFile"
+description: "MessageCloudFile 表达消息中真实存在的文件摘要，区分上传附件与执行产物。"
+---
+
+MessageCloudFile 表达消息中真实存在的文件摘要，区分上传附件与执行产物。
+
+## 模型与关联
+
+使用 refId、sourceKind（attachment / artifact）、name、state 等公开信息，按结果可携带 attachmentId 或 driveId / fileId。`MessageFilesResult` 按消息组织这些摘要与覆盖信息。
+
+来源消息见 [Message](/domain-model/05-message)，云文件操作见 [WyDriveFile](/domain-model/wy-drive-file)。
+
+## 生命周期
+
+读取真实消息文件结果 → 区分 pending / ready / unavailable 等状态 → 按来源及能力取得访问结果 → 文件过期、删除或无权访问时更新展示。
+
+## 操作入口
+
+- [`getMessageFiles`](/api-reference/messages/get-message-files)
+- [`getDownloadUrl`](/api-reference/files/get-download-url)
+
+## 使用边界
+
+“生成了文件”的文本声明不等于可下载字节。不能扫描 Markdown 路径伪造下载卡片；不同来源的文件标识与授权不能互换。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

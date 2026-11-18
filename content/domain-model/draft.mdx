@@ -1,0 +1,30 @@
+---
+title: "DraftAttachment"
+description: "草稿附件支持在会话建立或正式提交前暂存文件，再按契约提交到目标会话。"
+---
+
+草稿附件支持在会话建立或正式提交前暂存文件，再按契约提交到目标会话。
+
+## 模型与关联
+
+`DraftRef` 使用 Runtime 作用域内的不透明 draftId；`DraftSnapshot` 描述草稿项目。草稿与会话附件的最终引用通过公开提交结果衔接。
+
+正式暂存与访问规则见 [Attachment](/domain-model/attachment)。
+
+## 生命周期
+
+使用稳定 draftId / uploadId 暂存 → 查询草稿或预览 → 选择真实目标会话 → 提交指定附件 → 消费提交结果；放弃时丢弃未提交草稿项。
+
+## 操作入口
+
+- [`stageDraftAttachment`](/api-reference/drafts/stage-draft-attachment)
+- [`listDraftAttachments`](/api-reference/drafts/list-draft-attachments)
+- [`commitDraftAttachments`](/api-reference/drafts/commit-draft-attachments)
+- [`discardDraftAttachments`](/api-reference/drafts/discard-draft-attachments)
+- [`getDraftAttachmentPreview`](/api-reference/drafts/get-draft-attachment-preview)
+
+## 使用边界
+
+不把本地路径视作上传完成，也不把 draftId 当 conversationId。未知提交结果按原身份查询，不能换新 ID 重传；按具体语言与环境能力确认支持。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

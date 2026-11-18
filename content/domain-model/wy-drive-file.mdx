@@ -1,0 +1,26 @@
+---
+title: "WyDriveFile"
+description: "WyDriveFile 描述云文件的公开元数据及合法查询、下载与删除入口。"
+---
+
+WyDriveFile 描述云文件的公开元数据及合法查询、下载与删除入口。
+
+## 模型与关联
+
+文件标识以云接口返回的 driveId / fileId 等实际组合为准；[MessageCloudFile](/domain-model/message-cloud-file) 可能引用云文件，但仍保留消息自己的 refId 与来源。
+
+## 生命周期
+
+查询目录 → 选择真实文件 → 按权限申请访问 → 使用实际下载结果；删除后更新当前视图。
+
+## 操作入口
+
+- [`describeWyDriveFiles`](/api-reference/files/describe-wy-drive-files)
+- [`getDownloadUrl`](/api-reference/files/get-download-url)
+- [`deleteWyDriveFile`](/api-reference/files/delete-wy-drive-file)
+
+## 使用边界
+
+删除云盘文件不是丢弃会话暂存附件。不能根据展示路径或任意 URL 绕过授权取得字节；短期访问过期后重新核对。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

@@ -5,3 +5,8 @@ node_modules/
 !.env.example
 .DS_Store
 *.log
+
+__pycache__/
+
+# 同样忽略本机 node_modules 符号链接
+node_modules

@@ -1,0 +1,21 @@
+{
+  "groups": [
+    {
+      "group": "读取结果与实时更新",
+      "pages": [
+        "domain-model/10-projection-events",
+        "domain-model/projection",
+        "domain-model/page",
+        "domain-model/subscription",
+        "domain-model/stream-chunk"
+      ]
+    },
+    {
+      "group": "失败与恢复",
+      "pages": [
+        "domain-model/command-receipt",
+        "domain-model/12-errors-examples"
+      ]
+    }
+  ]
+}

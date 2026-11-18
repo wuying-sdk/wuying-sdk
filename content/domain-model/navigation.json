@@ -1,0 +1,86 @@
+{
+  "group": "领域模型",
+  "pages": [
+    "domain-model/00-overview",
+    {
+      "group": "云资源",
+      "pages": [
+        "domain-model/02-runtime-agent",
+        "domain-model/asp",
+        "domain-model/remote-script",
+        "domain-model/port-service"
+      ]
+    },
+    {
+      "group": "AI 能力",
+      "pages": [
+        "domain-model/agent",
+        {
+          "group": "会话",
+          "pages": [
+            "domain-model/03-conversation",
+            "domain-model/04-member-config",
+            "domain-model/config",
+            {
+              "group": "消息",
+              "pages": [
+                "domain-model/05-message",
+                "domain-model/message-presentation"
+              ]
+            },
+            {
+              "group": "执行轮次",
+              "pages": [
+                "domain-model/06-turn-items",
+                "domain-model/item",
+                "domain-model/execution",
+                "domain-model/07-interaction"
+              ]
+            }
+          ]
+        },
+        "domain-model/11-cloud-capabilities",
+        "domain-model/model",
+        {
+          "group": "附件与工作空间",
+          "pages": [
+            {
+              "group": "附件",
+              "pages": [
+                "domain-model/attachment",
+                "domain-model/draft"
+              ]
+            },
+            "domain-model/09-workspace-files",
+            "domain-model/message-cloud-file"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "存储能力",
+      "pages": [
+        {
+          "group": "云盘",
+          "pages": [
+            "domain-model/wy-drive",
+            "domain-model/wy-drive-file"
+          ]
+        },
+        {
+          "group": "知识库",
+          "pages": [
+            "domain-model/knowledge-space",
+            "domain-model/knowledge-file"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "计量",
+      "pages": [
+        "domain-model/credit"
+      ]
+    }
+  ]
+}

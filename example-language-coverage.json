@@ -1,0 +1,1535 @@
+{
+  "common_code_groups": 32,
+  "language_entries": 192,
+  "groups": [
+    {
+      "path": "domain-model/02-runtime-agent.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "domain-model/02-runtime-agent.mdx",
+      "group": 2,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "domain-model/attachment.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "getting-started/desktop-to-agent.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "getting-started/desktop-to-agent.mdx",
+      "group": 2,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "getting-started/desktop-to-agent.mdx",
+      "group": 3,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "getting-started/desktop-to-agent.mdx",
+      "group": 4,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "getting-started/initialize-client.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "getting-started/initialize-client.mdx",
+      "group": 2,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "getting-started/initialize-client.mdx",
+      "group": 3,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "getting-started/port-service.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "getting-started/remote-script.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/authentication-model.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/client-initialization.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "snippets/demo-agents.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "snippets/demo-asp-open.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/demo-conversation-read.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "snippets/demo-credential-provider.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Go",
+        "Java",
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/demo-messages.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "CLI"
+      ]
+    },
+    {
+      "path": "snippets/demo-next-page.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "snippets/demo-oauth-login.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Go",
+        "Java",
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/demo-oauth-reuse.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Go",
+        "Java",
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/demo-page.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "snippets/demo-port-url.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "CLI"
+      ]
+    },
+    {
+      "path": "snippets/demo-run-command.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/demo-runtimes.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "snippets/demo-start-desktop.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/demo-subscribe-agents.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "CLI"
+      ]
+    },
+    {
+      "path": "snippets/demo-subscribe-command.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Android",
+        "iOS"
+      ]
+    },
+    {
+      "path": "snippets/demo-task-status.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    },
+    {
+      "path": "snippets/demo-temporary-credentials.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": [
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ]
+    },
+    {
+      "path": "snippets/first-task.mdx",
+      "group": 1,
+      "languages": [
+        "TypeScript",
+        "Go",
+        "Java",
+        "Android",
+        "iOS",
+        "CLI"
+      ],
+      "support_notes": []
+    }
+  ],
+  "specific_blocks": [
+    {
+      "path": "domain-model/remote-script.mdx",
+      "sha256": "f4d0079c9436038ae6998a003ca81dae662786b66b3ea11ed9e52e686341d5d3",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "getting-started/port-service.mdx",
+      "sha256": "5da984d2809ee27a81c1e785301e3d0188b4ccba80cda049e3a7330ce2a8812d",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "getting-started/remote-script.mdx",
+      "sha256": "1ba87d62a7867b41964017a9fd650c36d58c7e58320d207c571901f0deb7f69f",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "guides/asp-desktop.mdx",
+      "sha256": "2d0ddfd7f1478319a85eb0a68630329f15198b8d6ab5fea183a301aa833b097c",
+      "reason": "CLI 私有管道协议说明；宿主需真实创建 fd 3，不是多语言 SDK 方法。"
+    },
+    {
+      "path": "guides/cli-skills.mdx",
+      "sha256": "1badb8c6ed093ea7b73a07d979bc6a246c6f26216ced238c13a9b3061aa51dee",
+      "reason": "CLI Skill/指定宿主插件安装命令；任务示例本身使用通用 SDK 卡片。"
+    },
+    {
+      "path": "guides/cli-skills.mdx",
+      "sha256": "f82c6aca5054781643a93374d735f120700419c93061dddb11f4df1af4bf283a",
+      "reason": "CLI Skill/指定宿主插件安装命令；任务示例本身使用通用 SDK 卡片。"
+    },
+    {
+      "path": "guides/cli-skills.mdx",
+      "sha256": "0809983c8d53992c7cab052c0b5711455f0c4c823012ea45a13ffc3cbb521ac3",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "guides/cli-skills.mdx",
+      "sha256": "16f499d0491f193ea7cafd8e53cab2858b6aa0c497e5c43475f91171c7831b7e",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "guides/deepseek-harness.mdx",
+      "sha256": "f94b87922133a40c272b9e92589a7ad1e4e368b69fd5df7468c5ff9a558e4de2",
+      "reason": "CLI Skill/指定宿主插件安装命令；任务示例本身使用通用 SDK 卡片。"
+    },
+    {
+      "path": "guides/deepseek-harness.mdx",
+      "sha256": "12727716b18a09b36b623e389e0b67015b0725820e6ea623404dd38aa8c0491e",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "guides/deepseek-harness.mdx",
+      "sha256": "06ee314a51d7ae43256876dfc71aba34ea97ce4a88479e0204c846d4e897e8a2",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "sdk-reference/android.mdx",
+      "sha256": "83f0abf55ea7f90a72fe9c5902ff5a4d89291c96527f1d88d6eba4d5e5836a5e",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/android.mdx",
+      "sha256": "2873a1a53e4efc84c2655f826984e64dad7b5d8f613e017b759a95b8290cc8b0",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/android.mdx",
+      "sha256": "824a8e58cc30bea4c6921743e17309e320cfff7ae10cfe3567eabed412baac32",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/cli.mdx",
+      "sha256": "789640c0f375b475f7d490f200116bab79d512dabe07a638728dcd00c31ad5f0",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/cli.mdx",
+      "sha256": "fe04a618186075f59611cdd6d652a81d4fbb6d348296b143b71b0d8edc6fb852",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/cli.mdx",
+      "sha256": "65d864140af7439b2f06cefcc678bb89bd4ed2b8306e78bef30eca45e570beb5",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/go.mdx",
+      "sha256": "9948538fa270890ff05d48329a5714b27291f5db4d80662fa9157cde7951793c",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/go.mdx",
+      "sha256": "273e3694d4774a32030b1e8a376a6f51eb6c5f64c1a21196b5d256dafbcff3fe",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/ios.mdx",
+      "sha256": "741d328b5e2b00c0816f30aedaaf47a7cb1f48165e7d70c07d91bf40f5b54df8",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/ios.mdx",
+      "sha256": "3a56a3cfffd9dfa583c43278589d87228170a90ff05f8289367a6b30451a98f8",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/java.mdx",
+      "sha256": "c3bf3341a8aa6ac0d505a77c95e03b595d9165c678d7b06d76c5e3af683b5456",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/java.mdx",
+      "sha256": "71db115b671b41ba176fa1ad96bdfd0a8f59d4095e37f97aa37db14a00a40ad5",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/java.mdx",
+      "sha256": "6c095bbe151fe363cfab62dab9130bb15e341285ff73abf26ff8558f5c272ebb",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/java.mdx",
+      "sha256": "c2c076d6a985c48bf9ee74f96c997348be2ea2ced7fcb997f7da146a715d6ae5",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/js.mdx",
+      "sha256": "2fe6df9836c20d68fac7381ad6d522cd9ea65ea9ae2a828a3f8e76a0de84cf3b",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/js.mdx",
+      "sha256": "319c9a5d71e8c35552978e00d7f2023363aa83c559d0b7aa9457e97a9859314e",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/js.mdx",
+      "sha256": "7afad223fada9eb5cd2f58c5e48e82b0bb7dbd877fb34df4c18733a3455c3177",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/js.mdx",
+      "sha256": "3c1b3438679903c6ab8ad9140ee9f0bd6366b16780fc6166cb7782a655ef5acc",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "snippets/cli-administration.mdx",
+      "sha256": "edc1392ca9e894d1491eb28effb635094da1f0c66dd45fb5d5cc1715a6ba7640",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    }
+  ],
+  "language_references": [
+    {
+      "path": "api-reference/agents/get-agent-model-catalog.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/agents/get-expert-directory.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/agents/list-experts.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/agents/list.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/agents/models.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/agents/subscribe-agents.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/asp/asp-open.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/asp/get-asp-stream-session.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/asp/start.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/asp/stop-asp-stream.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/attachments/access.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/attachments/attach-cloud-file.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/attachments/discard.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/attachments/prepare-conversation-attachment-target.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/attachments/stage.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/auth-import.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/auth-login.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/auth-logout.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/auth-oauth.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/auth-status.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/codex-install.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/doctor.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/interactions-respond.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/run.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/cli/turns-wait.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/build-agent-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/build-attachment-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/build-conversation-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/build-credit-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/build-runtime-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/build-skill-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/build-workspace-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/close.mdx",
+      "purpose": "手工维护的接口索引/初始化契约说明；按各自真实公开签名列参数，通用任务代码见快速开始。",
+      "fences": 0
+    },
+    {
+      "path": "api-reference/client/create-desktops.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/create.mdx",
+      "purpose": "手工维护的接口索引/初始化契约说明；按各自真实公开签名列参数，通用任务代码见快速开始。",
+      "fences": 0
+    },
+    {
+      "path": "api-reference/client/delete.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/get-auth-code.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/logout.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/reboot.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/reset.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/start.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/stop.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/update-login-credentials.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/client/wait.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/configuration/get-composer-capabilities.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/configuration/get.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/configuration/set-conversation-config-option.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/configuration/subscribe-conversation-config.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/configuration/update.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/archive.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/create.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/get-conversation-header-metadata.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/get.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/list-conversation-groups.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/list-sidebar-conversations.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/list.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/rename.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/set-conversation-pinned.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/subscribe-conversation-groups.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/subscribe-conversation.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/subscribe-conversations.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/subscribe-sidebar-conversations.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/conversations/unarchive-conversation.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/coverage/index.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/credits/describe-credit-package-agents.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/credits/usage.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/drafts/commit-draft-attachments.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/drafts/discard-draft-attachments.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/drafts/get-draft-attachment-preview.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/drafts/list-draft-attachments.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/drafts/stage-draft-attachment.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/executions/cancel-execution.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/executions/list-active-executions.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/executions/list-execution-activity.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/executions/subscribe-active-executions.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/executions/subscribe-execution-activity.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/executions/subscribe-live-process.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/files/delete-wy-drive-file.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/files/describe-wy-drive-files.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/files/describe-wy-drives.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/files/get-download-url.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/index.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/interactions/list.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/interactions/permission.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/interactions/question.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/interactions/refresh-pending-interactions.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/interactions/subscribe-interactions.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/knowledge/download-knowledge-files.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/knowledge/list-agent-knowledge-spaces.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/knowledge/list-knowledge-files.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/members/add.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/members/get-member-snapshot.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/members/list-member-candidates.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/members/list.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/members/remove.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/members/subscribe-members.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/members/update.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/detail.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/get-message-files.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/list-conversation-history.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/list.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/presentation.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/resolve-conversation-read.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/send.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/stream.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/subscribe-conversation-history.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/subscribe.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/messages/wait.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/mobile/cancel.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/mobile/close.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/mobile/is-done.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/mobile/new-client.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/mobile/start-error.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/mobile/start-with-data.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/mobile/start.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/receipts/get-command-receipt.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/receipts/get-question-response-receipt.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/receipts/subscribe-command-receipt.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/approve-fota-update.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/capabilities.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/describe-credit-package-agents.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/describe-credit-usage-info.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/generate-scene-url.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/list.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/run-command.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/subscribe-command.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/subscribe.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/runtimes/update-agent-instance.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/skills/ent-install-skills.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/skills/ent-uninstall-skills.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/skills/installed.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/skills/list-agent-authed-skills.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/skills/list-categories.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/skills/set-skill-enabled.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/streams/accepted.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/streams/cancel.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/streams/close.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/streams/next.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/streams/result.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/subscriptions/close.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/subscriptions/unsubscribe.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/turns/cancel.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/turns/get.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/turns/steer-turn.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/turns/subscribe-turn.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/workspaces/create.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "api-reference/workspaces/list.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/android/client.mdx",
+      "purpose": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。",
+      "fences": 4
+    },
+    {
+      "path": "reference/android/models/agent.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/android/models/attachment.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/android/models/conversation.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/android/models/credit.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/android/models/runtime.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/android/models/skill.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/android/models/workspace.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/android/public.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/agents.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/asp.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/auth.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/codex.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/conversations.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/desktops.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/doctor.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/interactions.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/messages.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/models.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/run.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/runtimes.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/classes/turns.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/cli/commands.mdx",
+      "purpose": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。",
+      "fences": 15
+    },
+    {
+      "path": "reference/cli/public.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/api.mdx",
+      "purpose": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。",
+      "fences": 1
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-client.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-agent-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-attachment-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-conversation-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-credit-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-runtime-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-skill-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-manager-workspace-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile-client.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile-operation.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-mobile.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-model-message-stream.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/classes/github-com-aliyun-wuying-sdk-go-model-subscription.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/go/public.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/ios/client.mdx",
+      "purpose": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。",
+      "fences": 4
+    },
+    {
+      "path": "reference/ios/models/agent.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/ios/models/attachment.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/ios/models/conversation.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/ios/models/credit.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/ios/models/runtime.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/ios/models/skill.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/ios/models/workspace.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/ios/public.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/api.mdx",
+      "purpose": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。",
+      "fences": 1
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-manager-agent-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-manager-attachment-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-manager-conversation-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-manager-credit-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-manager-runtime-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-manager-skill-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-manager-workspace-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-model-message-stream.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-model-subscription.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/classes/com-aliyun-wuying-sdk-wuying-client.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/java/public.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/api.mdx",
+      "purpose": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。",
+      "fences": 1
+    },
+    {
+      "path": "reference/js/classes/agent-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/asp-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/attachment-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/client.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/conversation-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/credit-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/message-stream.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/runtime-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/skill-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/subscription.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/classes/workspace-manager.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/public.mdx",
+      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
+    },
+    {
+      "path": "reference/js/types.mdx",
+      "purpose": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。",
+      "fences": 0
+    },
+    {
+      "path": "reference/mobile/contract.mdx",
+      "purpose": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。",
+      "fences": 1
+    }
+  ],
+  "scope": "通用任务卡片六入口。原始语言参考含同语言业务示例，明确分类保留原文；并非全部只有签名。"
+}

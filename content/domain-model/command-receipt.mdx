@@ -1,0 +1,32 @@
+---
+title: "查询操作回执"
+description: "使用同一次请求的标识查询结果，确认失败、成功或仍未知。"
+---
+
+创建会话、修改成员或发送消息时，应用可能因超时或断线没有收到响应。使用 `getCommandReceipt` 查询原请求，或用 `subscribeCommandReceipt` 跟踪变化，避免重复提交。
+
+## 保存原请求标识
+
+| 发起操作的方式 | 查询回执时的 clientCommandId |
+|---|---|
+| 方法明确支持 MutationOptions，写入时传入 mutationId | 填写同一个 mutationId |
+| 消息发送或 steerTurn 传入 clientCommandId | 填写原 clientCommandId |
+
+查询时保留原 runtimeId；已知原 conversationId 时一并传入，以校验作用域。仅适用于支持操作记录的接口；云管理任务、远程脚本等继续使用各自的结果查询接口。
+
+问题答复保留专用 `getQuestionResponseReceipt`，需要完整交互身份校验，详见[审批与问答](/domain-model/07-interaction)。
+
+## 读取状态
+
+| state | 含义 |
+|---|---|
+| pending | 仍在处理或核对 |
+| succeeded | 原操作已成功，可读取 result |
+| failed | 已确认失败，核对 errorCode 与 failureEffect |
+| unknown | 当前无法确认；不能当作失败并生成新 ID 重发 |
+
+对象查询读取当前状态，操作回执确认某一次请求的结果。消息受理成功后，继续使用真实 Message / Turn 身份跟踪 Agent 执行；回执成功不等于任务完成。退订仅停止本地跟踪。
+
+普通错误的 not_started 默认值或 retryable=true 不能单独作为重发写操作的依据。保留原请求标识，按[错误与恢复规则](/domain-model/12-errors-examples)核对。
+
+[完整类型与语言差异](/sdk-reference/index)

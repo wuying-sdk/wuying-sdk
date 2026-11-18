@@ -9,7 +9,10 @@
   "scripts": {
     "docs:dev": "cd docs && mint dev --no-open",
     "docs:validate": "cd docs && mint validate",
-    "docs:links": "cd docs && mint broken-links"
+    "docs:links": "cd docs && mint broken-links",
+    "docs:generate-api": "node scripts/generate-full-api.cjs",
+    "docs:check-api": "node scripts/generate-full-api.cjs --check",
+    "docs:check-examples": "python3 scripts/check-example-languages.py"
   },
   "devDependencies": {
     "mint": "4.3.8",

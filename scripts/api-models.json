@@ -1,0 +1,374 @@
+{
+  "groups": [
+    {
+      "key": "runtimes",
+      "title": "Runtime 执行环境",
+      "interface": "RuntimeManager",
+      "factory": "buildRuntimeManager",
+      "operations": [
+        {
+          "slug": "list",
+          "title": "列出 Runtime",
+          "method": "listRuntimes",
+          "kind": "query",
+          "notes": "返回 Runtime 分页列表，读取 items 和 nextCursor；目录未加载或认证失败会报错，不用空数组隐藏错误。"
+        },
+        {
+          "slug": "subscribe",
+          "title": "订阅 Runtime",
+          "method": "subscribeRuntimes",
+          "kind": "subscribe",
+          "notes": "订阅完整数组快照；结束订阅时调用 unsubscribe，不把每份快照重复追加。"
+        },
+        {
+          "slug": "capabilities",
+          "title": "读取环境能力",
+          "method": "getHostCapabilities",
+          "kind": "query",
+          "notes": "使用用户明确选择的 runtimeId，按实际 capability 决定是否展示或执行操作。"
+        },
+        {
+          "slug": "run-command",
+          "title": "runCommand",
+          "method": "runCommand",
+          "kind": "command",
+          "notes": "仅 AK/SK 管理员执行系统命令；保存 accepted 回执，逐桌面核对终态。"
+        },
+        {
+          "slug": "subscribe-command",
+          "title": "subscribeCommand",
+          "method": "subscribeCommand",
+          "kind": "subscribe",
+          "notes": "按原 regionId、desktopIds、invokeId 恢复只读订阅，不重新执行命令。"
+        }
+      ]
+    },
+    {
+      "key": "agents",
+      "title": "Agent",
+      "interface": "AgentManager$1",
+      "factory": "buildAgentManager",
+      "operations": [
+        {
+          "slug": "list",
+          "title": "列出 Agent",
+          "method": "listAgents",
+          "kind": "query",
+          "notes": "req.runtimeId 来自已授权目录；读取 items 当前页并保留 projection，不自动选择第一项。"
+        },
+        {
+          "slug": "models",
+          "title": "列出 Agent 模型",
+          "method": "listAgentModels",
+          "kind": "query",
+          "notes": "使用同一 Runtime 下的真实 agentId；此目录不同于独立云 ModelConfig。"
+        }
+      ]
+    },
+    {
+      "key": "conversations",
+      "title": "Conversation 会话",
+      "interface": "ConversationManager$1",
+      "factory": "buildConversationManager",
+      "operations": [
+        {
+          "slug": "create",
+          "title": "创建会话",
+          "method": "createConversation",
+          "kind": "mutation",
+          "notes": "req 明确 runtimeId 和 mode：single 使用 agentId，group 使用真实成员信息；mutationId 由宿主在发起前生成并保存。结果未知时查询原请求，不能换 ID 重建。"
+        },
+        {
+          "slug": "list",
+          "title": "列出会话",
+          "method": "listConversations",
+          "kind": "query",
+          "notes": "返回 Page<Conversation>，读取 items；保留投影与公开分页信息。"
+        },
+        {
+          "slug": "get",
+          "title": "读取会话",
+          "method": "getConversation",
+          "kind": "query",
+          "notes": "返回对象可能为 undefined，结合投影判断；不把未覆盖的数据当作权威不存在。"
+        },
+        {
+          "slug": "rename",
+          "title": "重命名会话",
+          "method": "renameConversation",
+          "kind": "mutation",
+          "notes": "使用真实 ConversationRef；保存 mutationId，结果不确定时按原身份核对。"
+        },
+        {
+          "slug": "archive",
+          "title": "归档会话",
+          "method": "archiveConversation",
+          "kind": "command",
+          "notes": "归档会话不等于删除云资源、删除文件或取消远端任务。"
+        }
+      ]
+    },
+    {
+      "key": "members",
+      "title": "Member 会话成员",
+      "interface": "ConversationManager$1",
+      "factory": "buildConversationManager",
+      "operations": [
+        {
+          "slug": "list",
+          "title": "列出成员",
+          "method": "listMembers",
+          "kind": "query",
+          "notes": "读取 items 当前页；memberId 是会话内身份，不能用 Agent ID 或显示名替代。"
+        },
+        {
+          "slug": "add",
+          "title": "添加成员",
+          "method": "addMember",
+          "kind": "mutation",
+          "notes": "使用获授权的 Agent，添加前核对候选与 capability；保留稳定 mutationId。"
+        },
+        {
+          "slug": "update",
+          "title": "更新成员",
+          "method": "updateMember",
+          "kind": "mutation",
+          "notes": "expectedVersion 来自当前成员快照；保留稳定 mutationId，冲突后刷新事实再决定操作。"
+        },
+        {
+          "slug": "remove",
+          "title": "移除成员",
+          "method": "removeMember",
+          "kind": "mutation",
+          "notes": "使用真实 memberId 和当前 expectedVersion；移除会话成员不等于释放云实例。"
+        }
+      ]
+    },
+    {
+      "key": "configuration",
+      "title": "Config 会话配置",
+      "interface": "ConversationManager$1",
+      "factory": "buildConversationManager",
+      "operations": [
+        {
+          "slug": "get",
+          "title": "读取配置",
+          "method": "getConversationConfig",
+          "kind": "query",
+          "notes": "区分期望配置、实际应用与状态；收到配置快照不代表所有执行环境已应用。"
+        },
+        {
+          "slug": "update",
+          "title": "更新配置",
+          "method": "updateConversationConfig",
+          "kind": "command",
+          "notes": "expectedVersion 使用当前配置版本；按返回与后续读取确认应用状态，不忽略版本冲突。"
+        }
+      ]
+    },
+    {
+      "key": "messages",
+      "title": "Message 消息",
+      "interface": "ConversationManager$1",
+      "factory": "buildConversationManager",
+      "operations": [
+        {
+          "slug": "send",
+          "title": "提交消息",
+          "method": "sendMessage",
+          "kind": "send",
+          "notes": "先保存稳定 clientCommandId；返回 MessageAccepted 只表示受理，不代表 Turn 完成或最终答案完整。"
+        },
+        {
+          "slug": "stream",
+          "title": "流式发送消息",
+          "method": "sendMessageStream",
+          "kind": "send",
+          "notes": "当前 JS 流交付 message / turn 快照，不承诺 text.delta 或 text.replace。保存受理身份；停止本地消费可退出迭代或使用 ctx.signal 结束等待，stream.cancel() 会请求远端取消，仍需核对终态。"
+        },
+        {
+          "slug": "wait",
+          "title": "发送并等待终态",
+          "method": "sendMessageAndWait",
+          "kind": "send",
+          "notes": "Context 应覆盖任务等待时长；核对执行终态及最终展示覆盖。超时按原请求/Turn 查询，不换 clientCommandId 重发。"
+        },
+        {
+          "slug": "list",
+          "title": "列出消息",
+          "method": "listMessages",
+          "kind": "query",
+          "notes": "返回 Page<Message>，读取 items；同一轮可产生多条消息，按真实 ID 对账。"
+        },
+        {
+          "slug": "detail",
+          "title": "读取消息详情",
+          "method": "getMessageDetail",
+          "kind": "query",
+          "notes": "结果可能为 undefined；详情有 complete 与 nextItemCursor，按实际覆盖与分页继续读取。"
+        },
+        {
+          "slug": "presentation",
+          "title": "读取最终展示",
+          "method": "getMessagePresentation",
+          "kind": "query",
+          "notes": "按展示覆盖确认内容完整；Turn 已结束不自动代表最终答案已完整同步。"
+        },
+        {
+          "slug": "subscribe",
+          "title": "订阅消息",
+          "method": "subscribeMessages",
+          "kind": "subscribe",
+          "notes": "按 Message ID 更新 data.items，保留 projection；停止订阅时退订，不能把快照当文本增量追加。"
+        }
+      ]
+    },
+    {
+      "key": "turns",
+      "title": "Turn 执行轮次",
+      "interface": "ConversationManager$1",
+      "factory": "buildConversationManager",
+      "operations": [
+        {
+          "slug": "get",
+          "title": "读取 Turn",
+          "method": "getTurn",
+          "kind": "query",
+          "notes": "使用受理返回的真实 turnId；区分 active 与具体终态，不能按消息气泡数推断执行完成。"
+        },
+        {
+          "slug": "cancel",
+          "title": "取消 Turn",
+          "method": "cancelTurn",
+          "kind": "command",
+          "notes": "requested 仅表示已请求取消；继续查询或订阅权威终态，already_finished 不表示任务被取消。"
+        }
+      ]
+    },
+    {
+      "key": "interactions",
+      "title": "Interaction 审批与问答",
+      "interface": "ConversationManager$1",
+      "factory": "buildConversationManager",
+      "operations": [
+        {
+          "slug": "list",
+          "title": "列出交互",
+          "method": "listInteractions",
+          "kind": "query",
+          "notes": "按真实 kind、state 与归属显示详情；没有题目或选项时不构造默认选择。"
+        },
+        {
+          "slug": "permission",
+          "title": "回复审批",
+          "method": "respondPermission",
+          "kind": "command",
+          "notes": "只提交用户明确选择的真实 optionId，携带当前 expectedVersion；pending 后继续核对，禁止自动批准。"
+        },
+        {
+          "slug": "question",
+          "title": "回复问答",
+          "method": "respondQuestion",
+          "kind": "mutation",
+          "notes": "答案由当前真实题目和用户选择构造；expectedVersion 与稳定 mutationId 均需保留，未知结果先按原身份核对。"
+        }
+      ]
+    },
+    {
+      "key": "attachments",
+      "title": "Attachment 附件",
+      "interface": "AttachmentManager$1",
+      "factory": "buildAttachmentManager",
+      "operations": [
+        {
+          "slug": "stage",
+          "title": "暂存附件",
+          "method": "stageAttachment",
+          "kind": "command",
+          "notes": "file 必须是真实文件字节（JS Blob）；返回 attachmentId 后在同一会话发送中引用，本地路径字符串不等于已上传。"
+        },
+        {
+          "slug": "access",
+          "title": "获取附件访问地址",
+          "method": "getAttachmentAccess",
+          "kind": "query",
+          "notes": "purpose 明确选择 preview 或 download；访问地址有 expiresAt，过期后重新申请，不永久保存授权 URL。"
+        },
+        {
+          "slug": "discard",
+          "title": "丢弃未提交附件",
+          "method": "discardAttachment",
+          "kind": "command",
+          "notes": "只丢弃未提交暂存，不删除会话历史或云文件，也不取消执行轮次。"
+        }
+      ]
+    },
+    {
+      "key": "workspaces",
+      "title": "Workspace 工作空间",
+      "interface": "WorkspaceManager$1",
+      "factory": "buildWorkspaceManager",
+      "operations": [
+        {
+          "slug": "list",
+          "title": "列出工作空间",
+          "method": "listWorkspaces",
+          "kind": "query",
+          "notes": "返回分页 items / nextCursor，并保留当前工作空间与父级引用等元数据；工作空间引用不是任意文件树或操作系统写权限。"
+        },
+        {
+          "slug": "create",
+          "title": "创建工作空间",
+          "method": "createWorkspace",
+          "kind": "command",
+          "notes": "使用明确选择的 runtimeId；返回 Workspace 只是工作空间对象，不代表任意 OS 操作能力。"
+        }
+      ]
+    },
+    {
+      "key": "skills",
+      "title": "Skill 技能",
+      "interface": "SkillManager",
+      "factory": "buildSkillManager",
+      "operations": [
+        {
+          "slug": "installed",
+          "title": "列出已安装技能",
+          "method": "listInstalledSkills",
+          "kind": "query",
+          "notes": "按该云技能接口的实际身份与权限查询；技能操作以本接口实际身份与授权范围为准。"
+        }
+      ]
+    },
+    {
+      "key": "credits",
+      "title": "Credit 用量",
+      "interface": "CreditManager",
+      "factory": "buildCreditManager",
+      "operations": [
+        {
+          "slug": "usage",
+          "title": "读取用量",
+          "method": "describeCreditUsageInfo",
+          "kind": "query",
+          "notes": "使用当前身份与该云接口所需的标识和授权；用量查询结果不代表 Agent 任务成功。"
+        }
+      ]
+    },
+    {
+      "key": "asp",
+      "title": "ASP 流化会话",
+      "interface": "AspManager",
+      "factory": "buildAspManager",
+      "operations": [
+        {
+          "slug": "start",
+          "title": "启动流化会话",
+          "method": "startAspStream",
+          "kind": "command",
+          "notes": "当前仅对客 JS 提供 AspManager，依赖浏览器 DOM 与配套环境；Go/Java/CLI 无对等工厂。打开桌面不表示 Agent Turn 成功。"
+        }
+      ]
+    }
+  ]
+}

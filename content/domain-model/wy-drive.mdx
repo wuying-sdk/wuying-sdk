@@ -1,0 +1,24 @@
+---
+title: "WyDrive"
+description: "WyDrive 表示云文件空间，是独立于 Workspace 和会话附件的存储管理域。"
+---
+
+WyDrive 表示云文件空间，是独立于 Workspace 和会话附件的存储管理域。
+
+## 模型与关联
+
+使用云接口返回的真实空间与目录标识。[WyDriveFile](/domain-model/wy-drive-file) 表示其中的文件；[Workspace](/domain-model/09-workspace-files) 是执行工作空间引用。
+
+## 生命周期
+
+按当前授权查询空间 → 用户选择实际空间 → 查询该空间内文件及当前状态。
+
+## 操作入口
+
+- [`describeWyDrives`](/api-reference/files/describe-wy-drives)
+
+## 使用边界
+
+不要用 workspaceId 或 conversationId 替代 driveId，也不能从空间列表存在推断任意文件可下载或删除。
+
+精确类型与语言差异见 [SDK Reference](/sdk-reference/index)。

@@ -1,0 +1,24 @@
+---
+title: "Model"
+description: "查询 Agent 可用的模型目录，并为会话或成员选择模型。"
+---
+
+Model 表示 Agent 可用的模型。模型目录由 AgentManager 读取，会话和成员分别管理自己的模型选择。
+
+## 查询模型目录
+
+使用 [`listAgentModels`](/api-reference/agents/models) 按 Runtime 与 Agent 分页读取模型；需要完整目录与默认模型时，使用 [`getAgentModelCatalog`](/api-reference/agents/get-agent-model-catalog)。
+
+模型包含 modelId、名称、可用状态及服务提供的能力信息。目录提供 defaultModelId 时可将其作为默认选择；没有默认标识时，不把列表第一项当作默认模型。
+
+## 选择会话与成员模型
+
+会话通过 [`setConversationConfigOption`](/api-reference/configuration/set-conversation-config-option) 的 model 选项提交 modelId；使用 [`getConversationConfig`](/api-reference/configuration/get) 核对期望配置、实际应用状态及错误。
+
+群聊成员通过 [`updateMember`](/api-reference/members/update) 设置 modelId，并按[成员配置](/domain-model/04-member-config)核对生效状态。
+
+## 使用边界
+
+模型目录使用当前授权范围内的 runtimeId 与 agentId；会话使用 conversationId，成员使用 memberId。模型 ID 使用目录的实际返回值，不从展示名称推断。目录可用性不替代后续请求的权限和执行结果。
+
+CLI 的 models list 查询同一 Agent 模型能力。本 SDK 不再提供独立 ModelManager、云模型模板、价格或旧 Channel Session 模型配置查询。

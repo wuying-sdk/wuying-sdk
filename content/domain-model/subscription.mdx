@@ -1,0 +1,19 @@
+---
+title: "订阅数据变化"
+description: "统一使用 subscribe 建立订阅，用 Subscription 取消订阅。"
+---
+
+import DemoMessages from '/snippets/demo-messages.mdx';
+
+
+使用 `subscribe*` 订阅数据或执行状态的后续变化。方法返回 `Subscription`，页面退出时调用 `unsubscribe()`。订阅不会自动取消远端任务。
+
+<DemoMessages />
+
+`SubscriptionListener<T>` 描述回调：消息、会话等数据订阅通过 `onSnapshot` 交付当前数据与同步状态，失败通过 `onError` 交付错误。`subscribe` 说明建立订阅，`onSnapshot` 说明收到的数据形态，两者并不冲突。
+
+远程脚本的订阅使用 `RuntimeCommandListener.onEvent`，因为它交付受理、桌面结果与完成等执行事件。入口统一为 `subscribeCommand`，CLI 对应 `runtimes subscribe-command`。
+
+每次数据回调按稳定 ID 替换或对账，避免把整份消息列表重复追加。先订阅再发送任务，所有退出路径都释放自己创建的句柄；应用最后关闭 Client。
+
+公开模型统一使用 `Runtime`、`Agent`、`Model`、`Group`。技能的 `skillSummary` 字段表示简介文本。

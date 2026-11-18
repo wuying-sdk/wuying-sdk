@@ -1,0 +1,206 @@
+{
+  "specific_blocks": [
+    {
+      "path": "domain-model/remote-script.mdx",
+      "sha256": "f4d0079c9436038ae6998a003ca81dae662786b66b3ea11ed9e52e686341d5d3",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "getting-started/port-service.mdx",
+      "sha256": "5da984d2809ee27a81c1e785301e3d0188b4ccba80cda049e3a7330ce2a8812d",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "getting-started/remote-script.mdx",
+      "sha256": "1ba87d62a7867b41964017a9fd650c36d58c7e58320d207c571901f0deb7f69f",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "guides/asp-desktop.mdx",
+      "sha256": "2d0ddfd7f1478319a85eb0a68630329f15198b8d6ab5fea183a301aa833b097c",
+      "reason": "CLI 私有管道协议说明；宿主需真实创建 fd 3，不是多语言 SDK 方法。"
+    },
+    {
+      "path": "guides/cli-skills.mdx",
+      "sha256": "1badb8c6ed093ea7b73a07d979bc6a246c6f26216ced238c13a9b3061aa51dee",
+      "reason": "CLI Skill/指定宿主插件安装命令；任务示例本身使用通用 SDK 卡片。"
+    },
+    {
+      "path": "guides/cli-skills.mdx",
+      "sha256": "f82c6aca5054781643a93374d735f120700419c93061dddb11f4df1af4bf283a",
+      "reason": "CLI Skill/指定宿主插件安装命令；任务示例本身使用通用 SDK 卡片。"
+    },
+    {
+      "path": "guides/cli-skills.mdx",
+      "sha256": "0809983c8d53992c7cab052c0b5711455f0c4c823012ea45a13ffc3cbb521ac3",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "guides/cli-skills.mdx",
+      "sha256": "16f499d0491f193ea7cafd8e53cab2858b6aa0c497e5c43475f91171c7831b7e",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "guides/deepseek-harness.mdx",
+      "sha256": "f94b87922133a40c272b9e92589a7ad1e4e368b69fd5df7468c5ff9a558e4de2",
+      "reason": "CLI Skill/指定宿主插件安装命令；任务示例本身使用通用 SDK 卡片。"
+    },
+    {
+      "path": "guides/deepseek-harness.mdx",
+      "sha256": "12727716b18a09b36b623e389e0b67015b0725820e6ea623404dd38aa8c0491e",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "guides/deepseek-harness.mdx",
+      "sha256": "06ee314a51d7ae43256876dfc71aba34ea97ce4a88479e0204c846d4e897e8a2",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    },
+    {
+      "path": "sdk-reference/android.mdx",
+      "sha256": "83f0abf55ea7f90a72fe9c5902ff5a4d89291c96527f1d88d6eba4d5e5836a5e",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/android.mdx",
+      "sha256": "2873a1a53e4efc84c2655f826984e64dad7b5d8f613e017b759a95b8290cc8b0",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/android.mdx",
+      "sha256": "824a8e58cc30bea4c6921743e17309e320cfff7ae10cfe3567eabed412baac32",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/cli.mdx",
+      "sha256": "789640c0f375b475f7d490f200116bab79d512dabe07a638728dcd00c31ad5f0",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/cli.mdx",
+      "sha256": "fe04a618186075f59611cdd6d652a81d4fbb6d348296b143b71b0d8edc6fb852",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/cli.mdx",
+      "sha256": "65d864140af7439b2f06cefcc678bb89bd4ed2b8306e78bef30eca45e570beb5",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/go.mdx",
+      "sha256": "9948538fa270890ff05d48329a5714b27291f5db4d80662fa9157cde7951793c",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/go.mdx",
+      "sha256": "273e3694d4774a32030b1e8a376a6f51eb6c5f64c1a21196b5d256dafbcff3fe",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/ios.mdx",
+      "sha256": "741d328b5e2b00c0816f30aedaaf47a7cb1f48165e7d70c07d91bf40f5b54df8",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/ios.mdx",
+      "sha256": "3a56a3cfffd9dfa583c43278589d87228170a90ff05f8289367a6b30451a98f8",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/java.mdx",
+      "sha256": "c3bf3341a8aa6ac0d505a77c95e03b595d9165c678d7b06d76c5e3af683b5456",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/java.mdx",
+      "sha256": "71db115b671b41ba176fa1ad96bdfd0a8f59d4095e37f97aa37db14a00a40ad5",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/java.mdx",
+      "sha256": "6c095bbe151fe363cfab62dab9130bb15e341285ff73abf26ff8558f5c272ebb",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/java.mdx",
+      "sha256": "c2c076d6a985c48bf9ee74f96c997348be2ea2ced7fcb997f7da146a715d6ae5",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/js.mdx",
+      "sha256": "2fe6df9836c20d68fac7381ad6d522cd9ea65ea9ae2a828a3f8e76a0de84cf3b",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/js.mdx",
+      "sha256": "319c9a5d71e8c35552978e00d7f2023363aa83c559d0b7aa9457e97a9859314e",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/js.mdx",
+      "sha256": "7afad223fada9eb5cd2f58c5e48e82b0bb7dbd877fb34df4c18733a3455c3177",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "sdk-reference/js.mdx",
+      "sha256": "3c1b3438679903c6ab8ad9140ee9f0bd6366b16780fc6166cb7782a655ef5acc",
+      "reason": "该语言安装、运行环境、原生类型与生命周期专页；其他语言入口由 SDK 下拉导航提供。"
+    },
+    {
+      "path": "snippets/cli-administration.mdx",
+      "sha256": "edc1392ca9e894d1491eb28effb635094da1f0c66dd45fb5d5cc1715a6ba7640",
+      "reason": "请求/响应 JSON、自然语言任务或宿主配置片段，不是 SDK 语言调用。"
+    }
+  ],
+  "language_reference_pages": [
+    {
+      "path": "reference/android/client.mdx",
+      "sha256": "4682d03d591871281148bc5a587df41487ec0b082cf5bf9170117a13fb778d48",
+      "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
+    },
+    {
+      "path": "reference/cli/commands.mdx",
+      "sha256": "cf2b82e3090ab8007ad305cbec4131f32113652a924203e3799a4567451cc5b1",
+      "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
+    },
+    {
+      "path": "reference/go/api.mdx",
+      "sha256": "6921171ad2d44e8ab8a7d4c0b658a15b6efc2e8176e37c582692ce8ac6a7483b",
+      "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
+    },
+    {
+      "path": "reference/ios/client.mdx",
+      "sha256": "7c10d31f17b91892ac8d966c0a0f95c6ddcf5b624b05dcc49e350af45fdb286a",
+      "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
+    },
+    {
+      "path": "reference/java/api.mdx",
+      "sha256": "a6ad3edb6e6dfebd15f0351d0eea21eee6c2fbb8b8b97e8088b61028e5d6e3bc",
+      "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
+    },
+    {
+      "path": "reference/js/api.mdx",
+      "sha256": "2403d23aef3ca8c61d53eb78a277115f64b00d4ffd6b4b5c4dddf3ae4a59acb6",
+      "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
+    },
+    {
+      "path": "reference/js/types.mdx",
+      "sha256": "c9e603907de81c8cc6bcd0622623972cf6ea8ceec1b2cce0a2771126d0449099",
+      "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
+    },
+    {
+      "path": "reference/mobile/contract.mdx",
+      "sha256": "0e23fc15517b08496224055c1e1a4070d6678decf911e911d7c86a4c956b4b38",
+      "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
+    },
+    {
+      "path": "api-reference/client/close.mdx",
+      "sha256": "e246f23760dbbd7a8e10e00fb9ce2f212276792e68098484d6081a1c13b45f96",
+      "reason": "手工维护的接口索引/初始化契约说明；按各自真实公开签名列参数，通用任务代码见快速开始。"
+    },
+    {
+      "path": "api-reference/client/create.mdx",
+      "sha256": "6d2b4de2e691915d2e1f1e7a654d786794473307d89295a26e444071009ee8c7",
+      "reason": "手工维护的接口索引/初始化契约说明；按各自真实公开签名列参数，通用任务代码见快速开始。"
+    }
+  ]
+}
