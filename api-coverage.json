@@ -1,37 +1,37 @@
 {
   "sdk_source_state": {
     "kind": "uncommitted-runtime-manager-draft",
-    "base_commit": "05bd99ec05afb4550ea96708c3b01970ae004d03",
-    "compatibility": "First public version: public subscriptions use subscribe*, SubscriptionListener and Subscription without observe* or Observer aliases; Agent/Model/Group replace Summary-suffixed models. Legacy cloud Agent is internal. getConversation accepts cache/refresh read options; getConversationSummary is not public. Unified list pagination retained. Native JSON contracts require rebuilding artifacts. Default desktop creation accepts omitted resource fields, using cn-shanghai, the cloud-owned default office network and an available 4c8g Windows Server 2025 ASP system template. Explicit templates and existing wait semantics are preserved. Customer first-release boundary: POP CloudClient/AuthApi and IM Admin packages are internal; root getIMCredentials/refreshLogin and ConversationManager IM administration are not customer methods. Existing wire protocols, AK/SK desktop operations, internal authentication refresh and CLI preflight remain unchanged. Customer transport boundary: raw Transport facades, root raw stream subscription and conversation group-directory/sync methods are internal only. Native registries omit the removed methods; no compatibility aliases. Existing wire protocols and the Gateway pinned vendor source are unchanged. Cold conversation reads, subscriptions and sends activate through the existing internal synchronization owner. Verified warm/offline cache reads and independent history contracts are preserved. Raw transport callbacks and ClientConfig assembly exports are not customer APIs. Standalone Java transport client/store facades are test support only. Old Channel Group model writes are removed across Node, Go, Java and mobile without compatibility aliases. SetChannelGroupModel request/result types and dead routing/transport implementation are removed. New Conversation/Member model selection contracts remain unchanged. Unimplemented generic resource catalog and conversation resource selection design is removed, including five methods, Resource/ResourceSelection/ResourceQuery/ResourceRequest DTOs, resourceQuery/resources capabilities and mobile constants. No compatibility aliases. Existing attachment/workspace/Skill/MCP/storage/cloud-resource operations remain under their existing owners. Legacy getAgentInstanceModelConfig cloud reads, their dedicated DTOs, empty ModelManager/buildModelManager and native model method are removed without compatibility aliases. Unified Model/AgentModelCatalog, Agent model catalog queries and Conversation/Member model configuration are retained. Duplicate getMutation/subscribeMutation APIs and MutationRef/MutationStatus DTOs are removed. Existing saved MutationOptions.mutationId is queried as CommandReceiptRef.clientCommandId through getCommandReceipt/subscribeCommandReceipt. Persisted identities, authorization isolation, recovery and no-replay behavior remain unchanged; question response receipts retain specialized identity validation. No compatibility aliases. Derived listAgentProducts/ListAgentProducts and agent.listAgentProducts native method are removed without aliases, together with dedicated ProductCatalog/ProductPage and Go/Java Product DTOs. listAgents/ListAgents and existing internal Agent presentation metadata remain unchanged. Cloud file attachments use one attachCloudFile/AttachCloudFile API, AttachCloudFileRequest with stable UUID clientCommandId and nested CloudFileRef, returning Attachment without internal receipt fields. Old attachImGroupFile/getImGroupAttachmentOperation and IM wire DTOs are internal only; mobile constants updated without aliases. Original Gateway RPC fields, operationId mapping, persisted receipt/idempotency owner and authorization remain unchanged. Explicit same-request recovery reuses the original Gateway import; no SDK retry loop, upload or message replay. getConversationStorageContext/GetConversationStorageContext is removed from public manager methods and mobile registries without aliases. Existing internal SDK storage-context reads/decoders and Gateway RPC/auth/binding behavior remain unchanged. Shared ConversationStorageContext is retained for the remaining public ConversationAttachmentTarget inheritance. Attachment staging, attachCloudFile and target preparation are unchanged. First public version splits ResourceManager into AttachmentManager (9 attachment/draft methods) and WorkspaceManager (2 workspace methods). Client factories and native attachment/workspace namespaces reflect those owners with no aliases. Method parameter/result DTOs, Gateway methods, authorization, persistence identities, paging and lifecycle semantics are preserved.",
+    "base_commit": "b9b83c444a9663ed0d41551932af9661f6615e4f",
+    "compatibility": "First public version: public subscriptions use subscribe*, SubscriptionListener and Subscription without observe* or Observer aliases; Agent/Model/Group replace Summary-suffixed models. Legacy cloud Agent is internal. getConversation accepts cache/refresh read options; getConversationSummary is not public. Unified list pagination retained. Native JSON contracts require rebuilding artifacts. Default desktop creation accepts omitted resource fields, using cn-shanghai, the cloud-owned default office network and an available 4c8g Windows Server 2025 ASP system template. Explicit templates and existing wait semantics are preserved. Customer first-release boundary: POP CloudClient/AuthApi and IM Admin packages are internal; root getIMCredentials/refreshLogin and ConversationManager IM administration are not customer methods. Existing wire protocols, AK/SK desktop operations, internal authentication refresh and CLI preflight remain unchanged. Customer transport boundary: raw Transport facades, root raw stream subscription and conversation group-directory/sync methods are internal only. Native registries omit the removed methods; no compatibility aliases. Existing wire protocols and the Gateway pinned vendor source are unchanged. Cold conversation reads, subscriptions and sends activate through the existing internal synchronization owner. Verified warm/offline cache reads and independent history contracts are preserved. Raw transport callbacks and ClientConfig assembly exports are not customer APIs. Standalone Java transport client/store facades are test support only. Old Channel Group model writes are removed across Node, Go, Java and mobile without compatibility aliases. SetChannelGroupModel request/result types and dead routing/transport implementation are removed. New Conversation/Member model selection contracts remain unchanged. Unimplemented generic resource catalog and conversation resource selection design is removed, including five methods, Resource/ResourceSelection/ResourceQuery/ResourceRequest DTOs, resourceQuery/resources capabilities and mobile constants. No compatibility aliases. Existing attachment/workspace/Skill/MCP/storage/cloud-resource operations remain under their existing owners. Legacy getAgentInstanceModelConfig cloud reads, their dedicated DTOs, empty ModelManager/buildModelManager and native model method are removed without compatibility aliases. Unified Model/AgentModelCatalog, Agent model catalog queries and Conversation/Member model configuration are retained. Duplicate getMutation/subscribeMutation APIs and MutationRef/MutationStatus DTOs are removed. Existing saved MutationOptions.mutationId is queried as CommandReceiptRef.clientCommandId through getCommandReceipt/subscribeCommandReceipt. Persisted identities, authorization isolation, recovery and no-replay behavior remain unchanged; question response receipts retain specialized identity validation. No compatibility aliases. Derived listAgentProducts/ListAgentProducts and agent.listAgentProducts native method are removed without aliases, together with dedicated ProductCatalog/ProductPage and Go/Java Product DTOs. listAgents/ListAgents and existing internal Agent presentation metadata remain unchanged. Cloud file attachments use one attachCloudFile/AttachCloudFile API, AttachCloudFileRequest with stable UUID clientCommandId and nested CloudFileRef, returning Attachment without internal receipt fields. Old attachImGroupFile/getImGroupAttachmentOperation and IM wire DTOs are internal only; mobile constants updated without aliases. Original Gateway RPC fields, operationId mapping, persisted receipt/idempotency owner and authorization remain unchanged. Explicit same-request recovery reuses the original Gateway import; no SDK retry loop, upload or message replay. getConversationStorageContext/GetConversationStorageContext is removed from public manager methods and mobile registries without aliases. Existing internal SDK storage-context reads/decoders and Gateway RPC/auth/binding behavior remain unchanged. Shared ConversationStorageContext is retained for the remaining public ConversationAttachmentTarget inheritance. Attachment staging, attachCloudFile and target preparation are unchanged. First public version splits ResourceManager into AttachmentManager (9 attachment/draft methods) and WorkspaceManager (2 workspace methods). Client factories and native attachment/workspace namespaces reflect those owners with no aliases. Method parameter/result DTOs, Gateway methods, authorization, persistence identities, paging and lifecycle semantics are preserved. 2026-11-19: remove unused RuntimeManager.updateAgentInstance, its request DTO, internal SDK adapters and native method; no alias. Remote service APIs, persistence, authorization and retained Runtime operations remain unchanged.",
     "publication": "Contract source inputs only; no SDK release implied.",
-    "provenance_sha256": "997a7ca3401ce07a18342d9a19b24882b80ea753e6650fce0479383c7efb4c6d"
+    "provenance_sha256": "9545d0551607639b412c967b203077d9b523308ea2ed92ce5098e274772d909a"
   },
-  "sdk_source_commit": "05bd99ec05afb4550ea96708c3b01970ae004d03",
-  "source_archive_sha256": "d5f9512e6904053074cc06d4a40e5187163f6bd58d1392e7b39b375c937b56ed",
-  "operations": 144,
+  "sdk_source_commit": "b9b83c444a9663ed0d41551932af9661f6615e4f",
+  "source_archive_sha256": "0a1beec4113b5a27e70d6e0f40d441451b0badc2ac6582521eae6bf0c72a47d7",
+  "operations": 143,
   "languages": {
     "js": {
-      "public_entries": 305,
-      "public_signatures": 305,
-      "represented_entries": 305,
-      "model_entries": 222,
+      "public_entries": 303,
+      "public_signatures": 303,
+      "represented_entries": 303,
+      "model_entries": 220,
       "auxiliary_entries": 83,
       "missing": []
     },
     "go": {
-      "public_entries": 198,
-      "public_signatures": 198,
-      "represented_entries": 198,
-      "model_entries": 126,
+      "public_entries": 197,
+      "public_signatures": 197,
+      "represented_entries": 197,
+      "model_entries": 125,
       "auxiliary_entries": 72,
       "missing": []
     },
     "java": {
-      "public_entries": 536,
-      "public_signatures": 577,
-      "represented_entries": 536,
-      "model_entries": 124,
-      "auxiliary_entries": 412,
+      "public_entries": 534,
+      "public_signatures": 575,
+      "represented_entries": 534,
+      "model_entries": 123,
+      "auxiliary_entries": 411,
       "missing": []
     },
     "cli": {
@@ -45,8 +45,8 @@
   },
   "mobile_bindings": {
     "android": {
-      "method_constants": 95,
-      "documented_methods": 95,
+      "method_constants": 94,
+      "documented_methods": 94,
       "missing": [],
       "bindings": [
         {
@@ -738,14 +738,6 @@
           "unsupported": false
         },
         {
-          "method": "runtime.updateAgentInstance",
-          "constant": "Methods.runtimeUpdateAgentInstance",
-          "mode": "call",
-          "document": "reference/android/models/runtime#updateagentinstance",
-          "model_document": "api-reference/runtimes/update-agent-instance",
-          "unsupported": false
-        },
-        {
           "method": "skill.entInstallSkills",
           "constant": "Methods.skillEntInstallSkills",
           "mode": "call",
@@ -812,8 +804,8 @@
       ]
     },
     "ios": {
-      "method_constants": 95,
-      "documented_methods": 95,
+      "method_constants": 94,
+      "documented_methods": 94,
       "missing": [],
       "bindings": [
         {
@@ -1502,14 +1494,6 @@
           "mode": "subscribe",
           "document": "reference/ios/models/runtime#subscriberuntimes",
           "model_document": "api-reference/runtimes/subscribe",
-          "unsupported": false
-        },
-        {
-          "method": "runtime.updateAgentInstance",
-          "constant": "Methods.runtimeUpdateAgentInstance",
-          "mode": "call",
-          "document": "reference/ios/models/runtime#updateagentinstance",
-          "model_document": "api-reference/runtimes/update-agent-instance",
           "unsupported": false
         },
         {
@@ -3717,18 +3701,6 @@
       "document": "api-reference/runtimes/describe-credit-usage-info"
     },
     {
-      "id": "js:RuntimeManager.updateAgentInstance:instance",
-      "language": "js",
-      "owner": "RuntimeManager",
-      "name": "updateAgentInstance",
-      "signatures": [
-        "updateAgentInstance(ctx: ExecutionContext, req: UpdateAgentInstanceRequest, ...opts: CallOption[]): Promise<void>;"
-      ],
-      "role": "auxiliary",
-      "deprecated": false,
-      "document": "api-reference/runtimes/update-agent-instance"
-    },
-    {
       "id": "js:RuntimeManager.approveFotaUpdate:instance",
       "language": "js",
       "owner": "RuntimeManager",
@@ -4087,18 +4059,6 @@
       "role": "operation",
       "deprecated": false,
       "document": "api-reference/runtimes/describe-credit-usage-info"
-    },
-    {
-      "id": "js:RuntimeManager.updateAgentInstance:factorybuildRuntimeManager",
-      "language": "js",
-      "owner": "RuntimeManager",
-      "name": "updateAgentInstance",
-      "signatures": [
-        "updateAgentInstance(ctx: ExecutionContext, req: UpdateAgentInstanceRequest, ...opts: CallOption[]): Promise<void>;"
-      ],
-      "role": "operation",
-      "deprecated": false,
-      "document": "api-reference/runtimes/update-agent-instance"
     },
     {
       "id": "js:RuntimeManager.approveFotaUpdate:factorybuildRuntimeManager",
@@ -6895,18 +6855,6 @@
       "role": "operation",
       "deprecated": false,
       "document": "api-reference/runtimes/subscribe"
-    },
-    {
-      "id": "go:github.com/aliyun/wuying-sdk-go/manager.RuntimeManager.UpdateAgentInstance",
-      "language": "go",
-      "owner": "github.com/aliyun/wuying-sdk-go/manager.RuntimeManager",
-      "name": "UpdateAgentInstance",
-      "signatures": [
-        "func (receiver *RuntimeManager) UpdateAgentInstance(ctx context.Context, req *UpdateAgentInstanceRequest, opts ...CallOption) error"
-      ],
-      "role": "operation",
-      "deprecated": false,
-      "document": "api-reference/runtimes/update-agent-instance"
     },
     {
       "id": "go:github.com/aliyun/wuying-sdk-go/manager.SkillManager.EntInstallSkills",
@@ -10276,18 +10224,6 @@
       "role": "auxiliary",
       "deprecated": false,
       "document": "reference/java/public#entry-815f010c900075f2"
-    },
-    {
-      "id": "java:com.aliyun.wuying.sdk.manager.RuntimeManager.updateAgentInstance",
-      "language": "java",
-      "owner": "com.aliyun.wuying.sdk.manager.RuntimeManager",
-      "name": "updateAgentInstance",
-      "signatures": [
-        "public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest, com.aliyun.wuying.sdk.CallContext);"
-      ],
-      "role": "operation",
-      "deprecated": false,
-      "document": "api-reference/runtimes/update-agent-instance"
     },
     {
       "id": "java:com.aliyun.wuying.sdk.manager.RuntimeManager.describeCreditPackageAgents",
@@ -13956,18 +13892,6 @@
       "role": "auxiliary",
       "deprecated": false,
       "document": "reference/java/public#entry-cc2034968c108fca"
-    },
-    {
-      "id": "java:com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest.constructor",
-      "language": "java",
-      "owner": "com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest",
-      "name": "constructor",
-      "signatures": [
-        "public com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest();"
-      ],
-      "role": "auxiliary",
-      "deprecated": false,
-      "document": "reference/java/public#entry-090c2cb33080c0ee"
     },
     {
       "id": "java:com.aliyun.wuying.sdk.model.WaitDesktopsRequest.constructor",

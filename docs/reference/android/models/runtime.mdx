@@ -111,18 +111,3 @@ func(ctx context.Context, o model.SubscriptionListener[[]model.Runtime]) (model.
 
 [模型操作、完整参数与能力边界](/api-reference/runtimes/subscribe) · [Go DTO 参考](/reference/go/api)
 
-<a id="updateagentinstance" />
-
-## Methods.runtimeUpdateAgentInstance
-
-`Methods.runtimeUpdateAgentInstance` → `runtime.updateAgentInstance`
-
-**模式：** `call`。**请求类型：** `*manager.UpdateAgentInstanceRequest`。**MutationOptions：** 不支持；省略 `mutationId`。
-
-```go
-*RuntimeManager.UpdateAgentInstance
-func(ctx context.Context, req *UpdateAgentInstanceRequest, opts ...CallOption) error
-```
-
-[模型操作、完整参数与能力边界](/api-reference/runtimes/update-agent-instance) · [Go DTO 参考](/reference/go/api)
-

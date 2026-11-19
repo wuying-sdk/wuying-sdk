@@ -164,7 +164,7 @@
     },
     {
       "path": "reference/go/api.mdx",
-      "sha256": "6921171ad2d44e8ab8a7d4c0b658a15b6efc2e8176e37c582692ce8ac6a7483b",
+      "sha256": "52faffdcf882644c5a8a3277d03cf54e31f8e1edc0a7c054c58bf42dd3ad800e",
       "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
     },
     {
@@ -174,7 +174,7 @@
     },
     {
       "path": "reference/java/api.mdx",
-      "sha256": "a6ad3edb6e6dfebd15f0351d0eea21eee6c2fbb8b8b97e8088b61028e5d6e3bc",
+      "sha256": "9a42b46f960158740cc873e17bb7785d6f0522d70581fbf893ef00f09ef20b03",
       "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
     },
     {
@@ -189,7 +189,7 @@
     },
     {
       "path": "reference/mobile/contract.mdx",
-      "sha256": "0e23fc15517b08496224055c1e1a4070d6678decf911e911d7c86a4c956b4b38",
+      "sha256": "daebc0f909c62efdaf13f7e9fcf132337b979e9100af74fa41065a27d7aacde5",
       "reason": "按语言保存的原始完整集成参考，包含同语言业务示例、配置或协议；跨语言通用任务使用快速开始与代码示例页。"
     },
     {

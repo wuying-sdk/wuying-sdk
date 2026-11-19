@@ -22,7 +22,7 @@
 python3 scripts/import-reference.py \
   --reference-docs /absolute/path/to/runtime-manager-inputs/docs \
   --draft-archive /absolute/path/to/runtime-manager-contract-inputs.zip \
-  --sdk-source-commit 05bd99ec05afb4550ea96708c3b01970ae004d03
+  --sdk-source-commit b9b83c444a9663ed0d41551932af9661f6615e4f
 ```
 
 导入器投影选定的对客文档、14 个示例文本、一个公开类型声明，以及客户明确要求的两项 Skill 指令和下载包。它不提取四种 SDK 源码树、完整 Shell demo、构建产物、授权材料、审查报告或历史诊断记录。HTML 示例以 `.txt` 文本提供，不在站点执行。其链接是阅读入口，实际编译运行仍依赖完整语言交付包。

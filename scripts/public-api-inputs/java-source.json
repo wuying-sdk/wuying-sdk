@@ -22,8 +22,8 @@
       "name": "adminIm"
     }
   ],
-  "source_archive_sha256": "d5f9512e6904053074cc06d4a40e5187163f6bd58d1392e7b39b375c937b56ed",
-  "sdk_source_commit": "05bd99ec05afb4550ea96708c3b01970ae004d03",
+  "source_archive_sha256": "0a1beec4113b5a27e70d6e0f40d441451b0badc2ac6582521eae6bf0c72a47d7",
+  "sdk_source_commit": "b9b83c444a9663ed0d41551932af9661f6615e4f",
   "input_sha256": {
     "src/main/java/com/aliyun/wuying/sdk/Administration.java": "18dd5f78422383605bf82fe1892bcc5082fea4171121751fed10354acd408c08",
     "src/main/java/com/aliyun/wuying/sdk/AuthCodeCredential.java": "c136d52621d690c97d6aa816f75231b0d43d50d8a416c665c039939b22b5f045",
@@ -157,7 +157,7 @@
     "src/main/java/com/aliyun/wuying/sdk/manager/CreditManager.java": "0a55b93a0956581746a6384b44f161335df0db3244bd9f9da703903189b842e9",
     "src/main/java/com/aliyun/wuying/sdk/manager/KnowledgeFilesPageRequest.java": "e1f99e2fbdc38746e91a989c283907b6d1ff5bb567816e51c6e8cada0f12bd50",
     "src/main/java/com/aliyun/wuying/sdk/manager/ListPagination.java": "0095917e9a86bd2ec95a1a287c4bfd66f5fbb3a783b20d1edf5985b8edad87fa",
-    "src/main/java/com/aliyun/wuying/sdk/manager/RuntimeManager.java": "4d62193f9e42ea608c970cfdd641a7bf383fcdbfaa8db772e6243a38724f6264",
+    "src/main/java/com/aliyun/wuying/sdk/manager/RuntimeManager.java": "9a6af9ad594ab7310907191be4eb89df6aa182e8348c01a18d91d76cf70998f1",
     "src/main/java/com/aliyun/wuying/sdk/manager/SkillManager.java": "ce4d801cdbadd34e3509026eaa1beb459cc02b0158906dd8234f0f5b361782a4",
     "src/main/java/com/aliyun/wuying/sdk/manager/WorkspaceManager.java": "183a009dd3c9ebd4fc12028558435cbb5775e2907ff695499756399786e00d2d",
     "src/main/java/com/aliyun/wuying/sdk/manager/WyDriveFilesPageRequest.java": "3406b2de70c11fb9bd9a2a47746193e1edfa5bb2d6bf55bb897b6ef28e7b5d10",
@@ -400,7 +400,6 @@
     "src/main/java/com/aliyun/wuying/sdk/model/Turn.java": "6db562d483ab53e208c8ec9b18f64fb4580a114d78030e585ef01ffc1c82e0bc",
     "src/main/java/com/aliyun/wuying/sdk/model/TurnRef.java": "ea83cfbab55b803d0a43e7cd95357a9c2a61eee8c3ba8c2c60f4ab1a0e711502",
     "src/main/java/com/aliyun/wuying/sdk/model/UninstallSkillInfo.java": "d4ed063aa053de02473599971faa90681ac62b3f372d9b30895284188ba91ce0",
-    "src/main/java/com/aliyun/wuying/sdk/model/UpdateAgentInstanceRequest.java": "3a1ca4f62ddc7e1bd650d3b0fdd8858f02ea28f8e3c1372ecf07a962803c772d",
     "src/main/java/com/aliyun/wuying/sdk/model/WaitDesktopsRequest.java": "138479c76e11e8f8d61de3aabd33410e66037e4c57fcb0aedca2785fd7ae8b86",
     "src/main/java/com/aliyun/wuying/sdk/model/WaitDesktopsResponse.java": "d48aa4aa4d0947b81fef044918f07d39217bd07db8e84758ca933af11b059b13",
     "src/main/java/com/aliyun/wuying/sdk/model/Workspace.java": "84d9da31988705000ab98901937a99cca14deaa9b177e6084d8abcf00de0741d",

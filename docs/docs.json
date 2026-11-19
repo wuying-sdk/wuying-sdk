@@ -488,8 +488,7 @@
                   "api-reference/runtimes/approve-fota-update",
                   "api-reference/runtimes/capabilities",
                   "api-reference/runtimes/list",
-                  "api-reference/runtimes/subscribe",
-                  "api-reference/runtimes/update-agent-instance"
+                  "api-reference/runtimes/subscribe"
                 ]
               },
               {

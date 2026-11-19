@@ -5,7 +5,7 @@ description: "同版本 Java SDK jar 的公开签名；参数说明另见随包�
 
 <Note>本页按所选语言保留原始完整参考，可能包含该语言的业务示例。跨语言操作请使用[快速开始](/getting-started/desktop-to-agent)和[代码示例](/examples/index)中的语言卡片。</Note>
 
-基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿；按客户合同排除 internal 及 @hidden 装配签名。
+基础提交 b9b83c444a9663ed0d41551932af9661f6615e4f 加首版对外边界草稿；按客户合同排除 internal 及 @hidden 装配签名。
 
 ```java
 Compiled from "Administration.java"
@@ -401,7 +401,6 @@ final class com.aliyun.wuying.sdk.manager.ListPagination$Numbered<T> {
 }
 Compiled from "RuntimeManager.java"
 public final class com.aliyun.wuying.sdk.manager.RuntimeManager extends com.aliyun.wuying.sdk.manager.BaseManager {
-  public java.util.concurrent.CompletionStage<java.lang.Void> updateAgentInstance(com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.Page<com.aliyun.wuying.sdk.model.CreditPackageAgent>> describeCreditPackageAgents(com.aliyun.wuying.sdk.model.DescribeCreditPackageAgentsRequest, com.aliyun.wuying.sdk.model.ListOptions, com.aliyun.wuying.sdk.CallContext);
   public java.util.concurrent.CompletionStage<com.aliyun.wuying.sdk.model.CreditUsageInfo> describeCreditUsageInfo(com.aliyun.wuying.sdk.model.DescribeCreditUsageInfoRequest, com.aliyun.wuying.sdk.CallContext);
@@ -2614,16 +2613,6 @@ public class com.aliyun.wuying.sdk.model.UninstallSkillInfo {
   public java.lang.String skillId;
   public java.lang.String skillName;
   public com.aliyun.wuying.sdk.model.UninstallSkillInfo();
-}
-Compiled from "UpdateAgentInstanceRequest.java"
-public class com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest {
-  public java.lang.String agentInstanceId;
-  public java.lang.String agentInstanceName;
-  public java.lang.String avatarUrl;
-  public java.lang.String description;
-  public java.lang.String simplePersonaType;
-  public java.lang.String simpleModelType;
-  public com.aliyun.wuying.sdk.model.UpdateAgentInstanceRequest();
 }
 Compiled from "WaitDesktopsRequest.java"
 public final class com.aliyun.wuying.sdk.model.WaitDesktopsRequest {

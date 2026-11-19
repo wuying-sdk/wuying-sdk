@@ -1,7 +1,7 @@
 {
   "language": "cli",
-  "source_archive_sha256": "d5f9512e6904053074cc06d4a40e5187163f6bd58d1392e7b39b375c937b56ed",
-  "sdk_source_commit": "05bd99ec05afb4550ea96708c3b01970ae004d03",
+  "source_archive_sha256": "0a1beec4113b5a27e70d6e0f40d441451b0badc2ac6582521eae6bf0c72a47d7",
+  "sdk_source_commit": "b9b83c444a9663ed0d41551932af9661f6615e4f",
   "source_sha256": "9015db9b9f1598606ae145f52f105fa8d4f098c221a444ac0868561fcafbec0f",
   "input_sha256": {
     "main.mjs": "9015db9b9f1598606ae145f52f105fa8d4f098c221a444ac0868561fcafbec0f",

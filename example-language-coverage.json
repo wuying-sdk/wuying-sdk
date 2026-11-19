@@ -1143,10 +1143,6 @@
       "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
     },
     {
-      "path": "api-reference/runtimes/update-agent-instance.mdx",
-      "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
-    },
-    {
       "path": "api-reference/skills/ent-install-skills.mdx",
       "purpose": "按同版本真实语言签名、类型、接口结构及授权生成；由 API 覆盖检查核验。"
     },

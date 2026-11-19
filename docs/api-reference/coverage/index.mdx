@@ -4,13 +4,13 @@ sidebarTitle: "Coverage"
 description: "核对公开入口、语言差异与覆盖范围，避免把声明数量等同于运行能力。"
 ---
 
-本次是 **RuntimeManager 首版未提交草稿**，基础提交为 `05bd99ec05afb4550ea96708c3b01970ae004d03`；完整输入以源码归档 SHA-256 `d5f9512e6904053074cc06d4a40e5187163f6bd58d1392e7b39b375c937b56ed` 标识，不能据基础 SHA 使用旧制品。
+本次是 **RuntimeManager 首版未提交草稿**，基础提交为 `b9b83c444a9663ed0d41551932af9661f6615e4f`；完整输入以源码归档 SHA-256 `0a1beec4113b5a27e70d6e0f40d441451b0badc2ac6582521eae6bf0c72a47d7` 标识，不能据基础 SHA 使用旧制品。
 
 | 语言 | 公开入口/成员条目 | 签名数（含重载） | 未文档化 |
 |---|---:|---:|---:|
-| [JavaScript / TypeScript](/reference/js/public) | 305 | 305 | 0 |
-| [Go](/reference/go/public) | 198 | 198 | 0 |
-| [Java](/reference/java/public) | 536 | 577 | 0 |
+| [JavaScript / TypeScript](/reference/js/public) | 303 | 303 | 0 |
+| [Go](/reference/go/public) | 197 | 197 | 0 |
+| [Java](/reference/java/public) | 534 | 575 | 0 |
 | [CLI](/reference/cli/public) | 44 | 44 | 0 |
 
 每个条目都有模型操作页或完整语言清单落点。覆盖声明不代表所有环境都具备运行能力；已知不支持和废弃分别标注，未实际执行的 API 不宣称在线验收。
@@ -28,6 +28,6 @@ description: "核对公开入口、语言差异与覆盖范围，避免把声明
 
 ## Android 与 iOS 移动绑定
 
-两端各有 **95 个方法常量**，经统一 Client.request 调用，来自同一哈希校验的草稿归档内 Go mobile 清单；不与上表的构造、DTO、重载成员数量相加。全部方法映射到模型操作，公开包装接口另列。当前原生目录也来自本次草稿输入归档；AAR/XCFramework 仍需重新构建，来源与制品验证限制见[移动合同](/reference/mobile/contract)。
+两端各有 **94 个方法常量**，经统一 Client.request 调用，来自同一哈希校验的草稿归档内 Go mobile 清单；不与上表的构造、DTO、重载成员数量相加。全部方法映射到模型操作，公开包装接口另列。当前原生目录也来自本次草稿输入归档；AAR/XCFramework 仍需重新构建，来源与制品验证限制见[移动合同](/reference/mobile/contract)。
 
 [Android 完整目录](/reference/android/public) · [iOS 完整目录](/reference/ios/public)

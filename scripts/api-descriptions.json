@@ -17,7 +17,6 @@
   "runtimemanager.subscriberuntimes": "订阅授权 Runtime 目录及后续变化，供应用持续更新环境列表。",
   "runtimemanager.gethostcapabilities": "读取指定 Runtime 的宿主能力，供应用判断可以展示和执行哪些操作。",
   "runtimemanager.describecreditusageinfo": "查询授权范围内的用量信息，用于向用户展示实际资源消耗。",
-  "runtimemanager.updateagentinstance": "更新 Runtime 关联 Agent 实例的名称、头像或公开配置，供应用调整该实例的展示和行为设置。",
   "runtimemanager.approvefotaupdate": "为指定资源提交固件升级请求，供资源维护和版本升级使用。",
   "runtimemanager.generatesceneurl": "为指定云桌面已配置的端口服务生成授权访问地址，供应用连接资源内服务。",
   "runtimemanager.runcommand": "在指定云桌面内执行脚本并订阅逐桌面结果，用于操作系统、文件或应用自动化。",

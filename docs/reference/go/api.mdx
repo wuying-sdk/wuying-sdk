@@ -5,7 +5,7 @@ description: "同版本 Go 根入口、config、manager 与 model 公共包的�
 
 <Note>本页按所选语言保留原始完整参考，可能包含该语言的业务示例。跨语言操作请使用[快速开始](/getting-started/desktop-to-agent)和[代码示例](/examples/index)中的语言卡片。</Note>
 
-基础提交 05bd99ec05afb4550ea96708c3b01970ae004d03 加首版对外边界草稿。由 go doc 生成。
+基础提交 b9b83c444a9663ed0d41551932af9661f6615e4f 加首版对外边界草稿。由 go doc 生成。
 
 ```go
 package wuying // import "github.com/aliyun/wuying-sdk-go"
@@ -610,23 +610,6 @@ func (m *RuntimeManager) SubscribeCommand(ctx context.Context, r *model.Subscrib
 
 func (a *RuntimeManager) SubscribeRuntimes(ctx context.Context, o model.SubscriptionListener[[]model.Runtime]) (model.Subscription, error)
 
-func (m *RuntimeManager) UpdateAgentInstance(ctx context.Context, req *UpdateAgentInstanceRequest, opts ...CallOption) error
-    UpdateAgentInstance updates the metadata of an existing agent instance.
-    Supports both sync and async modes via CallOption.
-
-    Sync usage:
-
-        err := mgr.UpdateAgentInstance(ctx, &manager.UpdateAgentInstanceRequest{
-            AgentInstanceId:   "agent-123",
-            AgentInstanceName: "New Name",
-        })
-
-    Async usage:
-
-        mgr.UpdateAgentInstance(ctx, req, manager.WithAsync(func(result interface{}, err error) {
-            // handle result or error
-        }))
-
 type SetSkillEnabledRequest struct {
 	RuntimeId  string   `json:"runtime_id,omitempty"` // Agent 的 RuntimeId（优先使用）
 	DesktopID  string   `json:"desktop_id,omitempty"` // Deprecated: 请使用 RuntimeId
@@ -696,16 +679,6 @@ func (m *SkillManager) SetSkillEnabled(ctx context.Context, req *SetSkillEnabled
         mgr.SetSkillEnabled(ctx, req, manager.WithAsync(func(result interface{}, err error) {
             tasks := result.([]*model.OperationTask)
         }))
-
-type UpdateAgentInstanceRequest struct {
-	AgentInstanceId   string `json:"agent_instance_id"`             // Required: agent instance ID
-	AgentInstanceName string `json:"agent_instance_name,omitempty"` // Optional: new name
-	AvatarUrl         string `json:"avatar_url,omitempty"`          // Optional: new avatar URL
-	Description       string `json:"description,omitempty"`         // Optional: new description
-	SimplePersonaType string `json:"simple_persona_type,omitempty"` // Optional: persona type
-	SimpleModelType   string `json:"simple_model_type,omitempty"`   // Optional: model type
-}
-    UpdateAgentInstanceRequest is the request for UpdateAgentInstance.
 
 type WorkspaceManager struct {
 	// Has unexported fields.
